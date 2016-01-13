@@ -1,0 +1,85 @@
+<ion-view title="PDA details">
+	<ion-content ng-class="{ 'overflow-scroll': (desktopBrowserScrolling == true) }" padding="true">
+
+	<!-- TODO - if no driver no. configured need to get it -->
+<!--
+	<div >
+		<form name="driverForm">
+			Driver: 
+			<input type="text" name=driverId" ng-model="pdaParams.driverId" ng-model-options="{ updateOn: 'submit' }" >
+
+			<input type="button" value="Save" ng-click="pdaParams.setDriverInfo(pdaParams.driverId);">
+		
+			<input type="button" value="Reset" ng-click="pdaParams.clearDriverInfo()">
+
+
+		</form>
+	</div>
+-->
+
+	<!-- ion-list for tpm_pda_controller data -->
+	<ion-list>
+<!--
+		<ion-item>
+				<h2>Driver</h2>
+				<input type="text" ng-model="pdaParams.driverId" >
+				<ion-option-button ng-click="pdaParams.setDriverInfo(pdaParams.driverId)">
+					Save
+				</ion-option-button>
+		</ion-item>
+-->
+
+		<!-- This should return one row only in a production environment -->
+		<ion-item ng-repeat="tpmpdacontroller in TpmPdaControllers" type="item-text-wrap" >
+
+				<h2>Driver no.</h2>
+				<p> {{tpmpdacontroller.tpmpc_driver_id}} </p>
+				<button class="button button-icon ion-compose" ng-click="openModal()"> </button>
+
+				<h2>IMEI</h2>
+				<p> {{ tpmpdacontroller.tpmpc_imei_id }} </p>
+
+				<h2>Name</h2>
+				<p> {{ tpmpdacontroller.tpmpc_driver_name }} </p>
+
+				<h2>Phone</h2>
+				<p> {{ tpmpdacontroller.tpmpc_phone_num }} </p>
+
+		</ion-item>
+
+<!-- <ion-item> <p> TpmRowCount: {{ TpmRowCount }} </p> </ion-item> -->
+
+		<div ng-show="!TpmRowCount">
+			<ion-item>
+				<p>Driver not configured or not activated or already registered.</p>
+				<p>Please contact office.</p>
+				<p>To edit click below.</p>
+				<button class="button button-icon ion-compose" ng-click="openModal()"> </button>
+			</ion-item>
+		</div>
+
+	</ion-list>
+
+	</ion-content>
+
+
+	<!-- modal window for driver no. entry/update -->
+	<script id="templates/modal.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-positive">
+          <h1 class="title">Driver</h1>
+          <button class="button button-clear button-primary" ng-click="closeModal()">Cancel</button>
+        </ion-header-bar>
+        <ion-content class="padding">
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">Driver</span>
+              <input ng-model="pdaParams.driverId" type="number">
+            </label>
+            <button class="button button-full button-positive" ng-click="updateDriver(pdaParams.driverId)">Update</button>
+          </div>
+        </ion-content>
+      </ion-modal-view>
+    </script>
+
+</ion-view>

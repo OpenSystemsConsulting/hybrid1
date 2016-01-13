@@ -1,0 +1,112 @@
+  <ion-content ng-class="{ 'overflow-scroll': (desktopBrowserScrolling == true) }" padding="true">
+      <div ng-hide="true" class="row row-bottom">
+        <div class="col colBase col-100">
+          <label class="item item-input">
+            <span class="input-label">Monthx</span>
+            <input type="date">
+          </label>
+        </div>
+      </div>
+
+	<div ng-repeat="property in data track by $index" ng-show="(property.index > 1)  && (!property.omitFromForm)"
+	  			class="item item-input noBorder disable-user-behaviour">
+
+<!-- this ng-include used to be in the ng-repeat above - caused major performance probs on android device - code now inlined below -->
+<!-- ng-include="'templates/jobDetailContentRow-ngif.html'" -->
+
+
+    	<span class="jobDetail-label"
+	    		ng-class="{ 'alignAlmostRight': (property.index == 1) }" >
+	    	<span class="jobDetails-label" >
+					<!-- {{ property.label | debug }} -->
+					{{ property.label }} 
+	    	</span>
+	    </span>
+
+		<!-- this is the field value -->
+	    <input disabled ng-if="(property.type != '') && (property.type != 'toggle') && (property.type != 'enum')  && (!property.omitFromForm) " 
+	    	ng-class="{'jobnumberspan': ((property.property == 'mobjobNumber')), 'requiredInput': ((property.required == true) && (property.value == '')),'addressfields': ((property.property == 'mobjobAddress1' || property.property == 'mobjobAddress2' || property.property == 'mobjobAddress3' || property.property == 'mobjobAddress4' || property.property == 'mobjobAddress5' || property.property == 'mobjobClientName')) , 'suburbfield': ((property.property == 'mobjobSuburb')) , 'servicefield': ((property.property == 'mobjobServiceCode')), 'centered': ((property.centered)), 'strong': ((property.strong)) }" 
+	    	type="{{property.type}}" value="{{property.value}}"
+	    	class="standardInput">
+	    </input>
+
+
+<!--
+	    <ion-toggle ng-show="property.type == 'toggle'" 
+	    			ng-model="property.value" 
+	    			ng-click="dataChanged($event, property)" 
+	    			class="noBorder toggleAdjust">
+		</ion-toggle>
+-->
+
+		<!--  Show the Job Status Enum Value   -->
+
+	    <input disabled ng-if="(property.type != '') && (property.type != 'toggle') && (property.type == 'enum')  && (!property.omitFromForm) " 
+	    	ng-class="{ 'requiredInput': ((property.required == false)) }" 
+	    	type="{{property.type}}" value="{{property.enumValue.label}}"
+	    	class="jobStatusInput">
+	    </input>
+
+		<!--   ACCEPT  JOB -->
+		<div ng-if="(property.enumValue.value == 'NJ' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
+					>
+			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				Accept
+			</button>
+		</div>
+
+
+		<!--   PICKUP  JOB -->
+		<div ng-if="(property.enumValue.value == 'AC' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
+					>
+
+			<button  class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				Pickup	
+			</button>
+
+
+		</div> 
+
+		<!--   COMPLETE JOB -->
+
+		<!-- no multileg parameter or single leg job has one "tap to sign" on first leg -->
+		<div ng-if="(property.enumValue.value == 'PU' && (property.legid % 100 == 0) && (!pdaParams.multileg || property.numlegs < 2))" class="input-label" style="width:100%;">
+				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				Deliver
+            </button>
+		</div> 
+
+		<!-- multileg parameter has individual per leg "tap to sign" -->
+		<div ng-if="(property.enumValue.value == 'PU' && (property.legid % 100 > 0) && (pdaParams.multileg && property.numlegs > 1) )" class="input-label" style="width:100%;">
+				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				Deliver
+            </button>
+		</div> 
+
+		<!--   TODO - show an icon or indicator if this leg already has POD captured?  -->
+
+<!--
+		<select ng-model="property.enumValue" 
+				ng-options="multi.label for multi in property.enum" 
+				ng-change="multiSelectChange(property)" 
+				ng-show="(property.type == 'enum')">
+		</select>
+
+-->
+
+
+
+
+
+
+	</div>
+
+  </ion-content>

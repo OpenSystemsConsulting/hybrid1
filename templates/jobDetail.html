@@ -1,0 +1,4 @@
+<!-- this {{generateJobHeader(job)}} causes the interpolation error in Chrome console -->
+<ion-view title="Driver: ({{pdaParams.driverId}}) Vers: {{pdaParams.getAppVersion()}}" ng-controller="JobDetailCtrl">
+	<span ng-include="'templates/jobDetailContent.html'"></span>
+</ion-view>

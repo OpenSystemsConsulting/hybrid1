@@ -1,0 +1,76 @@
+
+  var androidConfig = {
+    "senderID": "1069582465668",
+  };
+
+  document.addEventListener("deviceready", function(){
+    $cordovaPush.register(androidConfig).then(function(result) {
+      // Success
+		console.log('cordovaPush.register: Success:', result);
+		alert('cordovaPush.register: Success:', result);
+
+    }, function(err) {
+      // Error
+		alert('cordovaPush.register: Error:', err);
+		console.log('cordovaPush.register: Error:', err);
+    })
+
+    $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+      switch(notification.event) {
+        case 'registered':
+          if (notification.regid.length > 0 ) {
+            console.log('registration ID = ' + notification.regid);
+            alert('registration ID = ' + notification.regid);
+
+			// TODO - register with the loopback-component-push installations model
+			// TODO - do we do this here or should we trigger an event and do it in a service/controller?
+
+			var installation_object = {
+				"appId"			: "osc-push-demo",
+				"userId"		: "999",
+				"deviceToken"	: notification.regid,
+				"deviceType"	: "android"
+			};
+			$http.post('http://58.108.229.60:3000/api/installations', installation_object);
+
+          }
+          break;
+
+        case 'message':
+          // this is the actual push notification. its format depends on the data model from the push server
+          console.log('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+          alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+          break;
+
+        case 'error':
+          alert('GCM error = ' + notification.msg);
+          console.log('GCM error = ' + notification.msg);
+          break;
+
+        default:
+          alert('An unknown GCM event has occurred');
+          console.log('An unknown GCM event has occurred');
+          break;
+      }
+    });
+
+
+	// Handles incoming device tokens
+	$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+		console.log('$cordovaPush:tokenReceived: Got token ', data.token, data.platform);
+		alert("Successfully registered token " + data.token);
+		$rootScope.token = data.token;
+	});
+
+    // WARNING: dangerous to unregister (results in loss of tokenID)
+/*
+	var options = {};
+    $cordovaPush.unregister(options).then(function(result) {
+      // Success!
+    }, function(err) {
+      // Error
+    })
+*/
+
+  }, false);
+})

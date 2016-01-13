@@ -1,0 +1,124 @@
+/* Your app's CSS, go crazy, make it your own */
+
+.ionic-logo {
+  display: block;
+  margin: 15px auto;
+  width: 96px;
+  height: 96px;
+}
+
+.inputField {
+	border:1px solid #dddddd !important; 
+	background-color:#f8f8f8 !important;
+	padding: 0 5px 0 5px  !important;
+}
+
+.noBorder {
+	border: 0px solid #f8f8f8 !important;
+}
+
+.alignAlmostRight {
+	text-align: right;
+	padding-right: 40px;
+}
+
+.alignRight {
+	text-align: right;
+}
+
+.floatRight {
+	float: right;
+}
+
+.absoluteRight {
+	position: absolute; 
+	right:0px;
+}
+
+.normalFontWeight {
+	font-weight: normal;
+}
+
+.subduedLink {
+	color: #111177;
+	text-decoration: none;
+}
+
+.rowButton {
+	position: absolute;
+	top:5px;
+	padding:5px;
+	height:auto;
+	font-size:100%;
+	font-weight:normal;
+	line-height:20px !important;
+	border: 1px solid #b2b2b2;
+	background-color: #f4f4f4;
+}
+
+.wrappingText {
+	white-space: normal !important;
+	min-width:175px !important;
+}
+
+.errorText {
+	white-space: normal !important;
+}
+
+.verticalAlign {
+	vertical-align: top;
+}
+
+.bumpUp1 {
+	position: relative;
+	top:-1px;
+}
+
+.alignLeft {
+	text-align: left;
+}
+
+.alignCenter {
+	text-align: center;
+}
+
+.toggleAdjust {
+	position:relative;
+	top:-5px;
+	height:40px !important;
+	background-color: transparent !important;
+}
+
+.menuIcon {
+	font-size: 200%;
+	position:absolute;
+	top:0px; left:0px;
+	margin-right:5px;
+	z-index: 100;
+}
+
+.spaceOnLeft {
+	margin-left: 8px;
+}
+
+.spaceOnRight {
+	margin-right: 8px;
+}
+
+.topLeftMenuIcon {
+	font-size: 150%;
+}
+
+.bumpUp {
+	position: relative;
+	top:-5px;
+	z-index: 1;
+}
+
+.standardInput {
+	border:1px solid #dddddd !important; background-color:#fcfcfc !important; padding: 0 5px 0 5px !important;
+}
+
+.requiredInput {
+	border:1px solid #dddddd !important; background-color:#fceeee ; padding: 0 5px 0 5px !important;
+}

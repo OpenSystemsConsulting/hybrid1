@@ -1,0 +1,84 @@
+angular.module('cordovaReady', [])
+
+/**
+ * A simple example service that returns some data.
+ */
+.factory('cordovaReady',['$cordovaInsomnia', function($cordovaInsomnia) {
+
+	var isready;
+
+	var logOb;
+
+	var cordova_ready = { };
+
+	isready = false;
+
+	cordova_ready.isready = false;
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+	function onDeviceReady() {
+		// Now safe to use device APIs
+
+/*		// LT - I don't think we should clear cache/localstorage here on startup as e.g.
+		// if a driver completes jobs when offline and starts up next day we need those
+		// to sync rather than get a new set of data from the server
+
+		// clear webview cache
+		var success = function(status) {
+			alert('Message: ' + status);
+		}
+
+		var error = function(status) {
+			alert('Error: ' + status);
+		}
+		localStorage.removeItem('osc-local-db');
+		window.cache.clear( success, error );
+*/
+
+		cordova_ready.isready = true;
+		isready = true;
+
+		//alert(' CordovaIsready = ' + cordova_ready.isready);
+
+		// LT - TODO - set up log writing - gave an error on android device
+/*
+		window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
+			console.log("got main dir",dir);
+			dir.getFile("log.txt", {create:true}, function(file) {
+				console.log("got the file", file);
+				logOb = file;
+				writeLog("App started");			
+			});
+		});
+*/
+
+		// https://github.com/driftyco/ng-cordova/blob/master/src/plugins/insomnia.js
+		// Keep screen on for our app
+		$cordovaInsomnia.keepAwake();
+	}
+
+	cordova_ready.IsDeviceReady = function IsDeviceReady()
+	{
+		return isready;
+	}
+
+
+
+	function writeLog(str) {
+		if(!logOb) return;
+		var log = str + " [" + (new Date()) + "]\n";
+		console.log("going to log "+log);
+		logOb.createWriter(function(fileWriter) {
+
+			fileWriter.seek(fileWriter.length);
+
+			var blob = new Blob([log], {type:'text/plain'});
+			fileWriter.write(blob);
+			console.log("ok, in theory i worked");
+		}, fail);
+	}
+
+	return cordova_ready;
+
+}]);

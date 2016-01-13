@@ -1,0 +1,61 @@
+<ion-view title="GPS details">
+
+	<!-- TODO - if no driver no. configured need to get it -->
+<!--
+	<div >
+		<form name="driverForm">
+			Driver: 
+			<input type="text" name=driverId" ng-model="pdaParams.driverId" ng-model-options="{ updateOn: 'submit' }" >
+
+			<input type="button" value="Save" ng-click="pdaParams.setDriverInfo(pdaParams.driverId);">
+		
+			<input type="button" value="Reset" ng-click="pdaParams.clearDriverInfo()">
+
+
+		</form>
+	</div>
+-->
+  <ion-content padding="true">
+
+	<!-- ion-list for tpm_pda_controller data -->
+		<!-- This should return one row only in a production environment -->
+	<div class="row" ng-show="showResult()">
+		<ion-list>
+            <ion-item >
+	    	<label> Position Data: </label>
+	    	<span  class="normalFontWeight"> {{position.coords.latitude}} </span>
+            </ion-item>
+
+            <ion-item type="item-text-wrap">
+    		Latitude: {{ position.coords.latitude }} 
+            </ion-item>
+            <ion-item type="item-text-wrap">
+    		Longitude: {{ position.coords.longitude }}
+            </ion-item>
+            <ion-item type="item-text-wrap">
+          	Altitude: {{ position.coords.altitude }}
+            </ion-item>
+            <ion-item type="item-text-wrap">
+          	Accuracy: {{ position.coords.accuracy }}
+            </ion-item>
+            <ion-item type="item-text-wrap">
+          	Altitude Accuracy: {{ position.coords.altitudeAccuracy }}
+            </ion-item>
+            <ion-item type="item-text-wrap">
+          	Heading: {{ position.coords.heading }}
+            </ion-item>
+            <ion-item type="item-text-wrap">
+          	Speed: {{ position.coords.speed }} 
+            </ion-item>
+            <ion-item type="item-text-wrap">
+          	Timestamp: {{ position.timestamp }} 
+            </ion-item>
+		</ion-list>
+    </div>
+    <div class="row" ng-show="!showResult()">
+           Error : {{error}}
+           Error Code: {{error.code}}
+    </div>       
+  </ion-content>
+
+</ion-view>

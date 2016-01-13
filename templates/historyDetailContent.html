@@ -1,0 +1,53 @@
+  	<hr>
+	  <div ng-repeat="property in event" ng-hide="property.omitFromForm" class="item item-input noBorder">
+		<span ng-show="property.index == 1" class="menuIcon" ng-click="showActionSheet()">
+			<i class="icon ion-navicon-round"></i>
+		</span>
+	    <span class="input-label" 
+	    		ng-class="{ 'alignAlmostRight': (property.index == 1) }" 
+	    		ng-click="showActionSheet()">
+	    	<span ng-hide="(property.index == 1) && (property.value == 'New')">
+	    		{{property.label}}
+	    	</span>
+	    </span>
+	    <div class="input-label" ng-show="(property.type == '') || (!bNewItem)">
+	    	<span ng-show="!property.linkPattern" class="normalFontWeight">{{property.value}}</span>
+	    	<a ng-show="property.linkPattern" 
+	    		href="{{property.linkPattern}}{{property.value}}"
+	    		class="subduedLink" style="">
+	    		<span ng-show="!property.generatedValue">
+					<i class="icon ion-arrow-right-c" class="spaceOnRight"></i>
+	    			ID: {{property.value}}
+	    		</span>
+	    		<div ng-show="property.generatedValue" class="wrappingText">
+	    			<i class="icon ion-arrow-right-c" class="spaceOnRight"></i>
+	    			{{property.generatedValue}}
+	    		</div>
+	    	</a>
+	    	<div ng-show="(property.index == 1) && (bNewItem)" 
+	    			class="absoluteRight rowButton" 
+	    			ng-click="saveEvent()">
+  				Save Event
+			</div>
+	    </div>
+	    <input ng-show="(property.type != '') && (property.type != 'toggle') && (property.type != 'enum') && (bNewItem)" 
+	    	ng-class="{ 'requiredInput': ((property.required == true) && (property.value == '')) }" 
+	    	ng-keyup="dataChanged($event, property)" 
+	    	type="{{property.type}}" ng-model="property.value" 
+	    	class="standardInput">
+	    </input>
+
+	    <ion-toggle ng-show="(property.type == 'toggle') && (bNewItem)" 
+	    			ng-model="property.value" 
+	    			ng-click="dataChanged($event, property)" 
+	    			class="noBorder toggleAdjust">
+		</ion-toggle>
+
+		<select ng-model="property.enumValue" 
+				ng-options="multi.value for multi in property.enum" 
+				ng-change="multiSelectChange(property)" 
+				ng-show="(property.type == 'enum') && (bNewItem)">
+		</select>
+
+	  </div>
+	<hr>
