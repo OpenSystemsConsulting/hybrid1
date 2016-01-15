@@ -20,4 +20,6 @@
     <plugin name="cordova-plugin-media" />
     <plugin name="cordova-plugin-geolocation" />
     
+    <preference name="android-build-tool" value="gradle" />
+    
 </widget>
