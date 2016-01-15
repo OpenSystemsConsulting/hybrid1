@@ -9,6 +9,15 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <plugin name="cordova-plugin-geolocation" />
+    <plugin name="cordova-plugin-cache" />
+    <plugin name="phonegap-plugin-push" />
     <plugin name="cordova-plugin-network-information" />
+    <plugin name="cordova-connectivity-monitor" />
+    <plugin name="cordova-plugin-velda-devicefeedback" />
+    <plugin name="cordova-plugin-insomnia" />
+    <plugin name="cordova-plugin-device" />
+    <plugin name="cordova-plugin-file" />
+    <plugin name="cordova-plugin-media" />
+    <plugin name="cordova-plugin-geolocation" />
+    
 </widget>
