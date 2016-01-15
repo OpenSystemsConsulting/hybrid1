@@ -19,6 +19,7 @@
     <plugin name="cordova-plugin-file" />
     <plugin name="cordova-plugin-media" />
     <plugin name="cordova-plugin-geolocation" />
+    <plugin name="cordova-plugin-whitelist" />
     
     <preference name="android-build-tool" value="gradle" />
     
