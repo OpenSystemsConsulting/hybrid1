@@ -399,7 +399,7 @@ angular.module('osc-services', [])
 	}
   }
 })
-.factory('messageService', function($rootScope, pdaParams, Logger, FixedQueue, deleteChangeData){
+.factory('messageService', function($rootScope, pdaParams, Logger, FixedQueue, deleteChangeData, Job){
  
 	// Service to handle incoming PDA messages 
 
@@ -457,6 +457,32 @@ angular.module('osc-services', [])
 			});
 		},
 
+		deleteJobs: function(params) {
+			var logmsg = {};
+			logmsg.type = 'deleteJobs';
+
+			var delfilter = params;
+			log.info('filter:'+JSON.stringify(delfilter));	
+
+			// must supply where filter
+			if(delfilter.where) {
+
+				Job.find(delfilter, function (err, jobs) {
+					var len = jobs.length;
+					log.info("deleting:"+len+" legs");
+
+					for( var leg = 0; leg < len; leg++) {
+						var job = jobs[leg];
+						log.info("delete leg:"+leg+" job:" + job.mobjobSeq);
+						job.delete();
+					}
+				});
+			}
+			else {
+				log.debug('No where filter provided');
+			}
+		},
+
 		startWatching: function(){
 
 			// PDA commands 
@@ -478,6 +504,10 @@ angular.module('osc-services', [])
 
 					case 'setPdaParam':
 						messageService.setPdaParam(payload.params);
+						break;
+
+					case 'deleteJobs':
+						messageService.deleteJobs(payload.params);
 						break;
 
 					default:

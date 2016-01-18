@@ -211,11 +211,10 @@ angular.module('starter', ['ionic',
   $urlRouterProvider.otherwise('/login');
   //$urlRouterProvider.otherwise('/login');
 
-
+	// TODO - idle processing
   //4 Minutes
-
-  IdleProvider.idle(240);
-  IdleProvider.timeout(5);
+  //IdleProvider.idle(240);
+  //IdleProvider.timeout(5);
 
   //KeepaliveProvider.interval(10);
 
@@ -235,8 +234,8 @@ angular.module('starter', ['ionic',
 	$rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
   	//console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
 
-	mystr = '$stateChangeStart to '+toState.to+'- fired when the transition begins. ToState = ' + toState + ' toParams : ' + toParams ;
-	if(pdaParams.debug)
+	mystr = '$stateChangeStart to '+toState.to+' fired when the transition begins. ToState = ' + toState + ' toParams : ' + toParams ;
+	//if(pdaParams.debug)
 		log.debug(mystr);
 
 });
@@ -244,7 +243,7 @@ angular.module('starter', ['ionic',
     //console.log('$stateChangeError - fired when an error occurs during transition.');
 
 	mystr = '$stateChangeError fired when an error occurs during transition.';
-	if(pdaParams.debug)
+	//if(pdaParams.debug)
 		log.debug(mystr);
 
     //console.log(arguments);
@@ -252,7 +251,7 @@ angular.module('starter', ['ionic',
 	$rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
   	//console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.');
 
-	mystr = '$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.';
+	//mystr = '$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.';
 	if(pdaParams.debug)
 		log.debug(mystr);
 });
@@ -264,7 +263,7 @@ angular.module('starter', ['ionic',
   	//console.log('$viewContentLoaded - fired after dom rendered',event);
 
 	mystr = '$viewContentLoaded - fired after dom rendered' + event;
-	if(pdaParams.debug)
+	//if(pdaParams.debug)
 		log.debug(mystr);
 });
 
@@ -283,9 +282,6 @@ angular.module('starter', ['ionic',
 	// Start monitoring for messages
 	messageService.startWatching();
 
-	// test to fix performance probs
-	$animate.enabled(false);
-	
 
 })
 .provider('$exceptionHandler', {

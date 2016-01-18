@@ -3,11 +3,14 @@ angular.module('cordovaReady', [])
 /**
  * A simple example service that returns some data.
  */
-.factory('cordovaReady',['$cordovaInsomnia', function($cordovaInsomnia) {
+.factory('cordovaReady',['$cordovaInsomnia', 'Logger', 'pdaParams', function($cordovaInsomnia,Logger,pdaParams) {
 
 	var isready;
 
 	var logOb;
+
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'cordovaReady'};
+	var log = Logger.getInstance(logParams);
 
 	var cordova_ready = { };
 
@@ -19,6 +22,8 @@ angular.module('cordovaReady', [])
 
 	function onDeviceReady() {
 		// Now safe to use device APIs
+
+		log.debug('onDeviceReady');
 
 /*		// LT - I don't think we should clear cache/localstorage here on startup as e.g.
 		// if a driver completes jobs when offline and starts up next day we need those
@@ -56,6 +61,10 @@ angular.module('cordovaReady', [])
 		// https://github.com/driftyco/ng-cordova/blob/master/src/plugins/insomnia.js
 		// Keep screen on for our app
 		$cordovaInsomnia.keepAwake();
+
+
+		document.addEventListener("pause", onPause, false);
+		document.addEventListener("resume", onResume, false);
 	}
 
 	cordova_ready.IsDeviceReady = function IsDeviceReady()
@@ -63,7 +72,13 @@ angular.module('cordovaReady', [])
 		return isready;
 	}
 
+	function onPause() {
+		log.debug('onPause');
+	}
 
+	function onResume() {
+		log.debug('onresume');
+	}
 
 	function writeLog(str) {
 		if(!logOb) return;
