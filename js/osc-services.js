@@ -66,7 +66,7 @@ angular.module('osc-services', [])
 	};
 
 	pda_params.getAppVersion = function() {
-		return appConfig.version;
+		return appConfig.version.toFixed(2);
 	};
 
 	pda_params.getDriverId = function() {

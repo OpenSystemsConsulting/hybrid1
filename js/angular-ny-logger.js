@@ -7,6 +7,7 @@ angular.module('ny.logger', []).provider('Logger', [function () {
     };
     this.$get = ['$log','appConfig', function($log,appConfig) {
         var Logger = function(context) {
+			context.ver = appConfig.version;
             this.context = context;
         };
         Logger.getInstance = function(context) {

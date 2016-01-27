@@ -4,7 +4,7 @@ angular.module('pushService', [])
 function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaReady, $ionicPopup, $cordovaMedia, clientConfig, Logger) {
 
 	// "senderID" is "Project Number" from Google Developers Console (https://console.developers.google.com)
-	// NOTE that tere is also a server component involved - see API key in /app/strongloop/OSC-API/server/gcm_config.js
+	// NOTE that there is also a server component involved - see API key in /app/strongloop/OSC-API/server/gcm_config.js
 	// and the Strongloop/Google documentation for further details
 	// 1069582465668 is Project ID  carbide-primer-104106 (Push test)
   var androidConfig = {
@@ -22,8 +22,9 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 	push_service.registerForPush = function () {
 
-	var openPopup = true;
+		var openPopup = true;
 
+		log.debug('registerForPush: isready:' + cordovaReady.isready + ', driverId:' + pdaParams.driverId + ', registered:'+push_service.registered);
 		//If Device ready , driver > 0 and we are not already registered then do it
 		if (cordovaReady.isready && pdaParams.driverId > 0 && push_service.registered == false )
 		{
@@ -44,7 +45,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				//console.log('cordovaPush.register: Success:', result);
 				//alert('cordovaPush.register for Driver ' + push_service.mycurrent_drivernum + ' : Success:', result);
 
-				log.info('$cordovaPush.register for Driver ' + push_service.mycurrent_drivernum + ' : Success:', result);
+				var msg = '$cordovaPush.register for Driver ' + push_service.mycurrent_drivernum + ' : Success:'+ result;
+				log.info(msg);
 
 			}, function(err) {
 				// Error
@@ -54,132 +56,132 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				log.error('$cordovaPush.register: Error:'+err);
 			})
 
-		$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-		  switch(notification.event) {
-			case 'registered':
-				log.debug('$cordovaPush.notificationReceived: registered:[' + notification.regid + ']');
+			$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+			  switch(notification.event) {
+				case 'registered':
+					log.debug('$cordovaPush.notificationReceived: registered:[' + notification.regid + ']');
 
-			  if (notification.regid.length > 0 ) {
-				//console.log('registration ID = ' + notification.regid);
+				  if (notification.regid.length > 0 ) {
+					//console.log('registration ID = ' + notification.regid);
 
-				// register with the loopback-component-push installations model
-				// TODO - do we do this here or should we trigger an event and do it in a service/controller?
+					// register with the loopback-component-push installations model
+					// TODO - do we do this here or should we trigger an event and do it in a service/controller?
 
-				var installation_object = {
-					"appId"			: "osc-push-demo",
-					"userId"		: push_service.mycurrent_drivernum,
-					"deviceToken"	: notification.regid,
-					"deviceType"	: "android"
-				};
+					var installation_object = {
+						"appId"			: "osc-push-demo",
+						"userId"		: push_service.mycurrent_drivernum,
+						"deviceToken"	: notification.regid,
+						"deviceType"	: "android"
+					};
 
 
-				// examples from API explorer
-				//{"where" : { "deviceToken":  "APA91bGKCkYKtC_Q0qKVEQIlXZRxZS0mOHPHg6dqUtF0shCresjPTnU-2E0T2Khq4pJJapJ8Z54Nr6fpLE96RWnEUbwKWZIEDzeQHxn0dDFU6mpXKDVurkykiZyPJn_Fs6wzSy0l2Ier"}}
-				//{ "where": { "deviceToken": "APA91bEseHA5qJt2U5kd42PVnPd3ckpEytZok9xwTU23nbxmLw1Klq8LP7B1Mu0UPrBI-Hmuoxk9kFa-JjiSgqMb1z1KgmISXSzloZCsOUCCm78iNtFr1skaMYVtA_XIQMzHcEm7yKRO","userId": "999"}}
-				var filter = { "where": { "deviceToken": notification.regid }};
-				// TODO var filter = { "where": { "deviceToken": notification.regid, "userId": push_service.mycurrent_drivernum }};
+					// examples from API explorer
+					//{"where" : { "deviceToken":  "APA91bGKCkYKtC_Q0qKVEQIlXZRxZS0mOHPHg6dqUtF0shCresjPTnU-2E0T2Khq4pJJapJ8Z54Nr6fpLE96RWnEUbwKWZIEDzeQHxn0dDFU6mpXKDVurkykiZyPJn_Fs6wzSy0l2Ier"}}
+					//{ "where": { "deviceToken": "APA91bEseHA5qJt2U5kd42PVnPd3ckpEytZok9xwTU23nbxmLw1Klq8LP7B1Mu0UPrBI-Hmuoxk9kFa-JjiSgqMb1z1KgmISXSzloZCsOUCCm78iNtFr1skaMYVtA_XIQMzHcEm7yKRO","userId": "999"}}
+					var filter = { "where": { "deviceToken": notification.regid }};
+					// TODO var filter = { "where": { "deviceToken": notification.regid, "userId": push_service.mycurrent_drivernum }};
 
-				log.debug('$cordovaPush.notificationReceived: check for current registration, filter:'+JSON.stringify(filter));
-				
-				// LT - 30/11/2015 - TODO - http.get.success has been deprecated use .then instead
-				// see https://docs.angularjs.org/api/ng/service/$http
-				$http.get('http://'+ clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations'+'?filter='+encodeURIComponent(JSON.stringify(filter))).success(function (data) {
-					//console.log(data);			// this works
+					log.debug('$cordovaPush.notificationReceived: check for current registration, filter:'+JSON.stringify(filter));
+					
+					// LT - 30/11/2015 - TODO - http.get.success has been deprecated use .then instead
+					// see https://docs.angularjs.org/api/ng/service/$http
+					$http.get('http://'+ clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations'+'?filter='+encodeURIComponent(JSON.stringify(filter))).success(function (data) {
+						//console.log(data);			// this works
 
-					// Try and ensure that there only ever one row for a driver or a token
-					// TODO - remove any registrations for this token but NOT for this driver
-					// TODO - remove any registrations for this driver but NOT for this token
-					// Then register current token for current driver
+						// Try and ensure that there only ever one row for a driver or a token
+						// TODO - remove any registrations for this token but NOT for this driver
+						// TODO - remove any registrations for this driver but NOT for this token
+						// Then register current token for current driver
 
-					if( data.length == 0) {		// no current registration found
+						if( data.length == 0) {		// no current registration found
 
-						log.info('$cordovaPush.notificationReceived: registered: no current registration found in installations');
+							log.info('$cordovaPush.notificationReceived: registered: no current registration found in installations');
 
-						//This registers the Google Token with Strongloop and our Database
-						$http.post('http://' + clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations', installation_object);
+							//This registers the Google Token with Strongloop and our Database
+							$http.post('http://' + clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations', installation_object);
 
-						// Save data to local storage (it also gets put into $rootScope below)
-						localStorage.setItem('osc-push-credentials', JSON.stringify(installation_object));
+							// Save data to local storage (it also gets put into $rootScope below)
+							localStorage.setItem('osc-push-credentials', JSON.stringify(installation_object));
 
-						//alert('registration ID = ' + notification.regid);
-						var alertPopup = $ionicPopup.alert({
-							title: 'Device registered',
-						template: notification.regid
-						});
+							//alert('registration ID = ' + notification.regid);
+							var alertPopup = $ionicPopup.alert({
+								title: 'Device registered',
+							template: notification.regid
+							});
+						}
+						else {
+							log.info('$cordovaPush.notificationReceived: registered: current registration already found in installations');
+							log.debug('$cordovaPush.notificationReceived: registered: data:'+JSON.stringify(data));
+
+
+						}
+
+						push_service.registered = true;		// we've either just registered or we were already registered
+
+					});
+					// TODO - do we need an 'error' function for the get? - NO - see above - .error now deprecated - needs updating
+
+				  }
+				  break;
+
+				case 'message':
+				  // this is the actual push notification. its format depends on the data model from the push server
+				  //console.log('notification.message = ' + notification.message );
+
+					// Message with payload will broadcast payload.type which can be listened for elsewhere in the app
+					var payload = notification.payload.payload || {};
+					if( payload.type ) {
+						$rootScope.$broadcast(payload.type, payload);
 					}
 					else {
-						log.info('$cordovaPush.notificationReceived: registered: current registration already found in installations');
-						log.debug('$cordovaPush.notificationReceived: registered: data:'+JSON.stringify(data));
+						// Original push notification used for new work and cancels - can be obsoleted if/when we get the above working
+						$rootScope.$broadcast('pushNotificationReceived', notification);	// broadcast to the world
 
+						// TODO - maybe have a different popup and/or sound for each message type so we don't lose any messages
+						notificationSnd.play();				// TODO - should the sound be here?  Or in the broadcast receiver?
 
+	/*	DEBUG - remove popups to try and determine cause of screen hangs
+						if( openPopup) {
+							openPopup = false;
+
+							notificationSnd.play();
+
+							var message = notification.message;
+
+							// Use ionic popup service for alert box
+							var alertPopup = $ionicPopup.alert({
+								title: 'Message received',
+								template: message
+							});
+							alertPopup.then(function(res) {
+								openPopup = true;			// OK to open popup again
+								//console.log('Message acknowledged:',message);
+							});
+						}
+	*/
 					}
 
-					push_service.registered = true;		// we've either just registered or we were already registered
+				  break;
 
-				});
-				// TODO - do we need an 'error' function for the get? - NO - see above - .error now deprecated - needs updating
+				case 'error':
+				  alert('GCM error = ' + notification.msg);
+				  //console.log('GCM error = ' + notification.msg);
+				  break;
 
+				default:
+				  alert('An unknown GCM event has occurred');
+				  //console.log('An unknown GCM event has occurred');
+				  break;
 			  }
-			  break;
-
-			case 'message':
-			  // this is the actual push notification. its format depends on the data model from the push server
-			  //console.log('notification.message = ' + notification.message );
-
-				// Message with payload will broadcast payload.type which can be listened for elsewhere in the app
-				var payload = notification.payload.payload || {};
-				if( payload.type ) {
-					$rootScope.$broadcast(payload.type, payload);
-				}
-				else {
-					// Original push notification used for new work and cancels - can be obsoleted if/when we get the above working
-					$rootScope.$broadcast('pushNotificationReceived', notification);	// broadcast to the world
-
-					// TODO - maybe have a different popup and/or sound for each message type so we don't lose any messages
-					notificationSnd.play();				// TODO - should the sound be here?  Or in the broadcast receiver?
-
-/*	DEBUG - remove popups to try and determine cause of screen hangs
-					if( openPopup) {
-						openPopup = false;
-
-						notificationSnd.play();
-
-						var message = notification.message;
-
-						// Use ionic popup service for alert box
-						var alertPopup = $ionicPopup.alert({
-							title: 'Message received',
-							template: message
-						});
-						alertPopup.then(function(res) {
-							openPopup = true;			// OK to open popup again
-							//console.log('Message acknowledged:',message);
-						});
-					}
-*/
-				}
-
-			  break;
-
-			case 'error':
-			  alert('GCM error = ' + notification.msg);
-			  //console.log('GCM error = ' + notification.msg);
-			  break;
-
-			default:
-			  alert('An unknown GCM event has occurred');
-			  //console.log('An unknown GCM event has occurred');
-			  break;
-		  }
-		});
+			});
 
 
-		// Handles incoming device tokens
-		$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
-			//console.log('$cordovaPush:tokenReceived: Got token ', data.token, data.platform);
-			//alert("Successfully registered token " + data.token);
-			$rootScope.token = data.token;
-		});
+			// Handles incoming device tokens
+			$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+				//console.log('$cordovaPush:tokenReceived: Got token ', data.token, data.platform);
+				//alert("Successfully registered token " + data.token);
+				$rootScope.token = data.token;
+			});
 
 		}
 	  }

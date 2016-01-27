@@ -33,7 +33,8 @@ angular.module('starter', ['ionic',
 							'ny.logger',
 							'fqueue',
 							'config',
-							'ngIdle'
+							'ngIdle',
+							'BarcodeCtrl'
 							])
 
 
@@ -105,6 +106,16 @@ angular.module('starter', ['ionic',
 	  }
 	})
 
+    .state('tab.barcodes', {
+      url: '/barcodes',
+      views: {
+        'barcodes-tab': {
+          templateUrl: 'templates/barcodes.html',
+          controller: 'BarcodeCtrl'
+        }
+      }
+    })
+
     .state('tab.device-detail', {
       url: '/device',
       views: {
@@ -165,6 +176,7 @@ angular.module('starter', ['ionic',
 	  }
 	})
 
+/*
     .state('tab.cpushc', {
       url: '/cpushc',
       views: {
@@ -194,6 +206,7 @@ angular.module('starter', ['ionic',
         }
       }
     })
+*/
 
     .state('tab.messages', {
       url: '/messages',
