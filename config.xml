@@ -20,6 +20,7 @@
     <plugin name="cordova-plugin-media" />
     <plugin name="cordova-plugin-geolocation" />
     <plugin name="cordova-plugin-whitelist" />
+    <plugin name="phonegap-plugin-barcodescanner" />
     
     <preference name="android-build-tool" value="gradle" />
     
