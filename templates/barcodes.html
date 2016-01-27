@@ -1,0 +1,26 @@
+<ion-view title="Driver: ({{pdaParams.driverId}}) V: {{pdaParams.getAppVersion()}}">
+<!--
+	<ion-nav-buttons side="right">
+		<button ng-click="toggleSearchBox()" class="button button-icon ion-ios7-email-outline">
+			<span class="badge badge-assertive icon-badge">5</span>
+		</button>
+    </ion-nav-buttons>
+-->
+	<ion-content ng-class="{ 'overflow-scroll': (desktopBrowserScrolling == true) }">
+
+	<strong ng-if="barcodes.length === 0">
+		No barcodes
+	</strong>
+
+	<ion-list>
+		<ion-item ng-repeat="barcode in barcodes track by $index" type="item-text-wrap">
+
+			{{barcode}}
+
+		</ion-item>
+	</ion-list>
+
+	<input type="button" value="Scan" ng-click="scan()">
+
+	</ion-content>
+</ion-view>
