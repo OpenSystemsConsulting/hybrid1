@@ -245,7 +245,7 @@ angular.module('JobDetailCtrl', [])
 			job.save();		// save leg
 
 			mystr = 'handleJobStatusChange:' + job.mobjobSeq + ' updated from ' + oldStatus + ' -> ' + job.mobjobStatus;
-			log.debug(mystr);
+			log.info(mystr);
 		}
 
 		// TODO - what is best test for all PODs captured?
@@ -263,7 +263,7 @@ angular.module('JobDetailCtrl', [])
 					job.save();		// save leg
 
 					mystr = 'handleJobStatusChange:DL' + job.mobjobSeq + ' updated from ' + oldStatus + ' -> ' + job.mobjobStatus;
-					log.debug(mystr);
+					log.info(mystr);
 				}
 			}
 		}

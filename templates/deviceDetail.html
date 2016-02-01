@@ -40,8 +40,20 @@
 	</ion-checkbox>
 
 	<ion-checkbox class="item-checkbox-right" ng-checked="{{devicectrl.registeredForPush}}" ng-disabled="true">
-		Reg'd For Push
+		Reg'd For Push (GCM)
 	</ion-checkbox>
+	<ion-item class="item item-button-right" >
+		Register for GCM
+		<button class="button button-positive" ng-click="pushRegister()">
+			Register
+		</button>
+	</ion-item>
+	<ion-item class="item item-button-right" >
+		UnRegister from GCM
+		<button class="button button-light" ng-click="pushDeRegister()">
+			UnRegister
+		</button>
+	</ion-item>
 
 	<ion-checkbox class="item-checkbox-right" ng-model="desktopBrowserScrolling" ng-change="toggleDesktopBrowserScrolling()">
 		Desktop Scrolling Mode
@@ -69,27 +81,30 @@
 
 
 	<span ng-if="pdaParams.debugMode">
-	<div class="item item-divider">
-		Config
-	</div>
-	<ion-item class="item" >
-		Client ID
-		<span class="item-note">
-			{{clientConfig.clientID}}
-		</span>
-	</ion-item>
-	<ion-item class="item" >
-		Server IP
-		<span class="item-note">
-			{{clientConfig.serverIP}}:{{clientConfig.serverPort}}
-		</span>
-	</ion-item>
-	<ion-item class="item" >
-		Logger IP
-		<span class="item-note">
-			{{appConfig.logServerIP}}:{{appConfig.logServerPort}}
-		</span>
-	</ion-item>
+		<div class="item item-divider">
+			Config
+		</div>
+		<ion-item class="item" >
+			Client ID
+			<span class="item-note">
+				{{clientConfig.clientID}}
+			</span>
+		</ion-item>
+		<ion-item class="item" >
+			Server IP
+			<span class="item-note">
+				{{clientConfig.serverIP}}:{{clientConfig.serverPort}}
+			</span>
+		</ion-item>
+		<ion-item class="item" >
+			Logger IP
+			<span class="item-note">
+				{{appConfig.logServerIP}}:{{appConfig.logServerPort}}
+			</span>
+		</ion-item>
+		<div class="item item-divider">
+			GCM
+		</div>
 	</span>
 
 

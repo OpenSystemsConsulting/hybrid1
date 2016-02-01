@@ -82,6 +82,13 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 		$scope.isOnline = $cordovaNetwork.isOnline();
 	}
 
+	$scope.pushDeRegister = function() {
+		pushService.unRegister();
+	}
+	$scope.pushRegister = function() {
+		pushService.registerForPush();
+	}
+
 	// need to get these into $scope and onto template
 /*
 	document.addEventListener("deviceready", function () {

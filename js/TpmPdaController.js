@@ -1,7 +1,7 @@
 angular.module('TpmPdaControllerCtrl', [])
 
-.controller('TpmPdaControllerCtrl', ['$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', '$ionicModal','Logger','clientlog','eventService','messageService',
-	function($rootScope, $scope, $state, TpmPdaController, util, pdaParams, $ionicModal, Logger, clientlog, eventService, messageService) {
+.controller('TpmPdaControllerCtrl', ['$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', '$ionicModal','Logger','clientlog','eventService','messageService','pushService',
+	function($rootScope, $scope, $state, TpmPdaController, util, pdaParams, $ionicModal, Logger, clientlog, eventService, messageService, pushService) {
 		$scope.TpmPdaControllers = [];
 		$scope.TpmRowCount = 0;
 
@@ -144,5 +144,12 @@ angular.module('TpmPdaControllerCtrl', [])
 			}
 
 		};
+
+		$scope.pushDeRegister = function() {
+			pushService.unRegister();
+		}
+		$scope.pushRegister = function() {
+			pushService.registerForPush();
+		}
 	}
 ])

@@ -24,7 +24,7 @@
 	    </span>
 
 		<!-- this is the field value -->
-	    <input disabled ng-if="(property.type != '') && (property.type != 'toggle') && (property.type != 'enum')  && (!property.omitFromForm) " 
+	    <input ng-disabled="true" ng-if="(property.type != '') && (property.type != 'toggle') && (property.type != 'enum')  && (!property.omitFromForm) " 
 	    	ng-class="{'jobnumberspan': ((property.property == 'mobjobNumber')), 'requiredInput': ((property.required == true) && (property.value == '')),'addressfields': ((property.property == 'mobjobAddress1' || property.property == 'mobjobAddress2' || property.property == 'mobjobAddress3' || property.property == 'mobjobAddress4' || property.property == 'mobjobAddress5' || property.property == 'mobjobClientName')) , 'suburbfield': ((property.property == 'mobjobSuburb')) , 'servicefield': ((property.property == 'mobjobServiceCode')), 'centered': ((property.centered)), 'strong': ((property.strong)) }" 
 	    	type="{{property.type}}" value="{{property.value}}"
 	    	class="standardInput">
@@ -41,7 +41,7 @@
 
 		<!--  Show the Job Status Enum Value   -->
 
-	    <input disabled ng-if="(property.type != '') && (property.type != 'toggle') && (property.type == 'enum')  && (!property.omitFromForm) " 
+	    <input ng-disabled="true" ng-if="(property.type != '') && (property.type != 'toggle') && (property.type == 'enum')  && (!property.omitFromForm) " 
 	    	ng-class="{ 'requiredInput': ((property.required == false)) }" 
 	    	type="{{property.type}}" value="{{property.enumValue.label}}"
 	    	class="jobStatusInput">
