@@ -17,7 +17,7 @@
     <plugin name="cordova-plugin-insomnia" />
     <plugin name="cordova-plugin-device" />
     <plugin name="cordova-plugin-file" />
-    <plugin name="cordova=pluigin-media" />
+    <plugin name="cordova=plugin-media" />
     <plugin name="cordova-plugin-geolocation" />
     <plugin name="cordova-plugin-whitelist" />
     <plugin name="phonegap-plugin-barcodescanner" />
