@@ -9,19 +9,19 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    
-    <plugin name="cordova-plugin-geolocation" spec="^1.0.1" />
-    <plugin name="com.phonegap.plugins.PushPlugin" />
-    <plugin name="org.apache.cordova.device" spec="^0.3.0" />
-    <plugin name="nl.x-services.plugins.insomnia" />
-    <plugin name="cordova-plugin-network-information" spec="^1.0.1" />
-    <plugin name="org.apache.cordova.media" spec="^0.2.16" />
-    <plugin name="cordova-plugin-velda-devicefeedback" spec="^0.0.2" />
-    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="^0.7.2" />
-    <plugin name="de.appplant.cordova.plugin.background-mode" />
-    <plugin name="at.modalog.cordova.plugin.cache" />
-    <plugin name="cordova-plugin-networkinterface" spec="^1.0.8" />
+    <plugin name="cordova-plugin-cache" />
+    <plugin name="cordova-plugin-push-notification" />
+    <plugin name="cordova-plugin-network-information" />
+    <plugin name="cordova-connectivity-monitor" />
+    <plugin name="cordova-plugin-velda-devicefeedback" />
+    <plugin name="cordova-plugin-insomnia" />
+    <plugin name="cordova-plugin-device" />
+    <plugin name="cordova-plugin-file" />
+    <plugin name="org.apache.cordova.media" />
+    <plugin name="cordova-plugin-geolocation" />
+    <plugin name="cordova-plugin-whitelist" />
     <plugin name="phonegap-plugin-barcodescanner" />
     
-
+    <preference name="android-build-tool" value="gradle" />
+    
 </widget>
