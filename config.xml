@@ -11,17 +11,17 @@
     <access origin="*" />
     
     <plugin name="cordova-plugin-geolocation" spec="^1.0.1" />
-    <plugin name="com.phonegap.plugins.PushPlugin" spec="https://github.com/phonegap-build/PushPlugin.git" />
+    <plugin name="com.phonegap.plugins.PushPlugin" />
     <plugin name="org.apache.cordova.device" spec="^0.3.0" />
-    <plugin name="nl.x-services.plugins.insomnia" spec="https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git" />
+    <plugin name="nl.x-services.plugins.insomnia" />
     <plugin name="cordova-plugin-network-information" spec="^1.0.1" />
     <plugin name="org.apache.cordova.media" spec="^0.2.16" />
     <plugin name="cordova-plugin-velda-devicefeedback" spec="^0.0.2" />
     <plugin name="cordova-plugin-mauron85-background-geolocation" spec="^0.7.2" />
-    <plugin name="de.appplant.cordova.plugin.background-mode" spec="https://github.com/katzer/cordova-plugin-background-mode.git" />
-    <plugin name="at.modalog.cordova.plugin.cache" spec="https://github.com/moderna/cordova-plugin-cache.git" />
+    <plugin name="de.appplant.cordova.plugin.background-mode" />
+    <plugin name="at.modalog.cordova.plugin.cache" />
     <plugin name="cordova-plugin-networkinterface" spec="^1.0.8" />
-    <plugin name="phonegap-plugin-barcodescanner" spec="https://github.com/phonegap/phonegap-plugin-barcodescanner.git" />
+    <plugin name="phonegap-plugin-barcodescanner" />
     
 
 </widget>
