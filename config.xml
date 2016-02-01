@@ -17,11 +17,13 @@
     <plugin name="cordova-plugin-insomnia" />
     <plugin name="cordova-plugin-device" />
     <plugin name="cordova-plugin-file" />
-    <plugin name="org.apache.cordova.media" />
+    <plugin name="cordova=pluigin-media" />
     <plugin name="cordova-plugin-geolocation" />
     <plugin name="cordova-plugin-whitelist" />
     <plugin name="phonegap-plugin-barcodescanner" />
     
     <preference name="android-build-tool" value="gradle" />
+    
+    <engine name="android" spec="^5.0.0" />
     
 </widget>
