@@ -37,6 +37,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 			// Determine platform e.g. 'Android', 'iOS'
 			var platform = $cordovaDevice.getPlatform();
 
+			push_service.mycurrent_drivernum = pdaParams.driverId;
+
 			// ANDROID ----------------------------------------------------------
 			if( platform == 'Android') {
 
@@ -45,8 +47,6 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				// notification sound
 				var src = "/android_asset/www/audio/notification.mp3";
 				var notificationSnd = $cordovaMedia.newMedia(src);
-
-				push_service.mycurrent_drivernum = pdaParams.driverId;
 
 				//All this does is register the device with GCM (Google Cloud Messaging)
 				//Once registered with GCM we store the data against the driver id in our DB
