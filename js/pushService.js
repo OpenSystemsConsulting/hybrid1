@@ -65,13 +65,13 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 					//alert('cordovaPush.register: Error:', err);
 					//console.log('cordovaPush.register: Error:', err);
 
-					log.error('$cordovaPush.register: Error:'+err);
+					log.error(platform+':$cordovaPush.register: Error:'+err);
 				});
 
 				$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
 				  switch(notification.event) {
 					case 'registered':
-						log.debug('$cordovaPush.notificationReceived: registered:[' + notification.regid + ']');
+						log.debug(platform+':$cordovaPush.notificationReceived: registered:[' + notification.regid + ']');
 
 					  if (notification.regid.length > 0 ) {
 						//console.log('registration ID = ' + notification.regid);
@@ -93,7 +93,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 						var filter = { "where": { "deviceToken": notification.regid }};
 						// TODO var filter = { "where": { "deviceToken": notification.regid, "userId": push_service.mycurrent_drivernum }};
 
-						log.debug('$cordovaPush.notificationReceived: check for current registration, filter:'+JSON.stringify(filter));
+						log.debug(platform+':$cordovaPush.notificationReceived: check for current registration, filter:'+JSON.stringify(filter));
 						
 						// LT - 30/11/2015 - TODO - http.get.success has been deprecated use .then instead
 						// see https://docs.angularjs.org/api/ng/service/$http
@@ -107,7 +107,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 							if( data.length == 0) {		// no current registration found
 
-								log.info('$cordovaPush.notificationReceived: registered: no current registration found in installations');
+								log.info(platform+':$cordovaPush.notificationReceived: registered: no current registration found in installations');
 
 								//This registers the Google Token with Strongloop and our Database
 								$http.post('http://' + clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations', installation_object);
@@ -122,8 +122,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 								});
 							}
 							else {
-								log.info('$cordovaPush.notificationReceived: registered: current registration already found in installations');
-								log.debug('$cordovaPush.notificationReceived: registered: data:'+JSON.stringify(data));
+								log.info(platform+':$cordovaPush.notificationReceived: registered: current registration already found in installations');
+								log.debug(platform+':$cordovaPush.notificationReceived: registered: data:'+JSON.stringify(data));
 
 
 							}
@@ -202,7 +202,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 					};
 
 					var filter = { "where": { "deviceToken": deviceToken }};
-					log.debug('$cordovaPush.notificationReceived: check for current registration, filter:'+JSON.stringify(filter));
+					log.debug(platform+':$cordovaPush.register: check for current registration, filter:'+JSON.stringify(filter));
 
 					$http.get('http://'+ clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations'+'?filter='+encodeURIComponent(JSON.stringify(filter))).success(function (data) {
 
@@ -210,7 +210,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 						// Then register current token for current driver
 						if( data.length == 0) {		// no current registration found
 
-							log.info('$cordovaPush.notificationReceived: registered: no current registration found in installations');
+							log.info(platform+':$cordovaPush.register: registered: no current registration found in installations');
 
 							//This registers the Token with Strongloop and our Database
 							$http.post('http://' + clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations', installation_object);
@@ -224,10 +224,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 								});
 							}
 							else {
-								log.info('$cordovaPush.notificationReceived: registered: current registration already found in installations');
-								log.debug('$cordovaPush.notificationReceived: registered: data:'+JSON.stringify(data));
-
-
+								log.info(platform+':$cordovaPush.register: registered: current registration already found in installations');
+								log.debug(platform+':$cordovaPush.register: registered: data:'+JSON.stringify(data));
 							}
 
 							push_service.registered = true;		// we've either just registered or we were already registered
@@ -238,11 +236,33 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 				}, function(err) {
 					// Error
-					log.error('$cordovaPush.register: Error:'+err);
+					log.error(platform+':$cordovaPush.register: Error:'+err);
+				});
+
+				$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+					log.debug(platform+':$cordovaPush.notificationReceived:' + JSON.stringify(notification));
+					if (notification.alert) {
+						navigator.notification.alert(notification.alert);
+					}
+
+					if (notification.sound) {
+						var snd = new Media(event.sound);
+						snd.play();
+					}
+
+					if (notification.badge) {
+						$cordovaPush.setBadgeNumber(notification.badge).then(function(result) {
+							// Success!
+							log.debug(platform+':$cordovaPush.notificationReceived.setBadgeNumber:success:'+result);
+						}, function(err) {
+							// An error occurred. Show a message to the user
+							log.debug(platform+':$cordovaPush.notificationReceived.setBadgeNumber:error:'+err);
+						});
+					}
 				});
 			}
 			else {
-				log,error('$cordovaPush.register: unhandled platform:'+platform);
+				log,error(platform+':$cordovaPush.register: unhandled platform:'+platform);
 			}
 
 
@@ -251,7 +271,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 			$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
 				//console.log('$cordovaPush:tokenReceived: Got token ', data.token, data.platform);
 				//alert("Successfully registered token " + data.token);
-				log.debug('$cordovaPush:tokenReceived: Got token:' + data.token);
+				log.debug(playform+':$cordovaPush:tokenReceived: Got token:' + data.token);
 				$rootScope.token = data.token;
 			});
 
@@ -260,7 +280,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 	push_service.unRegister = function() {
 			var options = {};
-			log.info('unRegister: isready:' + cordovaReady.isready + ', driverId:' + pdaParams.driverId);
+			log.info(platform+':unRegister: isready:' + cordovaReady.isready + ', driverId:' + pdaParams.driverId);
 			if (cordovaReady.isready && pdaParams.driverId > 0) {
 				// WARNING: dangerous to unregister (results in loss of tokenID)
 				$cordovaPush.unregister(options).then(function(result) {
@@ -273,7 +293,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 					});
 				}, function(err) {
 				  // Error
-					log.error('unregister:error:'+err);
+					log.error(playform+':unregister:error:'+err);
 				})
 			}
 	}
