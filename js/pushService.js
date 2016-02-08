@@ -247,6 +247,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 							title: 'Notification received',
 							template: JSON.stringify(notification)
 							});
+
+							$rootScope.$broadcast('pushNotificationReceived', notification);	// broadcast to the world
 					}
 
 					if (notification.sound) {
