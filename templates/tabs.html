@@ -18,6 +18,7 @@
 
 
   <!-- Edit Tab  - hidden from display - only accessible when selecting a job -->
+  <!-- Required hack in lib/js/ionic.bundle.js per https://github.com/driftyco/ionic/issues/1666 -->
   <ion-tab hidden="true" title="Edit" icon="icon ion-edit" href="#/tab/jobs/x">
     <ion-nav-view name="job-edit"></ion-nav-view>
   </ion-tab>

@@ -67,7 +67,7 @@ angular.module('cordovaReady', [])
 		document.addEventListener("resume", onResume, false);
 	}
 
-	cordova_ready.IsDeviceReady = function IsDeviceReady()
+	cordova_ready.isDeviceReady = function isDeviceReady()
 	{
 		return isready;
 	}
@@ -79,6 +79,10 @@ angular.module('cordovaReady', [])
 	function onResume() {
 		log.debug('onresume');
 	}
+
+	/*
+	 * For future use - maybe write to log file on device that can be send to OSX
+	 * or maybe viewed on a tab on the device
 
 	function writeLog(str) {
 		if(!logOb) return;
@@ -93,6 +97,7 @@ angular.module('cordovaReady', [])
 			console.log("ok, in theory i worked");
 		}, fail);
 	}
+	*/
 
 	return cordova_ready;
 

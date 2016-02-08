@@ -10,11 +10,11 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 
 		devicectrl.title = "Device Detail Page";
 		devicectrl.drivernum = pdaParams.getDriverId();
-		devicectrl.IsGpsWorking = gpsService.getGpsIsWorking();
-		devicectrl.IsDeviceReady = cordovaReady.IsDeviceReady();
+		devicectrl.isGpsWorking = gpsService.getGpsIsWorking();
+		devicectrl.isDeviceReady = cordovaReady.isDeviceReady();
 		devicectrl.showGpsAlerts = gpsService.getShowGpsAlerts();
 		devicectrl.sendGps = gpsService.getSendGps();
-		if ( devicectrl.IsDeviceReady )
+		if ( devicectrl.isDeviceReady )
 			devicectrl.registeredForPush = pushService.getIsRegistered();
 
 		
@@ -63,7 +63,7 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 		$rootScope.desktopBrowserScrolling = !$rootScope.desktopBrowserScrolling;
 	}
 
-	if ( devicectrl.IsDeviceReady ) {
+	if ( devicectrl.isDeviceReady ) {
 		/*
 		var cordova = $cordovaDevice.getCordova();
 		var model = $cordovaDevice.getModel();

@@ -311,10 +311,12 @@ angular.module('osc-services', [])
 		return( log );
 
 })
-.factory( 'eventService', function( $window, $http, clientConfig, pdaParams ) {
+.factory( 'eventService', function( $window, $http, clientConfig, pdaParams, Logger ) {
 
 	// Send a message to the mobile_event REST API
 	// Used for e.g. LOGON, LOGOFF, maybe sending a message etc.
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'eventService'};
+	var log = Logger.getInstance(logParams);
 
 	var eventSvc = { };
 	
@@ -337,7 +339,8 @@ angular.module('osc-services', [])
 		message.event = msgType;
 
 		$http.get('http://'+ clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/mobile_event'+'?payload='+encodeURIComponent(JSON.stringify(message))).success(function (data) {
-				console.log("sendMsg:"+JSON.stringify(data));
+				//console.log("sendMsg:"+JSON.stringify(data));
+				log.info('mobile_event:'+JSON.stringify(message));
 			});
 
 /*

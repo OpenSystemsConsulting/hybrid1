@@ -242,7 +242,11 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
 					log.debug(platform+':$cordovaPush.notificationReceived:' + JSON.stringify(notification));
 					if (notification.alert) {
-						navigator.notification.alert(notification.alert);
+						//navigator.notification.alert(notification.alert);
+						var alertPopup = $ionicPopup.alert({
+							title: 'Notification received',
+							template: JSON.stringify(notification)
+							});
 					}
 
 					if (notification.sound) {

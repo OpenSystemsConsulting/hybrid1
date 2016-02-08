@@ -38,7 +38,9 @@ angular.module('starter', ['ionic',
 							])
 
 
-
+// When the application is being bootstrapped, it runs the configuration phase
+// first. During this phase, we have access to all the Providers, but NOT to the
+// actual service objects that will be created.
 .config(function( $stateProvider, $urlRouterProvider, LoopBackResourceProvider, clientConfig, KeepaliveProvider, IdleProvider) {
 
 	// Change the URL where to access the LoopBack REST API server
@@ -234,6 +236,10 @@ angular.module('starter', ['ionic',
 })
 
 
+// When the application is being bootstrapped, it will run the configuration
+// phase first and then it will execute the "Run" phase. At that point, all of
+// the run() blocks are executed. During this phase, we no longer have access
+// to any of the providers but we can finally access the services.
 .run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate) {
 
 /* NOTE: the run function gets called at app startup so any services injected here
@@ -247,7 +253,8 @@ angular.module('starter', ['ionic',
 	$rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
   	//console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
 
-	mystr = '$stateChangeStart to '+toState.to+' fired when the transition begins. ToState = ' + toState + ' toParams : ' + toParams ;
+	//mystr = '$stateChangeStart to '+toState.to+' fired when the transition begins. ToState = ' + toState + ' toParams : ' + toParams ;
+	mystr = '$stateChangeStart: from:' + fromState.name + ' to:'+toState.name+' (fired when the transition begins)';
 	//if(pdaParams.debug)
 		log.debug(mystr);
 
@@ -265,7 +272,8 @@ angular.module('starter', ['ionic',
   	//console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.');
 
 	//mystr = '$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.';
-	if(pdaParams.debug)
+	mystr = '$stateChangeSuccess: to:' + toState.name + ' from:'+fromState.name+' (fired once the transition completes)';
+	//if(pdaParams.debug)
 		log.debug(mystr);
 });
 // $rootScope.$on('$viewContentLoading',function(event, viewConfig){
@@ -284,8 +292,8 @@ angular.module('starter', ['ionic',
   	//console.log('$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.');
   	//console.log(unfoundState, fromState, fromParams);
 
-	mystr = '$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.';
-	if(pdaParams.debug)
+	mystr = '$stateNotFound '+unfoundState.name+'  - fired when a state cannot be found by its name.';
+	//if(pdaParams.debug)
 		log.debug(mystr);
 });
 
