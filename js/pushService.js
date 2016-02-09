@@ -35,6 +35,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 		if (cordovaReady.isready && pdaParams.driverId > 0 && push_service.registered == false )
 		{
 			// Determine platform e.g. 'Android', 'iOS'
+
 			var platform = $cordovaDevice.getPlatform();
 
 			push_service.mycurrent_drivernum = pdaParams.driverId;
@@ -69,6 +70,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				});
 
 				$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+					log.debug(platform+':$cordovaPush.notificationReceived:' + JSON.stringify(notification));
 				  switch(notification.event) {
 					case 'registered':
 						log.debug(platform+':$cordovaPush.notificationReceived: registered:[' + notification.regid + ']');
@@ -147,6 +149,9 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 						}
 						else {
 							// Original push notification used for new work and cancels - can be obsoleted if/when we get the above working
+							// add platform to notification so we can check in the event handler
+							notification.platform = platform;
+
 							$rootScope.$broadcast('pushNotificationReceived', notification);	// broadcast to the world
 
 							// TODO - maybe have a different popup and/or sound for each message type so we don't lose any messages
@@ -248,6 +253,9 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 							template: JSON.stringify(notification)
 							});
 
+							// add platform to notification so we can check in the event handler
+							notification.platform = platform;
+
 							$rootScope.$broadcast('pushNotificationReceived', notification);	// broadcast to the world
 					}
 
@@ -277,7 +285,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 			$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
 				//console.log('$cordovaPush:tokenReceived: Got token ', data.token, data.platform);
 				//alert("Successfully registered token " + data.token);
-				log.debug(playform+':$cordovaPush:tokenReceived: Got token:' + data.token);
+				log.debug(platform+':$cordovaPush:tokenReceived: Got token:' + data.token);
 				$rootScope.token = data.token;
 			});
 
@@ -286,12 +294,15 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 	push_service.unRegister = function() {
 			var options = {};
-			log.info(platform+':unRegister: isready:' + cordovaReady.isready + ', driverId:' + pdaParams.driverId);
 			if (cordovaReady.isready && pdaParams.driverId > 0) {
+				var platform = $cordovaDevice.getPlatform();
+
+				log.info(platform+':unRegister: isready:' + cordovaReady.isready + ', driverId:' + pdaParams.driverId);
+
 				// WARNING: dangerous to unregister (results in loss of tokenID)
 				$cordovaPush.unregister(options).then(function(result) {
 				  // Success!
-					log.info('unregister:success:'+result);
+					log.info(platform+':sunregister:success:'+result);
 					push_service.registered = false;
 					var alertPopup = $ionicPopup.alert({
 						title: 'GCM',
@@ -299,7 +310,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 					});
 				}, function(err) {
 				  // Error
-					log.error(playform+':unregister:error:'+err);
+					log.error(platform+':unregister:error:'+err);
 				})
 			}
 	}

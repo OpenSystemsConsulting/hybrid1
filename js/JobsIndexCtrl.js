@@ -248,81 +248,101 @@ angular.module('JobsIndexCtrl', [])
 	$scope.$on('pushNotificationReceived', function(event, notification) {
 		notificationCount++;
 
-		switch(notification.event) {
-		case 'message':
-			//console.log('JobsIndexCtrl:notificationCount:'+notificationCount+', notification.message:' + notification.message );
+		// TODO - we should store messages (maybe last x) to be viewed by driver
 
-			// notification.message is a string
-			// notification.payload is a JSON object - not always supplied
+		// GCM messages come in with an event property set to 'message' with the message itself in the message property
+		// APN messages come in without an event type property so we need to simply reference the message 
+		// pushService will add the platform to the notification so we can appropriate action
+		var platform = notification.platform;
 
-			var message = notification.message;
-			// TODO - double payload - can we make this more logical?
-			var payload = notification.payload.payload || {};
+		switch(platform) {
+			case 'Android':
+				switch(notification.event) {
+					case 'message':
+						// notification.message is a string
+						// notification.payload is a JSON object - not always supplied
 
-			// TODO - If payload is an empty object this causes an exception (so no data or type)
+						var message = notification.message;
+						// TODO - double payload - can we make this more logical?
+						var payload = notification.payload.payload || {};
 
-			// TODO - we should store messages (maybe last x) to be viewed by driver
+						// Check For Cancellation and then delete job 
+						if(typeof payload.data != "undefined") {
 
-			// Check For Cancellation and then delete job 
-			if(typeof payload.data != "undefined") {
+							// if we have a payload then do something with it
+							if(payload.data.type == "CANCEL") {
+								var baseJobNo = payload.data.baseJob;
 
-				// if we have a payload then do something with it
-				if(payload.data.type == "CANCEL") {
-					var baseJobNo = payload.data.baseJob;
-					var msgText = message;
-					//console.log('type:' + payload.data.type + ', baseJobNo:' + baseJobNo + ', msgText:' + msgText );
-
-					// delete from local storage and resync - if we don't do this we get a conflict - don't know why
-/*
-					var delfilter = 
-						{ "filter":
-							{ "where": {and: [{"mobjobDriver": pdaParams.getDriverId()}, {"mobjobBasejobNum": baseJobNo}] } }
-						};
-*/
-					var delfilter = { "where": {"mobjobBasejobNum": baseJobNo} };
-					Job.find(delfilter, function (err, jobs) {
-
-						var len = jobs.length;
-
-						log.debug("deleting:"+len+" legs");
-
-						for( var leg = 0; leg < len; leg++) {
-							var job = jobs[leg];
-							//console.log("delete job:" + job.mobjobSeq);
-							log.debug("delete leg:"+leg+" job:" + job.mobjobSeq);
-							job.delete();
+								// delete from local storage and resync - if we don't do this we get a conflict - don't know why
+								deleteLegs(baseJobNo);
+							}
+							else {
+								// unknown payload type - just refresh
+								refresh();
+							}
 						}
+						else {
+							// No specific payload data - just refresh
+							refresh();
+						}
+						break;
 
-						// reset total and apply changes (no onChange function so not auto)
-						getJobs();
-					});
-				}
-				else {
-					syncfilter = angular.copy(_syncfilter);
-					if(pdaParams.jobdisplay)
-						sync(onChange,syncfilter);
-					else {
-						syncService.setCallingFunc("JobsIndexCtrl->PushNotificationReceived");
-						syncService.hybridSync(onChange,syncfilter);
+					default:
+						log.info(platform+":Unhandled notification.event:"+notification.event);
+						break;
 					}
-				}
-			}
-			else {
-				// No specific payload data - just refresh
-				syncfilter = angular.copy(_syncfilter);
-				if(pdaParams.jobdisplay)
-					sync(onChange,syncfilter);
-				else {
-					syncService.setCallingFunc("JobsIndexCtrl->PushNotificationReceived");
-					syncService.hybridSync(onChange,syncfilter);
-				}
-			}
-		    break;
+				break;
 
-		default:
-			log.info("Unhandled notification.event:"+notification.event);
-			break;
+			case 'iOS':
+					switch(message.type) {
+						case 'CANCEL':
+							var baseJobNo = message.baseJob;
+							deleteLegs(baseJobNo);
+							break;
+						default:
+							// Probably new work - refresh
+							log.info(platform+":Unhandled message.type:"+message.type);
+							refresh();
+							break;
+					}
+				break;
+
+			// TODO - windows mobile?
+			default:
+				log.info(platform+":Unhandled platform:"+platform);
+				break;
+		};
+
+		function refresh() {
+			syncfilter = angular.copy(_syncfilter);
+			if(pdaParams.jobdisplay)
+				sync(onChange,syncfilter);
+			else {
+				syncService.setCallingFunc("JobsIndexCtrl->PushNotificationReceived");
+				syncService.hybridSync(onChange,syncfilter);
+			}
 		}
+
+		function deleteLegs(baseJobNo) {
+			var delfilter = { "where": {"mobjobBasejobNum": baseJobNo} };
+			Job.find(delfilter, function (err, jobs) {
+
+				var len = jobs.length;
+
+				log.debug("deleting:"+len+" legs");
+
+				for( var leg = 0; leg < len; leg++) {
+					var job = jobs[leg];
+					//console.log("delete job:" + job.mobjobSeq);
+					log.debug("delete leg:"+leg+" job:" + job.mobjobSeq);
+					job.delete();
+				}
+
+				// reset total and apply changes (no onChange function so not auto)
+				getJobs();
+			});
+		}
+
 	});
 
 	$scope.sync = function () {
