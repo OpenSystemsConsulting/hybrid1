@@ -246,6 +246,10 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 				$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
 					log.debug(platform+':$cordovaPush.notificationReceived:' + JSON.stringify(notification));
+					var payload = notification.payload || {};
+					if( payload.type ) {
+						$rootScope.$broadcast(payload.type, payload);
+					}
 					if (notification.alert) {
 						//navigator.notification.alert(notification.alert);
 						var alertPopup = $ionicPopup.alert({
