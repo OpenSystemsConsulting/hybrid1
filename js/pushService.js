@@ -47,7 +47,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				// TODO - IOS - need to get correct path
 				// notification sound
 				var src = "/android_asset/www/audio/notification.mp3";
-				var notificationSnd = $cordovaMedia.newMedia(src);
+				//var notificationSnd = $cordovaMedia.newMedia(src);
 
 				//All this does is register the device with GCM (Google Cloud Messaging)
 				//Once registered with GCM we store the data against the driver id in our DB
@@ -157,7 +157,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 							$rootScope.$broadcast('pushNotificationReceived', notification);	// broadcast to the world
 
 							// TODO - maybe have a different popup and/or sound for each message type so we don't lose any messages
-							notificationSnd.play();				// TODO - should the sound be here?  Or in the broadcast receiver?
+							//notificationSnd.play();				// TODO - should the sound be here?  Or in the broadcast receiver?
 
 		/*	DEBUG - remove popups to try and determine cause of screen hangs
 							if( openPopup) {
