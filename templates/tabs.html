@@ -18,8 +18,9 @@
 
 
   <!-- Edit Tab  - hidden from display - only accessible when selecting a job -->
-  <!-- Required hack in lib/js/ionic.bundle.js per https://github.com/driftyco/ionic/issues/1666 -->
-  <ion-tab hidden="true" title="Edit" icon="icon ion-edit" href="#/tab/jobs/x">
+  <!-- Required the hack in lib/js/ionic.bundle.js per https://github.com/driftyco/ionic/issues/1666 -->
+  <!-- LT - 10/02/2016 - reversed for now - causes error "Cannot call method '$destroy' of undefined" - maybe issue? -->
+  <ion-tab title="Edit" icon="icon ion-edit" href="#/tab/jobs/x">
     <ion-nav-view name="job-edit"></ion-nav-view>
   </ion-tab>
 

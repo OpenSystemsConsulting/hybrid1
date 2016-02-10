@@ -143,8 +143,10 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 					  //console.log('notification.message = ' + notification.message );
 
 						// Message with payload will broadcast payload.type which can be listened for elsewhere in the app
+						// double payload as GCM creates a payload object and puts our one inside it
 						var payload = notification.payload.payload || {};
 						if( payload.type ) {
+							payload.platform = platform;			// event handler may need to know this
 							$rootScope.$broadcast(payload.type, payload);
 						}
 						else {
@@ -248,6 +250,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 					log.debug(platform+':$cordovaPush.notificationReceived:' + JSON.stringify(notification));
 					var payload = notification.payload || {};
 					if( payload.type ) {
+						payload.platform = platform;			// event handler may need to know this
 						$rootScope.$broadcast(payload.type, payload);
 					}
 					if (notification.alert) {

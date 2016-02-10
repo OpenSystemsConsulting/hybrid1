@@ -16,8 +16,8 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData',
-	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData) {
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia',
+	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia) {
 
 	$scope.jobs = [];
 
@@ -244,7 +244,7 @@ angular.module('JobsIndexCtrl', [])
       });
 */
 
-
+	// Original event handler - TODO remove once all events handled elswehere
 	$scope.$on('pushNotificationReceived', function(event, notification) {
 		notificationCount++;
 
@@ -263,7 +263,7 @@ angular.module('JobsIndexCtrl', [])
 						// notification.payload is a JSON object - not always supplied
 
 						var message = notification.message;
-						// TODO - double payload - can we make this more logical?
+						// TODO - double payload - one added by GCM?  can we make this more logical?
 						var payload = notification.payload.payload || {};
 
 						// Check For Cancellation and then delete job 
@@ -294,6 +294,7 @@ angular.module('JobsIndexCtrl', [])
 				break;
 
 			case 'iOS':
+					// TODO - we need to check the correct property - notification.type?
 					switch(message.type) {
 						case 'CANCEL':
 							var baseJobNo = message.baseJob;
@@ -313,37 +314,109 @@ angular.module('JobsIndexCtrl', [])
 				break;
 		};
 
-		function refresh() {
-			syncfilter = angular.copy(_syncfilter);
-			if(pdaParams.jobdisplay)
-				sync(onChange,syncfilter);
-			else {
-				syncService.setCallingFunc("JobsIndexCtrl->PushNotificationReceived");
-				syncService.hybridSync(onChange,syncfilter);
-			}
-		}
 
-		function deleteLegs(baseJobNo) {
-			var delfilter = { "where": {"mobjobBasejobNum": baseJobNo} };
-			Job.find(delfilter, function (err, jobs) {
+	});
 
-				var len = jobs.length;
+	// TODO - move sound handling to function or other service maybe - do we need different sounds for different events?
+	$scope.$on('NEWJOB', function(event, payload) {
+		// Nothing much to do here other than make a noise and refresh the jobs list
+		notificationCount++;
 
-				log.debug("deleting:"+len+" legs");
+		var platform = payload.platform;
+		var sound = "";
 
-				for( var leg = 0; leg < len; leg++) {
-					var job = jobs[leg];
-					//console.log("delete job:" + job.mobjobSeq);
-					log.debug("delete leg:"+leg+" job:" + job.mobjobSeq);
-					job.delete();
-				}
+		switch(platform) {
+			case 'Android':
+				sound = "/android_asset/www/audio/notification.mp3";
+				break;
+			case 'iOS`':
+				break;
+			default:
+				break;
+		};
 
-				// reset total and apply changes (no onChange function so not auto)
-				getJobs();
-			});
+		refresh();
+
+		if( sound != "") {
+			var notificationSnd = $cordovaMedia.newMedia(sound);
+			notificationSnd.play();
 		}
 
 	});
+
+	$scope.$on('CANCEL', function(event, payload) {
+		notificationCount++;
+
+		var platform = payload.platform;
+		var sound = "";
+
+		switch(platform) {
+			case 'Android':
+				sound = "/android_asset/www/audio/notification.mp3";
+				break;
+			case 'iOS`':
+				break;
+			default:
+				break;
+		};
+
+
+		// Check For Cancellation and then delete job 
+		if(typeof payload.data != "undefined") {
+
+			// Belt and braces - we shouldn't get to the event handler if it's not a cancel
+			if(payload.data.type == "CANCEL") {
+				var baseJobNo = payload.data.baseJob;
+
+				// delete from local storage and resync - if we don't do this we get a conflict - don't know why
+				deleteLegs(baseJobNo);
+			}
+			else {
+				// unknown payload type - just refresh
+				refresh();
+			}
+		}
+		else {
+			// No specific payload data - just refresh
+			refresh();
+		}
+
+		if( sound != "") {
+			var notificationSnd = $cordovaMedia.newMedia(sound);
+			notificationSnd.play();
+		}
+
+	});
+
+	function refresh() {
+		syncfilter = angular.copy(_syncfilter);
+		if(pdaParams.jobdisplay)
+			sync(onChange,syncfilter);
+		else {
+			syncService.setCallingFunc("JobsIndexCtrl->PushNotificationReceived");
+			syncService.hybridSync(onChange,syncfilter);
+		}
+	}
+
+	function deleteLegs(baseJobNo) {
+		var delfilter = { "where": {"mobjobBasejobNum": baseJobNo} };
+		Job.find(delfilter, function (err, jobs) {
+
+			var len = jobs.length;
+
+			log.debug("deleting:"+len+" legs");
+
+			for( var leg = 0; leg < len; leg++) {
+				var job = jobs[leg];
+				//console.log("delete job:" + job.mobjobSeq);
+				log.debug("delete leg:"+leg+" job:" + job.mobjobSeq);
+				job.delete();
+			}
+
+			// reset total and apply changes (no onChange function so not auto)
+			getJobs();
+		});
+	}
 
 	$scope.sync = function () {
 
