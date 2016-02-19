@@ -150,8 +150,8 @@ angular.module('JobsIndexCtrl', [])
 		if(conflicts)
 			console.log(conflicts);
 
-			// TODO - should this be here?
-			pushService.registerForPush();
+		// TODO - should this be here?
+		pushService.registerForPush();
 
 
 		$rootScope.syncInProgress = false;
