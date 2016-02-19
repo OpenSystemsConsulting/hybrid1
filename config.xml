@@ -10,7 +10,7 @@
     <content src="index.html" />
     <access origin="*" />
     <plugin name="cordova-plugin-cache" />
-    <plugin name="cordova-plugin-push-notification" />
+    <plugin name="phonegap-plugin-push" />
     <plugin name="cordova-plugin-network-information" />
     <plugin name="cordova-connectivity-monitor" />
     <plugin name="cordova-plugin-velda-devicefeedback" />
