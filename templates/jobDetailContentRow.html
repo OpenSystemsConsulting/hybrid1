@@ -1,0 +1,121 @@
+		<!--   THIS IS THE LABEL  -->
+
+    	<span class="jobDetail-label"
+	    		ng-class="{ 'alignAlmostRight': (property.index == 1) }" 
+	    		ng-click="showActionSheet()">
+	    	<span class="jobDetails-label" >
+					<!-- {{ property.label | debug }} -->
+					{{ property.label }} 
+	    	</span>
+	    </span>
+
+		<!--jobDetailContentRow.html -->
+		<span ng-show="property.index == 1" class="menuIcon" ng-click="showActionSheet()">
+			<i class="icon ion-navicon-round"></i>
+		</span>
+
+	    <div ng-show="property.type == ''" class="input-label" style="width:100%;">
+	    	<span  class="normalFontWeight">{{property.value}}</span>
+	    	<div ng-show="(property.index == 1)" 
+	    			class="absoluteRight rowButton" 
+	    			ng-click="saveJob()">
+					Save Job
+			</div>
+	    </div>
+
+
+		<!--Put A Status Change Button on screen -->
+
+	<!-- [
+	    	class="standardInput"
+	    	ng-class="{ 'checkedclass': (property.property == 'mobjobLegNumber') }"  -->
+
+	    <input disabled ng-show="(property.type != '') && (property.type != 'toggle') && (property.type != 'enum')  && (!property.omitFromForm) " 
+	    	ng-class="{ 'requiredInput': ((property.required == true) && (property.value == '')),'addressfields': ((property.property == 'mobjobAddress1' || property.property == 'mobjobAddress2' || property.property == 'mobjobAddress3' || property.property == 'mobjobAddress4' || property.property == 'mobjobAddress5' || property.property == 'mobjobClientName')) , 'suburbfield': ((property.property == 'mobjobSuburb')) , 'servicefield': ((property.property == 'mobjobServiceCode')) }" 
+	    	ng-keyup="dataChanged($event, property)" 
+	    	type="{{property.type}}" ng-model="property.value"
+	    	class="standardInput">
+	    </input>
+
+	<!-- ] -->
+
+
+	    <ion-toggle ng-show="property.type == 'toggle'" 
+	    			ng-model="property.value" 
+	    			ng-click="dataChanged($event, property)" 
+	    			class="noBorder toggleAdjust">
+		</ion-toggle>
+
+
+		<!--  Show the Job Status Enum Value   -->
+
+	    <input disabled ng-show="(property.type != '') && (property.type != 'toggle') && (property.type == 'enum')  && (!property.omitFromForm) " 
+	    	ng-class="{ 'requiredInput': ((property.required == false)) }" 
+	    	ng-keyup="dataChanged($event, property)" 
+	    	type="{{property.type}}" ng-model="property.enumValue.label"
+	    	class="jobStatusInput">
+	    	
+	    	
+	    </input>
+		<!--   ACCEPT  JOB -->
+		<div ng-show="(property.enumValue.value == 'NJ' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
+					>
+			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)">
+				Accept
+			</button>
+			<!-- for testing - local delete job functionality -->
+			<button class="button button-positive floatLeft" ng-click="deleteJob(property.legid)" ng-show="false" >
+				Delete
+			</button>
+
+		</div>
+
+
+
+		<!--   PICKUP  JOB -->
+		<div ng-show="(property.enumValue.value == 'AC' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
+					>
+
+			<div ng-model="signatureOne">
+			<a  class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)">
+				Pickup	
+			</a>
+
+
+			</div> 
+
+		</div> 
+		<!--   COMPLETE  JOB -->
+		<div ng-show="(property.enumValue.value == 'PU' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
+					>
+			<!--LEGID = {{property.legid % 100}} -->
+
+			<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)">
+
+				Deliver	
+
+			</button>
+
+		</div> 
+
+		<div ng-show="(property.enumValue.value == 'PU' && (property.legid % 100 > 0) && pdaParams.experimental )" class="input-label" style="width:100%;"
+					>
+			<!--LEGID = {{property.legid % 100}} -->
+
+			<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)">
+
+				Deliver	
+
+			</button>
+
+		</div> 
+		
+
+<!--
+		<select ng-model="property.enumValue" 
+				ng-options="multi.label for multi in property.enum" 
+				ng-change="multiSelectChange(property)" 
+				ng-show="(property.type == 'enum')">
+		</select>
+
+-->

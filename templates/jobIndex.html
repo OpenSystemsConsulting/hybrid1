@@ -1,0 +1,203 @@
+<!-- 
+  This template gets placed in the Pet tab's <ion-nav-view> directive.
+  It was wired up in the app config (app.js) 
+  The 'jobs' data comes from its $scope within JobIndexCtrl (controller.js)
+-->
+<ion-view title="{{titleWithTotal}} Driver:{{pdaParams.driverId}} V:{{pdaParams.getAppVersion()}}">
+  <ion-content ng-class="{ 'overflow-scroll': (desktopBrowserScrolling == true) }">
+
+	<ion-nav-buttons side="right">
+		<a class="button button-icon ion-ios7-email-outline" href="#/tab/messages">
+			<span class="badge badge-assertive icon-badge" ng-if="newMessageCount">{{newMessageCount}}</span>
+		</a>
+    </ion-nav-buttons>
+
+<!-- TODO - new jobs icon of some kind
+	<ion-nav-buttons side="left">
+		<a class="button button-icon ion-ios7-briefcase-outline" href="#/tab/jobs">
+			<span class="badge badge-assertive icon-badge" ng-if="newMessageCount">{{newMessageCount}}</span>
+		</a>
+    </ion-nav-buttons>
+-->
+<!-- for jobs - see ionicons.com - maybe ion-ios-paper-outline, ion-ios-list-outline -->
+<!--
+    <div class="item item-input noBorder">
+      <span class="topLeftMenuIcon" ng-click="showActionSheet()">
+        <i class="icon ion-navicon-round"></i>
+      </span>
+    </div>
+-->
+    <ion-list>
+
+      <ion-item ng-repeat="job in jobs" type="item-text-wrap" href="#/tab/jobs/{{job.mobjobSeq}}" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+
+		<div class="list"> 
+
+			<span ng-switch on="job.mobjobStatus">
+   				<img class="left" ng-switch-when="DL" src='img/Del.jpg' >
+   				<img class="left" ng-switch-when="PU" src='img/PickedUp.jpg' >
+   				<img class="left" ng-switch-when="AC" src='img/Accept.jpg'>
+   				<img class="left" ng-switch-default   src='img/NwJob.jpg' >
+			</span>
+		<!--<span class="jobstatusspan"> {{ job.mobjobStatus | displayStatusDetail }} </span> <span class="jobdatespan"> {{ job.mobjobBookingDay | date:'dd-MM-yyyy' }} </span>  -->
+
+			<div class="jobdetails">
+
+				<span class="jobFromSubspan"> {{ job.mobjobSuburb }} </span>
+				-  
+				<span class="jobToSubspan"> {{ job.mobjobToSuburb }} </span> 
+				<span class="jobServicespan"> ({{ job.mobjobServiceCode }}) </span>
+
+				<span class="jobdatespan"> {{ job.mobjobBookingDay | date:'dd-MM-yyyy' }} </span>  
+				<h3>{{generateJobHeader(job)}}</h3>
+				
+
+			</div>
+	
+		</div>
+		
+      </ion-item>
+    </ion-list>
+
+
+<section id="totals" ng-if="pdaParams.debugMode">
+		<strong> {{ jobs.length }} jobs loaded </strong>
+</section>
+
+<section id="local-conflicts" class="conflicts" ng-if="localConflicts.length">
+  <ion-scroll direction="xy" >
+  <h1>Local Conflicts</h1>
+  <div ng-repeat="conflict in localConflicts">
+    <table>
+      <tr>
+        <th>Local Data</th>
+        <th>Remote Data</th>
+      </tr>
+      <tr>
+        <td>
+          <div ng-if="conflict.sourceChange.type() === 'delete'">
+            <strong>Deleted</strong>
+          </div>
+          <table ng-if="conflict.sourceChange.type() !== 'delete'">
+            <tr>
+              <th>id</th>
+              <th>change</th>
+              <!--<th>data</th>-->
+              <th>status</th>
+              <th>driver</th>
+              <th>job</th>
+              <th>last</th>
+            </tr>
+            <tr>
+              <td>{{conflict.sourceChange.modelId}}</td>
+              <td>{{conflict.sourceChange.type()}}</td>
+<!--
+              <td>
+                {{conflict.source}}
+              </td>
+-->
+              <td>
+                {{conflict.source.mobjobStatus}}
+              </td>
+              <td>
+                {{conflict.source.mobjobDriver}}
+              </td>
+              <td>
+                {{conflict.source.mobjobSeq}}
+              </td>
+              <td>
+                {{conflict.source.lastModified}}
+              </td>
+            </tr>
+            <tr class="hide">
+              <td>
+                {{conflict}}
+              </td>
+              <td>
+                {{conflict.sourceChange}}
+              </td>
+              <td>
+                {{conflict.source}}
+              </td>
+            </tr>
+          </table>
+          <button ng-click="resolveUsingSource(conflict)">Use Local Version</button>
+        </td>
+        <td>
+          <div ng-if="conflict.targetChange.type() === 'delete'">
+            <strong>Deleted</strong>
+          </div>
+          <table ng-if="conflict.targetChange.type() !== 'delete'">
+            <tr>
+              <th>id</th>
+              <th>change</th>
+              <!--<th>data</th>-->
+              <th>status</th>
+              <th>driver</th>
+              <th>job</th>
+              <th>last</th>
+            </tr>
+            <tr>
+              <td>{{conflict.targetChange.modelId}}</td>
+              <td>{{conflict.targetChange.type()}}</td>
+<!--
+              <td>
+                {{conflict.target}}
+              </td>
+-->
+              <td>
+                {{conflict.target.mobjobStatus}}
+              </td>
+              <td>
+                {{conflict.target.mobjobDriver}}
+              </td>
+              <td>
+                {{conflict.target.mobjobSeq}}
+              </td>
+              <td>
+                {{conflict.target.lastModified}}
+              </td>
+            <tr class="hide">
+              <td>
+                {{conflict}}
+              </td>
+              <td>
+                {{conflict.targetChange}}
+              </td>
+              <td>
+                {{conflict.target}}
+              </td>
+            </tr>
+            </tr>
+          </table>
+          <button ng-click="resolveUsingTarget(conflict)">Use Server Version</button>
+        </td>
+      </tr>
+    </table>
+<!--
+    <div class="manual-merge">
+      <h4>Merge Manually</h4>
+      <input class="toggle" type="checkbox" ng-model="conflict.manual.completed">
+      <input class="edit" ng-trim="false" ng-model="conflict.manual.title">
+      <button ng-click="resolveManually(conflict)">Use This Version</button>
+    </div>
+  </div>
+-->
+</ion-scroll>
+</section>
+
+	<section id="debug" class="debug" ng-if="pdaParams.debugMode">
+		<button ng-click="sync()" ng-class="{deltas: needSync}">Sync</button>
+		<button ng-click="connect()">Connect</button>
+		<button ng-click="disconnect()">Disconnect</button>
+		<button ng-click="reload()">Reload jobs</button>
+		<button ng-click="full_sync_and_load()">Remove/Resync</button>
+		<button ng-click="clearReplicationData()">Clear local repl</button>
+		<button ng-click="exitTplusMobile()" >Exit TplusMobile</button>
+		<!-- <a href="/debug" target="_blank">Debug</a> -->
+		<strong> connected: {{ connected() }} </strong>
+		<strong> syncing: {{ syncInProgress }} </strong>
+	</section>
+
+  </ion-content>
+</ion-view>

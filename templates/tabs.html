@@ -1,0 +1,77 @@
+
+<!-- 
+  Create tabs with an icon and label, using the tabs-positive style. 
+  Each tab's child <ion-nav-view> directive will have its own 
+  navigation history that also transitions its views in and out.
+-->
+<ion-tabs class="tabs-icon-top tabs-default">
+
+  <!-- Login    NOT NEEDED
+  <ion-tab title="Login" icon="icon ion-log-in" href="#/login">
+    <ion-nav-view name="login"></ion-nav-view>
+  </ion-tab> -->
+
+  <!-- Jobs Tab -->
+  <ion-tab title="Jobs" icon="icon ion-home" href="#/tab/jobs">
+    <ion-nav-view name="jobs-tab"></ion-nav-view>
+  </ion-tab>
+
+
+  <!-- Edit Tab  - hidden from display - only accessible when selecting a job -->
+  <!-- Required the hack in lib/js/ionic.bundle.js per https://github.com/driftyco/ionic/issues/1666 -->
+  <!-- LT - 10/02/2016 - reversed for now - causes error "Cannot call method '$destroy' of undefined" - maybe issue? -->
+  <ion-tab title="Edit" icon="icon ion-edit" href="#/tab/jobs/x">
+    <ion-nav-view name="job-edit"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Barcode Tab -->
+  <ion-tab ng-if="pdaParams.experimental" title="Barcodes" icon="icon ion-ios7-barcode-outline" href="#/tab/barcodes">
+    <ion-nav-view name="barcodes-tab"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Device Tab -->
+  <ion-tab title="Device" icon="icon ion-edit" href="#/tab/device">
+    <ion-nav-view name="device-tab"></ion-nav-view>
+  </ion-tab>
+
+  <!-- History Tab -->
+<!--
+  <ion-tab title="History" icon="icon ion-clipboard" href="#/tab/history">
+    <ion-nav-view name="history-tab"></ion-nav-view>
+  </ion-tab>
+-->
+
+  <!-- Sync test Tab    NOT NEEDED
+  <ion-tab title="Testing" icon="icon ion-clipboard" href="#/tab/test">
+    <ion-nav-view name="test-tab"></ion-nav-view>
+  </ion-tab> -->
+
+  <!-- Changes Tab -->
+  <ion-tab title="Changes" icon="icon ion-clipboard" href="#/tab/change">
+    <ion-nav-view name="change-tab"></ion-nav-view>
+  </ion-tab>
+
+  <!-- GPS Detail -->
+  <ion-tab title="GPS" icon="icon ion-ios7-eye" href="#/tab/debug">
+    <ion-nav-view name="debug-tab"></ion-nav-view>
+  </ion-tab>
+
+  <!-- PDA -->
+  <ion-tab title="PDA" icon="icon ion-ios7-cog-outline" href="#/tab/tpmPdaControllers">
+    <ion-nav-view name="pda-tab"></ion-nav-view>
+  </ion-tab>
+
+
+  <!-- About Tab -->
+<!--
+  <ion-tab title="About" icon="icon ion-search" href="#/tab/about">
+    <ion-nav-view name="about-tab"></ion-nav-view>
+  </ion-tab>
+-->
+
+  <!-- Messages Tab -->
+  <ion-tab title="Msgs" icon="icon ion-ios7-email" href="#/tab/messages">
+    <ion-nav-view name="messages-tab"></ion-nav-view>
+  </ion-tab>
+
+</ion-tabs>

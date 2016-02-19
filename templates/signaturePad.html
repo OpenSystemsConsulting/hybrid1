@@ -1,0 +1,22 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">Add Signature</h1>
+  </ion-header-bar>
+  <ion-content scroll="false">
+    <div class="card list">
+      <div class="item item-body">Please use your finger or stylus to sign below</div>
+      <canvas id="signature-canvas" class="padding-horizontal item" style="width: 100%;"></canvas>
+      <div class="item item-checkbox">
+        <label class="checkbox">
+           <input type="checkbox" ng-model="signaturePadModel.signatureConfirm">
+         </label>
+         I accept the signature above
+      </div>
+    </div>
+    <div class="button-bar padding">
+      <button class="button" ng-click="clear(); signatureModal.hide()">Cancel</button>
+      <button class="button" ng-click="clear()">Clear</button>
+      <button class="button button-positive" ng-disabled="!(signaturePadModel.signatureConfirm && signature)" ng-click="save()">Accept</button>
+    </div>
+  </ion-content>
+</ion-modal-view>

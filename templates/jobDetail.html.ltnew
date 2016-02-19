@@ -1,0 +1,11 @@
+<ion-view title="{{generateJobHeader(job)}}" ng-controller="JobDetailCtrl">
+<!--
+	<ion-content>
+		<ion-list>
+			<ion-item ng-repeat="job in jobs" type="item-text-wrap">
+				<span ng-include="'templates/jobDetailContent.html'"></span>
+			</ion-item>
+		</ion-list>
+	</ion-content>
+-->
+</ion-view>

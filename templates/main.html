@@ -1,0 +1,44 @@
+<!-- 
+  This template gets placed in the Pet tab's <ion-nav-view> directive.
+  It was wired up in the app config (app.js) 
+  The 'jobs' data comes from its $scope within JobIndexCtrl (controller.js)
+-->
+<ion-view title="{{titleWithTotal}}">
+  <ion-content ng-class="{ 'overflow-scroll': (desktopBrowserScrolling == true) }">
+    <div class="item item-input noBorder">
+      <span class="topLeftMenuIcon" ng-click="showActionSheet()">
+        <i class="icon ion-navicon-round"></i>
+      </span>
+    </div>
+    <ion-list>
+      <ion-item ng-repeat="job in jobs" type="item-text-wrap" href="#/tab/jobs/{{job.mobjobSeq}}">
+
+		<div class="list"> 
+
+			<span ng-switch on="job.mobjobStatus">
+   				<img class="left" ng-switch-when="IP" src='img/PickedUp.jpg' >
+   				<img class="left" ng-switch-when="AC" src='img/Accept.jpg'>
+   				<img class="left" ng-switch-default   src='img/NwJob.jpg' >
+			</span>
+		<!--<span class="jobstatusspan"> {{ job.mobjobStatus | displayStatusDetail }} </span> <span class="jobdatespan"> {{ job.mobjobBookingDay | date:'dd-MM-yyyy' }} </span>  -->
+
+			<div class="jobdetails">
+
+				<span class="jobFromSubspan"> {{ job.mobjobSuburb }} </span>
+				--To--  
+				<span class="jobToSubspan"> {{ job.mobjobToSuburb }} </span> 
+				<span class="jobServicespan"> ({{ job.mobjobServiceCode }}) </span>
+
+				<span class="jobdatespan"> {{ job.mobjobBookingDay | date:'dd-MM-yyyy' }} </span>  
+				
+				<h3>{{generateJobHeader(job)}}</h3>
+
+			</div>
+	
+		</div>
+		
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-view>

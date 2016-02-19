@@ -1,0 +1,169 @@
+.inputbg {
+ background-color: #FFFF00;
+}
+.bigbuttonspan {
+    color:blue;
+    font-size: 22px;
+    font-weight: black;
+    float: right;
+    width: 300px;
+}
+
+.item h3 {
+  margin: 0 0 4px 0;
+  font-size: 14px; }
+
+gridlabel{
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.jobdetailnumber {
+ background: #00ff00;
+}
+
+.jobnumberspan {
+    color:blue !important;
+    font-size: 21px;
+    font-weight: black;
+    width: 80px;
+    display: block;
+    text-align:center;
+}
+
+.jobdetails {
+
+    margin-top: 5px;
+    margin-left: 50px;
+}
+
+.jobdatespan {
+    color:blue;
+    font-size: 14px;
+    font-weight: black;
+    float: right;
+    /*width: 100px;*/
+}
+
+.jobFromSubspan {
+    font-size: 18px;
+    font-weight: black;
+}
+.jobToSubspan {
+    font-size: 18px;
+    font-weight: black;
+}
+.jobServicespan {
+    font-size: 18px;
+    font-weight: black;
+}
+.jobStatusInput {
+    text-align:center;
+    color:blue;
+    background-color:yellow !important;
+    font-size: 21px;
+    font-weight: black;
+    float: left;
+    width: 80px;
+    display: block:
+}
+
+.item-input {
+
+	padding: 2px 0px 2px 2px !important;
+}
+
+.item-content {
+    position: relative;
+    z-index: 2;
+    padding: 15px 25px 15px 2px !important;
+    border: none;
+    background-color: white;
+}
+.list {
+	padding-top: 0px !important;
+}
+
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+/* Use the clearfix technique: http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-   
+overflowhidden-demystified/ */
+.clearfix:before,
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  overflow: hidden;
+}
+.clearfix:after {clear: both;}
+.clearfix {zoom: 1;} /* IE < 8 */
+
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+.jobDetails-label {
+    width: 2%;
+    font-size: 10px;
+    float: left;
+}
+
+.input-label {
+    width: 5%;
+}
+
+.col {
+	width: 100%;
+}
+.devicespan {
+    color:blue;
+    font-size: 14px;
+    font-weight: black;
+    float: right;
+    width: 100px;
+}
+
+ 
+.inputClass {
+    background-color:#FFFF00 !important;
+    color:white;
+}
+.addressfields {
+    background-color:#FFCCFF !important;
+    color:white;
+}
+.suburbfield {
+    background-color:#FFCC99 !important;
+    color:white;
+}
+.servicefield {
+    background-color:#CCFFE5 !important;
+    color:white;
+}
+.centered {
+	text-align:center;
+}
+.strong {
+	font-size:25px !important;
+	font-weight:bold;
+}
+
+.badge-container{
+      position: relative;
+}
+
+.icon-badge {
+  position: absolute !important;
+  top: 3px;
+  right: 0px;
+  font-size: 12px;
+}
+.spinner svg {
+  width: 19% !important;
+  height: 85px !important;
+}

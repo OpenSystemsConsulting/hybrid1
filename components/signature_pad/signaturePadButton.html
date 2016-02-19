@@ -1,0 +1,7 @@
+<div>
+  <a ng-hide="signature" class="button button-clear button-positive button-small" ng-click="openSignatureModal()">Tap to sign</a>
+  <div ng-show="signature">
+    <p><a class="button button-clear button-positive button-small" ng-click="openSignatureModal()">Edit Signature</a></p>
+    <img ng-src="{{signature}}" style="width:100%;" />
+  </div>
+</div>

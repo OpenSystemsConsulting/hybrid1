@@ -1,0 +1,146 @@
+<ion-view title="{{devicectrl.title}}" ng-controller="deviceCtrl">
+  <ion-content padding="true">
+	<ion-list>
+
+	<ion-item class="item item-icon-right">
+		Driver Number:
+		<span class="item-note">
+			{{devicectrl.drivernum}}
+		</span>
+	</ion-item>
+
+	<div class="item item-divider">
+		App properties - v{{version}}
+	</div>
+	<ion-item class="item" >
+		Version
+		<span class="item-note">
+			{{version}}
+		</span>
+	</ion-item>
+
+	<ion-checkbox class="item-checkbox-right" ng-checked="{{connected()}}" ng-disabled="true">
+		Network connection
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-checked="{{devicectrl.isGpsWorking}}" ng-disabled="true">
+		GPS Active
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-checked="{{devicectrl.isDeviceReady}}" ng-disabled="true">
+		Device Ready
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-model="devicectrl.showGpsAlerts" ng-change="updateShowGpsAlerts(devicectrl.showGpsAlerts)">
+		Show GPS Alerts
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-model="devicectrl.sendGps" ng-change="updateSendGps(devicectrl.sendGps)">
+		GPS To Server
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-checked="{{devicectrl.registeredForPush}}" ng-disabled="true">
+		Reg'd For Push (GCM)
+	</ion-checkbox>
+	<ion-item class="item item-button-right" >
+		Register for GCM
+		<button class="button button-positive" ng-click="pushRegister()">
+			Register
+		</button>
+	</ion-item>
+	<ion-item class="item item-button-right" >
+		UnRegister from GCM
+		<button class="button button-light" ng-click="pushDeRegister()">
+			UnRegister
+		</button>
+	</ion-item>
+
+	<ion-checkbox class="item-checkbox-right" ng-model="desktopBrowserScrolling" ng-change="toggleDesktopBrowserScrolling()">
+		Desktop Scrolling Mode
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.multileg" >
+		Multileg
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.jobdisplay" >
+		Job display
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.debugMode" ng-change="pdaParams.setDebugMode(pdaParams.debugMode)">
+		Debug Mode
+	</ion-checkbox>
+
+	<ion-checkbox ng-if="pdaParams.debugMode" class="item-checkbox-right" ng-model="fullreplication" ng-change="toggleFullReplication()">
+		Full Replication
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.experimental" >
+		Enable experimental features
+	</ion-checkbox>
+
+
+	<span ng-if="pdaParams.debugMode">
+		<div class="item item-divider">
+			Config
+		</div>
+		<ion-item class="item" >
+			Client ID
+			<span class="item-note">
+				{{clientConfig.clientID}}
+			</span>
+		</ion-item>
+		<ion-item class="item" >
+			Server IP
+			<span class="item-note">
+				{{clientConfig.serverIP}}:{{clientConfig.serverPort}}
+			</span>
+		</ion-item>
+		<ion-item class="item" >
+			Logger IP
+			<span class="item-note">
+				{{appConfig.logServerIP}}:{{appConfig.logServerPort}}
+			</span>
+		</ion-item>
+		<div class="item item-divider">
+			GCM
+		</div>
+	</span>
+
+
+	<div class="item item-divider">
+		Network properties
+	</div>
+	<ion-checkbox class="item-checkbox-right" ng-checked="{{isOnline}}" ng-disabled="true">
+		Online
+	</ion-checkbox>
+
+	<ion-item class="item" >
+		Network type
+		<span class="item-note">
+			{{networkType}}
+		</span>
+	</ion-item>
+
+<!--
+	<ion-item class="item" >
+		IP address
+		<span class="item-note">
+			{{IPAddress}}
+		</span>
+	</ion-item>
+-->
+
+	<div class="item item-divider">
+		Device properties
+	</div>
+	<ion-item class="item" ng-repeat="(key, value) in device">
+		{{key}}
+		<span class="item-note">
+			{{value}}
+		</span>
+	</ion-item>
+
+	</ion-list>
+  </ion-content>
+</ion-view>
