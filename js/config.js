@@ -19,7 +19,7 @@ angular.module('config', [])
 })
 // clientConfig object contains the client specific data, name REST endpoint etc.
 .constant('clientConfig', {
-	'clientID':		'SCOPE',
-	'serverIP': 	'scope.opensyscon.com.au',
-	'serverPort':	3112
+	'clientID':		'WPE',
+	'serverIP': 	'opensyscon.com.au',
+	'serverPort':	3115
 })

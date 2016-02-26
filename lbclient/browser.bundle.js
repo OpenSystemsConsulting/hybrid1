@@ -18252,7 +18252,7 @@ module.exports={
     "remote": {
       "connector": "remote",
       "debug": "true",
-      "url": "http://scope.opensyscon.com.au:3112/api"
+      "url": "http://opensyscon.com.au:3115/api"
     },
     "local": {
       "connector": "memory",
