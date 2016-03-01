@@ -74,7 +74,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 					"appId"			: "osc-push-demo",
 					"userId"		: push_service.mycurrent_drivernum,
 					"deviceToken"	: token,
-					"deviceType"	: deviceType
+					"deviceType"	: deviceType,
+					"pdaVersion"	: pdaParams.getAppVersion()
 				};
 				var filter = { "where": { "deviceToken": token }};
 				log.debug(platform+':$cordovaPushV5.notificationReceived: check for current registration, filter:'+JSON.stringify(filter));
