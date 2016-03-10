@@ -65,7 +65,7 @@ gridlabel{
     font-size: 21px;
     font-weight: black;
     float: left;
-    width: 80px;
+	flex: 1 0 150px !important;
     display: block:
 }
 

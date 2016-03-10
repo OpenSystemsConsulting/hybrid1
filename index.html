@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-	<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+	<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
     <title>OSC Mobile</title>
 
 	<!-- weinre debugger -->
@@ -47,6 +47,7 @@
     <script src="js/lb-services.js"></script>
     <script src="js/osc-services.js"></script>
     <script src="js/LoginCtrl.js"></script>
+    <script src="js/MenuCtrl.js"></script>
 	<script src="js/ChangeCtrl.js"></script>
 	<script src="js/MainCtrl.js"></script>
     <script src="js/TpmPdaController.js"></script>
@@ -62,6 +63,7 @@
 	<script src="js/deviceCtrl.js"></script>
 	<script src="js/applications.js"></script>
 	<script src="js/installations.js"></script>
+	<script src="js/imageCapture.js"></script>
 	<script src="js/ng-stats.js"></script>
 	<script src="js/angular-fqueue.js"></script>
 
@@ -85,10 +87,13 @@
       Additional attributes set its look, ion-nav-bar animation and icons
       Icons provided by Ionicons: http://ionicons.com/ 
     -->
+
+	<!--
     <ion-nav-bar class="bar-positive">
       <ion-nav-back-button class="button-icon button-clear ion-ios7-arrow-back">
       </ion-nav-back-button>
     </ion-nav-bar>
+	-->
 
     <!-- 
       The views will be rendered in the <ion-nav-view> directive below

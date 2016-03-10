@@ -34,8 +34,10 @@ angular.module('starter', ['ionic',
 							'fqueue',
 							'config',
 							'ngIdle',
-							'BarcodeCtrl'
-							])
+							'BarcodeCtrl',
+							'imageCapture',
+							'MenuCtrl'
+						])
 
 
 // When the application is being bootstrapped, it runs the configuration phase
@@ -64,7 +66,9 @@ angular.module('starter', ['ionic',
     .state('tab', {
       url: '/tab',
       abstract: true,
-      templateUrl: 'templates/tabs.html'
+      //templateUrl: 'templates/tabs.html'
+		templateUrl: 'templates/menu.html',
+		controller: 'MenuCtrl'
     })
 
 	.state('login', {

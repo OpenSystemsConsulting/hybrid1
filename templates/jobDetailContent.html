@@ -57,6 +57,15 @@
 			</button>
 		</div>
 
+		<!--   IMAGE CAPTURE -->
+		<div ng-if="((property.enumValue.value == 'AC' || property.enumValue.value == 'PU' ||property.enumValue.value == 'AP') && (property.legid % 100 == 0 || property.legid % 100 > 0 ) )" class="input-label" >
+
+				<!--ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"-->
+			<!--<button camera ng-model='myPicture' imageid="property.legid" class="button button-energized floatLeft" > -->
+			<camera/>
+
+		</div> 
+
 
 		<!--   PICKUP  JOB -->
 		<div ng-if="(property.enumValue.value == 'AC' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"

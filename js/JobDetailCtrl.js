@@ -8,8 +8,8 @@ angular.module('JobDetailCtrl', [])
 })
 
 // For the View which is Displaying and Editing a Job or for the Creation of a new Job...
-.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger',
-	function($rootScope, $scope, $state, Job, util,pdaParams,Logger) {
+.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','$cordovaFile',
+	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,$cordovaFile) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -121,6 +121,22 @@ angular.module('JobDetailCtrl', [])
 
         });
 	  }
+
+
+	$scope.myPictures = [];
+	$scope.$watch('myPicture', function(value) {
+    if(value) {
+      	myPictures.push(value);
+		$cordovaFile.writeFile(cordova.file.dataDirectory, 'steve.txt' , value, true)
+			.then(function (success) {
+			// success
+		}, function (error) {
+			// error
+		});
+   	}
+	}, true);
+
+
 
 	  function newJob() {
 			mystr = 'newJob';
