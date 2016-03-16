@@ -2,8 +2,8 @@ angular.module('deviceCtrl', [])
 
 
 .controller('deviceCtrl', [
-'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', '$cordovaDevice', 'network','fullreplication', '$cordovaNetwork',"appConfig","clientConfig",
-function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, $cordovaDevice, network, fullreplication, $cordovaNetwork, appConfig, clientConfig) {
+'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', '$cordovaDevice', 'network','fullreplication', '$cordovaNetwork',"appConfig","clientConfig",'imageService',
+function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, $cordovaDevice, network, fullreplication, $cordovaNetwork, appConfig, clientConfig, imageService) {
 
 	// TODO - maybe have array of key/value pairs - then can simply iterate with ng-repeat on template
 	var devicectrl = { };
@@ -22,6 +22,7 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 
 	$scope.appConfig = appConfig;
 	$scope.clientConfig = clientConfig;
+	$scope.imagePollCount = imageService.getCount();
 
 	$scope.version = appConfig.version.toFixed(2);
 

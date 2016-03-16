@@ -1,0 +1,19 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">Add notes to Image</h1>
+  </ion-header-bar>
+  <ion-content scroll="false">
+    <div class="card list">
+      <div class="item item-body">
+           <label > Enter any comments for your image below: </label>
+           <input class="inputbg" type="text" name="imagemessage" onclick="this.focus();this.select()" ng_model="photoMessage.text" required >
+      </div>
+
+    <div class="button-bar padding">
+      <button class="button" ng-click="clear(); modal.hide()">Cancel</button>
+      <button class="button" ng-click="clear()">Clear</button>
+      <button class="button button-positive"  ng-click="save()">Save</button>
+    </div>
+
+  </ion-content>
+</ion-modal-view>

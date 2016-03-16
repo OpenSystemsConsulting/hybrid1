@@ -552,4 +552,140 @@ angular.module('osc-services', [])
 
 	return messageService;
 })
+.factory('imageService', function($rootScope, $timeout, cordovaReady, $cordovaFile){
+ 
+	// Service to handle image files
+
+	//var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'imageService'};
+
+	var fileList = [];
+	var calls = 0;
+
+	function fail(e) {
+		console.log("FileSystem Error");
+		console.dir(e);
+	}
+
+	function getFiles(fileSystem) {
+
+		var directoryReader = fileSystem.createReader();
+		directoryReader.readEntries(directoryReaderSuccess,fail);
+	}
+
+	function directoryReaderSuccess(entries){
+
+		// alphabetically sort the entries based on the entry's name
+		//entries.sort(function(a,b){return (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)});
+
+		var numFilesAndDirs = entries.length;
+		fileList = [];
+		for( i=0; i<numFilesAndDirs; i++) {
+			
+			var fileEntry = entries[i];
+
+			// TODO - filter out non image files
+			if( fileEntry.isFile) {
+
+				// TODO - do we read here?  Or simply create a list for use as required?
+				var imgfile = {};
+				imgfile.nativeURL = fileEntry.nativeURL;
+				imgfile.name = fileEntry.name;
+				fileList.push(imgfile);
+
+/*
+				fileEntry.file(function(file) {
+					var reader = new FileReader();
+
+					reader.onloadend = function(e) {
+						//console.log("Text is: "+this.result);
+						//fileList.push(file);
+					}
+
+					reader.readAsText(file);
+				});
+*/
+			}
+		}
+		
+	}
+
+
+	function listDir(path){
+		window.resolveLocalFileSystemURL(path, getFiles, fail
+
+/*
+			function (fileSystem) {
+				var reader = fileSystem.createReader();
+				reader.readEntries(
+					function (entries) {
+
+						console.log(entries);
+						var numFilesAndDirs = entries.length;
+
+						fileList = [];
+						for( i=0; i<numFilesAndDirs; i++) {
+							if( entries[i].isFile) {
+								//fileList.push(entries[i].nativeURL);		// nativeURL is the full local url name e.g. file://...
+								file.nativeURL = entries[i].nativeURL;
+								file.name = entries[i].name;
+
+								$cordovaFile.readAsText(cordova.file.dataDirectory, file.name)
+									.then( function(success) {
+
+										// TODO - async (again!!!) - this always pushes the last file only
+										file.base64 = success;
+					
+										fileList.push(file);
+
+									}, function(error) {
+										console.log(error);
+									});
+							}
+						}
+					},
+					function (err) {
+						console.log(err);
+					}
+				);
+			}, function (err) {
+				console.log(err);
+			}
+*/
+		);
+	}
+
+	var poller = function pollDir() {
+		// read through image dir and grab any files
+
+		if( cordovaReady.isready) {
+			listDir(cordova.file.dataDirectory);
+		}
+
+		calls++;
+
+		// TODO - need to restructure or move this call as listDir is async so we set a timeout maybe before retrirving files
+		$timeout(poller, 10000);			// 5000 = 5 seconds
+	};
+
+	var imageService = {
+
+		startWatching: function(){
+			poller();
+		},
+
+		getCount: function() { return(calls) },
+
+		getFileList: function() {
+			if( cordovaReady.isready) {
+				listDir(cordova.file.dataDirectory);		// grab latest set of filenames
+				return(fileList)
+			}
+			else {
+				return [];
+			}
+		}
+	}
+
+	return imageService;
+})
 ;

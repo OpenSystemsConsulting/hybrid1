@@ -1,0 +1,28 @@
+<ion-view title="Driver: ({{pdaParams.driverId}}) V: {{pdaParams.getAppVersion()}}">
+<!--
+	<ion-nav-buttons side="right">
+		<button ng-click="toggleSearchBox()" class="button button-icon ion-ios7-email-outline">
+			<span class="badge badge-assertive icon-badge">5</span>
+		</button>
+    </ion-nav-buttons>
+-->
+	<ion-content ng-class="{ 'overflow-scroll': (desktopBrowserScrolling == true) }">
+
+	<strong ng-if="images.length === 0">
+		No images
+	</strong>
+
+	<ion-list>
+		<ion-item class="item" ng-repeat="image in images.slice().reverse() track by $index" type="item-text-wrap">
+
+			<img data-ng-src="{{image.nativeURL}}" height="100px">
+
+			<span class="item-note">
+				{{image.name}}
+			</span>
+
+		</ion-item>
+
+	</ion-list>
+	</ion-content>
+</ion-view>

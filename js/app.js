@@ -36,6 +36,7 @@ angular.module('starter', ['ionic',
 							'ngIdle',
 							'BarcodeCtrl',
 							'imageCapture',
+							'ImageCtrl',
 							'MenuCtrl'
 						])
 
@@ -43,7 +44,7 @@ angular.module('starter', ['ionic',
 // When the application is being bootstrapped, it runs the configuration phase
 // first. During this phase, we have access to all the Providers, but NOT to the
 // actual service objects that will be created.
-.config(function( $stateProvider, $urlRouterProvider, LoopBackResourceProvider, clientConfig, KeepaliveProvider, IdleProvider) {
+.config(function( $stateProvider, $urlRouterProvider, LoopBackResourceProvider, clientConfig, KeepaliveProvider, IdleProvider, $compileProvider) {
 
 	// Change the URL where to access the LoopBack REST API server
     //LoopBackResourceProvider.setUrlBase('http://58.108.229.60:3001/api');
@@ -224,6 +225,15 @@ angular.module('starter', ['ionic',
       }
     })
 
+    .state('tab.images', {
+      url: '/images',
+      views: {
+        'images-tab': {
+          templateUrl: 'templates/images.html',
+          controller: 'ImageCtrl'
+        }
+      }
+    })
 	;
 
   // if none of the above states are matched, use this as the fallback
@@ -237,6 +247,8 @@ angular.module('starter', ['ionic',
 
   //KeepaliveProvider.interval(10);
 
+	$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https|ftp|mailto|file|tel|data|cdvfile)/);
+
 })
 
 
@@ -244,7 +256,7 @@ angular.module('starter', ['ionic',
 // phase first and then it will execute the "Run" phase. At that point, all of
 // the run() blocks are executed. During this phase, we no longer have access
 // to any of the providers but we can finally access the services.
-.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate) {
+.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate,imageService) {
 
 /* NOTE: the run function gets called at app startup so any services injected here
  * will be instantiated at that time
@@ -307,6 +319,8 @@ angular.module('starter', ['ionic',
 	// Start monitoring for messages
 	messageService.startWatching();
 
+	// Start monitoring for image files
+	//imageService.startWatching();
 
 })
 .provider('$exceptionHandler', {
