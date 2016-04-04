@@ -6,6 +6,15 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,cordovaReady,Logger) {
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'gpsService'};
 	var log = Logger.getInstance(logParams);
 
+	// TODO - set high accuracy with a toggle parameter
+	// TODO - set maximumAge to 0?  Apparently Samsing Galaxy phone have issues caching the gps location
+	// (see http://stackoverflow.com/questions/16262878/phonegap-geolocation-code-3-timeout-expired-keeps-popping-up-on-some-android)
+	// Apparently a reboot can fix Android gps timeouts
+
+	// example here: http://www.gajotres.net/using-cordova-geoloacation-api-with-google-maps-in-ionic-framework/
+
+	//HIGH ACCURACY may be problematic
+
   //var posOptions = {timeout: 1000, frequency : 1000, enableHighAccuracy: true };
   var posOptions = {timeout: 10000, enableHighAccuracy: false};
 
@@ -13,13 +22,12 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,cordovaReady,Logger) {
 	var numsaves = 0;
 	var lastsecs = 0;
 
-	//HIGH ACCURACY may be problematic
-
 	var showGpsAlerts;
 	var sendGps;
 
+	// TODO - background GPS
 	var bg_GPSWatchId = null;		// background gps
-	// TODO - set high accuracy with a toggle parameter
+
 	var bg_gpsOptions = {
 		enableHighAccuracy : true,
 		timeout : 1000 * 60 * 4,

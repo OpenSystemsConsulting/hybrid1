@@ -187,12 +187,8 @@ angular.module('JobsIndexCtrl', [])
 			}
 			if(syncRequired) {
 				syncfilter = angular.copy(_syncfilter);
-				if(pdaParams.jobdisplay)
-					sync(syncfilter);
-				else {
-					syncService.setCallingFunc("JobsIndexCtrl->Job.find");
-					syncService.hybridSync(onChange,syncfilter);
-				}
+				syncService.setCallingFunc("JobsIndexCtrl->Job.find");
+				syncService.hybridSync(onChange,syncfilter);
 			}
 
 		      		// Show Dates in a shortened format...
@@ -205,7 +201,7 @@ angular.module('JobsIndexCtrl', [])
 
 	// sync the initial data
 	if(network.isConnected) {
-		// maybe getJobs() which will load from local storage while we wait for the sync to happen
+		// getJobs() will load from local storage while we wait for the sync to happen
 		// Should improve perceived response times when server/network is slow to return
 		if(pdaParams.jobdisplay)
 			getJobs();
@@ -328,8 +324,12 @@ angular.module('JobsIndexCtrl', [])
 
 		refresh();
 
-		var notificationSnd = getSoundForPayload(payload);
-		notificationSnd.play();
+		// NOTE - not intuitive - if app is asked to play sound it has been done by the notification service
+		// already so DO NOT do it again here
+		if( !payload.playsound) {
+			var notificationSnd = getSoundForPayload(payload);
+			notificationSnd.play();
+		}
 	});
 
 	$scope.$on('CANCEL', function(event, payload) {
@@ -346,8 +346,10 @@ angular.module('JobsIndexCtrl', [])
 				// delete from local storage and resync - if we don't do this we get a conflict - don't know why
 				deleteLegs(baseJobNo);
 
-				var notificationSnd = getSoundForPayload(payload);
-				notificationSnd.play();
+				if( !payload.playsound) {
+					var notificationSnd = getSoundForPayload(payload);
+					notificationSnd.play();
+				}
 			}
 			else {
 				// unknown payload type - just refresh
@@ -362,12 +364,8 @@ angular.module('JobsIndexCtrl', [])
 
 	function refresh() {
 		syncfilter = angular.copy(_syncfilter);
-		if(pdaParams.jobdisplay)
-			sync(onChange,syncfilter);
-		else {
-			syncService.setCallingFunc("JobsIndexCtrl->PushNotificationReceived");
-			syncService.hybridSync(onChange,syncfilter);
-		}
+		syncService.setCallingFunc("JobsIndexCtrl->PushNotificationReceived");
+		syncService.hybridSync(onChange,syncfilter);
 	}
 
 	function deleteLegs(baseJobNo) {

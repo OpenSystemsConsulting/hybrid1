@@ -402,7 +402,7 @@ angular.module('osc-services', [])
 	}
   }
 })
-.factory('messageService', function($rootScope, pdaParams, Logger, FixedQueue, deleteChangeData, Job){
+.factory('messageService', function($rootScope, pdaParams, Logger, FixedQueue, deleteChangeData, Job, deviceService){
  
 	// Service to handle incoming PDA messages 
 
@@ -448,6 +448,15 @@ angular.module('osc-services', [])
 				logmsg.data = JSON.parse(localStorage.getItem('osc-local-db'));
 				log.info(logmsg);
 			});
+		},
+
+		dumpDeviceInfo: function() {
+			var logmsg = {};
+			logmsg.type = 'dumpDeviceInfo';
+
+			var deviceData = deviceService.getDevice();
+			logmsg.data = JSON.stringify(deviceData);
+			log.info(logmsg);
 		},
 
 		setPdaParam: function(params) {
@@ -551,5 +560,19 @@ angular.module('osc-services', [])
 	}
 
 	return messageService;
+})
+.factory('deviceService', function(cordovaReady,$cordovaDevice){
+
+	var deviceService = {
+		getDevice: function() {
+			var device = {"browser": true} ;			//TODO - get error in browser // default
+			if(cordovaReady.isready) {
+				device = $cordovaDevice.getDevice();
+			}
+			return device;
+		}
+	}
+
+	return deviceService;
 })
 ;

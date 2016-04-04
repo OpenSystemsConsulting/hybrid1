@@ -34,6 +34,10 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 	push_service.registered = false;
 	
+	var notificationSnd;
+	var lastSoundTime = Math.round(new Date().getTime()/1000);		// init when service instantiates
+	var newSoundTime;
+
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'pushService'};
 	var log = Logger.getInstance(logParams);
 
@@ -78,7 +82,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 					"pdaVersion"	: pdaParams.getAppVersion()
 				};
 				var filter = { "where": { "deviceToken": token }};
-				log.debug(platform+':$cordovaPushV5.notificationReceived: check for current registration, filter:'+JSON.stringify(filter));
+				log.debug(platform+':$cordovaPushV5.register: check for current registration, filter:'+JSON.stringify(filter));
 
 				// LT - 30/11/2015 - TODO - http.get.success has been deprecated use .then instead
 				// see https://docs.angularjs.org/api/ng/service/$http
@@ -92,7 +96,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 					if( data.length == 0) {		// no current registration found
 
-						log.info(platform+':$cordovaPush.notificationReceived: registered: no current registration found in installations');
+						log.info(platform+':$cordovaPush.register: no current registration found in installations');
 
 						//This registers the Google Token with Strongloop and our Database
 						$http.post('http://' + clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations', installation_object);
@@ -106,10 +110,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 						});
 					}
 					else {
-						log.info(platform+':$cordovaPush.notificationReceived: registered: current registration already found in installations');
-						log.debug(platform+':$cordovaPush.notificationReceived: registered: data:'+JSON.stringify(data));
-
-
+						log.info(platform+':$cordovaPush.register: current registration already found in installations');
+						log.debug(platform+':$cordovaPush.register: data:'+JSON.stringify(data));
 					}
 
 					push_service.registered = true;		// we've either just registered or we were already registered
@@ -135,6 +137,53 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 					// If a sound has been provided add to payload (normally iOS)
 					if( notification.sound)
 						payload.sound = notification.sound;
+
+					// If server requests we play the sound do it here
+					if( payload.playsound) {
+						var sound;
+
+						switch(payload.platform) {
+							case 'Android':
+								sound = payload.sound || "/android_asset/www/audio/notification.mp3";
+								break;
+							case 'iOS':
+								if( payload.hasOwnProperty('sound')) {
+									sound = payload.sound;
+								}
+								else {
+									// NOTE - this does not appear to work - ensure we send correct sound property for iOS
+									sound = "file://www/audio/notification.aiff";
+								}
+								break;
+							default:
+								sound = 'default';
+								break;
+						}
+
+						log.debug(platform+':$cordovaPushV5:notificationReceived:sound now:['+sound+']');
+
+						if( sound != "") {
+
+							// Had issues when processing lots of notifications with soumds in quick succession
+							// So only do this if no sound received within last 10 seconds
+							newSoundTime = Math.round(new Date().getTime()/1000);
+
+							if((newSoundTime - lastSoundTime) > 10) {			// TODO - should be a param
+								lastSoundTime = Math.round(new Date().getTime()/1000);
+
+								notificationSnd = $cordovaMedia.newMedia(sound);
+								// Maybe turn up the volume?	(0.0 - 1.0)
+								//notificationSnd.setVolume(1.0);
+
+								notificationSnd.play().then(function() {
+									notificationSnd.release();
+								}, function(err) {
+									log.error(platform+':$cordovaPushV5:notificationReceived:play error:['+sound+']['+JSON.stringify(err)+']');
+									notificationSnd.release();
+								});
+							}
+						}
+					}
 
 					log.debug(platform+':$cordovaPushV5:about to broadcast:' + payload.type + ':payload:'+JSON.stringify(payload));
 					$rootScope.$broadcast(payload.type, payload);

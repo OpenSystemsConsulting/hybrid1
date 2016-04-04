@@ -18252,7 +18252,7 @@ module.exports={
     "remote": {
       "connector": "remote",
       "debug": "true",
-      "url": "http://swiftt1.lnk.telstra.net:3000/api"
+      "url": "http://scope.opensyscon.com.au:3112/api"
     },
     "local": {
       "connector": "memory",

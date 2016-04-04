@@ -2,8 +2,8 @@ angular.module('deviceCtrl', [])
 
 
 .controller('deviceCtrl', [
-'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', '$cordovaDevice', 'network','fullreplication', '$cordovaNetwork',"appConfig","clientConfig",
-function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, $cordovaDevice, network, fullreplication, $cordovaNetwork, appConfig, clientConfig) {
+'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', 'deviceService', 'network','fullreplication', '$cordovaNetwork',"appConfig","clientConfig",
+function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, deviceService, network, fullreplication, $cordovaNetwork, appConfig, clientConfig) {
 
 	// TODO - maybe have array of key/value pairs - then can simply iterate with ng-repeat on template
 	var devicectrl = { };
@@ -73,7 +73,7 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 		*/
 
 		// device contains all properties
-		var device = $cordovaDevice.getDevice();
+		var device = deviceService.getDevice();
 		$scope.device = device;
 
 		// type of network connection

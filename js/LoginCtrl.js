@@ -22,6 +22,7 @@ angular.module('LoginCtrl', [])
 					// (NOTE: will also dump latest version of local storage)
 					messageService.clearChangeData();
 
+					messageService.dumpDeviceInfo();
 				}
 
 				$state.go('tab.job-index');		// list jobs
