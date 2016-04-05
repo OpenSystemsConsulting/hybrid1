@@ -199,6 +199,12 @@ angular.module('JobsIndexCtrl', [])
 		});
 	}
 
+
+
+	//THIS IS THE FIRST BIT OF CODE THAT RUNS IN THIS FUNC
+	// WE CALL The original loopback sync process which will call back to the onchange
+	// above and we then set hybrid sync in progress
+
 	// sync the initial data
 	if(network.isConnected) {
 		// getJobs() will load from local storage while we wait for the sync to happen

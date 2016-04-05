@@ -113,7 +113,9 @@ angular.module('osc-services', [])
 
 	pda_params.multileg = true;				// enable separate pods for multileg jobs
 
-	pda_params.jobdisplay = true;			// jobs tab does a quick display from local storage while sync takes place
+	// v2.37 - defaulted to false while we work out best way to sync when multiple jobs updated quickly within local storage
+	// which in turn trigger multiple replication processes which caused some changes to be missed
+	pda_params.jobdisplay = false;			// jobs tab does a quick display from local storage while sync takes place
 
 	pda_params.GPSInterval = 60000;			// 1 minute default to grab GPS data (milliseconds)
 	
@@ -205,7 +207,6 @@ angular.module('osc-services', [])
 			log.debug("SYNC: START");
 			sync(callback,filter);
 		}
-
 	}	
 
 	syncService.getSyncInProgress = function() {
@@ -215,13 +216,13 @@ angular.module('osc-services', [])
 
 		return syncService.isSyncing;
 	};
+
 	syncService.setCallingFunc = function(callingfunc) {
 		
 		mystr = 'syncService: In setCallingFunc value = ' + callingfunc;
 		log.debug(mystr);
 
 		lcallingfunc = callingfunc;
-
 	};
 
 	syncService.setSyncInProgress = function(torf) {
@@ -229,7 +230,6 @@ angular.module('osc-services', [])
 		syncService.isSyncing = torf;
 		mystr = 'syncService: In setSyncInprogress setting value = ' + syncService.isSyncing;
 		log.debug(mystr);
-
 	};
 
     return syncService;
