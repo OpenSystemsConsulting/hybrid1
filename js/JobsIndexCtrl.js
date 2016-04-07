@@ -16,10 +16,11 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia',
-	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia) {
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService',
+	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService) {
 
 	$scope.jobs = [];
+	$scope.jobStatuses = {};
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobsIndexCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -166,24 +167,32 @@ angular.module('JobsIndexCtrl', [])
 			//console.log(err);
 			//console.log(jobs);
 
+			$scope.jobStatuses = {};
+			syncService.setSyncInProgress(false);		// not syncing now
 
-			syncService.setSyncInProgress(false);
-
-			// TODO - need to check error and only show jobs if no error
+			// TODO - maybe need to check error and only show jobs if no error
 			$scope.jobs = jobs;
 
 			var syncRequired = 0;
 
-		      for (var i = 0; i < $scope.jobs.length; i++) {
+			for (var i = 0; i < $scope.jobs.length; i++) {
 		      	$scope.convertDates($scope.jobs[i], $rootScope.jobMetadata);
 
-					var job = $scope.jobs[i];
-					if( job.mobjobStatus == 'UJ') {
-						job.mobjobStatus = 'NJ';
-						job.onDeviceTime = new Date().toISOString();
-						job.save();
-						syncRequired++;
-					}
+				var job = $scope.jobs[i];
+
+				// ACK the job - notifies despatch job received by pda
+				if( job.mobjobStatus == 'UJ') {
+					job.mobjobStatus = 'NJ';
+					job.onDeviceTime = new Date().toISOString();
+					job.save();
+					syncRequired++;
+				}
+
+				// keep a count of the various job statuses
+				if($scope.jobStatuses[job.mobjobStatus])
+					$scope.jobStatuses[job.mobjobStatus] += 1;
+				else
+					$scope.jobStatuses[job.mobjobStatus] = 1;
 			}
 			if(syncRequired) {
 				syncfilter = angular.copy(_syncfilter);
@@ -199,12 +208,24 @@ angular.module('JobsIndexCtrl', [])
 		});
 	}
 
+
+
+	//THIS IS THE FIRST BIT OF CODE THAT RUNS IN THIS FUNC
+	// WE CALL The original loopback sync process which will call back to the onchange
+	// above and we then set hybrid sync in progress
+
 	// sync the initial data
 	if(network.isConnected) {
 		// getJobs() will load from local storage while we wait for the sync to happen
 		// Should improve perceived response times when server/network is slow to return
 		if(pdaParams.jobdisplay)
 			getJobs();
+
+		//Here someone has either changes a status on the job detail or just looked or its a straight upload
+		if(jobChangedService.getlastjobedited() == false)
+			getJobs();
+		else
+			jobChangedService.setlastjobedited(false);
 
 		// if we are connected to the network then this will sync and the callback will load the jobs after sync
 		log.debug("SYNC: START");
@@ -474,6 +495,12 @@ angular.module('JobsIndexCtrl', [])
 		getJobs(); //onChange();
 	};
 
+	$scope.clearLocalStorage = function() {
+		localStorage.removeItem('osc-local-db');
+	};
+
+	// ] END - New code for syncing
+
 	// [ Conflict resolution 
 	Job.on('conflicts', function (conflicts) {
 		$scope.localConflicts = conflicts;
@@ -552,16 +579,52 @@ angular.module('JobsIndexCtrl', [])
 	};
 	// ] Conflict resolution end
 
-	$scope.clearLocalStorage = function() {
-		localStorage.removeItem('osc-local-db');
-	};
-
-	// ] END - New code for syncing
-
 	$scope.full_sync_and_load = function() {
 		localStorage.removeItem('osc-local-db');
 		syncfilter = angular.copy(_syncfilter);
 		sync(onChange,syncfilter);
+	}
+
+
+	$scope.multiAccept = function() {
+		updateSelectedJobs('NJ');
+	}
+
+	$scope.multiPickup = function() {
+		updateSelectedJobs('AC');
+	}
+
+	function updateSelectedJobs(oldstatus) {
+		var newstatus = 'XX';
+		var syncRequired = 0;
+		var len = $scope.jobs.length;
+
+		// update many jobs at once from e.g. NJ -> AC, or AC -> PU
+		// TODO - will need to only update selected jobs rather than all at a particular status
+	
+		if(oldstatus === 'NJ')
+			newstatus = 'AC';
+		if(oldstatus === 'AC')
+			newstatus = 'PU';
+
+		for (var i = 0; i < len; i++) {
+
+			// TODO - check if specific job is selected via checkbox on screen
+			var job = $scope.jobs[i];
+			if( job.mobjobStatus === oldstatus && newstatus != 'XX') {
+				job.mobjobStatus = newstatus;
+				job.save();			// TODO
+				syncRequired++;
+			}
+		}
+
+		// resync if required
+		if(syncRequired) {
+			syncfilter = angular.copy(_syncfilter);
+			syncService.setCallingFunc("JobsIndexCtrl->updateSelectedJobs");
+			syncService.hybridSync(onChange,syncfilter);
+		}
+		//$scope.$apply();
 	}
 
 		// LT - don't require this functionality atm

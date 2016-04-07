@@ -4,11 +4,11 @@
   </ion-header-bar>
   <ion-content scroll="false">
     <div class="card list">
-	  <div class="item item-body">
+	  <div class="item item-body signature-item-body">
 		   <label > Enter your POD NAME below: </label>
 		   <input class="inputbg" type="text" name="podname" onclick="this.focus();this.select()" ng_model="signaturePadModel.podname" required >
 	  </div>
-      <div class="item item-body">Please use your finger or stylus to sign below</div>
+      <div class="item item-body signature-item-body">Use finger or stylus to sign below</div>
       <canvas id="signature-canvas" class="padding-horizontal item" style="width: 100%;"></canvas>
       <div class="item item-checkbox">
         <label class="checkbox">
@@ -17,7 +17,7 @@
          I accept the signature above
       </div>
     </div>
-    <div class="button-bar padding">
+    <div class="button-bar">
       <button class="button" ng-click="clear(); signatureModal.hide()">Cancel</button>
       <button class="button" ng-click="clear()">Clear</button>
       <button class="button button-positive" ng-disabled="!(signaturePadModel.signatureConfirm && signature)" ng-click="save()">Accept</button>
