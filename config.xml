@@ -11,6 +11,7 @@
     <access origin="*" />
     <plugin name="cordova-plugin-cache" />
     <plugin name="phonegap-plugin-push" />
+    <plugin name="phonegap-plugin-push" spec="1.5.3" />
     <plugin name="cordova-plugin-network-information" />
     <plugin name="cordova-connectivity-monitor" />
     <plugin name="cordova-plugin-velda-devicefeedback" />
