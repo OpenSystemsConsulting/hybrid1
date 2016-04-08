@@ -2,15 +2,18 @@
 <widget id="io.cordova.hellocordova" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Tplus Mobile</name>
     <description>
-        Copyright Open Systems Consulting Pty Ltd 2015 (Tplus Mobile Application)
+        Copyright Open Systems Consulting Pty Ltd 2016 (Tplus Mobile Application)
     </description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
         Apache Cordova Team
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <preference name="android-minSdkVersion" value="13" />
+	<preference name="android-build-tool" value="gradle" />
+
     <plugin name="cordova-plugin-cache" />
-    <plugin name="phonegap-plugin-push" />
+    <plugin name="phonegap-plugin-push" spec="1.5.3"/>
     <plugin name="cordova-plugin-network-information" />
     <plugin name="cordova-connectivity-monitor" />
     <plugin name="cordova-plugin-velda-devicefeedback" />
@@ -21,7 +24,6 @@
     <plugin name="cordova-plugin-geolocation" />
     <plugin name="cordova-plugin-whitelist" />
     <plugin name="phonegap-plugin-barcodescanner" />
-    
-    <preference name="android-build-tool" value="gradle" />
-    
+
+
 </widget>
