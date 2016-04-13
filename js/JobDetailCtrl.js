@@ -8,8 +8,8 @@ angular.module('JobDetailCtrl', [])
 })
 
 // For the View which is Displaying and Editing a Job or for the Creation of a new Job...
-.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger',
-	function($rootScope, $scope, $state, Job, util,pdaParams,Logger) {
+.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService',
+	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -17,6 +17,8 @@ angular.module('JobDetailCtrl', [])
 
 	var testing = 0;
 
+
+	jobChangedService.setlastjobedited(false);
 
 	  $scope.bNewItem = false;		// Just looking at an existing Job by default
 
@@ -246,6 +248,8 @@ angular.module('JobDetailCtrl', [])
 
 			mystr = 'handleJobStatusChange:' + job.mobjobSeq + ' updated from ' + oldStatus + ' -> ' + job.mobjobStatus;
 			log.info(mystr);
+
+			jobChangedService.setlastjobedited(true);
 		}
 
 		// TODO - what is best test for all PODs captured?
@@ -264,6 +268,7 @@ angular.module('JobDetailCtrl', [])
 
 					mystr = 'handleJobStatusChange:DL' + job.mobjobSeq + ' updated from ' + oldStatus + ' -> ' + job.mobjobStatus;
 					log.info(mystr);
+					jobChangedService.setlastjobedited(true);
 				}
 			}
 		}

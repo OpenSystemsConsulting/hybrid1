@@ -32,6 +32,8 @@ module.exports = function (client) {
 
 },{"bunyan":77}],"loopback-boot#boot#logging.js":[function(require,module,exports){
 module.exports=require('smdeOZ');
+},{}],"loopback-boot#boot#replication.js":[function(require,module,exports){
+module.exports=require('kn1c3t');
 },{}],"kn1c3t":[function(require,module,exports){
 // TODO(bajtos) Move the bi-di replication to loopback core,
 // add model settings to enable the replication.
@@ -133,13 +135,15 @@ module.exports = function (client) {
 		if( numargs == 2) {
 			cb = callback;
 			options.filter = filter;
+			options.lastFilter = filter;
+			this.lastFilter = filter;
 
 			lastFilter  = filter;
 		}
 
 		var counter = 0;
 		//alert('Checking: syncInProgress:'+client.syncstatus.syncInProgress);
-        //if (client.network.isConnected && client.syncstatus.syncInProgress == false) {		// now done via syncService
+        //if (client.network.isConnected && client.syncstatus.syncInProgress == false) 		// now done via syncService
         if (client.network.isConnected) {
 
 			client.syncstatus.syncInProgress = true;
@@ -216,7 +220,45 @@ module.exports = function (client) {
 						}
 						else {
 */
-							console.log(new Date().toISOString()+': finished replication');
+							console.log(new Date().toISOString()+': finished replication, conflicts:'+conflicts.length);
+							if(conflicts.length > 0) {
+								console.log('sync: conflicts:'+JSON.stringify(conflicts));
+								conflicts.forEach(function (conflict) {
+
+									conflict.type(function (err, type) {
+										conflict.type = type;
+										conflict.models(function (err, source, target) {
+											conflict.source = source;
+											conflict.target = target;
+											conflict.manual = new conflict.SourceModel(source || target);
+
+											// log the conflict details
+											console.log("conflicts: source:"+JSON.stringify(conflict.source));
+											console.log("conflicts: target:"+JSON.stringify(conflict.target));
+
+										});
+										conflict.changes(function (err, source, target) {
+											conflict.sourceChange = source;
+											conflict.targetChange = target;
+
+											var sourceType = conflict.sourceChange.type();
+											var targetType = conflict.targetChange.type();
+
+											// log the conflict details
+											console.log("conflicts: source type:" +sourceType + ", sourceChange:"+JSON.stringify(conflict.sourceChange));
+											console.log("conflicts: target type:" +targetType + ", targetChange:"+JSON.stringify(conflict.targetChange));
+
+											// TODO - automatically resolve conflicts
+											if( sourceType == 'update' && targetType == 'delete') {
+												conflict.resolveUsingTarget(refreshConflicts);
+											}
+											else {
+												conflict.resolveUsingSource(refreshConflicts);
+											}
+										});
+									});
+								});
+							}
 							cb && cb(err,conflicts);
 						/*}*/
 					});
@@ -276,6 +318,10 @@ module.exports = function (client) {
 
         }
     }
+
+	function refreshConflicts() {
+		sync(this.lastFilter);
+	};
 
 	// LT - don't work with our current loopback version - use observe ?  Maybe need filter (and callback?)
 	LocalJob.on('before save', function(ctx, next) {
@@ -355,8 +401,6 @@ module.exports = function (client) {
 */
 };
 
-},{}],"loopback-boot#boot#replication.js":[function(require,module,exports){
-module.exports=require('kn1c3t');
 },{}],"lbclient":[function(require,module,exports){
 module.exports=require('gwhLyT');
 },{}],"gwhLyT":[function(require,module,exports){
@@ -18252,7 +18296,7 @@ module.exports={
     "remote": {
       "connector": "remote",
       "debug": "true",
-      "url": "http://scope.opensyscon.com.au:3112/api"
+      "url": "http://couriers-express.com.au:3000/api"
     },
     "local": {
       "connector": "memory",

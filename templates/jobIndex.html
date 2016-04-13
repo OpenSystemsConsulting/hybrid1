@@ -27,9 +27,22 @@
       </span>
     </div>
 -->
+	
     <ion-list>
 
-      <ion-item ng-repeat="job in jobs" type="item-text-wrap" href="#/tab/jobs/{{job.mobjobSeq}}" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+<!--
+	  <ion-item ng-if="{{jobStatus['NJ']}}">
+-->
+	<ion-item class="button-bar" ng-if="pdaParams.multiSelect && ( jobStatuses['NJ'] || jobStatuses['AC'] )">
+		<button class="button button-balanced" ng-click="multiAccept()" ng-if="jobStatuses['NJ']" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+			Accept {{ jobStatuses['NJ'] }}
+		</button>
+		<button class="button button-balanced" ng-click="multiPickup()" ng-if="jobStatuses['AC']" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+			Pickup {{ jobStatuses['AC'] }}
+		</button>
+	</ion-item>
+
+      <ion-item ng-repeat="job in jobs track by $index" type="item-text-wrap" href="#/tab/jobs/{{job.mobjobSeq}}" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 
 		<div class="list"> 
 
