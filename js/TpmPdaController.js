@@ -113,7 +113,8 @@ angular.module('TpmPdaControllerCtrl', [])
 
 		$scope.updateDriver = function( driverId) {
 			//Get rid of all stuff related to the driver so we dont get wrong data.
-			localStorage.clear();	
+			//localStorage.clear();	
+			pdaParams.clearDriverInfo();
 
 			// TODO - remove any leading 0s
 			pdaParams.setDriverInfo( driverId);

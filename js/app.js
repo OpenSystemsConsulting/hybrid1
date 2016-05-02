@@ -37,11 +37,66 @@ angular.module('starter', ['ionic',
 							'BarcodeCtrl'
 							])
 
+// default client config values - will be populated correctly after login
+.provider('clientConfig', function() {
+	var _clientID = 'clientID';
+	var _serverIP = 'serverIP.opensyscon.com.au';
+	var _serverPort = 3000;
+
+	var _clientConfig = localStorage.getItem('clientConfig');
+	if( _clientConfig) {
+		this._clientID = _clientConfig.clientId;
+		this._serverIP = _clientConfig.serverIP;
+		this.serverPort = _clientConfig.serverPort;
+	}
+
+	return {
+		clientID : function() {
+			return _clientID;
+		},
+		serverIP : function() {
+			return _serverIP;
+		},
+		serverPort : function() {
+			return _serverPort;
+		},
+		$get: function() {
+			return {
+				clientId: _clientID,
+				serverIP: _serverIP,
+				serverPort: _serverPort
+			};
+		}
+	}
+})
+.provider('$exceptionHandler', {
+	// http://www.bennadel.com/blog/2542-logging-client-side-errors-with-angularjs-and-stacktrace-js.htm
+	// By default, AngularJS will catch errors and log them to
+	// the Console. We want to keep that behavior; however, we
+	// want to intercept it so that we can also log the errors
+	// to the server for later analysis.
+	$get: function( errorLogService ) {
+		return( errorLogService );
+	}
+})
+.provider('apiURLFetcher', function apiURLFetcherProvider(){
+	if(!localStorage.getItem('apiURL')){ // if there is no apiURL in localStorage, set a default value
+		localStorage.setItem('apiURL', "http://opensyscon.com.au:3000/api");
+	}
+	this.getURL = function(){ // fetches apiURL from localStorage
+		//return JSON.parse(localStorage.getItem('apiURL'));
+		return localStorage.getItem('apiURL');
+	};
+	this.$get = function(){
+		//return JSON.parse(localStorage.getItem('apiURL'));
+		return localStorage.getItem('apiURL');
+	}
+})
 
 // When the application is being bootstrapped, it runs the configuration phase
 // first. During this phase, we have access to all the Providers, but NOT to the
 // actual service objects that will be created.
-.config(function( $stateProvider, $urlRouterProvider, LoopBackResourceProvider, clientConfig, KeepaliveProvider, IdleProvider) {
+.config(function( apiURLFetcherProvider, $stateProvider, $urlRouterProvider, LoopBackResourceProvider, KeepaliveProvider, IdleProvider) {
 
 	// Change the URL where to access the LoopBack REST API server
     //LoopBackResourceProvider.setUrlBase('http://58.108.229.60:3001/api');
@@ -51,14 +106,14 @@ angular.module('starter', ['ionic',
 	//var myIpaddress = 'scope.opensyscon.com.au/scope/';
 	//var myIpaddress = 'swiftt1.lnk.telstra.net';
     //LoopBackResourceProvider.setUrlBase('http://'+ myIpaddress + ':' + myPort + '/api');
-    LoopBackResourceProvider.setUrlBase('http://'+ clientConfig.serverIP + ':' + clientConfig.serverPort + '/api');
+    //LoopBackResourceProvider.setUrlBase('http://'+ clientConfig.serverIP + ':' + clientConfig.serverPort + '/api');
+    LoopBackResourceProvider.setUrlBase(apiURLFetcherProvider.getURL());
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
   $stateProvider
-
 
     // setup an abstract state for the tabs directive
     .state('tab', {
@@ -222,9 +277,16 @@ angular.module('starter', ['ionic',
 
 	;
 
+  // if this parameter exists then default to tpmPdaControllers as we have already logged in once
+  // which will configure all of the site specific parameters before restarting the app
+  // TODO should this test be the other way i.e. check for parameter absence?
+  if( localStorage.getItem('firstTimeLoad')) {
+    $urlRouterProvider.otherwise('/tpmPdaControllers');
+    localStorage.removeItem('firstTimeLoad');
+  }
+  else
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
-  //$urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/login');
 
 	// TODO - idle processing
   //4 Minutes
@@ -305,14 +367,3 @@ angular.module('starter', ['ionic',
 
 
 })
-.provider('$exceptionHandler', {
-	// http://www.bennadel.com/blog/2542-logging-client-side-errors-with-angularjs-and-stacktrace-js.htm
-	// By default, AngularJS will catch errors and log them to
-	// the Console. We want to keep that behavior; however, we
-	// want to intercept it so that we can also log the errors
-	// to the server for later analysis.
-	$get: function( errorLogService ) {
-		return( errorLogService );
-	}
-})
-

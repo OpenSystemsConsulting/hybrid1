@@ -2,8 +2,8 @@ angular.module('deviceCtrl', [])
 
 
 .controller('deviceCtrl', [
-'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', '$cordovaDevice', 'network','fullreplication', '$cordovaNetwork',"appConfig","clientConfig",
-function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, $cordovaDevice, network, fullreplication, $cordovaNetwork, appConfig, clientConfig) {
+'$rootScope', '$scope', '$state', 'TpmPdaController' ,  'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', '$cordovaDevice', 'network','fullreplication', '$cordovaNetwork',"appConfig","clientConfig",'$ionicPopup',
+function( $rootScope, $scope, $state, TpmPdaController,  pdaParams, gpsService , cordovaReady ,appService , pushService, $cordovaDevice, network, fullreplication, $cordovaNetwork, appConfig, clientConfig, $ionicPopup) {
 
 	// TODO - maybe have array of key/value pairs - then can simply iterate with ng-repeat on template
 	var devicectrl = { };
@@ -87,6 +87,24 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 	}
 	$scope.pushRegister = function() {
 		pushService.registerForPush();
+	}
+
+	$scope.resetApp = function() {
+		var confirmPopup = $ionicPopup.confirm({
+			title: 'Reset App',
+			template: 'This will delete all data for this app and you will need to login again.  Are you sure you want to do this?'
+		});
+
+		confirmPopup.then(function(res) {
+			if(res) {
+				// confirmed
+				localStorage.clear();
+				$state.go('login');
+				//$window.location.reload();
+			} else {
+				// Cancelled
+			}
+		});
 	}
 
 	// need to get these into $scope and onto template

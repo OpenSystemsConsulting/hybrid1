@@ -18,4 +18,5 @@ angular.module('starter')
   .value('syncstatus', client.syncstatus)
   .value('clientlog', client.clientlog)
   .value('deleteChangeData', client.deleteChangeData)
+  .value('dataSources', client.dataSources)
 ;

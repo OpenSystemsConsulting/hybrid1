@@ -79,9 +79,14 @@ angular.module('osc-services', [])
 	};
 
 	pda_params.getSiteId = function() {
+/*
 		localdriver = getParams();
 		pda_params.siteId = localdriver.siteId;
 		return localdriver.siteId;
+*/
+		// NOTE - should be in service but got circular dependancy when injecting siteService
+		pda_params.siteId = localStorage.getItem('clientID');
+		return pda_params.siteId;
 	};
 
 /*
@@ -338,7 +343,10 @@ angular.module('osc-services', [])
 
 		message.event = msgType;
 
-		$http.get('http://'+ clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/mobile_event'+'?payload='+encodeURIComponent(JSON.stringify(message))).success(function (data) {
+		var serverIP = localStorage.getItem('serverIP');
+		var serverPort = localStorage.getItem('serverPort');
+
+		$http.get('http://'+ serverIP + ':' + serverPort + '/api/mobile_event'+'?payload='+encodeURIComponent(JSON.stringify(message))).success(function (data) {
 				//console.log("sendMsg:"+JSON.stringify(data));
 				log.info('mobile_event:'+JSON.stringify(message));
 			});
@@ -411,6 +419,15 @@ angular.module('osc-services', [])
 	var msgQ = FixedQueue(50);		// Store last x no. driver messages
 	var newMsgCount = 0;			// keep a count of new messages - will reset once driver has seen them
 
+	function isJson(str) {
+	try {
+		JSON.parse(str);
+	} catch (e) {
+		return false;
+	}
+		return true;
+	};
+
 	var messageService = {
 
 
@@ -419,10 +436,22 @@ angular.module('osc-services', [])
 			var dblist = [ 'osc-local-db', 'osc-driver-info', 'osc-push-credentials' ];
 			var len = dblist.length;
 
+			// dump ALL items, not just out predefined ones
+			len = localStorage.length;
+
 			for(var i=0; i < len; i++) {
-				logmsg.type = 'dumpLocalStorage:'+dblist[i];
-				//logmsg.data = JSON.parse(localStorage.getItem('osc-local-db'));
-				logmsg.data = JSON.parse(localStorage.getItem(dblist[i]));
+				var key = localStorage.key(i);
+				var value = localStorage[key];
+
+				//logmsg.type = 'dumpLocalStorage:'+dblist[i];
+				//logmsg.data = JSON.parse(localStorage.getItem(dblist[i]));
+
+				logmsg.type = 'dumpLocalStorage:'+key;
+				if(isJson(value))
+					logmsg.data = JSON.parse(value);
+				else
+					logmsg.data = value;
+
 				log.info(logmsg);
 			}
 		},
@@ -551,5 +580,39 @@ angular.module('osc-services', [])
 	}
 
 	return messageService;
+})
+.factory('siteService', function($rootScope, pdaParams, Logger, clientConfig, dataSources){
+
+	// dataSources are loopback generated datasources
+	var siteService = {
+
+		setSiteDetails: function(name){
+			var siteDetails = dataSources[name];
+			localStorage.setItem('apiURL', siteDetails.connector.url);
+			localStorage.setItem('clientID', siteDetails.settings.clientID);
+			localStorage.setItem('serverIP', siteDetails.settings.serverIP);
+			localStorage.setItem('serverPort', siteDetails.settings.serverPort);
+
+			localStorage.setItem('apiDSName', name);		// IMPORTANT - used by model js code for connector
+
+			clientConfig.clientID = siteDetails.settings.clientID;
+			clientConfig.serverIP = siteDetails.settings.serverIP;
+			clientConfig.serverPort = siteDetails.settings.serverPort;
+		},
+
+		setClientConfig: function(name){
+			var siteDetails = dataSources[name];
+
+			clientConfig.clientID = siteDetails.settings.clientID;
+			clientConfig.serverIP = siteDetails.settings.serverIP;
+			clientConfig.serverPort = siteDetails.settings.serverPort;
+		},
+
+		getSiteId: function(){
+			return localStorage.getItem('clientID');
+		}
+	}
+
+	return siteService;
 })
 ;

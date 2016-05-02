@@ -80,9 +80,12 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				var filter = { "where": { "deviceToken": token }};
 				log.debug(platform+':$cordovaPushV5.notificationReceived: check for current registration, filter:'+JSON.stringify(filter));
 
+				var serverIP = localStorage.getItem('serverIP');
+				var serverPort = localStorage.getItem('serverPort');
+
 				// LT - 30/11/2015 - TODO - http.get.success has been deprecated use .then instead
 				// see https://docs.angularjs.org/api/ng/service/$http
-				$http.get('http://'+ clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations'+'?filter='+encodeURIComponent(JSON.stringify(filter))).success(function (data) {
+				$http.get('http://'+ serverIP + ':' + serverPort + '/api/installations'+'?filter='+encodeURIComponent(JSON.stringify(filter))).success(function (data) {
 					//console.log(data);			// this works
 
 					// Try and ensure that there only ever one row for a driver or a token
@@ -95,7 +98,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 						log.info(platform+':$cordovaPush.notificationReceived: registered: no current registration found in installations');
 
 						//This registers the Google Token with Strongloop and our Database
-						$http.post('http://' + clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations', installation_object);
+						$http.post('http://' + serverIP + ':' + serverPort + '/api/installations', installation_object);
 
 						// Save data to local storage (it also gets put into $rootScope below)
 						localStorage.setItem('osc-push-credentials', JSON.stringify(installation_object));
