@@ -165,6 +165,12 @@ angular.module('osc-services', [])
 
 		eventService.sendMsg('LOGOFF');
 
+		// NOTE - it is not possible to programatically exit an iOS app see:
+		// http://stackoverflow.com/questions/14422908/iphone-does-not-recognize-phonegaps-navigator-app
+		// https://groups.google.com/forum/?fromgroups=#!topic/phonegap/XjTm0ua4uOY
+
+		// NOTE - another option: ionic.Platform.exitApp()
+
 		// LT - TODO - NOTE - this does NOT close/exit the app on an android device
 		// LT - further note - it puts the app into background which apparently is the
 		// appropriate thing to do.  However this means that our GPS etc. updates keep
