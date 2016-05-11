@@ -113,7 +113,11 @@ angular.module('osc-services', [])
 
 	pda_params.multileg = true;				// enable separate pods for multileg jobs
 
-	pda_params.jobdisplay = true;			// jobs tab does a quick display from local storage while sync takes place
+	// v2.37 - defaulted to false while we work out best way to sync when multiple jobs updated quickly within local storage
+	// which in turn trigger multiple replication processes which caused some changes to be missed
+	pda_params.jobdisplay = false;			// jobs tab does a quick display from local storage while sync takes place
+
+	pda_params.multiSelect = true;			// Allow multi job select for Accept, Pickup etc.
 
 	pda_params.GPSInterval = 60000;			// 1 minute default to grab GPS data (milliseconds)
 	
@@ -161,6 +165,12 @@ angular.module('osc-services', [])
 
 		eventService.sendMsg('LOGOFF');
 
+		// NOTE - it is not possible to programatically exit an iOS app see:
+		// http://stackoverflow.com/questions/14422908/iphone-does-not-recognize-phonegaps-navigator-app
+		// https://groups.google.com/forum/?fromgroups=#!topic/phonegap/XjTm0ua4uOY
+
+		// NOTE - another option: ionic.Platform.exitApp()
+
 		// LT - TODO - NOTE - this does NOT close/exit the app on an android device
 		// LT - further note - it puts the app into background which apparently is the
 		// appropriate thing to do.  However this means that our GPS etc. updates keep
@@ -205,7 +215,6 @@ angular.module('osc-services', [])
 			log.debug("SYNC: START");
 			sync(callback,filter);
 		}
-
 	}	
 
 	syncService.getSyncInProgress = function() {
@@ -215,13 +224,13 @@ angular.module('osc-services', [])
 
 		return syncService.isSyncing;
 	};
+
 	syncService.setCallingFunc = function(callingfunc) {
 		
 		mystr = 'syncService: In setCallingFunc value = ' + callingfunc;
 		log.debug(mystr);
 
 		lcallingfunc = callingfunc;
-
 	};
 
 	syncService.setSyncInProgress = function(torf) {
@@ -229,7 +238,6 @@ angular.module('osc-services', [])
 		syncService.isSyncing = torf;
 		mystr = 'syncService: In setSyncInprogress setting value = ' + syncService.isSyncing;
 		log.debug(mystr);
-
 	};
 
     return syncService;
@@ -354,6 +362,26 @@ angular.module('osc-services', [])
 
 	return( eventSvc );
 
+})
+.factory( 'jobChangedService', function( ) {
+
+	var jobreclocal = { };
+
+	jobreclocal.lastjobedited = false ;
+	//Set this in JobsDetailCtrl
+
+	jobreclocal.setlastjobedited = function ( arg_tf )
+	{
+		jobreclocal.lastjobedited = arg_tf ;
+	}	
+
+	//Get this in JobsIndexCtrl
+	jobreclocal.getlastjobedited = function ()
+	{
+		return jobreclocal.lastjobedited ;
+	}	
+
+	return( jobreclocal );
 })
 .factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork, pdaParams, Logger){
  
