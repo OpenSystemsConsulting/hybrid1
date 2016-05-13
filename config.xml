@@ -24,6 +24,6 @@
     <plugin name="cordova-plugin-geolocation" />
     <plugin name="cordova-plugin-whitelist" />
     <plugin name="phonegap-plugin-barcodescanner" />
-
+	<gap:plugin name="cordova-plugin-mauron85-background-geolocation" source="npm"/>
 
 </widget>
