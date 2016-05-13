@@ -638,7 +638,7 @@ angular.module('osc-services', [])
 
 	return deviceService;
 })
-.factory('BackgroundGeolocationService',['Logger','pdaParams','gpsHistory',function (Logger,pdaParams,gpsHistory) {
+.factory('BackgroundGeolocationService',['Logger','pdaParams','gpsHistory','$cordovaDevice',function (Logger,pdaParams,gpsHistory,$cordovaDevice) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'BackgroundGeoLocationService'};
 	var log = Logger.getInstance(logParams);
@@ -649,7 +649,19 @@ angular.module('osc-services', [])
 		var lgps = new gpsHistory();
 
 		lgps.gps_driver_id = drvid;
-		lgps.gps_timestamp = location.time;
+		var platform = $cordovaDevice.getPlatform();
+
+
+		if ( platform == 'iOS' ) 
+		{
+			lgps.gps_timestamp = location.timestamp;
+			lgps.gps_heading = 0; // IOS Has a heading if u want to use it later
+		}
+		else
+		{
+			lgps.gps_timestamp = location.time;
+			lgps.gps_heading = 0; // Android has a bearing if u want to use it later
+		}
 
 		var ldate = new Date(location.time);
 		var oset = ldate.getTimezoneOffset();
@@ -659,7 +671,6 @@ angular.module('osc-services', [])
 		lgps.gps_latitude = location.latitude.toFixed(6);
 		lgps.gps_longitude = location.longitude.toFixed(6);
 		lgps.gps_quality = location.accuracy;
-		lgps.gps_heading = 0; // location.coords.heading;
 
 		lgps.gps_speed = 0; //location.coords.speed;
 
