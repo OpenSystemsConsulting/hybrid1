@@ -654,14 +654,17 @@ angular.module('osc-services', [])
 
 		if ( platform == 'iOS' ) 
 		{
+			log.debug("BGGS platform is IOS:" + platform + " gpstimestamp: = "+ location.timestamp);
 			lgps.gps_timestamp = location.timestamp;
 			lgps.gps_heading = 0; // IOS Has a heading if u want to use it later
 		}
 		else
 		{
+			log.debug("BGGS platform is ANDroid: " + platform + " gpstimestamp: = "+ location.time);
 			lgps.gps_timestamp = location.time;
 			lgps.gps_heading = 0; // Android has a bearing if u want to use it later
 		}
+
 
 		var ldate = new Date(location.time);
 		var oset = ldate.getTimezoneOffset();
