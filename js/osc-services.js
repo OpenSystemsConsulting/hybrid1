@@ -666,10 +666,14 @@ angular.module('osc-services', [])
 		}
 
 
-		var ldate = new Date(location.time);
+		var ldate = new Date(lgps.gps_timestamp);
+
+		log.debug("BGGS new date: " + ldate );
 		var oset = ldate.getTimezoneOffset();
+		log.debug("BGGS oset: " + oset );
 									
 		lgps.gps_timestamp += (oset * -1)  * 60  * 1000;
+		log.debug("BGGS gps_timestamp: now = " + lgps.gps_timestamp );
 
 		lgps.gps_latitude = location.latitude.toFixed(6);
 		lgps.gps_longitude = location.longitude.toFixed(6);
