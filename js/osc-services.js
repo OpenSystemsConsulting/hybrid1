@@ -15,7 +15,7 @@ angular.module('osc-services', [])
 		//return showConflicts;
 	//}
 
-.factory( 'pdaParams', ['appConfig','clientConfig', function(appConfig, clientConfig) {
+.factory( 'pdaParams', ['appConfig','clientConfig',function(appConfig, clientConfig) {
 
 /*
  * pdaParams
@@ -106,6 +106,41 @@ angular.module('osc-services', [])
 		localStorage.setItem('osc-driver-info', JSON.stringify(localdriver));
 	}
 
+	pda_params.logonDriver = function() {
+        localdriver = getParams();
+        localdriver.loggedOn = true;
+        localdriver.lastUpdate = Date.now();
+        localStorage.setItem('osc-driver-info', JSON.stringify(localdriver));
+    }
+    pda_params.logoffDriver = function() {
+        localdriver = getParams();
+        localdriver.loggedOn = false;
+        localdriver.lastUpdate = Date.now();
+        localStorage.setItem('osc-driver-info', JSON.stringify(localdriver));
+    }
+	pda_params.isDrvLoggedOff = function() {
+        localdriver = getParams();
+        if ( localdriver.loggedOn )
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    pda_params.isDrvLoggedOn = function() {
+        localdriver = getParams();
+        if ( localdriver.loggedOn )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 	pda_params.driverId = pda_params.getDriverId();
 	pda_params.debugMode = localdriver.debugMode;
 	
@@ -113,7 +148,11 @@ angular.module('osc-services', [])
 
 	pda_params.multileg = true;				// enable separate pods for multileg jobs
 
-	pda_params.jobdisplay = true;			// jobs tab does a quick display from local storage while sync takes place
+	// v2.37 - defaulted to false while we work out best way to sync when multiple jobs updated quickly within local storage
+	// which in turn trigger multiple replication processes which caused some changes to be missed
+	pda_params.jobdisplay = false;			// jobs tab does a quick display from local storage while sync takes place
+
+	pda_params.multiSelect = true;			// Allow multi job select for Accept, Pickup etc.
 
 	pda_params.GPSInterval = 60000;			// 1 minute default to grab GPS data (milliseconds)
 	
@@ -161,6 +200,12 @@ angular.module('osc-services', [])
 
 		eventService.sendMsg('LOGOFF');
 
+		// NOTE - it is not possible to programatically exit an iOS app see:
+		// http://stackoverflow.com/questions/14422908/iphone-does-not-recognize-phonegaps-navigator-app
+		// https://groups.google.com/forum/?fromgroups=#!topic/phonegap/XjTm0ua4uOY
+
+		// NOTE - another option: ionic.Platform.exitApp()
+
 		// LT - TODO - NOTE - this does NOT close/exit the app on an android device
 		// LT - further note - it puts the app into background which apparently is the
 		// appropriate thing to do.  However this means that our GPS etc. updates keep
@@ -205,7 +250,6 @@ angular.module('osc-services', [])
 			log.debug("SYNC: START");
 			sync(callback,filter);
 		}
-
 	}	
 
 	syncService.getSyncInProgress = function() {
@@ -215,13 +259,13 @@ angular.module('osc-services', [])
 
 		return syncService.isSyncing;
 	};
+
 	syncService.setCallingFunc = function(callingfunc) {
 		
 		mystr = 'syncService: In setCallingFunc value = ' + callingfunc;
 		log.debug(mystr);
 
 		lcallingfunc = callingfunc;
-
 	};
 
 	syncService.setSyncInProgress = function(torf) {
@@ -229,7 +273,6 @@ angular.module('osc-services', [])
 		syncService.isSyncing = torf;
 		mystr = 'syncService: In setSyncInprogress setting value = ' + syncService.isSyncing;
 		log.debug(mystr);
-
 	};
 
     return syncService;
@@ -354,6 +397,26 @@ angular.module('osc-services', [])
 
 	return( eventSvc );
 
+})
+.factory( 'jobChangedService', function( ) {
+
+	var jobreclocal = { };
+
+	jobreclocal.lastjobedited = false ;
+	//Set this in JobsDetailCtrl
+
+	jobreclocal.setlastjobedited = function ( arg_tf )
+	{
+		jobreclocal.lastjobedited = arg_tf ;
+	}	
+
+	//Get this in JobsIndexCtrl
+	jobreclocal.getlastjobedited = function ()
+	{
+		return jobreclocal.lastjobedited ;
+	}	
+
+	return( jobreclocal );
 })
 .factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork, pdaParams, Logger){
  
@@ -575,4 +638,103 @@ angular.module('osc-services', [])
 
 	return deviceService;
 })
+.factory('BackgroundGeolocationService',['Logger','pdaParams','gpsHistory',function (Logger,pdaParams,gpsHistory) {
+
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'BackgroundGeoLocationService'};
+	var log = Logger.getInstance(logParams);
+	var backgroundGeoService = { };
+
+
+	var saveGpsToDb = function(drvid,location) {
+		var lgps = new gpsHistory();
+
+		lgps.gps_driver_id = drvid;
+		lgps.gps_timestamp = location.time;
+
+		var ldate = new Date(location.time);
+		var oset = ldate.getTimezoneOffset();
+									
+		lgps.gps_timestamp += (oset * -1)  * 60  * 1000;
+
+		lgps.gps_latitude = location.latitude.toFixed(6);
+		lgps.gps_longitude = location.longitude.toFixed(6);
+		lgps.gps_quality = location.accuracy;
+		lgps.gps_heading = 0; // location.coords.heading;
+
+		lgps.gps_speed = 0; //location.coords.speed;
+
+		lgps.gps_time = 0 ; //new Date(location.timestamp).getTime();
+
+		log.debug("BGGS AssignValues: lgps: = "+ JSON.stringify(lgps));
+
+
+		// TODO - do we need any more criteria to create history record?  if connected?
+		if( lgps.gps_driver_id > 0)
+		{
+			log.info("About to save GPS");
+			lgps.$create(lgps, function success( obj) {
+				if( obj) {
+					log.debug("lgps.$create success: obj:"+JSON.stringify(obj));
+					//console.log(obj);
+				}
+			}, function error(err) {
+				if( err) {
+					log.error("lgps.$create failed: err:"+JSON.stringify(err));
+					//console.log(err);
+				}
+			});
+		}
+	  }
+	  /*=====================================================*/
+	  /*             CALLBACK FROM PLUGIN                    */
+	  /*=====================================================*/
+	  var callbackFn = function(location) {
+
+		  //$http({
+			  //request options to send data to server
+		  //});
+
+		log.debug('BGGS callbackFn: location = ' + JSON.stringify(location));
+
+		log.debug('BGGS callbackFn: now Callin saveGPSToDb' + location.latitude + ',' + location.longitude);
+		saveGpsToDb(pdaParams.getDriverId(),location);
+		backgroundGeoLocation.finish();
+	  };
+
+	  var failureFn = function(error) {
+		log.debug('BGGS failureFn: error ' + JSON.stringify(error) ); 
+	  };
+
+
+	  /*=====================================================*/
+	  /*             START METHOD                            */
+	  /*=====================================================*/
+		 // stationaryRadius: 20,
+		  //distanceFilter: 30,
+	  //Enable background geolocation
+	  backgroundGeoService.start = function () {
+
+		backgroundGeoLocation.configure(callbackFn,failureFn, {
+		  desiredAccuracy: 10,
+		  stationaryRadius: 1,
+		  distanceFilter: 1,
+		  locationService: backgroundGeoLocation.service.ANDROID_DISTANCE_FILTER,
+		  debug: true,
+		  stopOnTerminate: true
+		});
+
+		log.debug('BGGS START Method called:'); 
+		backgroundGeoLocation.start();
+	  }
+
+	  /*=====================================================*/
+	  /*             STOP METHOD                            */
+	  /*=====================================================*/
+
+	  backgroundGeoService.stop = function () {
+		  log.debug('BGGS STOP Method called:'); 
+		  backgroundGeoLocation.stop();
+		}
+  return backgroundGeoService;
+}])
 ;

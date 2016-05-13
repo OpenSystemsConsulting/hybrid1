@@ -1,7 +1,7 @@
 angular.module('geoCtrl', [])
 
-.controller('geoCtrl',['$scope', '$cordovaGeolocation', 
-  function($scope,$cordovaGeolocation) {
+.controller('geoCtrl',['$scope', '$cordovaGeolocation', 'pdaParams',
+  function($scope,$cordovaGeolocation,pdaParams) {
 
 
 var gpsIsWorking;
@@ -13,7 +13,7 @@ var gpsIsWorking;
 
 	$scope.error = "";
 
-
+	$scope.debug = pdaParams.debugMode;
 
   	$cordovaGeolocation
 	.getCurrentPosition(posOptions)

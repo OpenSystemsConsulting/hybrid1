@@ -3,10 +3,21 @@
   It was wired up in the app config (app.js) 
   The 'jobs' data comes from its $scope within JobIndexCtrl (controller.js)
 -->
-<ion-view title="{{titleWithTotal}} Driver:{{pdaParams.driverId}} V:{{pdaParams.getAppVersion()}}">
+<ion-view title="{{titleWithTotal}} Drv:{{pdaParams.driverId}}">
   <ion-content ng-class="{ 'overflow-scroll': (desktopBrowserScrolling == true) }">
 
+	<ion-nav-buttons side="left">
+		<button class="button button-assertive" ng-disabled="isDrvLoggedOff()" ng-click="logoffDriver()">
+            L/OFF
+        </button>
+
+    </ion-nav-buttons>
+
 	<ion-nav-buttons side="right">
+        <button class="button button-balanced" ng-disabled="isDrvLoggedOn()" ng-click="logonDriver();">
+            L/ON
+        </button> 
+
 		<a class="button button-icon ion-ios7-email-outline" href="#/tab/messages">
 			<span class="badge badge-assertive icon-badge" ng-if="newMessageCount">{{newMessageCount}}</span>
 		</a>
@@ -27,9 +38,22 @@
       </span>
     </div>
 -->
+	
     <ion-list>
 
-      <ion-item ng-repeat="job in jobs" type="item-text-wrap" href="#/tab/jobs/{{job.mobjobSeq}}" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+<!--
+	  <ion-item ng-if="{{jobStatus['NJ']}}">
+-->
+	<ion-item class="button-bar" ng-if="pdaParams.multiSelect && ( jobStatuses['NJ'] || jobStatuses['AC'] )">
+		<button class="button button-balanced" ng-click="multiAccept()" ng-if="jobStatuses['NJ']" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+			Accept {{ jobStatuses['NJ'] }}
+		</button>
+		<button class="button button-balanced" ng-click="multiPickup()" ng-if="jobStatuses['AC']" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+			Pickup {{ jobStatuses['AC'] }}
+		</button>
+	</ion-item>
+
+      <ion-item ng-repeat="job in jobs track by $index" type="item-text-wrap" href="#/tab/jobs/{{job.mobjobSeq}}" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 
 		<div class="list"> 
 

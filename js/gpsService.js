@@ -1,7 +1,7 @@
 angular.module('gpsService', [])
 
-.factory('gpsService',[ 'gpsHistory','$cordovaGeolocation','pdaParams', 'cordovaReady','Logger',
-function (gpsHistory,$cordovaGeolocation,pdaParams,cordovaReady,Logger) {
+.factory('gpsService',[ 'gpsHistory','$cordovaGeolocation','pdaParams','Logger',
+function (gpsHistory,$cordovaGeolocation,pdaParams,Logger) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'gpsService'};
 	var log = Logger.getInstance(logParams);
@@ -50,6 +50,9 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,cordovaReady,Logger) {
 				alert (' GPSService: Position returned ' );
 
 			}
+			
+			saveGpsToDB(pdaParams.getDriverId(),position);
+			/****
 			var lgps = new gpsHistory();
 
 			lgps.gps_driver_id = pdaParams.getDriverId();
@@ -91,6 +94,7 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,cordovaReady,Logger) {
 					}
 				});
 			}
+			***/
 
 			gpsIsWorking = true;
 
@@ -110,6 +114,51 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,cordovaReady,Logger) {
 			gpsIsWorking = false;
 			log.error("getCurrentPosition failed, err:"+JSON.stringify(err));
 		});
+	}
+	
+	function saveGpsToDB(drvid,position)
+	{
+		var lgps = new gpsHistory();
+
+		lgps.gps_driver_id = drvid;
+		lgps.gps_timestamp = position.timestamp;
+
+		var ldate = new Date(position.timestamp);
+		var oset = ldate.getTimezoneOffset();
+									
+		lgps.gps_timestamp += (oset * -1)  * 60  * 1000;
+
+
+		//parseFloat("123.456").toFixed(2);
+
+		lgps.gps_latitude = position.coords.latitude.toFixed(6);
+		lgps.gps_longitude = position.coords.longitude.toFixed(6);
+		lgps.gps_quality = position.coords.accuracy;
+		lgps.gps_heading = 0; // position.coords.heading;
+
+		lgps.gps_speed = 0; //position.coords.speed;
+
+		lgps.gps_time = 0 ; //new Date(position.timestamp).getTime();
+
+		//sendGps = true;			// DEBUG
+		log.debug("getCurrentPosition OK: sendGps:"+sendGps+", lgps:"+ JSON.stringify(lgps));
+
+		// TODO - do we need any more criteria to create history record?  if connected?
+		if( sendGps && lgps.gps_driver_id > 0)
+		{
+			log.info("About to save GPS");
+			lgps.$create(lgps, function success( obj) {
+				if( obj) {
+					log.debug("lgps.$create success: obj:"+JSON.stringify(obj));
+					//console.log(obj);
+				}
+			}, function error(err) {
+				if( err) {
+					log.error("lgps.$create failed: err:"+JSON.stringify(err));
+					//console.log(err);
+				}
+			});
+		}
 	}
 
 	function bg_onSuccess(position) {

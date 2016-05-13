@@ -167,3 +167,7 @@ overflowhidden-demystified/ */
   width: 19% !important;
   height: 85px !important;
 }
+
+.signature-item-body {
+	padding: 10px; !important
+}
