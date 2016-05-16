@@ -734,10 +734,10 @@ angular.module('osc-services', [])
 
 		backgroundGeoLocation.configure(callbackFn,failureFn, {
 		  desiredAccuracy: 10,
-		  stationaryRadius: 1,
-		  distanceFilter: 1,
+		  stationaryRadius: 20,
+		  distanceFilter: 30,
 		  locationService: backgroundGeoLocation.service.ANDROID_DISTANCE_FILTER,
-		  debug: true,
+		  debug: false,
 		  stopOnTerminate: true
 		});
 
