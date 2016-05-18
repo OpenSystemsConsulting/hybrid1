@@ -137,7 +137,8 @@ angular.module('TpmPdaControllerCtrl', [])
 
 			// Send LOGON event
 			if(driverId>0) {
-				eventService.sendMsg('LOGON');
+				// as of v2.41 driver must explicitly logon/logoff from jobs screen
+				//eventService.sendMsg('LOGON');
 
 				// Dump local storage at logon time - debug aid
 				messageService.dumpLocalStorage();

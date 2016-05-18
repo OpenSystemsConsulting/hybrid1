@@ -46,6 +46,10 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope) {
 
 	function getPos()
 	{
+		if (log.context.driver == 0) {
+			log.context.driver = pdaParams.getDriverId();
+		}
+
 		if( !pdaParams.alwaysGetGPS) {
 			// If driver logged off or app in background don't bother with any of this
 			if(!getGps) {

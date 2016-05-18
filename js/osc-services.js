@@ -638,6 +638,7 @@ angular.module('osc-services', [])
 })
 .factory('BackgroundGeolocationService',['Logger','pdaParams','gpsHistory','$cordovaDevice',function (Logger,pdaParams,gpsHistory,$cordovaDevice) {
 
+	// background gps plugin from: https://github.com/mauron85/cordova-plugin-background-geolocation
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'BackgroundGeoLocationService'};
 	var log = Logger.getInstance(logParams);
 	var backgroundGeoService = { };

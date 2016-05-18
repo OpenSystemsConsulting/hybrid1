@@ -18296,7 +18296,7 @@ module.exports={
     "remote": {
       "connector": "remote",
       "debug": "true",
-      "url": "http://opensyscon.com.au:3083/api"
+      "url": "http://allpur2.lnk.telstra.net:3000/api"
     },
     "local": {
       "connector": "memory",

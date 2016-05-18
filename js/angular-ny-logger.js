@@ -14,6 +14,7 @@ angular.module('ny.logger', []).provider('Logger', [function () {
             return new Logger(context);
         };
 		Logger.setContext = function(context) {
+			context.ver = appConfig.version;
 			this.context = context;
 		}
         Logger.supplant = function(str, o) {
