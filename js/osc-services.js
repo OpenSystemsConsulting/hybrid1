@@ -120,23 +120,19 @@ angular.module('osc-services', [])
     }
 	pda_params.isDrvLoggedOff = function() {
         localdriver = getParams();
-        if ( localdriver.loggedOn )
-        {
+        if ( localdriver.loggedOn ) {
             return false;
         }
-        else
-        {
+        else {
             return true;
         }
     }
     pda_params.isDrvLoggedOn = function() {
         localdriver = getParams();
-        if ( localdriver.loggedOn )
-        {
+        if ( localdriver.loggedOn ) {
             return true;
         }
-        else
-        {
+        else {
             return false;
         }
     }
@@ -156,6 +152,8 @@ angular.module('osc-services', [])
 
 	pda_params.GPSInterval = 60000;			// 1 minute default to grab GPS data (milliseconds)
 	
+	pda_params.alwaysGetGPS = false;
+
 	pda_params.setParameter = function(params, cb) {
 		// params is object of (maybe array) of key/value pair(s) for us to set
 		// e.g. { "experimental":false}
@@ -643,37 +641,38 @@ angular.module('osc-services', [])
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'BackgroundGeoLocationService'};
 	var log = Logger.getInstance(logParams);
 	var backgroundGeoService = { };
-
+	var lastGPS = 0;
 
 	var saveGpsToDb = function(drvid,location) {
 		var lgps = new gpsHistory();
 
 		lgps.gps_driver_id = drvid;
-		var platform = $cordovaDevice.getPlatform();
 
+		var platform = $cordovaDevice.getPlatform();
 
 		if ( platform == 'iOS' ) 
 		{
-			log.debug("BGGS platform is IOS:" + platform + " gpstimestamp: = "+ location.timestamp);
+			log.debug("BGGS platform is iOS:" + platform + " gpstimestamp:"+ location.timestamp);
 			lgps.gps_timestamp = location.timestamp;
 			lgps.gps_heading = 0; // IOS Has a heading if u want to use it later
 		}
 		else
 		{
-			log.debug("BGGS platform is ANDroid: " + platform + " gpstimestamp: = "+ location.time);
+			log.debug("BGGS platform is Android:" + platform + " gpstimestamp:"+ location.time);
 			lgps.gps_timestamp = location.time;
 			lgps.gps_heading = 0; // Android has a bearing if u want to use it later
 		}
 
+		// TODO - maybe check last GPS and only update if diff is greater than x seconds
+		lastGPS = lgps.gps_timestamp;				// store last GPS time
 
 		var ldate = new Date(lgps.gps_timestamp);
 
-		log.debug("BGGS new date: " + ldate );
 		var oset = ldate.getTimezoneOffset();
-		log.debug("BGGS oset: " + oset );
+		log.debug("BGGS new date: " + ldate + ", oset: " + oset );
 									
 		lgps.gps_timestamp += (oset * -1)  * 60  * 1000;
-		log.debug("BGGS gps_timestamp: now = " + lgps.gps_timestamp );
+		log.debug("BGGS gps_timestamp: now:" + lgps.gps_timestamp );
 
 		lgps.gps_latitude = location.latitude.toFixed(6);
 		lgps.gps_longitude = location.longitude.toFixed(6);
@@ -683,7 +682,7 @@ angular.module('osc-services', [])
 
 		lgps.gps_time = 0 ; //new Date(location.timestamp).getTime();
 
-		log.debug("BGGS AssignValues: lgps: = "+ JSON.stringify(lgps));
+		log.debug("BGGS driver:" + lgps.gps_driver_id + ", lgps:"+ JSON.stringify(lgps));
 
 
 		// TODO - do we need any more criteria to create history record?  if connected?
@@ -702,57 +701,62 @@ angular.module('osc-services', [])
 				}
 			});
 		}
-	  }
-	  /*=====================================================*/
-	  /*             CALLBACK FROM PLUGIN                    */
-	  /*=====================================================*/
-	  var callbackFn = function(location) {
+	}
+	/*=====================================================*/
+	/*             CALLBACK FROM PLUGIN                    */
+	/*=====================================================*/
+	var callbackFn = function(location) {
 
-		  //$http({
-			  //request options to send data to server
-		  //});
+		//$http({
+			//request options to send data to server
+		//});
 
-		log.debug('BGGS callbackFn: location = ' + JSON.stringify(location));
+		log.debug('BGGS callbackFn: calling saveGpsToDb: location:' + JSON.stringify(location));
 
-		log.debug('BGGS callbackFn: now Callin saveGPSToDb' + location.latitude + ',' + location.longitude);
+		//log.debug('BGGS callbackFn: calling saveGpsToDb:' + location.latitude + ',' + location.longitude);
 		saveGpsToDb(pdaParams.getDriverId(),location);
 		backgroundGeoLocation.finish();
-	  };
+	};
 
-	  var failureFn = function(error) {
-		log.debug('BGGS failureFn: error ' + JSON.stringify(error) ); 
-	  };
+	var failureFn = function(error) {
+		log.debug('BGGS failureFn: error:' + JSON.stringify(error) ); 
+	};
 
 
-	  /*=====================================================*/
-	  /*             START METHOD                            */
-	  /*=====================================================*/
-		 // stationaryRadius: 20,
-		  //distanceFilter: 30,
-	  //Enable background geolocation
-	  backgroundGeoService.start = function () {
+	/*=====================================================*/
+	/*             START METHOD                            */
+	/*=====================================================*/
+		// stationaryRadius: 20,
+		//distanceFilter: 30,
+	//Enable background geolocation
+	backgroundGeoService.start = function () {
 
-		backgroundGeoLocation.configure(callbackFn,failureFn, {
-		  desiredAccuracy: 10,
-		  stationaryRadius: 20,
-		  distanceFilter: 30,
-		  locationService: backgroundGeoLocation.service.ANDROID_DISTANCE_FILTER,
-		  debug: false,
-		  stopOnTerminate: true
-		});
+		var platform = $cordovaDevice.getPlatform();
+		var bgOptions = {
+			desiredAccuracy: 10,
+			stationaryRadius: 20,
+			distanceFilter: 30,
+			locationTimeout: 60,			// Android - The minimum time interval between location updates in seconds
+			activityType: 'AutomotiveNavigation',			// iOS hint
+			debug: false,					// <-- enable this hear sounds for background-geolocation life-cycle
+			stopOnTerminate: true			// <-- enable this to clear background location settings when the app terminates
+		};
 
-		log.debug('BGGS START Method called:'); 
+
+		log.debug('BGGS START: configure with:'+JSON.stringify(bgOptions)); 
+		backgroundGeoLocation.configure(callbackFn, failureFn, bgOptions);
 		backgroundGeoLocation.start();
-	  }
+	}
 
-	  /*=====================================================*/
-	  /*             STOP METHOD                            */
-	  /*=====================================================*/
+	/*=====================================================*/
+	/*             STOP METHOD                            */
+	/*=====================================================*/
 
-	  backgroundGeoService.stop = function () {
-		  log.debug('BGGS STOP Method called:'); 
-		  backgroundGeoLocation.stop();
-		}
-  return backgroundGeoService;
+	backgroundGeoService.stop = function () {
+		log.debug('BGGS STOP Method called:'); 
+		backgroundGeoLocation.stop();
+	}
+
+	return backgroundGeoService;
 }])
 ;

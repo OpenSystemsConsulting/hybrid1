@@ -3,7 +3,7 @@ angular.module('cordovaReady', [])
 /**
  * A simple example service that returns some data.
  */
-.factory('cordovaReady',['$cordovaInsomnia', 'Logger', 'pdaParams','BackgroundGeolocationService', function($cordovaInsomnia,Logger,pdaParams,BackgroundGeolocationService) {
+.factory('cordovaReady',['$rootScope','$cordovaInsomnia', 'Logger', 'pdaParams','BackgroundGeolocationService', function($rootScope,$cordovaInsomnia,Logger,pdaParams,BackgroundGeolocationService) {
 
 	var isready;
 
@@ -77,10 +77,13 @@ angular.module('cordovaReady', [])
 	function onPause() {
 		log.debug('onPause About to call BGGS.start()');
 		BackgroundGeolocationService.start();	
+
+		$rootScope.$broadcast('PAUSE');
 	}
 
 	function onResume() {
-		log.debug('onresume');
+		log.debug('onresume: about to broadcast: RESUME event');
+		$rootScope.$broadcast('RESUME');
 	}
 
 	/*

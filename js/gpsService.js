@@ -1,7 +1,7 @@
 angular.module('gpsService', [])
 
-.factory('gpsService',[ 'gpsHistory','$cordovaGeolocation','pdaParams','Logger',
-function (gpsHistory,$cordovaGeolocation,pdaParams,Logger) {
+.factory('gpsService',[ 'gpsHistory','$cordovaGeolocation','pdaParams','Logger','$rootScope',
+function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'gpsService'};
 	var log = Logger.getInstance(logParams);
@@ -16,7 +16,7 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger) {
 	//HIGH ACCURACY may be problematic
 
   //var posOptions = {timeout: 1000, frequency : 1000, enableHighAccuracy: true };
-  var posOptions = {timeout: 10000, enableHighAccuracy: false};
+	var posOptions = {timeout: 10000, enableHighAccuracy: false};
 
 	var gpsIsWorking = false;
 	var numsaves = 0;
@@ -25,23 +25,39 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger) {
 	var showGpsAlerts;
 	var sendGps;
 
-	// TODO - background GPS
-	var bg_GPSWatchId = null;		// background gps
-
-	var bg_gpsOptions = {
-		enableHighAccuracy : true,
-		timeout : 1000 * 60 * 4,
-		maximumAge : 1 * 1000
-	};
+	var getGps = true;
 
 	var gpsService = { };
 
-	showGpsAlerts = false; //By Default true , get them to turn it off if they dont want it
+	showGpsAlerts = false;
 	sendGps = true;
 
+	
+	$rootScope.$on('RESUME', function(event) {
+		// foreground
+		log.info("Received event:"+event.name);
+		getGps = true;
+	});
+	$rootScope.$on('PAUSE', function(event) {
+		// background
+		log.info("Received event:"+event.name);
+		getGps = false;
+	});
 
 	function getPos()
 	{
+		if( !pdaParams.alwaysGetGPS) {
+			// If driver logged off or app in background don't bother with any of this
+			if(!getGps) {
+				log.info('getGps:'+getGps+', no GPS attempted');
+				return;
+			}
+			if(pdaParams.isDrvLoggedOff()) {
+				log.info('driver logged off, no GPS attempted');
+				return;
+			}
+		}
+
 		$cordovaGeolocation
 		.getCurrentPosition(posOptions)
 		.then(function (position) {
@@ -98,12 +114,6 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger) {
 
 			gpsIsWorking = true;
 
-/*
-			if( ! bg_GPSWatchId) {
-				bg_GPSWatchId = $cordovaGeolocation.watchPosition(bg_onSuccess, bg_onError, bg_gpsOptions);
-			}
-*/
-
 		}, function(err) {
 			if ( showGpsAlerts ) 
 			{
@@ -159,14 +169,6 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger) {
 				}
 			});
 		}
-	}
-
-	function bg_onSuccess(position) {
-		if ( showGpsAlerts ){
-    		alert('bg_onSuccess:%j \n',position);
-		}
-	}
-	function bg_onError(error) {
 	}
 
 	function onSuccess(position) {

@@ -5,24 +5,11 @@
 -->
 <ion-view title="{{titleWithTotal}} Drv:{{pdaParams.driverId}}">
   <ion-content ng-class="{ 'overflow-scroll': (desktopBrowserScrolling == true) }">
-
-	<ion-nav-buttons side="left">
-		<button class="button button-assertive" ng-disabled="isDrvLoggedOff()" ng-click="logoffDriver()">
-            L/OFF
-        </button>
-
-    </ion-nav-buttons>
-
 	<ion-nav-buttons side="right">
-        <button class="button button-balanced" ng-disabled="isDrvLoggedOn()" ng-click="logonDriver();">
-            L/ON
-        </button> 
-
 		<a class="button button-icon ion-ios7-email-outline" href="#/tab/messages">
 			<span class="badge badge-assertive icon-badge" ng-if="newMessageCount">{{newMessageCount}}</span>
 		</a>
     </ion-nav-buttons>
-
 <!-- TODO - new jobs icon of some kind
 	<ion-nav-buttons side="left">
 		<a class="button button-icon ion-ios7-briefcase-outline" href="#/tab/jobs">
@@ -82,6 +69,16 @@
 		
       </ion-item>
     </ion-list>
+	<ion-item class="button-bar" >
+			<button class="button button-assertive" ng-disabled="isDrvLoggedOff()" ng-click="logoffDriver()">
+				L/OFF
+			</button>
+
+			<button class="button button-balanced" ng-disabled="isDrvLoggedOn()" ng-click="logonDriver();">
+				L/ON
+			</button> 
+
+	</ion-item>
 
 
 <section id="totals" ng-if="pdaParams.debugMode">
@@ -222,6 +219,7 @@
 		<strong> connected: {{ connected() }} </strong>
 		<strong> syncing: {{ syncInProgress }} </strong>
 	</section>
+
 
   </ion-content>
 </ion-view>

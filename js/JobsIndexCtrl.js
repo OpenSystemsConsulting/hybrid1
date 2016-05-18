@@ -16,8 +16,8 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService',
-	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService) {
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady',
+	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady) {
 
 	$scope.jobs = [];
 	$scope.jobStatuses = {};
@@ -38,24 +38,28 @@ angular.module('JobsIndexCtrl', [])
 	});
 
 	$scope.logonDriver = function() {
-           pdaParams.logonDriver();
-           eventService.sendMsg('LOGON'); 
-    
-            // Dump local storage at logon time - debug aid
-            messageService.dumpLocalStorage();
-		    BackgroundGeolocationService.start();
-     }
-    $scope.logoffDriver = function() {
-           pdaParams.logoffDriver();
-           eventService.sendMsg('LOGOFF');
-		   BackgroundGeolocationService.stop();
-     }
-    $scope.isDrvLoggedOff = function() {
-           return pdaParams.isDrvLoggedOff();
-     }
-    $scope.isDrvLoggedOn = function() {
-           return pdaParams.isDrvLoggedOn();
-     }
+		pdaParams.logonDriver();
+		eventService.sendMsg('LOGON'); 
+	
+		// Dump local storage at logon time - debug aid
+		messageService.dumpLocalStorage();
+
+		if(cordovaReady.isready)
+			BackgroundGeolocationService.start();
+	}
+	$scope.logoffDriver = function() {
+		pdaParams.logoffDriver();
+		eventService.sendMsg('LOGOFF');
+		
+		if(cordovaReady.isready)
+			BackgroundGeolocationService.stop();
+	}
+	$scope.isDrvLoggedOff = function() {
+		return pdaParams.isDrvLoggedOff();
+	}
+	$scope.isDrvLoggedOn = function() {
+		return pdaParams.isDrvLoggedOn();
+	}
 
 	// LT - 31/08/2015 - I couldn't get the "inq" filter working for sync - it would get an error 400
 	// from the REST server - 
@@ -421,6 +425,13 @@ angular.module('JobsIndexCtrl', [])
 		syncService.setCallingFunc("JobsIndexCtrl->PushNotificationReceived");
 		syncService.hybridSync(onChange,syncfilter);
 	}
+
+	$scope.$on('RESUME', function(event) {
+		// Nothing much to do here other than refresh the jobs list
+		notificationCount++;
+		log.info("Received event:"+event.name+': calling refresh function');
+		refresh();
+	});
 
 	function deleteLegs(baseJobNo) {
 		var delfilter = { "where": {"mobjobBasejobNum": baseJobNo} };
