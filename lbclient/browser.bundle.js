@@ -18296,7 +18296,7 @@ module.exports={
     "remote": {
       "connector": "remote",
       "debug": "true",
-      "url": "http://allpur2.lnk.telstra.net:3000/api"
+      "url": "http://swiftt1.lnk.telstra.net:3000/api"
     },
     "local": {
       "connector": "memory",

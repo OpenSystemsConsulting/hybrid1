@@ -3,7 +3,7 @@ angular.module('cordovaReady', [])
 /**
  * A simple example service that returns some data.
  */
-.factory('cordovaReady',['$rootScope','$cordovaInsomnia', 'Logger', 'pdaParams','BackgroundGeolocationService', function($rootScope,$cordovaInsomnia,Logger,pdaParams,BackgroundGeolocationService) {
+.factory('cordovaReady',['$rootScope','$cordovaInsomnia', 'Logger', 'pdaParams','BackgroundGeolocationService','cipherlabScannerService', function($rootScope,$cordovaInsomnia,Logger,pdaParams,BackgroundGeolocationService,cipherlabScannerService) {
 
 	var isready;
 
@@ -65,6 +65,8 @@ angular.module('cordovaReady', [])
 
 		document.addEventListener("pause", onPause, false);
 		document.addEventListener("resume", onResume, false);
+
+//		cipherlabScannerService.initScanner();
 
 
 	}
