@@ -6,7 +6,7 @@
     <div class="card list">
 	  <div class="item item-body signature-item-body">
 		   <label > Enter your POD NAME below: </label>
-		   <input class="inputbg" type="text" name="podname" onclick="this.focus();this.select()" ng_model="signaturePadModel.podname" required >
+		   <input class="inputbg" type="text" name="podname" onclick="this.focus();this.setSelectionRange(0, this.value.length)" ng_model="signaturePadModel.podname" required >
 	  </div>
       <div class="item item-body signature-item-body">Use finger or stylus to sign below</div>
       <canvas id="signature-canvas" class="padding-horizontal item" style="width: 100%;"></canvas>
