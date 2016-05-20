@@ -639,12 +639,20 @@ angular.module('osc-services', [])
 .factory('BackgroundGeolocationService',['Logger','pdaParams','gpsHistory','$cordovaDevice',function (Logger,pdaParams,gpsHistory,$cordovaDevice) {
 
 	// background gps plugin from: https://github.com/mauron85/cordova-plugin-background-geolocation
+	// GPS timestamps are in milliseconds since epoch - iOS also has a fractional part
+	// e.g. iOS:		1463707063130.011
+	// e.g. Android:	1463707069003
+	// Site for millisecond calcs and conversions: http://currentmillis.com/
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'BackgroundGeoLocationService'};
 	var log = Logger.getInstance(logParams);
 	var backgroundGeoService = { };
-	var lastGPS = 0;
+	var lastGPSsecs = 0;		// last timestamp in seconds
+	var thisGPSsecs = 0;		// this timestamp in seconds
+	var diffGPSsecs = 0;
 
 	var saveGpsToDb = function(drvid,location) {
+
+
 		var lgps = new gpsHistory();
 
 		lgps.gps_driver_id = drvid;
@@ -665,7 +673,11 @@ angular.module('osc-services', [])
 		}
 
 		// TODO - maybe check last GPS and only update if diff is greater than x seconds
-		lastGPS = lgps.gps_timestamp;				// store last GPS time
+		thisGPSsecs = lgps.gps_timestamp/1000;				// current GPS time in seconds
+		diffGPSsecs = thisGPSsecs-lastGPSsecs;
+		log.debug("BGGS: lastGPSsecs:"+lastGPSsecs+", thisGPSsecs:"+thisGPSsecs+", diff:"+diffGPSsecs);
+
+		lastGPSsecs = lgps.gps_timestamp/1000;				// store last GPS time in seconds for next time
 
 		var ldate = new Date(lgps.gps_timestamp);
 

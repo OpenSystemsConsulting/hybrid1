@@ -35,5 +35,30 @@ angular.module('BarcodeCtrl', [])
 			
 		};
 
+      
+        cordova.plugins.CipherlabRS30CordovaPlugin.initialise(function () {
+    
+           // append("init done");
+                                                                                                                                                              
+            cordova.plugins.CipherlabRS30CordovaPlugin.setReceiveScanCallback(function (data) {                                                               
+                //append("scan received: " + data);                                                                                                             
+				barcodes.push(data);
+            });                                                                                                                                               
+                                                                                                                                                              
+        });                                                                                                                                                   
+                                                                                                                                                              
+        window.onbeforeunload = function () {                                                                                                                 
+            cordova.plugins.CipherlabRS30CordovaPlugin.destroy(function () { });                                                                              
+        }                                                                                                                                                     
+                                                                                                                                                              
+
+	    $scope.cipherscan = function () {
+
+			 cordova.plugins.CipherlabRS30CordovaPlugin.requestScan(function () {
+                // MDR 30/11/2015 - This is just a placeholder callback. Results will be handled by setReceiveScanCallback() parameter below
+            });
+				
+		}
+
 	}
 ])

@@ -9,14 +9,15 @@ angular.module('ny.logger', []).provider('Logger', [function () {
         var Logger = function(context) {
 			context.ver = appConfig.version;
             this.context = context;
+
+			this.setContext = function(context) {
+				context.ver = appConfig.version;
+				this.context = context;
+			}
         };
         Logger.getInstance = function(context) {
             return new Logger(context);
         };
-		Logger.setContext = function(context) {
-			context.ver = appConfig.version;
-			this.context = context;
-		}
         Logger.supplant = function(str, o) {
             return str.replace(
                 /\{([^{}]*)\}/g,

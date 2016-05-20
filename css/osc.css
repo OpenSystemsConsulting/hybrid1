@@ -108,9 +108,12 @@ overflowhidden-demystified/ */
     box-sizing: border-box;
 }
 .jobDetails-label {
-    width: 2%;
     font-size: 10px;
     float: left;
+}
+.jobDetail-label {
+	flex: 0 0 5%;
+    max-width: 5%;
 }
 
 .input-label {

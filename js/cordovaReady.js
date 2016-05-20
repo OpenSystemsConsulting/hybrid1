@@ -3,7 +3,7 @@ angular.module('cordovaReady', [])
 /**
  * A simple example service that returns some data.
  */
-.factory('cordovaReady',['$rootScope','$cordovaInsomnia', 'Logger', 'pdaParams','BackgroundGeolocationService','cipherlabScannerService', function($rootScope,$cordovaInsomnia,Logger,pdaParams,BackgroundGeolocationService,cipherlabScannerService) {
+.factory('cordovaReady',['$rootScope','$cordovaInsomnia', 'Logger', 'pdaParams','BackgroundGeolocationService','cipherlabScannerService','$cordovaDevice',function($rootScope,$cordovaInsomnia,Logger,pdaParams,BackgroundGeolocationService,cipherlabScannerService,$cordovaDevice) {
 
 	var isready;
 
@@ -66,8 +66,17 @@ angular.module('cordovaReady', [])
 		document.addEventListener("pause", onPause, false);
 		document.addEventListener("resume", onResume, false);
 
-//		cipherlabScannerService.initScanner();
-
+		var model =  $cordovaDevice.getModel();
+		log.debug("Device Model = " + model);
+		if( model == 'CipherLab RS30')
+		{
+			log.debug("Device is a CipherLab RS30 " + model);
+			cipherlabScannerService.initScanner();
+		}
+		else
+		{
+			log.debug("Device is NOT !!!! a CipherLab RS30 HEAD scanning NOT Available " + model);
+		}
 
 	}
 

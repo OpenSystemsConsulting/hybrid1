@@ -30,8 +30,7 @@
 	    	class="standardInput"
 	    	ng-class="{ 'checkedclass': (property.property == 'mobjobLegNumber') }"  -->
 
-	    <input disabled ng-show="(property.type != '') && (property.type != 'toggle') && (property.type != 'enum')  && (!property.omitFromForm) " 
-	    	ng-class="{ 'requiredInput': ((property.required == true) && (property.value == '')),'addressfields': ((property.property == 'mobjobAddress1' || property.property == 'mobjobAddress2' || property.property == 'mobjobAddress3' || property.property == 'mobjobAddress4' || property.property == 'mobjobAddress5' || property.property == 'mobjobClientName')) , 'suburbfield': ((property.property == 'mobjobSuburb')) , 'servicefield': ((property.property == 'mobjobServiceCode')) }" 
+	    <input disabled ng-show="(property.type != '') && (property.type != 'toggle') && (property.type != 'enum')  && (!property.omitFromForm) && !!property.value " ng-class="{ 'requiredInput': ((property.required == true) && (property.value == '')),'addressfields': ((property.property == 'mobjobAddress1' || property.property == 'mobjobAddress2' || property.property == 'mobjobAddress3' || property.property == 'mobjobAddress4' || property.property == 'mobjobAddress5' || property.property == 'mobjobClientName')) , 'suburbfield': ((property.property == 'mobjobSuburb')) , 'servicefield': ((property.property == 'mobjobServiceCode')) }" 
 	    	ng-keyup="dataChanged($event, property)" 
 	    	type="{{property.type}}" ng-model="property.value"
 	    	class="standardInput">
