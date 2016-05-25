@@ -329,9 +329,10 @@ angular.module('JobsIndexCtrl', [])
 							// if we have a payload then do something with it
 							if(payload.data.type == "CANCEL") {
 								var baseJobNo = payload.data.baseJob;
+								var bookingDay = payload.data.bookingDay || 0;
 
 								// delete from local storage and resync - if we don't do this we get a conflict - don't know why
-								deleteLegs(baseJobNo);
+								deleteLegs(baseJobNo, bookingDay);
 							}
 							else {
 								// unknown payload type - just refresh
@@ -355,7 +356,8 @@ angular.module('JobsIndexCtrl', [])
 					switch(message.type) {
 						case 'CANCEL':
 							var baseJobNo = message.baseJob;
-							deleteLegs(baseJobNo);
+							var bookingDay = message.bookingDay || 0;
+							deleteLegs(baseJobNo, bookingDay);
 							break;
 						default:
 							// Probably new work - refresh
@@ -400,9 +402,10 @@ angular.module('JobsIndexCtrl', [])
 			// Belt and braces - we shouldn't get to the event handler if it's not a cancel
 			if(payload.data.type == "CANCEL") {
 				var baseJobNo = payload.data.baseJob;
+				var bookingDay = payload.data.bookingDay || 0;
 
 				// delete from local storage and resync - if we don't do this we get a conflict - don't know why
-				deleteLegs(baseJobNo);
+				deleteLegs(baseJobNo, bookingDay);
 
 				if( !payload.playsound) {
 					var notificationSnd = getSoundForPayload(payload);
@@ -433,8 +436,31 @@ angular.module('JobsIndexCtrl', [])
 		refresh();
 	});
 
-	function deleteLegs(baseJobNo) {
-		var delfilter = { "where": {"mobjobBasejobNum": baseJobNo} };
+	function deleteLegs(baseJobNo, bookingDay) {
+		var delfilter = {};
+
+		if(pdaParams.jobDetailOneDayOnly && bookingDay > 0) {
+			// convoluted (maybe) way to get job date with no hh/mm/ss into date object
+			var year = Math.round(bookingDay/10000);
+			var mon = Math.round((bookingDay % 10000) / 100);
+			var day = Math.round((bookingDay % 100));
+
+			var jobDateFilter = new Date();
+			jobDateFilter.setUTCFullYear(year);
+			jobDateFilter.setUTCMonth(mon-1);			// 0 - 11
+			jobDateFilter.setUTCDate(day);
+			// Dates are stored UTC so h/m/s all zero
+			jobDateFilter.setUTCHours(0);
+			jobDateFilter.setUTCMinutes(0);
+			jobDateFilter.setUTCSeconds(0);
+			jobDateFilter.setUTCMilliseconds(0);
+
+			delfilter = { "where": {"mobjobBasejobNum": baseJobNo, "mobjobBookingDay": jobDateFilter} };
+		}
+		else {
+			delfilter = { "where": {"mobjobBasejobNum": baseJobNo} };
+		}
+		log.debug("About to delete legs delfilter:"+JSON.stringify(delfilter));
 		Job.find(delfilter, function (err, jobs) {
 
 			var len = jobs.length;

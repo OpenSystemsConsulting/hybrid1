@@ -167,6 +167,8 @@ angular.module('osc-services', [])
 			cb();
 	};
 
+	pda_params.jobDetailOneDayOnly = true;
+
 	return pda_params;
 }])
 

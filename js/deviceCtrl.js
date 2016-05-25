@@ -103,4 +103,12 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 	}, false);
 */
 
+	$scope.usedStorage = Math.round(JSON.stringify(localStorage).length / 1024) + " KB";
+/*
+	function() {
+		var storageSize = Math.round(JSON.stringify(localStorage).length / 1024);
+		return (storageSize+" Kb");
+	}
+*/
+
 }]);
