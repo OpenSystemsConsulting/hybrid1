@@ -112,6 +112,7 @@ angular.module('TpmPdaControllerCtrl', [])
 		});
 
 		$scope.updateDriver = function( driverId) {
+			//Driver number has changed - normally from default of 0 to real driver id when initialising
 			//Get rid of all stuff related to the driver so we dont get wrong data.
 			//localStorage.clear();	
 			pdaParams.clearDriverInfo();
@@ -137,12 +138,14 @@ angular.module('TpmPdaControllerCtrl', [])
 			log.info("About to call getTpmPdaControllers with filter:" + JSON.stringify(filter));
 
 			// Send LOGON event
+			/* LOGON is done via a button now
 			if(driverId>0) {
 				eventService.sendMsg('LOGON');
 
 				// Dump local storage at logon time - debug aid
 				messageService.dumpLocalStorage();
 			}
+			*/
 
 		};
 
@@ -151,6 +154,18 @@ angular.module('TpmPdaControllerCtrl', [])
 		}
 		$scope.pushRegister = function() {
 			pushService.registerForPush();
+		}
+
+		$scope.logon = function() {
+			pdaParams.logonDriver();
+			eventService.sendMsg('LOGON');
+
+			// Dump local storage at logon time - debug aid
+			messageService.dumpLocalStorage();
+		}
+		$scope.logoff = function() {
+			pdaParams.logoffDriver();
+			eventService.sendMsg('LOGOFF');
 		}
 	}
 ])

@@ -6,11 +6,14 @@ angular.module('services', [])
 			var deferred = $q.defer();
 			var promise = deferred.promise;
 
+/*
 			if (name == 'user' && pw == 'secret') {
 				deferred.resolve('Welcome ' + name + '!');
 			}
+*/
 			// Added by OSC ---------------------------------------
-			else if (name == 'oscvtest' && pw == 'oscvtest') {
+			//else
+			if (name == 'oscvtest' && pw == 'oscvtest') {
 				deferred.resolve(name);
 			} else if (name == 'scope' && pw == 'scope') {
 				deferred.resolve(name);

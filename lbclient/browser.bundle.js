@@ -18283,7 +18283,7 @@ module.exports={
     "scope": {
       "connector": "remote",
       "debug": "true",
-      "clientID": "SCOPE",
+      "clientId": "SCOPE",
       "serverIP": "scope.opensyscon.com.au",
       "serverPort": 3112,
       "url": "http://scope.opensyscon.com.au:3112/api"
@@ -18291,7 +18291,7 @@ module.exports={
     "swift1": {
       "connector": "remote",
       "debug": "true",
-      "clientID": "SWIFT1",
+      "clientId": "SWIFT1",
       "serverIP": "swiftt1.lnk.telstra.net",
       "serverPort": 3000,
       "url": "http://swiftt1.lnk.telstra.net:3000/api"
@@ -18299,7 +18299,7 @@ module.exports={
     "oscvtest": {
       "connector": "remote",
       "debug": "true",
-      "clientID": "OSCVTEST",
+      "clientId": "OSCVTEST",
       "serverIP": "opensyscon.com.au",
       "serverPort": 3000,
       "url": "http://opensyscon.com.au:3000/api"
@@ -18307,7 +18307,7 @@ module.exports={
     "wpe": {
       "connector": "remote",
       "debug": "true",
-      "clientID": "WPE",
+      "clientId": "WPE",
       "serverIP": "opensyscon.com.au",
       "serverPort": 3115,
       "url": "http://opensyscon.com.au:3115/api"
@@ -18315,7 +18315,7 @@ module.exports={
     "apt": {
       "connector": "remote",
       "debug": "true",
-      "clientID": "APT",
+      "clientId": "APT",
       "serverIP": "allpur2.lnk.telstra.net",
       "serverPort": 3000,
       "url": "http://allpur2.lnk.telstra.net:3000/api"
@@ -18323,7 +18323,7 @@ module.exports={
     "ces": {
       "connector": "remote",
       "debug": "true",
-      "clientID": "CES",
+      "clientId": "CES",
       "serverIP": "couriers-express.com.au",
       "serverPort": 3000,
       "url": "http://couriers-express.com.au:3000/api"

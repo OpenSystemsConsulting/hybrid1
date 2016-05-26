@@ -2,8 +2,8 @@ angular.module('deviceCtrl', [])
 
 
 .controller('deviceCtrl', [
-'$rootScope', '$scope', '$state', 'TpmPdaController' ,  'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', '$cordovaDevice', 'network','fullreplication', '$cordovaNetwork',"appConfig","clientConfig",'$ionicPopup',
-function( $rootScope, $scope, $state, TpmPdaController,  pdaParams, gpsService , cordovaReady ,appService , pushService, $cordovaDevice, network, fullreplication, $cordovaNetwork, appConfig, clientConfig, $ionicPopup) {
+'$rootScope', '$scope', '$state', 'TpmPdaController' ,  'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', '$cordovaDevice', 'network','fullreplication', '$cordovaNetwork','appConfig','clientConfig','siteService','$ionicPopup',
+function( $rootScope, $scope, $state, TpmPdaController,  pdaParams, gpsService , cordovaReady ,appService , pushService, $cordovaDevice, network, fullreplication, $cordovaNetwork, appConfig, clientConfig, siteService, $ionicPopup) {
 
 	// TODO - maybe have array of key/value pairs - then can simply iterate with ng-repeat on template
 	var devicectrl = { };
@@ -22,6 +22,7 @@ function( $rootScope, $scope, $state, TpmPdaController,  pdaParams, gpsService ,
 
 	$scope.appConfig = appConfig;
 	$scope.clientConfig = clientConfig;
+	//$scope.clientConfig = siteService.getClientConfig();;
 
 	$scope.version = appConfig.version.toFixed(2);
 

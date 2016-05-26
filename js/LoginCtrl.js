@@ -1,6 +1,6 @@
 angular.module('LoginCtrl', [])
 
-.controller('LoginCtrl', function( $scope, LoginService, $ionicPopup, $state, pdaParams, eventService, messageService, $window, siteService) {
+.controller('LoginCtrl', function( $scope, LoginService, $ionicPopup, $state, pdaParams, eventService, messageService, $window, siteService, $location) {
 	$scope.data = {};
 
 	$scope.login = function() {
@@ -25,28 +25,32 @@ angular.module('LoginCtrl', [])
 
 				// Store API url based on login name
 				siteService.setSiteDetails(name);
+				siteService.setClientConfig(name);
 
 				// reload app based on new stored urls
 				// TODO - need a please wait initialiasing app... type message
 				$scope.firstTimeLoad = true;
 				
 				// Store 1st time loaded to avoid double login when restarting
-				localStorage.setItem('firstTimeLoad', true);
+				//localStorage.setItem('firstTimeLoad', true);
 
 				var alertPopup = $ionicPopup.alert({
 					title: 'First time initialisation',
-					template: 'Please wait while we configure the device.  You will need to log in again.'
+					template: 'Please wait while we configure the device.  You may need to log in again.'
 				});
 
 				// Default username/password
-				$scope.data.username = 'First time initialisation';
-				$scope.data.password = 'Please wait, restarting app...';
+				$scope.data.username = 'First time initialisation, restarting app...';
+				//$scope.data.password = 'Please wait, restarting app...';
+				$scope.data.password = '';
 				//$scope.apply();
 
 				alertPopup.then(function(res) {
-					// maybe $location/path or $state.go()
+					// maybe $location.path or $state.go()
 					// (http://stackoverflow.com/questions/22843371/how-to-restart-angularjs-app)
-					$window.location.reload();
+					$location.path('/');
+					//$window.location.href = '/';		// no 2nd login - doesn't work on android device though
+					$window.location.reload();		// reloads app completely - have to login 2nd time
 				});
 			}
 			else {
@@ -54,8 +58,6 @@ angular.module('LoginCtrl', [])
 				// update last login time
 				loginDetails.time = new Date().toISOString();
 				localStorage.setItem('login', JSON.stringify(loginDetails));
-
-				siteService.setClientConfig(name);
 
 				if(pdaParams.getDriverId() <= 0) {
 					$state.go('tab.pda');			// configure driver no. here

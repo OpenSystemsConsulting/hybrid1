@@ -36,6 +36,20 @@ angular.module('JobsIndexCtrl', [])
 		$scope.$apply();
 	});
 
+	$rootScope.logonStatus = pdaParams.getDriverLogonStatus();
+	$scope,getLogonStatus = function() {
+		pdaParams.getDriverLogonStatus();
+	}
+	$scope.logonDriver = function() {
+		pdaParams.logonDriver();
+		$rootScope.logonStatus = pdaParams.getDriverLogonStatus();
+	}
+	$scope.logoffDriver = function() {
+		pdaParams.logoffDriver();
+		$rootScope.logonStatus = pdaParams.getDriverLogonStatus();
+	}
+	
+
 	// LT - 31/08/2015 - I couldn't get the "inq" filter working for sync - it would get an error 400
 	// from the REST server - 
 	// "The mobjobStatus property has invalid clause {\"inq\":{\"[0]\":\"NJ\",\"[1]\":\"AC\",\"[2]\":\"PU\"}}"

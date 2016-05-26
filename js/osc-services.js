@@ -27,11 +27,11 @@ angular.module('osc-services', [])
  */
 	var pda_params = { };
 
-	// TODO - siteId needs to be in a config file somewhere
 	var localdriver = {
-					siteId			: clientConfig.clientID,
 					driverId		: 0,
 					accessAllowed	: false,
+					loggedOn		: false,
+					lastUpdate		: 0,
 					debugMode		: false
 				};
 
@@ -85,7 +85,7 @@ angular.module('osc-services', [])
 		return localdriver.siteId;
 */
 		// NOTE - should be in service but got circular dependancy when injecting siteService
-		pda_params.siteId = localStorage.getItem('clientID');
+		pda_params.siteId = localStorage.getItem('clientId');
 		return pda_params.siteId;
 	};
 
@@ -102,6 +102,7 @@ angular.module('osc-services', [])
 
 	pda_params.setDriverInfo = function(driverId) {
 		localdriver.driverId = driverId;
+		localdriver.lastUpdate = Date.now();
 		pda_params.driverId = driverId;
 		localStorage.setItem('osc-driver-info', JSON.stringify(localdriver));
 	}
@@ -109,6 +110,43 @@ angular.module('osc-services', [])
 	pda_params.setDebugMode = function(value) {
 		localdriver.debugMode = value || false;
 		localStorage.setItem('osc-driver-info', JSON.stringify(localdriver));
+	}
+
+	pda_params.logonDriver = function() {
+		localdriver = getParams();
+		localdriver.loggedOn = true;
+		localdriver.lastUpdate = Date.now();
+		localStorage.setItem('osc-driver-info', JSON.stringify(localdriver));
+	}
+	pda_params.logoffDriver = function() {
+		localdriver = getParams();
+		localdriver.loggedOn = false;
+		localdriver.lastUpdate = Date.now();
+		localStorage.setItem('osc-driver-info', JSON.stringify(localdriver));
+	}
+	pda_params.isDrvLoggedOff = function() {
+		if ( localdriver.loggedOn )
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	pda_params.isDrvLoggedOn = function() {
+		if ( localdriver.loggedOn )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	pda_params.getDriverLogonStatus = function() {
+		return localdriver.loggedOn;
 	}
 
 	pda_params.driverId = pda_params.getDriverId();
@@ -581,35 +619,42 @@ angular.module('osc-services', [])
 
 	return messageService;
 })
-.factory('siteService', function($rootScope, pdaParams, Logger, clientConfig, dataSources){
+.factory('siteService', function( clientConfig, dataSources){
 
-	// dataSources are loopback generated datasources
+	// dataSources are loopback generated datasource objects created during the loopback boot phase
 	var siteService = {
 
 		setSiteDetails: function(name){
 			var siteDetails = dataSources[name];
 			localStorage.setItem('apiURL', siteDetails.connector.url);
-			localStorage.setItem('clientID', siteDetails.settings.clientID);
+			localStorage.setItem('clientId', siteDetails.settings.clientId);
 			localStorage.setItem('serverIP', siteDetails.settings.serverIP);
 			localStorage.setItem('serverPort', siteDetails.settings.serverPort);
 
 			localStorage.setItem('apiDSName', name);		// IMPORTANT - used by model js code for connector
 
-			clientConfig.clientID = siteDetails.settings.clientID;
+			clientConfig.clientId = siteDetails.settings.clientId;
 			clientConfig.serverIP = siteDetails.settings.serverIP;
 			clientConfig.serverPort = siteDetails.settings.serverPort;
+
 		},
 
 		setClientConfig: function(name){
 			var siteDetails = dataSources[name];
 
-			clientConfig.clientID = siteDetails.settings.clientID;
+			clientConfig.clientId = siteDetails.settings.clientId;
 			clientConfig.serverIP = siteDetails.settings.serverIP;
 			clientConfig.serverPort = siteDetails.settings.serverPort;
+
+			localStorage.setItem('clientConfig', JSON.stringify(clientConfig));
 		},
 
 		getSiteId: function(){
-			return localStorage.getItem('clientID');
+			return localStorage.getItem('clientId');
+		},
+
+		getClientConfig: function(){
+			return JSON.parse(localStorage.getItem('clientConfig'));
 		}
 	}
 

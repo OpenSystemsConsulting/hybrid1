@@ -39,20 +39,20 @@ angular.module('starter', ['ionic',
 
 // default client config values - will be populated correctly after login
 .provider('clientConfig', function() {
-	var _clientID = 'clientID';
+	var _clientId = 'clientId';
 	var _serverIP = 'serverIP.opensyscon.com.au';
 	var _serverPort = 3000;
 
-	var _clientConfig = localStorage.getItem('clientConfig');
+	var _clientConfig = JSON.parse(localStorage.getItem('clientConfig'));
 	if( _clientConfig) {
-		this._clientID = _clientConfig.clientId;
-		this._serverIP = _clientConfig.serverIP;
-		this.serverPort = _clientConfig.serverPort;
+		_clientId = _clientConfig.clientId;
+		_serverIP = _clientConfig.serverIP;
+		_serverPort = _clientConfig.serverPort;
 	}
 
 	return {
-		clientID : function() {
-			return _clientID;
+		clientId : function() {
+			return _clientId;
 		},
 		serverIP : function() {
 			return _serverIP;
@@ -62,7 +62,7 @@ angular.module('starter', ['ionic',
 		},
 		$get: function() {
 			return {
-				clientId: _clientID,
+				clientId: _clientId,
 				serverIP: _serverIP,
 				serverPort: _serverPort
 			};
@@ -277,14 +277,6 @@ angular.module('starter', ['ionic',
 
 	;
 
-  // if this parameter exists then default to tpmPdaControllers as we have already logged in once
-  // which will configure all of the site specific parameters before restarting the app
-  // TODO should this test be the other way i.e. check for parameter absence?
-  if( localStorage.getItem('firstTimeLoad')) {
-    $urlRouterProvider.otherwise('/tpmPdaControllers');
-    localStorage.removeItem('firstTimeLoad');
-  }
-  else
   // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/login');
 
@@ -302,7 +294,7 @@ angular.module('starter', ['ionic',
 // phase first and then it will execute the "Run" phase. At that point, all of
 // the run() blocks are executed. During this phase, we no longer have access
 // to any of the providers but we can finally access the services.
-.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate) {
+.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate,$state) {
 
 /* NOTE: the run function gets called at app startup so any services injected here
  * will be instantiated at that time
@@ -313,12 +305,37 @@ angular.module('starter', ['ionic',
 
 // Assist debugging angular ui router
 	$rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
+
+	// TODO - NOTE - can put code here to disallow change based on whatever we want using event.preventDefault();
+
   	//console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
 
 	//mystr = '$stateChangeStart to '+toState.to+' fired when the transition begins. ToState = ' + toState + ' toParams : ' + toParams ;
 	mystr = '$stateChangeStart: from:' + fromState.name + ' to:'+toState.name+' (fired when the transition begins)';
 	//if(pdaParams.debug)
 		log.debug(mystr);
+
+		// If going to login screen and already done and driver set up go to jobs
+		// otherwise go to pda controller to configure driver
+		if(toState.name === "login") {
+			if( localStorage.getItem('clientId')) {
+				event.preventDefault();
+				if( pdaParams.getDriverId() > 0 )
+					$state.go('tab.job-index');
+				else
+					$state.go('tab.pda');
+			}
+		}
+
+/*
+		// If going to pda controller tab and already have driver id configured go to jobs
+		if(toState.name === "tab.pda") {
+			if( pdaParams.getDriverId() > 0 ) {
+				event.preventDefault();
+				$state.go('tab.job-index');
+			}
+		}
+*/
 
 });
 	$rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams, error){
