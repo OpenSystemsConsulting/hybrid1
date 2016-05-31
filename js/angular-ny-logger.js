@@ -5,19 +5,18 @@ angular.module('ny.logger', []).provider('Logger', [function () {
     this.enabled = function(_isEnabled) {
         isEnabled = !!_isEnabled;
     };
-    this.$get = ['$log','appConfig', function($log,appConfig) {
+    this.$get = ['$log','appConfig','pdaParams', function($log,appConfig,pdaParams) {
         var Logger = function(context) {
 			context.ver = appConfig.version;
             this.context = context;
-
-			this.setContext = function(context) {
-				context.ver = appConfig.version;
-				this.context = context;
-			}
+			this.pdaParams = pdaParams;
         };
         Logger.getInstance = function(context) {
             return new Logger(context);
         };
+		Logger.setContext = function(context) {
+			this.context = context;
+		}
         Logger.supplant = function(str, o) {
             return str.replace(
                 /\{([^{}]*)\}/g,
@@ -54,6 +53,13 @@ angular.module('ny.logger', []).provider('Logger', [function () {
                 var now  = Logger.getFormattedTimestamp(new Date());
                 var message = '', supplantData = [];
 				var logstring = '';
+
+
+				// LT - BAD - HACK - check driver id and if zero update context
+				// Logger function should not know details of context or what a driver id is!!!!
+				if( this.context.driver == 0)
+					this.context.driver = this.pdaParams.getDriverId();
+
 				// LT - for our OSC PDA app context is a JSON object so need to convert to string
 				var lcontext = JSON.stringify(this.context);
                 switch (args.length) {

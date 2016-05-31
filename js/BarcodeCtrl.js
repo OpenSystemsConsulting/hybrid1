@@ -35,7 +35,6 @@ angular.module('BarcodeCtrl', [])
 			
 		};
 
-      
         cordova.plugins.CipherlabRS30CordovaPlugin.initialise(function () {
     
            // append("init done");
