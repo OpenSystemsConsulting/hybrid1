@@ -19,7 +19,7 @@ angular.module('config', [])
 })
 // clientConfig object contains the client specific data, name REST endpoint etc.
 .constant('clientConfig', {
-	'clientID':		'APT',
-	'serverIP': 	'allpur2.lnk.telstra.net',
+	'clientID':		'CES',
+	'serverIP': 	'couriers-express.com.au',
 	'serverPort':	3000
 })
