@@ -6,12 +6,31 @@ angular.module('services', [])
 			var deferred = $q.defer();
 			var promise = deferred.promise;
 
+/*
 			if (name == 'user' && pw == 'secret') {
 				deferred.resolve('Welcome ' + name + '!');
 			}
-			else
-			if (name == 'opensys' && pw == 'opensys1') {
-				deferred.resolve('Welcome ' + name + '!');
+*/
+			// Added by OSC ---------------------------------------
+			// All sites hardcoded for now until we get an authorisation service running
+			//else
+			if (name == 'oscvtest' && pw == 'oscvtest') {
+				deferred.resolve(name);
+			} else if (name == 'scope' && pw == 'scope') {
+				deferred.resolve(name);
+			} else if (name == 'swift1' && pw == 'swift1') {
+				deferred.resolve(name);
+			} else if (name == 'wpe' && pw == 'wpe') {
+				deferred.resolve(name);
+			} else if (name == 'apt' && pw == 'apt') {
+				deferred.resolve(name);
+			} else if (name == 'ces' && pw == 'ces') {
+				deferred.resolve(name);
+			} else if (name == 'redback' && pw == 'redback') {
+				deferred.resolve(name);
+			} else if (name == 'swift2' && pw == 'swift2') {
+				deferred.resolve(name);
+			// ----------------------------------------------------
 			} else {
 				deferred.reject('Wrong credentials.');
 			}

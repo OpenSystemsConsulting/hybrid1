@@ -11,8 +11,6 @@ angular.module('TpmPdaControllerCtrl', [])
 		//$scope.driverId = pdaParams.getDriverId();
 		$scope.pdaParams = pdaParams;
 
-
-
 		// NOTE - "filter" keyword appears to be required for Oracle queries
 		// but NOT mongodb queries.  Are we doing it correctly?
 		var _filter = { "filter":
@@ -73,22 +71,6 @@ angular.module('TpmPdaControllerCtrl', [])
 			getTpmPdaControllers(filter);
 		//});
 
-		// we don't want full on 2 way data binding - should only refresh when save button clicked
-/*
-		$scope.$watch('pdaParams.driverId', function(newDriver) {
-			
-			if( newDriver == "")
-				return;
-
-			filter = { "filter":
-					{
-						"where": { and: [{ "tpmpc_driver_id": pdaParams.driverId, "tpmpc_access_allowed": 'Y' }] }
-					}
-				};
-			getTpmPdaControllers();
-		});
-*/
-
 		// modal window to update driver no
 		$ionicModal.fromTemplateUrl('templates/modal.html', {
 			scope: $scope
@@ -112,16 +94,16 @@ angular.module('TpmPdaControllerCtrl', [])
 		});
 
 		$scope.updateDriver = function( driverId) {
+			//Driver number has changed - normally from default of 0 to real driver id when initialising
 			//Get rid of all stuff related to the driver so we dont get wrong data.
-			localStorage.clear();	
+			//localStorage.clear();	
+			pdaParams.clearDriverInfo();
 
 			// TODO - remove any leading 0s
 			pdaParams.setDriverInfo( driverId);
 			$scope.closeModal();
 
 			// TODO - we need to unregister from push services and reregister with new driver id
-
-			//$scope.$apply();
 
 			// reset _newfilter as driver id has changed
 			_newfilter = { "filter":
@@ -136,13 +118,14 @@ angular.module('TpmPdaControllerCtrl', [])
 			log.info("About to call getTpmPdaControllers with filter:" + JSON.stringify(filter));
 
 			// Send LOGON event
+			/* LOGON is done via a button now
 			if(driverId>0) {
-				// as of v2.41 driver must explicitly logon/logoff from jobs screen
-				//eventService.sendMsg('LOGON');
+				eventService.sendMsg('LOGON');
 
 				// Dump local storage at logon time - debug aid
 				messageService.dumpLocalStorage();
 			}
+			*/
 
 		};
 
@@ -151,6 +134,18 @@ angular.module('TpmPdaControllerCtrl', [])
 		}
 		$scope.pushRegister = function() {
 			pushService.registerForPush();
+		}
+
+		$scope.logon = function() {
+			pdaParams.logonDriver();
+			eventService.sendMsg('LOGON');
+
+			// Dump local storage at logon time - debug aid
+			messageService.dumpLocalStorage();
+		}
+		$scope.logoff = function() {
+			pdaParams.logoffDriver();
+			eventService.sendMsg('LOGOFF');
 		}
 	}
 ])

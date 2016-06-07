@@ -15,7 +15,7 @@ angular.module('osc-services', [])
 		//return showConflicts;
 	//}
 
-.factory( 'pdaParams', ['appConfig','clientConfig',function(appConfig, clientConfig) {
+.factory( 'pdaParams', ['appConfig',function(appConfig) {
 
 /*
  * pdaParams
@@ -29,34 +29,12 @@ angular.module('osc-services', [])
 
 	// TODO - siteId needs to be in a config file somewhere
 	var localdriver = {
-					siteId			: clientConfig.clientID,
 					driverId		: 0,
 					accessAllowed	: false,
+					loggedOn		: false,
+					lastUpdate		: 0,
 					debugMode		: false
 				};
-
-	// TODO - site params into a config file - maybe a different service?
-	// NOTE - LT - future use - as at 08/20/2015 these are NOT used yet
-/*
-	var siteParams = [
-					{
-						user		: 'opensys',
-						siteId		: 'OSCVTEST',
-						urlBase		: 'scope.opensyscon.com.au/scope/',
-						urlPort		: 3000,
-						logBase		: '58.108.229.60',
-						logPort		: 5678
-					},
-					{
-						user		: 'user',
-						siteId		: 'SWIFT',
-						urlBase		: 'swiftt1.lnk.telstra.net',
-						urlPort		: 3000,
-						logBase		: '58.108.229.60',
-						logPort		: 5678
-					}
-				];
-*/
 
 	function getParams() {
 		
@@ -66,7 +44,8 @@ angular.module('osc-services', [])
 	};
 
 	pda_params.getAppVersion = function() {
-		return appConfig.version.toFixed(2);
+		//return appConfig.version.toFixed(2);
+		return appConfig.version;
 	};
 
 	pda_params.getDriverId = function() {
@@ -79,17 +58,15 @@ angular.module('osc-services', [])
 	};
 
 	pda_params.getSiteId = function() {
+/*
 		localdriver = getParams();
 		pda_params.siteId = localdriver.siteId;
 		return localdriver.siteId;
-	};
-
-/*
-	pda_params.setSiteData = function( username) {
-		// TODO - set site specific date e.g. REST endpoints
-		siteParams[0].user = username;
-	};
 */
+		// NOTE - should be in service but got circular dependancy when injecting siteService
+		pda_params.siteId = localStorage.getItem('clientId');
+		return pda_params.siteId;
+	};
 
 	pda_params.clearDriverInfo = function() {
 		localStorage.removeItem('osc-driver-info');
@@ -354,7 +331,7 @@ angular.module('osc-services', [])
 		return( log );
 
 })
-.factory( 'eventService', function( $window, $http, clientConfig, pdaParams, Logger ) {
+.factory( 'eventService', function( $window, $http, siteService, pdaParams, Logger ) {
 
 	// Send a message to the mobile_event REST API
 	// Used for e.g. LOGON, LOGOFF, maybe sending a message etc.
@@ -381,18 +358,13 @@ angular.module('osc-services', [])
 
 		message.event = msgType;
 
-		$http.get('http://'+ clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/mobile_event'+'?payload='+encodeURIComponent(JSON.stringify(message))).success(function (data) {
-				//console.log("sendMsg:"+JSON.stringify(data));
+		var serverIP = siteService.getServerIP();
+		var serverPort = siteService.getServerPort();
+
+		// TODO - implement POST method - should be POST as we are creating
+		$http.get('http://'+ serverIP + ':' + serverPort + '/api/mobile_event'+'?payload='+encodeURIComponent(JSON.stringify(message))).success(function (data) {
 				log.info('mobile_event:'+JSON.stringify(message));
 			});
-
-/*
-		// TODO - implement POST method
-		$http.post('http://'+ clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/mobile_event',
-				encodeURIComponent(JSON.stringify(message))) {
-				console.log("sendMsg:"+JSON.stringify(data));
-			});
-*/
 	}
 
 	return( eventSvc );
@@ -482,10 +454,19 @@ angular.module('osc-services', [])
 			var dblist = [ 'osc-local-db', 'osc-driver-info', 'osc-push-credentials' ];
 			var len = dblist.length;
 
+			// dump ALL items, not just out predefined ones
+			len = localStorage.length;
+
 			for(var i=0; i < len; i++) {
-				logmsg.type = 'dumpLocalStorage:'+dblist[i];
-				//logmsg.data = JSON.parse(localStorage.getItem('osc-local-db'));
-				logmsg.data = JSON.parse(localStorage.getItem(dblist[i]));
+				var key = localStorage.key(i);
+				var value = localStorage[key];
+
+				logmsg.type = 'dumpLocalStorage:'+key;
+				if(isJson(value))
+					logmsg.data = JSON.parse(value);
+				else
+					logmsg.data = value;
+
 				log.info(logmsg);
 			}
 		},
@@ -624,6 +605,55 @@ angular.module('osc-services', [])
 
 	return messageService;
 })
+.factory('siteService', function( clientConfig, dataSources){
+
+	// dataSources are loopback generated datasource objects created during the loopback boot phase
+	var siteService = {
+
+		setSiteDetails: function(name){
+			var siteDetails = dataSources[name];
+			localStorage.setItem('apiURL', siteDetails.connector.url);
+			localStorage.setItem('apiDSName', name);		// IMPORTANT - used by model js code for connector
+
+			localStorage.setItem('clientId', siteDetails.settings.clientId);
+			//localStorage.setItem('serverIP', siteDetails.settings.serverIP);
+			//localStorage.setItem('serverPort', siteDetails.settings.serverPort);
+
+			//clientConfig.clientId = siteDetails.settings.clientId;
+			//clientConfig.serverIP = siteDetails.settings.serverIP;
+			//clientConfig.serverPort = siteDetails.settings.serverPort;
+
+		},
+
+		setClientConfig: function(name){
+			var siteDetails = dataSources[name];
+
+			clientConfig.clientId = siteDetails.settings.clientId;
+			clientConfig.serverIP = siteDetails.settings.serverIP;
+			clientConfig.serverPort = siteDetails.settings.serverPort;
+
+			localStorage.setItem('clientConfig', JSON.stringify(clientConfig));
+		},
+
+		getSiteId: function(){
+			return localStorage.getItem('clientId');
+		},
+
+		getClientConfig: function(){
+			return JSON.parse(localStorage.getItem('clientConfig'));
+		},
+
+		getServerIP: function() {
+			return clientConfig.serverIP;
+		},
+
+		getServerPort: function() {
+			return clientConfig.serverPort;
+		}
+	}
+
+	return siteService;
+})
 .factory('deviceService', function(cordovaReady,$cordovaDevice){
 
 	var deviceService = {
@@ -651,6 +681,7 @@ angular.module('osc-services', [])
 	var lastGPSsecs = 0;		// last timestamp in seconds
 	var thisGPSsecs = 0;		// this timestamp in seconds
 	var diffGPSsecs = 0;
+	var threshold = 1;			// diff between gps must be greater than this to save
 
 	var saveGpsToDb = function(drvid,location) {
 
@@ -677,7 +708,7 @@ angular.module('osc-services', [])
 		// TODO - maybe check last GPS and only update if diff is greater than x seconds
 		thisGPSsecs = lgps.gps_timestamp/1000;				// current GPS time in seconds
 		diffGPSsecs = thisGPSsecs-lastGPSsecs;
-		log.debug("BGGS: lastGPSsecs:"+lastGPSsecs+", thisGPSsecs:"+thisGPSsecs+", diff:"+diffGPSsecs);
+		log.debug("BGGS: lastGPSsecs:"+lastGPSsecs+", thisGPSsecs:"+thisGPSsecs+", diff:"+diffGPSsecs + ", threshold:"+threshold);
 
 		lastGPSsecs = lgps.gps_timestamp/1000;				// store last GPS time in seconds for next time
 
@@ -701,7 +732,7 @@ angular.module('osc-services', [])
 
 
 		// TODO - do we need any more criteria to create history record?  if connected?
-		if( lgps.gps_driver_id > 0)
+		if( lgps.gps_driver_id > 0 && diffGPSsecs > threshold)
 		{
 			log.info("About to save GPS");
 			lgps.$create(lgps, function success( obj) {

@@ -1,7 +1,7 @@
 angular.module('pushService', [])
 
-.factory('pushService',[ '$rootScope','$ionicPlatform','$cordovaPush','$http','pdaParams', 'cordovaReady','$ionicPopup','$cordovaMedia','clientConfig','Logger','$cordovaDevice','$cordovaPushV5',
-function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaReady, $ionicPopup, $cordovaMedia, clientConfig, Logger, $cordovaDevice, $cordovaPushV5) {
+.factory('pushService',[ '$rootScope','$ionicPlatform','$cordovaPush','$http','pdaParams', 'cordovaReady','$ionicPopup','$cordovaMedia','siteService','Logger','$cordovaDevice','$cordovaPushV5',
+function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaReady, $ionicPopup, $cordovaMedia, siteService, Logger, $cordovaDevice, $cordovaPushV5) {
 
 	// "senderID" is "Project Number" from Google Developers Console (https://console.developers.google.com)
 	// NOTE that there is also a server component involved - see API key in /app/strongloop/OSC-API/server/gcm_config.js
@@ -84,9 +84,12 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				var filter = { "where": { "deviceToken": token }};
 				log.debug(platform+':$cordovaPushV5.register: check for current registration, filter:'+JSON.stringify(filter));
 
+				var serverIP = siteService.getServerIP();
+				var serverPort = siteService.getServerPort();
+
 				// LT - 30/11/2015 - TODO - http.get.success has been deprecated use .then instead
 				// see https://docs.angularjs.org/api/ng/service/$http
-				$http.get('http://'+ clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations'+'?filter='+encodeURIComponent(JSON.stringify(filter))).success(function (data) {
+				$http.get('http://'+ serverIP + ':' + serverPort + '/api/installations'+'?filter='+encodeURIComponent(JSON.stringify(filter))).success(function (data) {
 					//console.log(data);			// this works
 
 					// Try and ensure that there only ever one row for a driver or a token
@@ -99,7 +102,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 						log.info(platform+':$cordovaPush.register: no current registration found in installations');
 
 						//This registers the Google Token with Strongloop and our Database
-						$http.post('http://' + clientConfig.serverIP + ':' + clientConfig.serverPort + '/api/installations', installation_object);
+						$http.post('http://' + serverIP + ':' + serverPort + '/api/installations', installation_object);
 
 						// Save data to local storage (it also gets put into $rootScope below)
 						localStorage.setItem('osc-push-credentials', JSON.stringify(installation_object));

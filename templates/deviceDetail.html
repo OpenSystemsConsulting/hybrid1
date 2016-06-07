@@ -108,7 +108,7 @@
 		<ion-item class="item" >
 			Client ID
 			<span class="item-note">
-				{{clientConfig.clientID}}
+				{{clientConfig.clientId}}
 			</span>
 		</ion-item>
 		<ion-item class="item" >
@@ -123,11 +123,15 @@
 				{{appConfig.logServerIP}}:{{appConfig.logServerPort}}
 			</span>
 		</ion-item>
-<!--
 		<div class="item item-divider">
-			GCM
+			Device Reset
 		</div>
--->
+		<ion-item class="item item-button-right" >
+			Reset app (deletes all data)
+			<button class="button button-positive" ng-click="resetApp()">
+				Reset
+			</button>
+		</ion-item>
 	</span>
 
 	<div class="item item-divider">
