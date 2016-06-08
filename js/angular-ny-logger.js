@@ -37,6 +37,22 @@ angular.module('ny.logger', []).provider('Logger', [function () {
         Logger.getLogTimestamp = function(date) {
 			return( date.toISOString());
         };
+        Logger.getLocalTimestamp = function(date) {
+			tzo = -date.getTimezoneOffset(),
+			dif = tzo >= 0 ? '+' : '-',
+			pad = function(num) {
+				var norm = Math.abs(Math.floor(num));
+				return (norm < 10 ? '0' : '') + norm;
+			};
+			return date.getFullYear() 
+				+ '-' + pad(date.getMonth()+1)
+				+ '-' + pad(date.getDate())
+				+ 'T' + pad(date.getHours())
+				+ ':' + pad(date.getMinutes()) 
+				+ ':' + pad(date.getSeconds()) 
+				+ dif + pad(tzo / 60) 
+				+ ':' + pad(tzo % 60);
+        };
 		Logger.getlogServerIP = function() {
 			return(appConfig.logServerIP);
 		};
@@ -94,8 +110,10 @@ angular.module('ny.logger', []).provider('Logger', [function () {
 				 * To overcome this  a direct ajax call should be made.
 				 * TODO - maybe use "request" https://github.com/request/request/blob/master/README.md instead of jQuery to reduce footprint
 				 */
+				var d = new Date();
 				var OSC_log = {
-					time:		Logger.getLogTimestamp(new Date()),
+					time:		Logger.getLogTimestamp(d),
+					localtime:	Logger.getLocalTimestamp(d),
 					logtype:	originalFn,
 					context:	this.context,
 					message:	logstring
