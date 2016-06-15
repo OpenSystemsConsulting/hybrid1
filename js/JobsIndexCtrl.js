@@ -44,15 +44,17 @@ angular.module('JobsIndexCtrl', [])
 		// Dump local storage at logon time - debug aid
 		messageService.dumpLocalStorage();
 
-		if(cordovaReady.isready)
+		if(cordovaReady.isready) {
 			BackgroundGeolocationService.start();
+		}
 	}
 	$scope.logoffDriver = function() {
 		pdaParams.logoffDriver();
 		eventService.sendMsg('LOGOFF');
 		
-		if(cordovaReady.isready)
+		if(cordovaReady.isready) {
 			BackgroundGeolocationService.stop();
+		}
 	}
 	$scope.isDrvLoggedOff = function() {
 		return pdaParams.isDrvLoggedOff();

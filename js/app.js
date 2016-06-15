@@ -99,10 +99,6 @@ angular.module('starter', ['ionic',
 .config(function( apiURLFetcherProvider, $stateProvider, $urlRouterProvider, LoopBackResourceProvider, KeepaliveProvider, IdleProvider) {
 
 	// Change the URL where to access the LoopBack REST API server
-    //LoopBackResourceProvider.setUrlBase('http://58.108.229.60:3001/api');
-	// Use 3000 for the OSC-API offline sync server process
-	var myPort = 3000;
-	var myIpaddress = 'opensyscon.com.au';
 	LoopBackResourceProvider.setUrlBase(apiURLFetcherProvider.getURL());
 
   // Ionic uses AngularUI Router which uses the concept of states

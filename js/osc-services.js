@@ -446,6 +446,15 @@ angular.module('osc-services', [])
 	var msgQ = FixedQueue(50);		// Store last x no. driver messages
 	var newMsgCount = 0;			// keep a count of new messages - will reset once driver has seen them
 
+	function isJson(str) {
+		try {
+			JSON.parse(str);
+		} catch (e) {
+			return false;
+		}
+		return true;
+	}
+
 	var messageService = {
 
 
@@ -682,9 +691,8 @@ angular.module('osc-services', [])
 	var thisGPSsecs = 0;		// this timestamp in seconds
 	var diffGPSsecs = 0;
 	var threshold = 1;			// diff between gps must be greater than this to save
-
+	
 	var saveGpsToDb = function(drvid,location) {
-
 
 		var lgps = new gpsHistory();
 
@@ -715,10 +723,10 @@ angular.module('osc-services', [])
 		var ldate = new Date(lgps.gps_timestamp);
 
 		var oset = ldate.getTimezoneOffset();
-		log.debug("BGGS new date: " + ldate + ", oset: " + oset );
+		//log.debug("BGGS new date: " + ldate + ", oset: " + oset );
 									
 		lgps.gps_timestamp += (oset * -1)  * 60  * 1000;
-		log.debug("BGGS gps_timestamp: now:" + lgps.gps_timestamp );
+		//log.debug("BGGS gps_timestamp: now:" + lgps.gps_timestamp );
 
 		lgps.gps_latitude = location.latitude.toFixed(6);
 		lgps.gps_longitude = location.longitude.toFixed(6);
@@ -728,13 +736,15 @@ angular.module('osc-services', [])
 
 		lgps.gps_time = 0 ; //new Date(location.timestamp).getTime();
 
-		log.debug("BGGS driver:" + lgps.gps_driver_id + ", lgps:"+ JSON.stringify(lgps));
+		// TODO - need to NOT rely on log - need our own access to this function
+		var loggedOn = log.pdaParams.isDrvLoggedOn();
 
+		log.debug("BGGS driver:" + lgps.gps_driver_id + ", loggedOn:" + loggedOn + ", lgps:"+ JSON.stringify(lgps));
 
 		// TODO - do we need any more criteria to create history record?  if connected?
-		if( lgps.gps_driver_id > 0 && diffGPSsecs > threshold)
+		if( lgps.gps_driver_id > 0 && diffGPSsecs > threshold && loggedOn)
 		{
-			log.info("About to save GPS");
+			log.info("About to save GPS for driver:"+ lgps.gps_driver_id + ", lgps:"+ JSON.stringify(lgps));
 			lgps.$create(lgps, function success( obj) {
 				if( obj) {
 					log.debug("lgps.$create success: obj:"+JSON.stringify(obj));
