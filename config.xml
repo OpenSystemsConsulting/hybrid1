@@ -56,3 +56,7 @@
   </platform>
 
 </widget>
+
+<!-- iOS build version -->
+<widget CFBundleVersion="2.52.0.01">
+</widget>
