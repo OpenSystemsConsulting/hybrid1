@@ -708,8 +708,7 @@ angular.module('osc-services', [])
 			if(location.timestamp) {
 				lgps.gps_timestamp = location.timestamp;
 			}
-			else
-			if(location.time) {
+			else if(location.time) {
 				lgps.gps_timestamp = location.time;
 			}
 			else {
@@ -725,12 +724,12 @@ angular.module('osc-services', [])
 			lgps.gps_heading = 0; // Android has a bearing if u want to use it later
 		}
 
-		log.debug("BGGS platform is:" + platform + ", gpstimestamp:"+ lgps.gps_timestamp);
+		//log.debug("BGGS platform is:" + platform + ", gpstimestamp:"+ lgps.gps_timestamp); // combine into 1 log below
 
 		// check last GPS and only update if diff is greater than x seconds
 		thisGPSsecs = lgps.gps_timestamp/1000;				// current GPS time in seconds
 		diffGPSsecs = thisGPSsecs-lastGPSsecs;
-		log.debug("BGGS: lastGPSsecs:"+lastGPSsecs+", thisGPSsecs:"+thisGPSsecs+", diff:"+diffGPSsecs + ", threshold:"+threshold);
+		log.debug("BGGS: platform:" + platform + ", gpstimestamp:"+ lgps.gps_timestamp + ", lastGPSsecs:"+lastGPSsecs+", thisGPSsecs:"+thisGPSsecs+", diff:"+diffGPSsecs + ", threshold:"+threshold);
 
 		lastGPSsecs = lgps.gps_timestamp/1000;				// store last GPS time in seconds for next time
 
