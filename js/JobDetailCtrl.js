@@ -286,6 +286,9 @@ angular.module('JobDetailCtrl', [])
 			jobChangedService.setlastjobedited(true);
 		}
 
+		// NOTE - because we don't replicate between the very last PC and setting all to DL the last PC leg goes
+		// direct from PU -> DL and therefore does NOT trigger a POD_INFORMATION event on the server
+
 		// TODO - what is best test for all PODs captured?
 		// if all PODs now captured update job to DL (all delivery legs have status PC so now job fully completed)
 		if( podCount >= (legCount-1))

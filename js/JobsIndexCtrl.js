@@ -186,7 +186,7 @@ angular.module('JobsIndexCtrl', [])
 	function onChange(err, conflicts) {
 		if(err)
 			console.log(err);
-		if(conflicts)
+		if(conflicts.length)
 			console.log(conflicts);
 
 		// TODO - should this be here?

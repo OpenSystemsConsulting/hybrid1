@@ -700,20 +700,34 @@ angular.module('osc-services', [])
 
 		var platform = $cordovaDevice.getPlatform();
 
+		log.debug("BGGS platform:" + platform + ", location:"+ JSON.stringify(location));
+		// LT - 06/07/2016 - with 2.52 release iOS devices do not appear to have a location.timestamp property
+		// but do have the location.time property - check for both
 		if ( platform == 'iOS' ) 
 		{
-			log.debug("BGGS platform is iOS:" + platform + " gpstimestamp:"+ location.timestamp);
-			lgps.gps_timestamp = location.timestamp;
+			if(location.timestamp) {
+				lgps.gps_timestamp = location.timestamp;
+			}
+			else
+			if(location.time) {
+				lgps.gps_timestamp = location.time;
+			}
+			else {
+				lgps.gps_timestamp = Date.now();
+				log.error("BGGS: no time provided so use now:"+lgps.gps_timestamp);
+			}
+
 			lgps.gps_heading = 0; // IOS Has a heading if u want to use it later
 		}
 		else
 		{
-			log.debug("BGGS platform is Android:" + platform + " gpstimestamp:"+ location.time);
 			lgps.gps_timestamp = location.time;
 			lgps.gps_heading = 0; // Android has a bearing if u want to use it later
 		}
 
-		// TODO - maybe check last GPS and only update if diff is greater than x seconds
+		log.debug("BGGS platform is:" + platform + ", gpstimestamp:"+ lgps.gps_timestamp);
+
+		// check last GPS and only update if diff is greater than x seconds
 		thisGPSsecs = lgps.gps_timestamp/1000;				// current GPS time in seconds
 		diffGPSsecs = thisGPSsecs-lastGPSsecs;
 		log.debug("BGGS: lastGPSsecs:"+lastGPSsecs+", thisGPSsecs:"+thisGPSsecs+", diff:"+diffGPSsecs + ", threshold:"+threshold);
