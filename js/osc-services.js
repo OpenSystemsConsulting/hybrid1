@@ -941,6 +941,8 @@ angular.module('osc-services', [])
 						pdaParams.logoffDriver();
 						eventService.sendMsg('LOGOFF');
 						messageService.clearChangeData();
+						mycurday = now.getDate();
+						log.debug(" prevResumeDay != mycurday mycurday = " + mycurday);
 					}
 					else {
 						log.debug('Not new date');
@@ -950,6 +952,7 @@ angular.module('osc-services', [])
 				{
 					now = new Date();
 					localStorage.setItem('FIRST_RESUME_DATE',now );
+					log.debug('On Resume prevResumeDate is NULL date = ' + now  + ' Will clearChange Data' );
 					pdaParams.logoffDriver();
 					eventService.sendMsg('LOGOFF');
 					messageService.clearChangeData();
