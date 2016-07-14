@@ -15,7 +15,7 @@ angular.module('osc-services', [])
 		//return showConflicts;
 	//}
 
-.factory( 'pdaParams', ['appConfig',function(appConfig) {
+.factory( 'pdaParams', ['appConfig', function(appConfig) {
 
 /*
  * pdaParams
@@ -113,6 +113,15 @@ angular.module('osc-services', [])
             return false;
         }
     }
+
+	pda_params.checkDriverStatus = function() {
+		// If device is resumed first time on a date after last login then auto logoff the driver
+		// which will ensure he has to login in again before processing any work
+		// (so in effect an auto logout overnight)
+
+		// TODO - need a date check etc.
+		//this.logoffDriver();
+	}
 
 	pda_params.driverId = pda_params.getDriverId();
 	pda_params.debugMode = localdriver.debugMode;
@@ -554,6 +563,7 @@ angular.module('osc-services', [])
 			// From REST endpoint /TpmPdaControllers/sendCommandToPDA/{driver}
 			$rootScope.$on('commandToPDA', function(event, payload){
 
+				log.debug('commandToPDA:received:'+JSON.stringify(payload));
 				switch(payload.command) {
 					case 'dumpLocalStorage':
 						messageService.dumpLocalStorage();
@@ -882,4 +892,83 @@ angular.module('osc-services', [])
 
 	return cipherlabScannerService;
 }])
+.factory('sodService', function($rootScope,pdaParams,Logger,eventService,messageService){
+
+	//Start of Day Service
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'sodService'};
+	var log = Logger.getInstance(logParams);
+	var mycurday;
+	var today; 
+	var now;
+	var type;
+
+	//When App starts Get from localstorage
+
+
+	//Logic is everytime the app resumes we check the resume datetime
+    // and if its a new day the update the time in local storage
+    // and do a logoff and clear local storage
+	today = new Date();
+
+	mycurday = today.getDate();
+
+	log.debug('Instantiating mycurday = :' + mycurday); 
+
+
+	var sodService = {
+			
+	  checkDoSodAction: function(type){
+	
+			//Get What is stored from last initial resum on a day in past
+			var prevResumeDateStr = localStorage.getItem('FIRST_RESUME_DATE');
+
+			if( type = 'FIRST_RESUME')
+			{
+				if (prevResumeDateStr)
+				{
+					var prevResumeDate = new Date(prevResumeDateStr);
+
+					var prevResumeDay = prevResumeDate.getDate();
+					log.debug('On Resume prevResumeDate from localstorage = :' + prevResumeDateStr + ' Str convertTodate = ' + prevResumeDate + ' prevResumeDay = ' + prevResumeDay + ' mycurday = ' + mycurday); 
+
+					//Resume on different day
+					//if( prevResumeDay == mycurday )
+					if( prevResumeDay != mycurday )
+					{
+						//Do some shit and store
+						now = new Date();
+						localStorage.setItem('FIRST_RESUME_DATE',now );
+						pdaParams.logoffDriver();
+						eventService.sendMsg('LOGOFF');
+						messageService.clearChangeData();
+					}
+					else {
+						log.debug('Not new date');
+					}
+				}
+				else //Never Stored so Do the shit
+				{
+					now = new Date();
+					localStorage.setItem('FIRST_RESUME_DATE',now );
+					pdaParams.logoffDriver();
+					eventService.sendMsg('LOGOFF');
+					messageService.clearChangeData();
+				}
+			}
+		}
+	}
+
+   $rootScope.$on('RESUME', function(event) {
+		log.debug('RESUME detected');
+		sodService.checkDoSodAction('FIRST_RESUME');
+	});                      
+
+
+	//This will happen the first time they resume the app on a day
+
+	//For testing, however JobsIndexCtrl wont see this as this service is initialised before JObsIndexCtrl is
+	//$rootScope.$broadcast('RESUME');
+
+	return sodService;
+})
 ;

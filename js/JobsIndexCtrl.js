@@ -16,8 +16,8 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady',
-	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady) {
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService',
+	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService) {
 
 	$scope.jobs = [];
 	$scope.jobStatuses = {};
@@ -41,6 +41,11 @@ angular.module('JobsIndexCtrl', [])
 		pdaParams.logonDriver();
 		eventService.sendMsg('LOGON'); 
 	
+		// Clear obsolete change data - used to be done at main login but that doesn't happen in this generic version
+		//messageService.clearChangeData();
+
+		sodService.checkDoSodAction('FIRST_RESUME');				// check if first for the day
+
 		// Dump local storage at logon time - debug aid
 		messageService.dumpLocalStorage();
 
@@ -689,6 +694,7 @@ angular.module('JobsIndexCtrl', [])
 		// This is async - TODO should we block?  how to handle this?
 		Job.find(all_legs_filter, function (err, jobs) {
 			var len = jobs.length;
+			var logstr = '';
 
 			// update many jobs at once from e.g. NJ -> AC, or AC -> PU
 			// TODO - will need to only update selected jobs rather than all at a particular status
@@ -701,6 +707,9 @@ angular.module('JobsIndexCtrl', [])
 				if( job.mobjobStatus === oldstatus && newstatus != 'XX') {
 					job.mobjobStatus = newstatus;
 					job.save();
+
+					logstr = 'updateSelectedJobs:' + job.mobjobSeq + ' updated from ' + oldstatus + ' -> ' + job.mobjobStatus;
+					log.info(logstr);
 					syncRequired++;
 				}
 			}

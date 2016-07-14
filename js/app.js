@@ -287,7 +287,7 @@ angular.module('starter', ['ionic',
 // phase first and then it will execute the "Run" phase. At that point, all of
 // the run() blocks are executed. During this phase, we no longer have access
 // to any of the providers but we can finally access the services.
-.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate,$state) {
+.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate,$state,sodService) {
 
 /* NOTE: the run function gets called at app startup so any services injected here
  * will be instantiated at that time
@@ -304,9 +304,12 @@ angular.module('starter', ['ionic',
 		// If going to login screen and already have client and driver set up go to jobs
 		// otherwise go to pda controller to configure driver
 		// This means that the driver doesn't need to keep logging in to the app with user/password
+		// So in effect this is the app starting up from being closed (not a resume from background)
 		if(toState.name === "login") {
 			if( localStorage.getItem('clientId')) {
 				event.preventDefault();
+				//messageService.clearChangeData();		// clear any obsolete change data
+				sodService.checkDoSodAction('FIRST_RESUME');	// check if this is first start for the day
 				if( pdaParams.getDriverId() > 0 )
 					$state.go('tab.job-index');
 				else
