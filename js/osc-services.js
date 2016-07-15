@@ -924,6 +924,9 @@ angular.module('osc-services', [])
 
 			if( type = 'FIRST_RESUME')
 			{
+				today = new Date();
+    			mycurday = today.getDate();
+
 				if (prevResumeDateStr)
 				{
 					var prevResumeDate = new Date(prevResumeDateStr);
@@ -941,7 +944,6 @@ angular.module('osc-services', [])
 						pdaParams.logoffDriver();
 						eventService.sendMsg('LOGOFF');
 						messageService.clearChangeData();
-						mycurday = now.getDate();
 						log.debug(" prevResumeDay != mycurday mycurday = " + mycurday);
 					}
 					else {
@@ -962,6 +964,7 @@ angular.module('osc-services', [])
 	}
 
    $rootScope.$on('RESUME', function(event) {
+
 		log.debug('RESUME detected');
 		sodService.checkDoSodAction('FIRST_RESUME');
 	});                      
