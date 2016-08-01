@@ -24,7 +24,7 @@
     <plugin name="cordova-plugin-geolocation" />
     <plugin name="cordova-plugin-whitelist" />
     <plugin name="phonegap-plugin-barcodescanner" />
-	<gap:plugin name="cordova-plugin-mauron85-background-geolocation" source="npm"/>
+    <plugin name="cordova-plugin-mauron85-background-geolocation" source="npm"/>
 
  <platform name="ios">
     <icon src="resources/ios/icon/icon.png" width="57" height="57"/>
