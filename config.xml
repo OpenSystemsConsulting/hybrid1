@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.cordova.hellocordova" version="2.54.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"  CFBundleVersion="1.0.0">
+<widget id="au.com.opensyscon.tplusmobile" version="2.54.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"  CFBundleVersion="1.0.0">
     <name>Tplus Mobile</name>
     <description>
         Copyright Open Systems Consulting Pty Ltd 2016 (Tplus Mobile Application)
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="steven.green@opensyscon.com.au" href="http://www.oscsoftware.com.au">
+        OSC Developer Team
     </author>
     <content src="index.html" />
     <access origin="*" />
