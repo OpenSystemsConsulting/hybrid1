@@ -77,4 +77,5 @@
     <splash src="resources/android/splash/drawable-port-xxxhdpi-screen.png" qualifier="port-xxxhdpi"/>
   </platform>
   
+  <splash src="splash.png" />
 </widget>
