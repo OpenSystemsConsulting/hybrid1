@@ -10,7 +10,10 @@
     <content src="index.html" />
     <access origin="*" />
     <preference name="android-minSdkVersion" value="13" />
-	<preference name="android-build-tool" value="gradle" />
+    <preference name="android-build-tool" value="gradle" />
+    
+    <preference name="SplashScreen" value="screen"/>
+    <preference name="SplashScreenDelay" value="7000"/>
 
     <plugin name="cordova-plugin-cache" />
     <plugin name="phonegap-plugin-push" spec="1.5.3"/>
@@ -78,4 +81,5 @@
   </platform>
   
   <splash src="splash.png" />
+  <icon src="icon.png" />
 </widget>
