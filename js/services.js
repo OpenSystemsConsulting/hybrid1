@@ -30,6 +30,8 @@ angular.module('services', [])
 				deferred.resolve(name);
 			} else if (name == 'swift2' && pw == 'swift2') {
 				deferred.resolve(name);
+			} else if (name == 'cct' && pw == 'cct') {
+				deferred.resolve(name);
 			// ----------------------------------------------------
 			} else {
 				deferred.reject('Wrong credentials.');

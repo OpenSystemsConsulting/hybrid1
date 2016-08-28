@@ -31,12 +31,15 @@
 <!--
 	  <ion-item ng-if="{{jobStatus['NJ']}}">
 -->
-	<ion-item class="button-bar" ng-if="pdaParams.multiSelect && ( jobStatuses['NJ'] || jobStatuses['AC'] )">
-		<button class="button button-balanced" ng-click="multiAccept()" ng-if="jobStatuses['NJ']" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+	<ion-item class="button-bar" ng-if="pdaParams.multiSelect && ( ( jobStatuses['NJ'] || jobStatuses['AC'] ) || (fullStatuses && jobStatuses['PU']) )">
+		<button class="button button-assertive" ng-click="multiAccept()" ng-if="jobStatuses['NJ']" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 			Accept {{ jobStatuses['NJ'] }}
 		</button>
-		<button class="button button-balanced" ng-click="multiPickup()" ng-if="jobStatuses['AC']" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+		<button class="button button-energized" ng-click="multiPickup()" ng-if="jobStatuses['AC']" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 			Pickup {{ jobStatuses['AC'] }}
+		</button>
+		<button class="button button-balanced" ng-click="multiDepartPickup()" ng-if="fullStatuses && jobStatuses['PU']" ng-disabled="syncInProgress"  ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+			Depart {{ jobStatuses['PU'] }}
 		</button>
 	</ion-item>
 
@@ -48,11 +51,15 @@
    				<img class="left" ng-switch-when="DL" src='img/Del.jpg' >
    				<img class="left" ng-switch-when="PU" src='img/PickedUp.jpg' >
    				<img class="left" ng-switch-when="AC" src='img/Accept.jpg'>
+   				<img class="left" ng-switch-when="Ap" src='img/ArrivePup.jpg'>
+   				<img class="left" ng-switch-when="Dp" src='img/DepartPup.jpg'>
+   				<img class="left" ng-switch-when="Ad" src='img/ArriveDel.jpg'>
+   				<img class="left" ng-switch-when="Dd" src='img/DepartDel.jpg'>
    				<img class="left" ng-switch-default   src='img/NwJob.jpg' >
 			</span>
 		<!--<span class="jobstatusspan"> {{ job.mobjobStatus | displayStatusDetail }} </span> <span class="jobdatespan"> {{ job.mobjobBookingDay | date:'dd-MM-yyyy' }} </span>  -->
 
-			<div class="jobdetails">
+			<div class="jobdetails" >
 
 				<span class="jobFromSubspan"> {{ job.mobjobSuburb }} </span>
 				-  
@@ -70,11 +77,11 @@
       </ion-item>
     </ion-list>
 	<ion-item class="button-bar" >
-			<button class="button button-assertive" ng-disabled="isDrvLoggedOff()" ng-click="logoffDriver()">
+			<button class="button button-assertive" ng-disabled="isDrvLoggedOff() || syncInProgress" ng-click="logoffDriver()">
 				L/OFF
 			</button>
 
-			<button class="button button-balanced" ng-disabled="isDrvLoggedOn()" ng-click="logonDriver();">
+			<button class="button button-balanced" ng-disabled="isDrvLoggedOn() || syncInProgress" ng-click="logonDriver();">
 				L/ON
 			</button> 
 

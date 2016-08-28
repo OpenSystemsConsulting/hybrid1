@@ -16,8 +16,8 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService',
-	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService) {
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig',
+	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig) {
 
 	$scope.jobs = [];
 	$scope.jobStatuses = {};
@@ -28,6 +28,19 @@ angular.module('JobsIndexCtrl', [])
 	var notificationCount = 0;
 	//Idle.watch();						// TODO - idle - check if idle and maybe auto refresh
 	$rootScope.syncInProgress = false;
+
+	/*
+	 * New functionality to get arrive/depart pickup/delivery times
+	 */
+/*
+	siteConfig.getSiteConfigYN('FULL_JOB_STATUSES').then(function(YN) {
+		if(YN == "Y")
+			$scope.fullStatuses = true;
+		else
+			$scope.fullStatuses = false;
+	});
+*/
+	$scope.fullStatuses = false;		// off by default for this version
 
 	// initialise the current new message count in this scope
 	$scope.newMessageCount = messageService.getNewMesssageCount();
@@ -671,6 +684,10 @@ angular.module('JobsIndexCtrl', [])
 		updateSelectedJobs('AC');
 	}
 
+	$scope.multiDepartPickup = function() {
+		updateSelectedJobs('PU');				// FULL_JOB_STATUSES
+	}
+
 	function updateSelectedJobs(oldstatus) {
 		var newstatus = 'XX';
 		var syncRequired = 0;
@@ -690,6 +707,8 @@ angular.module('JobsIndexCtrl', [])
 			newstatus = 'AC';
 		if(oldstatus === 'AC')
 			newstatus = 'PU';
+		if(oldstatus === 'PU')					// FULL_JOB_STATUSES
+			newstatus = 'Dp';
 
 		// This is async - TODO should we block?  how to handle this?
 		Job.find(all_legs_filter, function (err, jobs) {

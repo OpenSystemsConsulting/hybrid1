@@ -34,7 +34,8 @@ angular.module('starter', ['ionic',
 							'fqueue',
 							'config',
 							'ngIdle',
-							'BarcodeCtrl'
+							'BarcodeCtrl',
+							'TabCtrl'
 							])
 
 // default client config values - will be populated correctly after login
@@ -112,7 +113,8 @@ angular.module('starter', ['ionic',
     .state('tab', {
       url: '/tab',
       abstract: true,
-      templateUrl: 'templates/tabs.html'
+      templateUrl: 'templates/tabs.html',
+	  controller: 'TabCtrl'
     })
 
 	.state('login', {

@@ -8,8 +8,8 @@ angular.module('JobDetailCtrl', [])
 })
 
 // For the View which is Displaying and Editing a Job or for the Creation of a new Job...
-.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup',
-	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup) {
+.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig',
+	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -20,31 +20,41 @@ angular.module('JobDetailCtrl', [])
 
 	jobChangedService.setlastjobedited(false);
 
-	  $scope.bNewItem = false;		// Just looking at an existing Job by default
+	$scope.bNewItem = false;		// Just looking at an existing Job by default
 
-	 //	console.log("Steve STATEPARAMS" + $state.params );
- 		//console.log("Steve STATEPARAMS Stringify" + JSON.stringify($state.params) );
+	/*
+	 * New functionality to get arrive/depart pickup/delivery times
+	 */
+/*
+	siteConfig.getSiteConfigYN('FULL_JOB_STATUSES').then(function(YN) {
+		if(YN == "Y")
+			$scope.fullStatuses = true;
+		else
+			$scope.fullStatuses = false;
+	});
+*/
+	$scope.fullStatuses = false;		// off by default for this version
 
-	  function getJob() {
+	function getJob() {
 			mystr = 'getJob';
 
 			if(pdaParams.debug)
 				log.debug(mystr);
 
-	  	if ($state.params.jobId === 'new') {
-	  		// The Route URL for a new Job looks like: 'tab/jobs/new'
-	  		return newJob();
-	  	}
+		if ($state.params.jobId === 'new') {
+			// The Route URL for a new Job looks like: 'tab/jobs/new'
+			return newJob();
+		}
 
 
 		var njobId;
 		var legnum;
 		var jobId;
 
-	  	//var jobId = $state.params.jobId;	// A single Job to Display
+		//var jobId = $state.params.jobId;	// A single Job to Display
 		// e.g. 2015090900584500
-	  	//njobId = $state.params.jobId % 10000000;	//Modulus 10 Million gives job num and leg num
-	  	njobId = $state.params.jobId % 100000000;	//Modulus 100 Million gives job num and leg num - need to account for modded jobs
+		//njobId = $state.params.jobId % 10000000;	//Modulus 10 Million gives job num and leg num
+		njobId = $state.params.jobId % 100000000;	//Modulus 100 Million gives job num and leg num - need to account for modded jobs
 
 		legnum = njobId % 100;                   //Modulus 100 give leg num
 
@@ -184,7 +194,9 @@ angular.module('JobDetailCtrl', [])
 			//console.log("In handleJobStatusChange ");
 			//console.log("In job =  ",seqid);
 		
-			
+		var dateTime = new Date().getTime();
+		var timestamp = Math.floor(dateTime / 1000);
+
 		// Loop thru this array and update the status on all legs of the job
 		// $scope.jobs at this point contains all legs for one basejob
 		
@@ -204,7 +216,11 @@ angular.module('JobDetailCtrl', [])
 			if(pdaParams.multileg)
 			{
 				// Pod captured (PC) processing
-				if ( job.mobjobStatus == 'PU')
+				if (
+					(! $scope.fullStatuses && job.mobjobStatus == 'PU')			// Std statuses -  NJ->AC->PU->DL
+					||
+					( $scope.fullStatuses && job.mobjobStatus == 'Ad')			// Full statuses - NJ->AC->PU->Dp->Ad->DL
+				)
 				{
 					// Set pickup leg status only - don't store signature etc. on this leg
 					// Can't let this fall thru below otherwise will become DL and not visible
@@ -241,18 +257,22 @@ angular.module('JobDetailCtrl', [])
 
 			// Following block is for all legs
 			// TODO - should this be a switch/case?
+			var oldStatus = job.mobjobStatus;
+			if( ! $scope.fullStatuses)			// Original Carry way NJ->AC->PU->DL
 			{
-				if ( job.mobjobStatus == 'NJ')
+				if ( oldStatus == 'NJ')
 				{
 					job.mobjobStatus = 'AC';
+					job.mobjobTimeAC = Date.now();
 				}
 				else
-				if ( job.mobjobStatus == 'AC')
+				if ( oldStatus == 'AC')
 				{
 					job.mobjobStatus = 'PU';
+					job.mobjobTimePU = Date.now();
 				}
 				else
-				if ( job.mobjobStatus == 'PU')
+				if ( oldStatus == 'PU')
 				{
 					// PC processing - no direct route to DL now - will either be PU or PC until all pods captured
 					if(!pdaParams.multileg)
@@ -272,7 +292,95 @@ angular.module('JobDetailCtrl', [])
 					}
 				}
 				else
-				if ( job.mobjobStatus == 'PC')
+				if ( oldStatus == 'PC')
+				{
+					podCount++;
+				}
+			}
+			else			// $scope.fullStatuses - additional status steps NJ->AC->PU->Dp->Ad->DL
+			{
+/*
+					// LT - trying to implement an associative array of timestamps so we don't have
+					// to worry about adding new ones or changing them - we simply store all timestamps
+					// in an array indexed by the status
+					// Unfortunately this does not work with loopback/mongo after the first update
+					// as we end up with a server error
+					// {"error":{"name":"MongoError","status":500,"message":"unknown operator: $AC","index":0,"code":2,"errmsg":"unknown operator: $AC","stack":"MongoError: unknown operator: $AC\n    at toError (/app/strongloop/OSC-API/node_modules/loopback-connector-mongodb/node_modules/mongodb/lib/utils.js:113:11)\n    at /app/strongloop/OSC-API/node_modules/loopback-connector-mongodb/node_modules/mongodb/lib/collection.js:664:67\n    at /app/strongloop/OSC-API/node_modules/loopback-connector-mongodb/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:795:13\n    at /app/strongloop/OSC-API/node_modules/loopback/node_modules/continuation-local-storage/context.js:76:17\n    at b (domain.js:184:18)\n    at Callbacks.emit (/app/strongloop/OSC-API/node_modules/loopback-connector-mongodb/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:94:3)\n    at null.messageHandler (/app/strongloop/OSC-API/node_modules/loopback-connector-mongodb/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:235:23)\n    at Socket.<anonymous> (/app/strongloop/OSC-API/node_modules/loopback-connector-mongodb/node_modules/mongodb/node_modules/mongodb-core/lib/connection/connection.js:259:22)\n    at Socket.emit (events.js:95:17)\n    at Socket.<anonymous> (_stream_readable.js:765:14)"}}
+					// "mobjobStatusTstamp":{"AC":1470289287, "PU":1470289678}
+					// I believe we may need to implement loopback's "embedsMany" concept to the models to get this to work
+					// https://github.com/strongloop/loopback-example-relations
+					// https://docs.strongloop.com/display/APIC/Embedded+models+and+relations#Embeddedmodelsandrelations-EmbedsMany
+					if( ! job.mobjobStatusTstamp)
+						job.mobjobStatusTstamp = {};
+					job.mobjobStatusTstamp[job.mobjobStatus] = timestamp;
+*/
+/*
+					var jobstatus = { status: job.mobjobStatus, tstamp: timestamp };
+					job.mobjobStatusTstamp.create(jobstatus, function(err, jobstatus) {
+						if(err)
+							log.err("err:"+err);
+					});
+*/
+				if ( oldStatus == 'NJ')
+				{
+					job.mobjobStatus = 'AC';
+					job.mobjobTimeAC = Date.now();
+				}
+				else
+/*
+				if ( oldStatus == 'AC')
+				{
+					job.mobjobStatus = 'Ap';
+					job.mobjobTimeAp = Date.now();
+				}
+				else
+*/
+				if ( oldStatus == 'AC')
+				{
+					job.mobjobStatus = 'PU';
+					job.mobjobTimePU = Date.now();
+				}
+				else
+				// Arrive pickup - not used atm
+/*
+				if ( oldStatus == 'Ap')
+				{
+					job.mobjobStatus = 'PU';
+					job.mobjobTimePU = Date.now();
+				}
+				else
+*/
+				if ( oldStatus == 'PU')
+				{
+					job.mobjobStatus = 'Dp';
+					job.mobjobTimeDp = Date.now();
+				}
+				if ( oldStatus == 'Dp')
+				{
+					job.mobjobStatus = 'Ad';
+					job.mobjobTimeAd = Date.now();
+				}
+				if ( oldStatus == 'Ad')
+				{
+					// PC processing - no direct route to DL now - will either be PU or PC until all pods captured
+					if(!pdaParams.multileg)
+					{
+						job.mobjobStatus = 'DL';
+
+						// why did we store signature on pickup leg (leg 0)?
+						if( job.mobjobLegNumber > 0)
+						{
+							job.mobjobSignat = signat || "";
+
+							if(podname) {
+								job.mobjobPodName = podname;
+								job.mobjobPodTime = new Date().toISOString();
+							}
+						}
+					}
+				}
+				else
+				if ( oldStatus == 'PC')
 				{
 					podCount++;
 				}
@@ -298,7 +406,7 @@ angular.module('JobDetailCtrl', [])
 				var job = $scope.jobs[iac];
 				var oldStatus = job.mobjobStatus;
 				// TODO - do we need this test?  or just update every leg regardless?
-				if ( job.mobjobStatus == 'PU' || job.mobjobStatus == 'PC')
+				if ( job.mobjobStatus == 'PU' || job.mobjobStatus == 'PC' || job.mobjobStatus == 'Ad')
 				{
 					job.mobjobStatus = 'DL';
 					job.save();		// save leg

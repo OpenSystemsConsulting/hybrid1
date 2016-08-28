@@ -687,6 +687,62 @@ angular.module('osc-services', [])
 
 	return deviceService;
 })
+.factory('barcodeService', function($rootScope,barcode_sync,pdaParams,Logger){
+
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'barcodeService'};
+	var log = Logger.getInstance(logParams);
+	var	apponline = true; 
+
+
+	//When App starts Get from localstorage
+	var syncrequired = localStorage.getItem('BARCODES_SYNC_REQD');
+	syncrequired = (syncrequired == "true");
+
+
+	var barcodeService = {
+
+		//This is called from BarcodeCtrl and will update Local Storage
+		setSyncRequired: function(val)
+		{
+			localStorage.setItem('BARCODES_SYNC_REQD', val);
+			log.debug(" setSyncRequired:" + val);
+			syncrequired = val;	
+		}
+	}
+
+	$rootScope.$on('APP_ON_LINE', function(event){
+	
+		syncrequired = localStorage.getItem('BARCODES_SYNC_REQD');
+		syncrequired = (syncrequired == "true");
+
+		apponline = localStorage.getItem('APP_CONECTIVITY');
+		apponline = (apponline == "true");
+
+		log.debug(" APP_ON_LINE: Syncrequired = " + syncrequired + " AppOnline From LocaStorage = " + apponline);
+		
+
+		//If the last state from localstorage was offline the sync if required
+
+		if(syncrequired  && apponline == false)
+		{
+			log.debug(" SYNC Required and apponline from LStorage is FALSE so will barcode_sync:" + event);
+			barcode_sync();
+			localStorage.setItem('BARCODES_SYNC_REQD', 'false');
+		
+		}
+
+		//Now Update Local Storage
+		apponline = true;
+		localStorage.setItem('APP_CONECTIVITY', apponline);
+	});
+
+	$rootScope.$on('APP_OFF_LINE', function(event){
+		apponline = false;
+		localStorage.setItem('APP_CONECTIVITY', apponline);
+	});
+
+	return barcodeService;
+})
 .factory('BackgroundGeolocationService',['Logger','pdaParams','gpsHistory','$cordovaDevice',function (Logger,pdaParams,gpsHistory,$cordovaDevice) {
 
 	// background gps plugin from: https://github.com/mauron85/cordova-plugin-background-geolocation
@@ -838,61 +894,7 @@ angular.module('osc-services', [])
 
 	return backgroundGeoService;
 }])
-.factory('cipherlabScannerService',['Logger','pdaParams',function (Logger,pdaParams) {
-
-	// background gps plugin from: https://github.com/mauron85/cordova-plugin-background-geolocation
-	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'cipherlabScannerService'};
-	var log = Logger.getInstance(logParams);
-	var cipherlabScannerService = { };
-
-
-	function append(message) {
-        var node = document.createElement("p");
-        node.appendChild(document.createTextNode(message));
-        document.body.appendChild(node);
-    }
-
-	cipherlabScannerService.initScanner = function() {
-
-		log.debug('initScanner: called:');
-		document.addEventListener( 'pause', onPause.bind( this ), false );
-        document.addEventListener('resume', onResume.bind(this), false);
-
-        document.getElementById("scan_button").addEventListener('click', function () {
-            cordova.plugins.CipherlabRS30CordovaPlugin.requestScan(function () {
-                // MDR 30/11/2015 - This is just a placeholder callback. Results will be handled by setReceiveScanCallback() parameter below
-            });
-        });
-        
-        // TODO: Cordova has been loaded. Perform any initialization that requires Cordova here.
-        cordova.plugins.CipherlabRS30CordovaPlugin.initialise(function () {
-
-            append("init done");
-            
-            cordova.plugins.CipherlabRS30CordovaPlugin.setReceiveScanCallback(function (data) {
-                append("scan received: " + data);
-            });
-
-        });
-
-        window.onbeforeunload = function () {
-            cordova.plugins.CipherlabRS30CordovaPlugin.destroy(function () { });
-        }
-
-        append("setup done");
-	};
-
-	function onPause() {
-        // TODO: This application has been suspended. Save application state here.
-    };
-
-    function onResume() {
-        // TODO: This application has been reactivated. Restore application state here.
-	}
-
-	return cipherlabScannerService;
-}])
-.factory('sodService', function($rootScope,pdaParams,Logger,eventService,messageService){
+.factory('sodService', function($rootScope,pdaParams,Logger,eventService,messageService,siteConfig){
 
 	//Start of Day Service
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'sodService'};
@@ -914,6 +916,21 @@ angular.module('osc-services', [])
 
 	log.debug('Instantiating mycurday = :' + mycurday); 
 
+	var getConfigsFromServer = function(type) {
+		switch(type) {
+			case 'YN':
+				// list of site config keys with y/n values
+				var keylist = [ 'BARCODE_SUPP_BCODEISJOBNUM', 'FULL_JOB_STATUSES' ];
+				var len = keylist.length;
+				for(var i=0; i < len; i++) {
+					var key = keylist[i];
+					siteConfig.getSiteConfigYN(key, {useServer: true}).then(function(YN) {
+						//localStorage.setItem(key,YN ); // getSiteConfig stores for us
+					});
+				}
+			break;
+		}
+	};
 
 	var sodService = {
 			
@@ -945,6 +962,12 @@ angular.module('osc-services', [])
 						eventService.sendMsg('LOGOFF');
 						messageService.clearChangeData();
 						log.debug(" prevResumeDay != mycurday mycurday = " + mycurday);
+
+/*
+						siteConfig.getSiteConfigYN('BARCODE_SUPP_BCODEISJOBNUM', {useServer: true}).then(function(YN) {
+							localStorage.setItem('BARCODE_SUPP_BCODEISJOBNUM',YN );
+						});
+*/
 					}
 					else {
 						log.debug('Not new date');
@@ -958,7 +981,16 @@ angular.module('osc-services', [])
 					pdaParams.logoffDriver();
 					eventService.sendMsg('LOGOFF');
 					messageService.clearChangeData();
+
+/*
+					siteConfig.getSiteConfigYN('BARCODE_SUPP_BCODEISJOBNUM', {useServer: true}).then(function(YN) {
+						localStorage.setItem('BARCODE_SUPP_BCODEISJOBNUM',YN );
+					});
+*/
 				}
+
+				// Get site config parameters from server
+				getConfigsFromServer('YN');
 			}
 		}
 	}
@@ -976,5 +1008,70 @@ angular.module('osc-services', [])
 	//$rootScope.$broadcast('RESUME');
 
 	return sodService;
+})
+.factory('siteConfig', function(pdaParams,Logger,SiteConfig,$q){
+
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'siteConfig'};
+	var log = Logger.getInstance(logParams);
+
+	var siteConfig = {
+		getSiteConfigYN: function(key, options) {
+			//var filter = { "filter": { "where": { and: [{ "CONF_KEY": key, "CONF_ACTIVE": 'Y' } ] } } };
+			var filter = { "filter": { "where": { and: [{ "confKey": key, "confActive": true } ] } } };
+
+			var options = options || {};
+/*
+			SiteConfig.find(filter, function( err, siteconfigs) {
+				if(err) {
+					log.error('err:'+err);
+				}
+			});
+*/
+/*
+			SiteConfig.find(filter)
+				.$promise
+				.then(function(siteconfigs) {
+					log.debug(JSON.stringify(siteconfigs));	
+					return siteconfigs[0].confValue;
+				},function(err) {
+					log.error(JSON.stringify(err));
+					return null;
+				});
+*/
+			if( options.useServer) {
+				var promise = SiteConfig.find(filter)
+					.$promise
+					.then(function(siteconfigs) {
+						var retval = "";
+						log.debug(JSON.stringify(siteconfigs));
+
+						if(siteconfigs.length == 0)		// not found
+							retval = 'N';			// TODO - is this the correct default return value if no key found?
+						else
+							retval = siteconfigs[0].confValue;
+
+						// store in local storage for future use
+						// TODO - store in individual keys or as a site_config key for an object with all keys?
+						localStorage.setItem( key, retval);
+						return retval;
+					});
+
+				return promise;
+			}
+			else {
+				var retval = localStorage.getItem(key);
+				if(!retval) {
+					// If nothing found put a default value in for next time
+					retval = 'N';
+					localStorage.setItem( key, retval);
+				}
+				//return( $q.when(localStorage.getItem(key)));
+				return( $q.when(retval));
+			}
+		}
+
+	}
+
+	return siteConfig;
 })
 ;

@@ -143,6 +143,12 @@
 			{{usedStorage}}
 		</span>
 	</ion-item>
+	<ion-item class="item" ng-repeat="(key, value) in localStorageList">
+		{{key}}
+		<span class="item-note">
+			{{value}}
+		</span>
+	</ion-item>
 
 	<div class="item item-divider">
 		Network properties

@@ -73,6 +73,19 @@ gridlabel{
 
 	padding: 2px 0px 2px 2px !important;
 }
+.barcode-item {
+    border-color: #ddd;
+    background-color: #fff;
+    color: #444;
+    position: relative;
+    z-index: 2;
+    display: block;
+    margin: -1px;
+    padding: 10px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 16px;
+}
 
 .item-content {
     position: relative;

@@ -115,4 +115,22 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 
 	$scope.usedStorage = Math.round(JSON.stringify(localStorage).length / 1024) + " KB";
 
+	$scope.localStorageList = localStorageUsage();
+
+	function localStorageUsage () {
+		var len = localStorage.length;
+		var localStorageList = {};
+
+		for(var i=0; i < len; i++) {
+			var key = localStorage.key(i);
+			var value = localStorage[key];
+			
+			if( key == 'osc-local-db')		// Ignore (potentially very large) list of jobs etc.
+				continue;
+
+			localStorageList[key] = value;
+		}
+		return(localStorageList);
+	}
+
 }]);

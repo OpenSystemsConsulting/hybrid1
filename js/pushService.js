@@ -65,6 +65,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 			// register with message service
 			log.debug(platform+': About to $cordovaPush.register: driver:' + push_service.mycurrent_drivernum);
+
+			//Ask Google for a Token , token is returned in the then callback
 			$cordovaPushV5.register().then(function(token) {
 
 				// Success - register for notifications
@@ -74,6 +76,9 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				var msg = '$cordovaPushV5.register for Driver ' + push_service.mycurrent_drivernum + ' : token:'+ token;
 				log.info(msg);
 
+				
+				//Init an Object to insert into installation table if our filter below gets empty or filter 
+				// returns not the same as the current token just got from Google
 				var installation_object = {
 					"appId"			: "osc-push-demo",
 					"userId"		: push_service.mycurrent_drivernum,

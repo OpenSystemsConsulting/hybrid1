@@ -3,7 +3,7 @@ angular.module('cordovaReady', [])
 /**
  * A simple example service that returns some data.
  */
-.factory('cordovaReady',['$rootScope','$cordovaInsomnia', 'Logger', 'pdaParams','BackgroundGeolocationService','cipherlabScannerService','$cordovaDevice',function($rootScope,$cordovaInsomnia,Logger,pdaParams,BackgroundGeolocationService,cipherlabScannerService,$cordovaDevice) {
+.factory('cordovaReady',['$rootScope','$cordovaInsomnia', 'Logger', 'pdaParams','BackgroundGeolocationService','$cordovaDevice',function($rootScope,$cordovaInsomnia,Logger,pdaParams,BackgroundGeolocationService,$cordovaDevice) {
 
 	var isready;
 
@@ -71,7 +71,6 @@ angular.module('cordovaReady', [])
 		if( model == 'CipherLab RS30')
 		{
 			log.debug("Device is a CipherLab RS30 " + model);
-			cipherlabScannerService.initScanner();
 		}
 		else
 		{

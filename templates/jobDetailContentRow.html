@@ -56,6 +56,7 @@
 	    	
 	    	
 	    </input>
+
 		<!--   ACCEPT  JOB -->
 		<div ng-show="(property.enumValue.value == 'NJ' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
@@ -68,6 +69,50 @@
 			</button>
 
 		</div>
+
+
+	    <!-- NEW SG CODE   NOT SURE If this is correct yet -->
+
+		<!--   Arrive Pup -->
+		<div ng-show="((fullStatuses == true) && property.enumValue.value == 'AC' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
+					>
+			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				Arrive Pickup
+			</button>
+		</div>
+
+		<!--   Depart Pup -->
+		<div ng-show="(property.enumValue.value == 'Ap' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
+					>
+			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				Arrive Delivery
+			</button>
+		</div>
+
+		<!--   Arrive Del -->
+		<div ng-show="(property.enumValue.value == 'Ad' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
+					>
+			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				Arrive Delivery
+			</button>
+		</div>
+
+		<!--   Depart Delivery -->
+		<div ng-show="(property.enumValue.value == 'Dd' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
+					>
+			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				Depart Delivery
+			</button>
+		</div>
+	    <!-- End NEW SG CODE   NOT SURE If this is correct yet -->
 
 
 

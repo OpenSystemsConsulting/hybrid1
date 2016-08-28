@@ -11,7 +11,16 @@ angular.module('tnf.IonicUtils', ['ionic'])
 		data: '=myKey',
 		podname: '=podName'
 	  },
+
+
+
 	  link: function ($scope, $element, $attrs, $controller) {
+
+
+		$scope.$on('BarcodeScanOff',function(event,data){
+            $scope.openSignatureModal();
+        });
+
 		$scope.signaturePadModel = {};
 		$scope.signaturePadModel.podname = "NOT SET";
 
