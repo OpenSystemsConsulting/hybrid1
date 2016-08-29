@@ -285,10 +285,15 @@ angular.module('JobsIndexCtrl', [])
 			jobChangedService.setlastjobedited(false);
 
 		// if we are connected to the network then this will sync and the callback will load the jobs after sync
-		log.debug("SYNC: START");
+		log.debug("MAIN PAGE SYNC: START i(will give a log in hybrid sync to say SYNC:START as well eg 2) ");
 		$rootScope.syncInProgress = true;
 		syncfilter = angular.copy(_syncfilter);
-		sync(onChange,syncfilter);
+
+		//Use hybrid Sync
+		//sync(onChange,syncfilter);
+
+        syncService.setCallingFunc("JobsIndexCtrl->MAIN PAGE SYNC");                                                                  
+		syncService.hybridSync(onChange,syncfilter);
 	} else {
 		// If we are not connected to the network just load jobs from local storage
 		getJobs();
