@@ -12,7 +12,7 @@
     <preference name="android-minSdkVersion" value="13" />
 	<preference name="android-build-tool" value="gradle" />
 
-	<preference name="phonegap-version" value="cli-6.2.0" />
+	<preference name="phonegap-version" value="cli-6.1.0" />
 
     <plugin name="phonegap-plugin-push" spec="1.5.3"/>
     <plugin name="cordova-plugin-network-information" />
