@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="au.com.opensyscon.tplusmobile" version="2.55.07" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"  CFBundleVersion="1.0.0">
+<widget id="au.com.opensyscon.tplusmobile" version="2.55.08" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"  CFBundleVersion="1.0.0">
     <name>Tplus Mobile</name>
     <description>
         Copyright Open Systems Consulting Pty Ltd 2016 (Tplus Mobile Application)
@@ -16,7 +16,6 @@
 
     <plugin name="phonegap-plugin-push" spec="1.5.3"/>
     <plugin name="cordova-plugin-network-information" />
-    <plugin name="cordova-connectivity-monitor" />
     <plugin name="cordova-plugin-velda-devicefeedback" />
     <plugin name="cordova-plugin-insomnia" />
     <plugin name="cordova-plugin-device" />

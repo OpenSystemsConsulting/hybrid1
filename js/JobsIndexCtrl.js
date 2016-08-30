@@ -285,7 +285,7 @@ angular.module('JobsIndexCtrl', [])
 			jobChangedService.setlastjobedited(false);
 
 		// if we are connected to the network then this will sync and the callback will load the jobs after sync
-		log.debug("MAIN PAGE SYNC: START i(will give a log in hybrid sync to say SYNC:START as well eg 2) ");
+		log.debug("MAIN PAGE SYNC: START (will give a log in hybrid sync to say SYNC:START as well eg 2) ");
 		$rootScope.syncInProgress = true;
 		syncfilter = angular.copy(_syncfilter);
 
