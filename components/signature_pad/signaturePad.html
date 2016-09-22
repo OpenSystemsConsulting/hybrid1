@@ -20,7 +20,7 @@
     <div class="button-bar">
       <button class="button" ng-click="clear(); signatureModal.hide()">Cancel</button>
       <button class="button" ng-click="clear()">Clear</button>
-      <button class="button button-positive" ng-disabled="!(signaturePadModel.signatureConfirm && signature)" ng-click="save()">Accept</button>
+      <button class="button button-positive" ng-disabled="!(signaturePadModel.signatureConfirm && signature && signaturePadModel.podname)" ng-click="save()">Accept</button>
     </div>
   </ion-content>
 </ion-modal-view>

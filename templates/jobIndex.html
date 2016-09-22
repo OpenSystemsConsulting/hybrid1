@@ -35,7 +35,7 @@
 		<button class="button button-assertive" ng-click="multiAccept()" ng-if="jobStatuses['NJ']" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 			Accept {{ jobStatuses['NJ'] }}
 		</button>
-		<button class="button button-energized" ng-click="multiPickup()" ng-if="jobStatuses['AC']" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+		<button class="button button-energized" ng-click="multiPickup()" ng-if="pda_pickup_all == 'Y'  && jobStatuses['AC']" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 			Pickup {{ jobStatuses['AC'] }}
 		</button>
 		<button class="button button-balanced" ng-click="multiDepartPickup()" ng-if="fullStatuses && jobStatuses['PU']" ng-disabled="syncInProgress"  ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
@@ -43,7 +43,7 @@
 		</button>
 	</ion-item>
 
-      <ion-item ng-repeat="job in jobs track by $index" type="item-text-wrap" href="#/tab/jobs/{{job.mobjobSeq}}" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+      <ion-item ng-repeat="job in jobs track by $index" type="item-text-wrap" href="#/tab/jobs/{{job.mobjobSeq}}" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 
 		<div class="list"> 
 

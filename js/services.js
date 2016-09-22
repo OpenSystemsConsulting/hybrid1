@@ -30,7 +30,17 @@ angular.module('services', [])
 				deferred.resolve(name);
 			} else if (name == 'swift2' && pw == 'swift2') {
 				deferred.resolve(name);
-			} else if (name == 'cct' && pw == 'cct') {
+			} else if (name == 'cct' && pw == 'cct') {				// City Crane
+				deferred.resolve(name);
+			} else if (name == 'itc' && pw == 'itc') {				// Intime
+				deferred.resolve(name);
+			} else if (name == 'glc' && pw == 'glc') {				// Greenlight
+				deferred.resolve(name);
+			} else if (name == 'ace' && pw == 'ace') {				// Ace
+				deferred.resolve(name);
+			} else if (name == 'pam' && pw == 'pam') {				// P and M
+				deferred.resolve(name);
+			} else if (name == 'flg' && pw == 'flg') {				// Fair Logistics
 				deferred.resolve(name);
 			// ----------------------------------------------------
 			} else {

@@ -8,16 +8,56 @@
 -->
 	<ion-content ng-class="{ 'overflow-scroll': (desktopBrowserScrolling == true) }">
 
+
+	<!-- Angularjs has a directive to handle textarea which brings in a new scope which overrides the HTML
+		scope so angular has to go to the parent to get the entered data so use $parent-->
+
+	<div ng-show="boxshow">
+	 	<textarea id="styled" onfocus="this.value='';" rows="4" cols="50" ng-model="$parent.textareadata" required>
+			{{textareadata}}
+		</textarea>
+    </div>
+
+    <div class="button-bar">
+        <button class="button button-large button-energized" ng-click="newMessage(true)">
+            New Message
+        </button>
+
+<!--
+        <button class="button button-large button-assertive" ng-click="deleteAllMessages()">
+            Delete All
+        </button>
+-->
+
+        <button class="button button-large button-positive" ng-show="boxshow" ng-click="onSubmit()">
+            Submit
+        </button>
+
+        <button class="button button-large button-stable" ng-click="quit()">
+            Quit
+        </button>
+    </div>
+
 	<strong ng-if="messages.length === 0">
 		No messages
 	</strong>
 
-	<ion-list>
-		<ion-item ng-repeat="message in messages.slice().reverse() track by $index" type="item-text-wrap">
 
-			{{message}}
+	<ion-list>
+		<!-- <ion-item ng-repeat="message in messages.slice().reverse() track by $index" type="item-text-wrap"> -->
+		<ion-item ng-repeat="message in messages track by $index" type="item-text-wrap">
+
+			<!-- {{message.drvmTimestamp}} -->
+
+			<!-- if message was from driver to despatch show on right, otherwise show on left like tradidiona; messages app -->
+			<span ng-show="{{pdaParams.driverId}}!={{message.drvmSender}}" class="left"> {{message.drvmMessage}} </span>
+
+			<span ng-show="{{pdaParams.driverId}}=={{message.drvmSender}}" class="right"> {{message.drvmMessage}} </span>
 
 		</ion-item>
 	</ion-list>
+
+
+
 	</ion-content>
 </ion-view>

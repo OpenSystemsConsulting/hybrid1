@@ -28,7 +28,7 @@
 
   <!-- Barcode Tab -->
   <!--<ion-tab ng-if="pdaParams.experimental" title="Barcodes" icon="icon ion-ios7-barcode-outline" href="#/tab/barcodes">-->
-  <ion-tab title="Barcodes" icon="icon ion-ios7-barcode-outline" href="#/tab/barcodes" ng-if="displayBarcodeTab">
+  <ion-tab title="Scan" icon="icon ion-ios7-barcode-outline" href="#/tab/barcodes" ng-if="displayBarcodeTab">
     <ion-nav-view name="barcodes-tab"></ion-nav-view>
   </ion-tab>
 
@@ -49,10 +49,10 @@
     <ion-nav-view name="test-tab"></ion-nav-view>
   </ion-tab> -->
 
-  <!-- Changes Tab -->
+  <!-- Changes Tab
   <ion-tab title="Changes" icon="icon ion-clipboard" href="#/tab/change">
     <ion-nav-view name="change-tab"></ion-nav-view>
-  </ion-tab>
+  </ion-tab> -->
 
   <!-- GPS Detail -->
   <ion-tab title="GPS" icon="icon ion-ios7-eye" href="#/tab/debug">
@@ -71,10 +71,18 @@
     <ion-nav-view name="about-tab"></ion-nav-view>
   </ion-tab>
 -->
+  <!-- JSEA QUESTIONS ANSWERS -->
+
+	<!--   REMEMBER !!!!!!!!!!!!!!!!! the href must match the info in app.js -->
+
+  <ion-tab title="JSA" icon="icon ion-edit" href="#/tab/jseas">
+    <ion-nav-view name="jsea-tab"></ion-nav-view>
+  </ion-tab>
 
   <!-- Messages Tab -->
   <ion-tab title="Msgs" icon="icon ion-ios7-email" href="#/tab/messages">
     <ion-nav-view name="messages-tab"></ion-nav-view>
   </ion-tab>
+
 
 </ion-tabs>

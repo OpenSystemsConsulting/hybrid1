@@ -18479,6 +18479,46 @@ module.exports={
       "serverPort": 3000,
       "url": "http://couriers-express.com.au:3000/api"
     },
+    "itc": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "ITC",
+      "serverIP": "carry.intime-distribution.com.au",
+      "serverPort": 3000,
+      "url": "http://carry.intime-distribution.com.au:3000/api"
+    },
+    "glc": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "GLC",
+      "serverIP": "glcouriers.com.au",
+      "serverPort": 3001,
+      "url": "http://glcouriers.com.au:3001/api"
+    },
+    "ace": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "ACE",
+      "serverIP": "CPE-61-9-246-82.static.wa.bigpond.net.au",
+      "serverPort": 3000,
+      "url": "http://CPE-61-9-246-82.static.wa.bigpond.net.au:3000/api"
+    },
+    "pam": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "PAM",
+      "serverIP": "logist14.lnk.telstra.net",
+      "serverPort": 3000,
+      "url": "http://logist14.lnk.telstra.net:3000/api"
+    },
+    "flg": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "FLG",
+      "serverIP": "opensyscon.com.au",
+      "serverPort": 3133,
+      "url": "http://opensyscon.com.au:3133/api"
+    },
     "redback": {
       "connector": "remote",
       "debug": "true",

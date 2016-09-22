@@ -920,12 +920,13 @@ angular.module('osc-services', [])
 		switch(type) {
 			case 'YN':
 				// list of site config keys with y/n values
-				var keylist = [ 'BARCODE_SUPP_BCODEISJOBNUM', 'FULL_JOB_STATUSES' ];
+				var keylist = [ 'BARCODE_SUPP_BCODEISJOBNUM', 'FULL_JOB_STATUSES', 'PDA_BARCODES', 'PDA_JSEA_ON','PDA_PICKUP_ALL' ];
 				var len = keylist.length;
 				for(var i=0; i < len; i++) {
 					var key = keylist[i];
 					siteConfig.getSiteConfigYN(key, {useServer: true}).then(function(YN) {
 						//localStorage.setItem(key,YN ); // getSiteConfig stores for us
+						log.info("getSiteConfigYN for key:"+key+" returns:"+YN);
 					});
 				}
 			break;
@@ -963,11 +964,9 @@ angular.module('osc-services', [])
 						messageService.clearChangeData();
 						log.debug(" prevResumeDay != mycurday mycurday = " + mycurday);
 
-/*
-						siteConfig.getSiteConfigYN('BARCODE_SUPP_BCODEISJOBNUM', {useServer: true}).then(function(YN) {
-							localStorage.setItem('BARCODE_SUPP_BCODEISJOBNUM',YN );
-						});
-*/
+						// Get site config parameters from server
+						getConfigsFromServer('YN');
+
 					}
 					else {
 						log.debug('Not new date');
@@ -982,15 +981,13 @@ angular.module('osc-services', [])
 					eventService.sendMsg('LOGOFF');
 					messageService.clearChangeData();
 
-/*
-					siteConfig.getSiteConfigYN('BARCODE_SUPP_BCODEISJOBNUM', {useServer: true}).then(function(YN) {
-						localStorage.setItem('BARCODE_SUPP_BCODEISJOBNUM',YN );
-					});
-*/
+					// Get site config parameters from server
+					getConfigsFromServer('YN');
+
 				}
 
 				// Get site config parameters from server
-				getConfigsFromServer('YN');
+				//getConfigsFromServer('YN');	// not every time - only first ever or on new date
 			}
 		}
 	}
@@ -1068,10 +1065,112 @@ angular.module('osc-services', [])
 				//return( $q.when(localStorage.getItem(key)));
 				return( $q.when(retval));
 			}
+		},
+		getSiteConfigTF: function(key, options) {
+			//var filter = { "filter": { "where": { and: [{ "CONF_KEY": key, "CONF_ACTIVE": 'Y' } ] } } };
+			var filter = { "filter": { "where": { and: [{ "confKey": key, "confActive": true } ] } } };
+
+			var options = options || {};
+/*
+			SiteConfig.find(filter, function( err, siteconfigs) {
+				if(err) {
+					log.error('err:'+err);
+				}
+			});
+*/
+/*
+			SiteConfig.find(filter)
+				.$promise
+				.then(function(siteconfigs) {
+					log.debug(JSON.stringify(siteconfigs));	
+					return siteconfigs[0].confValue;
+				},function(err) {
+					log.error(JSON.stringify(err));
+					return null;
+				});
+*/
+			if( options.useServer) {
+				var promise = SiteConfig.find(filter)
+					.$promise
+					.then(function(siteconfigs) {
+						//DEFAULT here is true watch out
+						var retval = true;
+						var ltmp = "";
+						log.debug(JSON.stringify(siteconfigs));
+
+						if(siteconfigs.length == 0)		// not found
+							retval = false;			// TODO - is this the correct default return value if no key found?
+						else
+						{
+							ltmp = siteconfigs[0].confValue;
+							if (ltmp == 'Y')
+								retval = true;
+							else
+								retval = false;
+						}
+
+						// store in local storage for future use
+						// TODO - store in individual keys or as a site_config key for an object with all keys?
+						localStorage.setItem( key, retval);
+						return retval;
+					});
+
+				return promise;
+			}
+			else {
+				var retval = localStorage.getItem(key);
+				if(!retval) {
+					// If nothing found put a default value in for next time
+					retval = false;
+					localStorage.setItem( key, retval);
+				}
+				//return( $q.when(localStorage.getItem(key)));
+				return( $q.when(retval));
+			}
 		}
 
 	}
 
 	return siteConfig;
+})
+.factory('driverMessageService', function(DespatchToDriverMessages) {
+
+	function getMessages(driverId) {
+		// TODO - limit shoud be a config or pda parameter
+
+		// This works in the REST API:
+		// {"where" : { "drvmDriverId": 999}, "order": "drvmSeqid DESC", "limit":2}
+
+		var filter = { "filter": {
+							"where": { "drvmDriverId": driverId },
+							"order": 'drvmSeqid DESC',
+							"limit": 20
+						}
+					};
+
+		// {limit: 50}
+
+		return(DespatchToDriverMessages.find(filter));
+	};
+
+	function addMessage(driverId,message,cb) {
+		var driverMsg = {};
+		//var now = new Date();
+		var now = new Date().toISOString();
+
+		driverMsg.drvmDriverId = driverId;
+		driverMsg.drvmDate = now;
+		driverMsg.drvmTimestamp = now;
+		driverMsg.drvmMessage = message;		// TODO - should make sure <=512 chars
+		driverMsg.drvmSender = driverId;
+		driverMsg.drvmRecipient = "DESPATCH";	// for now will always be DESPATCH until we maybe have a reply concept
+
+		DespatchToDriverMessages.create(driverMsg,cb);
+	};
+
+  return {
+	getMessages: getMessages,
+	addMessage: addMessage
+  }
 })
 ;

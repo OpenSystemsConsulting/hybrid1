@@ -3490,6 +3490,511 @@ module.factory(
     return R;
   }]);
 
+/**
+ * @ngdoc object
+ * @name lbServices.DespatchToDriverMessages
+ * @header lbServices.DespatchToDriverMessages
+ * @object
+ *
+ * @description
+ *
+ * A $resource object for interacting with the `DespatchToDriverMessages` model.
+ *
+ * ## Example
+ *
+ * See
+ * {@link http://docs.angularjs.org/api/ngResource.$resource#example $resource}
+ * for an example of using this object.
+ *
+ */
+module.factory(
+  "DespatchToDriverMessages",
+  ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
+    var R = Resource(
+      urlBase + "/DespatchToDriverMessages/:id",
+      { 'id': '@id' },
+      {
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#create
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Create a new instance of the model and persist it into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `DespatchToDriverMessages` object.)
+         * </em>
+         */
+        "create": {
+          url: urlBase + "/DespatchToDriverMessages",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#upsert
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `DespatchToDriverMessages` object.)
+         * </em>
+         */
+        "upsert": {
+          url: urlBase + "/DespatchToDriverMessages",
+          method: "PUT"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#exists
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Check whether a model instance exists in the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `exists` – `{boolean=}` - 
+         */
+        "exists": {
+          url: urlBase + "/DespatchToDriverMessages/:id/exists",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#findById
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Find a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `DespatchToDriverMessages` object.)
+         * </em>
+         */
+        "findById": {
+          url: urlBase + "/DespatchToDriverMessages/:id",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#find
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Find all instances of the model matched by filter from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, orderBy, offset, and limit
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `DespatchToDriverMessages` object.)
+         * </em>
+         */
+        "find": {
+          isArray: true,
+          url: urlBase + "/DespatchToDriverMessages",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#findOne
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Find first instance of the model matched by filter from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, orderBy, offset, and limit
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `DespatchToDriverMessages` object.)
+         * </em>
+         */
+        "findOne": {
+          url: urlBase + "/DespatchToDriverMessages/findOne",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#updateAll
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "updateAll": {
+          url: urlBase + "/DespatchToDriverMessages/update",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#deleteById
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "deleteById": {
+          url: urlBase + "/DespatchToDriverMessages/:id",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#count
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Count instances of the model matched by where from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        "count": {
+          url: urlBase + "/DespatchToDriverMessages/count",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#prototype$updateAttributes
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Update attributes for a model instance and persist it into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `DespatchToDriverMessages` object.)
+         * </em>
+         */
+        "prototype$updateAttributes": {
+          url: urlBase + "/DespatchToDriverMessages/:id",
+          method: "PUT"
+        },
+      }
+    );
+
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#updateOrCreate
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `DespatchToDriverMessages` object.)
+         * </em>
+         */
+        R["updateOrCreate"] = R["upsert"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#update
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["update"] = R["updateAll"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#destroyById
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["destroyById"] = R["deleteById"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.DespatchToDriverMessages#removeById
+         * @methodOf lbServices.DespatchToDriverMessages
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["removeById"] = R["deleteById"];
+
+
+    /**
+    * @ngdoc property
+    * @name lbServices.DespatchToDriverMessages#modelName
+    * @propertyOf lbServices.DespatchToDriverMessages
+    * @description
+    * The name of the model represented by this $resource,
+    * i.e. `DespatchToDriverMessages`.
+    */
+    R.modelName = "DespatchToDriverMessages";
+
+
+    return R;
+  }]);
+
 module.factory(
   "gpsHistory",
   ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
@@ -4583,6 +5088,981 @@ module.factory(
     * i.e. `BarcodeHists`.
     */
     R.modelName = "BarcodeHist";
+
+
+    return R;
+  }]);
+
+module.factory(
+  "JseaDriverAnswers",
+  ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
+    var R = Resource(
+      urlBase + "/JseaDriverAnswers/:id",
+      { 'id': '@id' },
+      {
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#create
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Create a new instance of the model and persist it into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverAnswers` object.)
+         * </em>
+         */
+        "create": {
+          url: urlBase + "/JseaDriverAnswers",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#upsert
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `TpmPdaController` object.)
+         * </em>
+         */
+        "upsert": {
+          url: urlBase + "/JseaDriverAnswers",
+          method: "PUT"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#exists
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Check whether a model instance exists in the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `exists` – `{boolean=}` - 
+         */
+        "exists": {
+          url: urlBase + "/JseaDriverAnswers/:id/exists",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#findById
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Find a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverAnswers` object.)
+         * </em>
+         */
+        "findById": {
+          url: urlBase + "/JseaDriverAnswers/:id",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#find
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Find all instances of the model matched by filter from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, orderBy, offset, and limit
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverAnswers` object.)
+         * </em>
+         */
+        "find": {
+          isArray: true,
+          url: urlBase + "/JseaDriverAnswers",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#findOne
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Find first instance of the model matched by filter from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, orderBy, offset, and limit
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverAnswers` object.)
+         * </em>
+         */
+        "findOne": {
+          url: urlBase + "/JseaDriverAnswers/findOne",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#updateAll
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "updateAll": {
+          url: urlBase + "/JseaDriverAnswers/update",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#deleteById
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "deleteById": {
+          url: urlBase + "/JseaDriverAnswers/:id",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#count
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Count instances of the model matched by where from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        "count": {
+          url: urlBase + "/JseaDriverAnswers/count",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#prototype$updateAttributes
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Update attributes for a model instance and persist it into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverAnswers` object.)
+         * </em>
+         */
+        "prototype$updateAttributes": {
+          url: urlBase + "/JseaDriverAnswers/:id",
+          method: "PUT"
+        },
+      }
+    );
+
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#updateOrCreate
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverAnswers` object.)
+         * </em>
+         */
+        R["updateOrCreate"] = R["upsert"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#update
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["update"] = R["updateAll"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#destroyById
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["destroyById"] = R["deleteById"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverAnswers#removeById
+         * @methodOf lbServices.JseaDriverAnswers
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["removeById"] = R["deleteById"];
+
+
+    /**
+    * @ngdoc property
+    * @name lbServices.JseaDriverAnswers#modelName
+    * @propertyOf lbServices.JseaDriverAnswers
+    * @description
+    * The name of the model represented by this $resource,
+    * i.e. `JseaDriverAnswers`.
+    */
+    R.modelName = "JseaDriverAnswers";
+
+
+    return R;
+  }]);
+module.factory(
+  "JseaDriverQuestions",
+  ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
+    var R = Resource(
+      urlBase + "/JseaDriverQuestions/:id",
+      { 'id': '@id' },
+      {
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#create
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Create a new instance of the model and persist it into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverQuestions` object.)
+         * </em>
+         */
+        "create": {
+          url: urlBase + "/JseaDriverQuestions",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#upsert
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `TpmPdaController` object.)
+         * </em>
+         */
+        "upsert": {
+          url: urlBase + "/JseaDriverQuestions",
+          method: "PUT"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#exists
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Check whether a model instance exists in the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `exists` – `{boolean=}` - 
+         */
+        "exists": {
+          url: urlBase + "/JseaDriverQuestions/:id/exists",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#findById
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Find a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverQuestions` object.)
+         * </em>
+         */
+        "findById": {
+          url: urlBase + "/JseaDriverQuestions/:id",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#find
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Find all instances of the model matched by filter from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, orderBy, offset, and limit
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverQuestions` object.)
+         * </em>
+         */
+        "find": {
+          isArray: true,
+          url: urlBase + "/JseaDriverQuestions",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#findOne
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Find first instance of the model matched by filter from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, orderBy, offset, and limit
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverQuestions` object.)
+         * </em>
+         */
+        "findOne": {
+          url: urlBase + "/JseaDriverQuestions/findOne",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#updateAll
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "updateAll": {
+          url: urlBase + "/JseaDriverQuestions/update",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#deleteById
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "deleteById": {
+          url: urlBase + "/JseaDriverQuestions/:id",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#count
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Count instances of the model matched by where from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        "count": {
+          url: urlBase + "/JseaDriverQuestions/count",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#prototype$updateAttributes
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Update attributes for a model instance and persist it into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverQuestions` object.)
+         * </em>
+         */
+        "prototype$updateAttributes": {
+          url: urlBase + "/JseaDriverQuestions/:id",
+          method: "PUT"
+        },
+      }
+    );
+
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#updateOrCreate
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `JseaDriverQuestions` object.)
+         * </em>
+         */
+        R["updateOrCreate"] = R["upsert"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#update
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["update"] = R["updateAll"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#destroyById
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["destroyById"] = R["deleteById"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.JseaDriverQuestions#removeById
+         * @methodOf lbServices.JseaDriverQuestions
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["removeById"] = R["deleteById"];
+
+
+    /**
+    * @ngdoc property
+    * @name lbServices.JseaDriverQuestions#modelName
+    * @propertyOf lbServices.JseaDriverQuestions
+    * @description
+    * The name of the model represented by this $resource,
+    * i.e. `JseaDriverQuestions`.
+    */
+    R.modelName = "JseaDriverQuestions";
 
 
     return R;

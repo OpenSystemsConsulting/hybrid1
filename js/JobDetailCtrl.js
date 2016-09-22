@@ -100,15 +100,23 @@ angular.module('JobDetailCtrl', [])
 				var mon = Math.round((jobDate % 10000) / 100);
 				var day = Math.round((jobDate % 100));
 
-				var jobDateFilter = new Date();
-				jobDateFilter.setUTCFullYear(year);
-				jobDateFilter.setUTCMonth(mon-1);			// 0 - 11
-				jobDateFilter.setUTCDate(day);
+
+				var jobDateFilter = new Date(Date.UTC(year, mon-1, day, 0, 0, 0, 0));
+
+				//Old code which we think is buggy
+				// Caused a problem on 1st September 2016 prior to 10:00am AEST !!!
+				// So the find did not return the job and so it went straight back to the jobs screen
+				// Something to do with the way we create then set?
+				//var jobDateFilter = new Date();
+				//jobDateFilter.setUTCFullYear(year);
+				//jobDateFilter.setUTCMonth(mon-1);			// 0 - 11
+				//jobDateFilter.setUTCDate(day);
 				// Dates are stored UTC so h/m/s all zero
-				jobDateFilter.setUTCHours(0);
-				jobDateFilter.setUTCMinutes(0);
-				jobDateFilter.setUTCSeconds(0);
-				jobDateFilter.setUTCMilliseconds(0);
+				//jobDateFilter.setUTCHours(0);
+				//jobDateFilter.setUTCMinutes(0);
+				//jobDateFilter.setUTCSeconds(0);
+				//jobDateFilter.setUTCMilliseconds(0);
+
 				var localfilter = 
 					  {
 						"where": {"mobjobBasejobNum": jobId, "mobjobBookingDay": jobDateFilter},

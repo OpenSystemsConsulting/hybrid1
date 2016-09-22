@@ -60,7 +60,7 @@
 		<!--   ACCEPT  JOB -->
 		<div ng-show="(property.enumValue.value == 'NJ' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
-			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)">
+			<button class="button button-positive floatLeft" ng-disabled="syncInProgress" ng-click="handleJobStatusChange(property.legid)">
 				Accept
 			</button>
 			<!-- for testing - local delete job functionality -->
@@ -76,7 +76,7 @@
 		<!--   Arrive Pup -->
 		<div ng-show="((fullStatuses == true) && property.enumValue.value == 'AC' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
-			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+			<button class="button button-positive floatLeft" ng-disabled="syncInProgress" ng-click="handleJobStatusChange(property.legid)"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Arrive Pickup
@@ -86,7 +86,7 @@
 		<!--   Depart Pup -->
 		<div ng-show="(property.enumValue.value == 'Ap' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
-			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+			<button class="button button-positive floatLeft"  ng-disabled="syncInProgress" ng-click="handleJobStatusChange(property.legid)"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Arrive Delivery
@@ -96,7 +96,7 @@
 		<!--   Arrive Del -->
 		<div ng-show="(property.enumValue.value == 'Ad' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
-			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+			<button class="button button-positive floatLeft" ng-disabled="syncInProgress" ng-click="handleJobStatusChange(property.legid)"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Arrive Delivery
@@ -106,7 +106,7 @@
 		<!--   Depart Delivery -->
 		<div ng-show="(property.enumValue.value == 'Dd' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
-			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+			<button class="button button-positive floatLeft" ng-disabled="syncInProgress" ng-click="handleJobStatusChange(property.legid)"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Depart Delivery
@@ -121,7 +121,7 @@
 					>
 
 			<div ng-model="signatureOne">
-			<a  class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)">
+			<a  class="button button-positive floatLeft" ng-disabled="syncInProgress" ng-click="handleJobStatusChange(property.legid)">
 				Pickup	
 			</a>
 
@@ -134,7 +134,7 @@
 					>
 			<!--LEGID = {{property.legid % 100}} -->
 
-			<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)">
+			<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" ng-disabled="syncInProgress" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)">
 
 				Deliver	
 
@@ -146,7 +146,7 @@
 					>
 			<!--LEGID = {{property.legid % 100}} -->
 
-			<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)">
+			<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" ng-disabled="syncInProgress" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)">
 
 				Deliver	
 

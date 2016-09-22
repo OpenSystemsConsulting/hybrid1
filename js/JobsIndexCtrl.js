@@ -16,8 +16,8 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig',
-	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig) {
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig','pda_pickup_all',
+	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig,pda_pickup_all) {
 
 	$scope.jobs = [];
 	$scope.jobStatuses = {};
@@ -29,6 +29,8 @@ angular.module('JobsIndexCtrl', [])
 	//Idle.watch();						// TODO - idle - check if idle and maybe auto refresh
 	$rootScope.syncInProgress = false;
 
+
+	$scope.pda_pickup_all = pda_pickup_all;
 	/*
 	 * New functionality to get arrive/depart pickup/delivery times
 	 */
@@ -594,6 +596,13 @@ angular.module('JobsIndexCtrl', [])
 		localStorage.removeItem('osc-local-db');
 	};
 
+	function resolveCallBack(err) 
+	{
+		if(err)	
+			log.debug('resolveCallBackErr:['+err+']');
+		
+	}
+
 	// ] END - New code for syncing
 
 	// [ Conflict resolution 
@@ -633,10 +642,15 @@ angular.module('JobsIndexCtrl', [])
 					// on the server and should no longer be on the client so auto resolve this
 					// (we still don't know why this happens though, probably bad design on our part)
 					if( sourceType == 'update' && targetType == 'delete') {
-						$scope.resolveUsingTarget(conflict);
+						//$scope.resolveUsingTarget(conflict);
+						conflict.resolveUsingTarget(resolveCallBack);
 					}
 					else {
-						// For now still show these ones
+						//OVeride with what client has done
+						log.error("conflicts: NOW CALLING RESOLVE USING SOURCE");
+						conflict.resolveUsingSource(resolveCallBack);
+
+						//Redraw the screen
 						$scope.$apply();
 					}
 				});
@@ -647,7 +661,8 @@ angular.module('JobsIndexCtrl', [])
 	});
 
 	$scope.resolveUsingSource = function (conflict) {
-		conflict.resolve(refreshConflicts);
+		//conflict.resolve(refreshConflicts);
+		conflict.resolveUsingSource(resolveCallBack);
 	};
 
 	$scope.resolveUsingTarget = function (conflict) {
@@ -670,7 +685,9 @@ angular.module('JobsIndexCtrl', [])
 		$scope.localConflicts = [];
 		$scope.$apply();
 		syncfilter = angular.copy(_syncfilter);
-		sync(syncfilter);
+		syncService.setCallingFunc("JobsIndexCtrl->refreshConflicts");
+		syncService.hybridSync(onChange,syncfilter);
+		//sync(syncfilter);
 	};
 	// ] Conflict resolution end
 

@@ -35,7 +35,8 @@ angular.module('starter', ['ionic',
 							'config',
 							'ngIdle',
 							'BarcodeCtrl',
-							'TabCtrl'
+							'TabCtrl',
+							'JseaCtrl'
 							])
 
 // default client config values - will be populated correctly after login
@@ -131,6 +132,15 @@ angular.module('starter', ['ionic',
 
     .state('tab.job-index', {
       url: '/jobs',
+
+	  resolve: {
+        pda_pickup_all:
+            // This will only load the tab once the config has been retrieved
+            // and the value is made available to the controlller in the injectable variable
+            function(siteConfig) {
+               return siteConfig.getSiteConfigYN('PDA_PICKUP_ALL');
+			}
+      },
       views: {
         'jobs-tab': {
           templateUrl: 'templates/jobIndex.html',
@@ -160,6 +170,14 @@ angular.module('starter', ['ionic',
 
     .state('tab.barcodes', {
       url: '/barcodes',
+	  resolve: {
+        pda_barcodes:
+            // This will only load the tab once the config has been retrieved
+            // and the value is made available to the controlller in the injectable variable pda_barcodes
+            function(siteConfig) {
+                return siteConfig.getSiteConfigYN('PDA_BARCODES');
+            }
+      },
       views: {
         'barcodes-tab': {
           templateUrl: 'templates/barcodes.html',
@@ -266,6 +284,23 @@ angular.module('starter', ['ionic',
         'messages-tab': {
           templateUrl: 'templates/messages.html',
           controller: 'MessageCtrl'
+        }
+      }
+    })
+    .state('tab.jseas', {
+      url: '/jseas',
+	  resolve: {
+        pda_jsea_on:
+            // This will only load the tab once the config has been retrieved
+            // and the value is made available to the controlller in the injectable variable
+            function(siteConfig) {
+                return siteConfig.getSiteConfigYN('PDA_JSEA_ON');
+            }
+      },
+      views: {
+        'jsea-tab': {
+          templateUrl: 'templates/jseaQuestions.html',
+          controller: 'JseaCtrl'
         }
       }
     })

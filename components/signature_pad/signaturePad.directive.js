@@ -22,7 +22,7 @@ angular.module('tnf.IonicUtils', ['ionic'])
         });
 
 		$scope.signaturePadModel = {};
-		$scope.signaturePadModel.podname = "NOT SET";
+		$scope.signaturePadModel.podname = "";
 
 		// This is the template with the canvas element where we can draw the signature
 		$ionicModal.fromTemplateUrl('components/signature_pad/signaturePad.html', {
@@ -66,7 +66,7 @@ angular.module('tnf.IonicUtils', ['ionic'])
 			$scope.signaturePad.fromDataURL($scope.signature);
 		  }
 		  $scope.resizeCanvas();
-		  $scope.signaturePadModel.podname = "NOT SET";
+		  $scope.signaturePadModel.podname = "";
 		  //$scope.$apply();
 		};
 
@@ -86,7 +86,7 @@ angular.module('tnf.IonicUtils', ['ionic'])
 			// TODO - this is called when 'cancel' button is pressed 
 			// so probably shouldn't remove from storage on cancel, on clear only
 			localStorage.removeItem( "signature");
-		  $scope.signaturePadModel.podname = "NOT SET";
+		  $scope.signaturePadModel.podname = "";
 		  //$scope.$apply();
 		};
 
