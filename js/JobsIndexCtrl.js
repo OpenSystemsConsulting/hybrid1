@@ -459,6 +459,11 @@ angular.module('JobsIndexCtrl', [])
 	$scope.$on('RESUME', function(event) {
 		// Nothing much to do here other than refresh the jobs list
 		notificationCount++;
+
+		// In testing we managed to do a sync start, pause app, resume without sync finish
+		// which then caused all buttons to be disabled and no more syncs to happen
+		syncService.setSyncInProgress(false);		// not syncing now
+
 		log.info("Received event:"+event.name+': calling refresh function');
 		refresh();
 	});

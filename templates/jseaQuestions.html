@@ -1,0 +1,40 @@
+<ion-view title="Driver: ({{pdaParams.driverId}}) V: {{pdaParams.getAppVersion()}}">
+<!--
+    <ion-nav-buttons side="right">
+        <button ng-click="toggleSearchBox()" class="button button-icon ion-ios7-email-outline">
+            <span class="badge badge-assertive icon-badge">5</span>
+        </button>
+    </ion-nav-buttons>
+-->
+    <ion-content ng-class="{ 'overflow-scroll': (desktopBrowserScrolling == true) }">
+
+    <ion-list>
+
+        <ion-item class="jsea-item" ng-repeat=" jseaQuestion in jseaQuestions track by $index" type="item-text-wrap">
+
+			<ion-checkbox class="item-checkbox-right jsea-item" ng-model="jseaQuestion.jdqCbox" > 
+<!--
+            {{jseaQuestion.jdqOrder}} 
+            {{jseaQuestion.jdqType}} 
+-->
+            {{jseaQuestion.jdqQuestionText}} 
+			</ion-checkbox> 
+			<!--{{jseaQuestion.jdqType}}  -->
+        </ion-item>
+    </ion-list>
+
+
+    <div class="button-bar">
+        <button class="button button-large button-energized" ng-click="scan()">
+            Camera Scan
+        </button>
+        <button class="button button-large button-assertive" ng-click="scanCancel()">
+            Cancel
+        </button>
+        <button class="button button-large button-positive" ng-click="scanSubmit()">
+            Submit
+        </button>
+    </div>
+
+    </ion-content>
+</ion-view>
