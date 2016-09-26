@@ -16,14 +16,15 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig','pda_pickup_all',
-	function($rootScope, $scope, $window , $state, Job, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig,pda_pickup_all) {
-
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig','pda_pickup_all',
+	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig,pda_pickup_all) { 
 	$scope.jobs = [];
 	$scope.jobStatuses = {};
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobsIndexCtrl'};
 	var log = Logger.getInstance(logParams);
+
+	var mystr;
 
 	var notificationCount = 0;
 	//Idle.watch();						// TODO - idle - check if idle and maybe auto refresh
@@ -185,6 +186,10 @@ angular.module('JobsIndexCtrl', [])
 					if( job.mobjobStatus == 'UJ') {
 						job.mobjobStatus = 'NJ';
 						job.onDeviceTime = new Date().toISOString();
+
+						mystr = 'getJobs:' + job.mobjobSeq + ' updated from ' + 'UJ' + ' -> ' + job.mobjobStatus;
+						log.info(mystr);
+
 						job.save();
 					}
 
@@ -243,6 +248,10 @@ angular.module('JobsIndexCtrl', [])
 				if( job.mobjobStatus == 'UJ') {
 					job.mobjobStatus = 'NJ';
 					job.onDeviceTime = new Date().toISOString();
+
+					mystr = 'onChange:' + job.mobjobSeq + ' updated from ' + 'UJ' + ' -> ' + job.mobjobStatus;
+					log.info(mystr);
+
 					job.save();
 					syncRequired++;
 				}
@@ -620,6 +629,7 @@ angular.module('JobsIndexCtrl', [])
 
 			conflict.type(function (err, type) {
 				conflict.type = type;
+				// This function appears to give us the model data (i.e. the Job) for the conflict
 				conflict.models(function (err, source, target) {
 					conflict.source = source;
 					conflict.target = target;
@@ -630,7 +640,19 @@ angular.module('JobsIndexCtrl', [])
 					log.error("conflicts: source:"+JSON.stringify(conflict.source));
 					log.error("conflicts: target:"+JSON.stringify(conflict.target));
 
+					// Maybe simply clobber the remote end with the local data
+					// as resolveUsingSource doesn't appear to do what we want
+					log.error("conflicts: NOW CALLING RemoteJob.upsert()");
+					RemoteJob.upsert(conflict.source, function(err,model) {
+						if(err)
+							log.error("upsert:error:"+JSON.stringify(err));
+						if(model)
+							log.info("upsert: model:"+JSON.stringify(model));
+					});
+
 				});
+
+				// This functions gives us change model data for the conflict e.g. prev/rev etc
 				conflict.changes(function (err, source, target) {
 					conflict.sourceChange = source;
 					conflict.targetChange = target;
@@ -648,15 +670,15 @@ angular.module('JobsIndexCtrl', [])
 					// (we still don't know why this happens though, probably bad design on our part)
 					if( sourceType == 'update' && targetType == 'delete') {
 						//$scope.resolveUsingTarget(conflict);
-						conflict.resolveUsingTarget(resolveCallBack);
+						conflict.resolveUsingTarget(refreshConflicts);
 					}
 					else {
-						//OVeride with what client has done
-						log.error("conflicts: NOW CALLING RESOLVE USING SOURCE");
-						conflict.resolveUsingSource(resolveCallBack);
+						//Override with what client has done
+						log.error("conflicts: used to NOW CALLING RESOLVE USING SOURCE");
+						//conflict.resolveUsingSource(refreshConflicts);
 
 						//Redraw the screen
-						$scope.$apply();
+						//$scope.$apply();
 					}
 				});
 
@@ -667,7 +689,7 @@ angular.module('JobsIndexCtrl', [])
 
 	$scope.resolveUsingSource = function (conflict) {
 		//conflict.resolve(refreshConflicts);
-		conflict.resolveUsingSource(resolveCallBack);
+		conflict.resolveUsingSource(refreshConflicts);
 	};
 
 	$scope.resolveUsingTarget = function (conflict) {

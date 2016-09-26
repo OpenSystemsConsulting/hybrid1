@@ -92,7 +92,7 @@
 		<strong> {{ jobs.length }} jobs loaded </strong>
 </section>
 
-<section id="local-conflicts" class="conflicts" ng-if="localConflicts.length">
+<section id="local-conflicts" class="conflicts" ng-if="localConflicts.length && pdaParams.debugMode">
   <ion-scroll direction="xy" >
   <h1>Local Conflicts</h1>
   <div ng-repeat="conflict in localConflicts">

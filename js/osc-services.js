@@ -926,7 +926,7 @@ angular.module('osc-services', [])
 					var key = keylist[i];
 					siteConfig.getSiteConfigYN(key, {useServer: true}).then(function(YN) {
 						//localStorage.setItem(key,YN ); // getSiteConfig stores for us
-						log.info("getSiteConfigYN for key:"+key+" returns:"+YN);
+						//log.info("getSiteConfigYN for key:"+key+" returns:"+YN);		// key is always last one  - need a "this"
 					});
 				}
 			break;
@@ -989,6 +989,10 @@ angular.module('osc-services', [])
 				// Get site config parameters from server
 				//getConfigsFromServer('YN');	// not every time - only first ever or on new date
 			}
+		},
+
+		reloadConfigsFromServer: function() {
+			getConfigsFromServer('YN');
 		}
 	}
 
