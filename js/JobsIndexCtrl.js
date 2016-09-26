@@ -469,6 +469,8 @@ angular.module('JobsIndexCtrl', [])
 		// Nothing much to do here other than refresh the jobs list
 		notificationCount++;
 
+		$rootScope.syncInProgress = false;	// TODO - template buttons use this - should be checking syncService
+
 		// In testing we managed to do a sync start, pause app, resume without sync finish
 		// which then caused all buttons to be disabled and no more syncs to happen
 		syncService.setSyncInProgress(false);		// not syncing now
@@ -751,6 +753,8 @@ angular.module('JobsIndexCtrl', [])
 		}
 		// read all legs for this driver's jobs (no need to put into scope though?)
 		var all_legs_filter = angular.copy(_allfilter);
+
+		$rootScope.syncInProgress = true;	// TODO - template buttons use this - should be checking syncService
 
 		if(oldstatus === 'NJ')
 			newstatus = 'AC';
