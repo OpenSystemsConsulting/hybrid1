@@ -8,8 +8,8 @@ angular.module('JobDetailCtrl', [])
 })
 
 // For the View which is Displaying and Editing a Job or for the Creation of a new Job...
-.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig',
-	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig) {
+.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService',
+	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -143,6 +143,14 @@ angular.module('JobDetailCtrl', [])
 				 var alertPopup = $ionicPopup.alert({
                             title: 'Log On/Off Issue',
                             template: "Please Log on to action jobs"
+                        });
+                return;  
+			}
+			if(jseaService.getJseaIsCaptured() == false)
+			{
+				 var alertPopup = $ionicPopup.alert({
+                            title: 'Job Safety Sheet Not Filled out.',
+                            template: "Please fill in your Job Safety Sheet to before continuing."
                         });
                 return;  
 			}
@@ -547,6 +555,32 @@ angular.module('JobDetailCtrl', [])
 		if(testing < 1)
 			getJob();
   	});
+
+	$scope.$on('CANCEL', function(event, payload) {
+
+		log.info('Received a CANCEL event');
+		log.info(payload.platform+":"+event+':'+JSON.stringify(payload));
+
+		if(typeof payload.data != "undefined") {
+
+			if(payload.data.type == "CANCEL") {
+				var alertPopup = $ionicPopup.alert({
+					title: 'Job Cancellation',
+					template: 'A Job has Been Cancelled by Base - resyncing.'
+				});
+
+				alertPopup.then(function(res) {
+					window.location.href = "#/tab/jobs"
+				});
+				
+			}
+			else
+				log.info('payload.data.type <> Cancel, help !!!!');
+		}
+		else {
+			log.info('payload.data = undefined, help !!!!');
+		}
+	});
 
 
 

@@ -18418,7 +18418,9 @@ exports = module.exports = function bootBrowserApp(app, options) {
 
 exports.execute = execute;
 
-},{"./lib/executor":95}],"qT+Bxl":[function(require,module,exports){
+},{"./lib/executor":95}],"loopback-boot#instructions":[function(require,module,exports){
+module.exports=require('qT+Bxl');
+},{}],"qT+Bxl":[function(require,module,exports){
 module.exports={
   "config": {},
   "dataSources": {
@@ -19181,6 +19183,15 @@ module.exports={
             "label": "Received on device",
             "omitFromForm": true
           },
+          "jseaCaptured": {
+            "type": "String",
+            "required": false,
+            "length": 1,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": "Jsea Captured"
+          },
           "lastModified": {
             "type": "Date",
             "required": true,
@@ -19409,8 +19420,6 @@ module.exports={
     ]
   }
 }
-},{}],"loopback-boot#instructions":[function(require,module,exports){
-module.exports=require('qT+Bxl');
 },{}],95:[function(require,module,exports){
 (function (process){
 var assert = require('assert');

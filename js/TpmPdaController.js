@@ -1,7 +1,7 @@
 angular.module('TpmPdaControllerCtrl', [])
 
-.controller('TpmPdaControllerCtrl', ['$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', '$ionicModal','Logger','clientlog','eventService','messageService','pushService',
-	function($rootScope, $scope, $state, TpmPdaController, util, pdaParams, $ionicModal, Logger, clientlog, eventService, messageService, pushService) {
+.controller('TpmPdaControllerCtrl', ['$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', '$ionicModal','Logger','clientlog','eventService','messageService','pushService','siteConfig',
+	function($rootScope, $scope, $state, TpmPdaController, util, pdaParams, $ionicModal, Logger, clientlog, eventService, messageService, pushService,siteConfig) {
 		$scope.TpmPdaControllers = [];
 		$scope.TpmRowCount = 0;
 
@@ -126,6 +126,7 @@ angular.module('TpmPdaControllerCtrl', [])
 				messageService.dumpLocalStorage();
 			}
 			*/
+			siteConfig.getAllConfigsFromServer();
 
 		};
 

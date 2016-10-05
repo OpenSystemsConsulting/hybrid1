@@ -50,7 +50,7 @@
 		<!--   ACCEPT  JOB -->
 		<div ng-if="(property.enumValue.value == 'NJ' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
-			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)" ng-disabled="syncInProgress"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Accept
@@ -74,7 +74,7 @@
 		<!--   Depart Pup -->
 		<div ng-if="(fullStatuses && property.enumValue.value == 'PU' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
-			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)" ng-disabled="syncInProgress"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Depart Pickup
@@ -84,7 +84,7 @@
 		<!--   Arrive Del -->
 		<div ng-if="(fullStatuses && property.enumValue.value == 'Dp' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
-			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)" ng-disabled="syncInProgress"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Arrive Delivery
@@ -104,7 +104,7 @@
 -->
 		<!-- no multileg parameter or single leg job has one "tap to sign" on first leg -->
 		<div ng-if="(fullStatuses && property.enumValue.value == 'Ad' && (property.legid % 100 == 0) && (!pdaParams.multileg || property.numlegs < 2))" class="input-label" style="width:100%;">
-				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)"
+				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)" ng-disabled="syncInProgress"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Deliver
@@ -112,7 +112,7 @@
 		</div> 
 		<!-- multileg parameter has individual per leg "tap to sign" -->
 		<div ng-if="(fullStatuses && property.enumValue.value == 'Ad' && (property.legid % 100 > 0) && (pdaParams.multileg && property.numlegs > 1) )" class="input-label" style="width:100%;">
-				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)"
+				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)" ng-disabled="syncInProgress"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Deliver
@@ -123,7 +123,7 @@
 		<!--   PICKUP  JOB -->
 		<div ng-if="(property.enumValue.value == 'AC' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
-			<button  class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)"
+			<button  class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)" ng-disabled="syncInProgress"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Pickup	
@@ -134,7 +134,7 @@
 
 		<!-- no multileg parameter or single leg job has one "tap to sign" on first leg -->
 		<div ng-if="(!fullStatuses && property.enumValue.value == 'PU' && (property.legid % 100 == 0) && (!pdaParams.multileg || property.numlegs < 2))" class="input-label" style="width:100%;">
-				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)"
+				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)" ng-disabled="syncInProgress"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Deliver
@@ -143,7 +143,7 @@
 
 		<!-- multileg parameter has individual per leg "tap to sign" -->
 		<div ng-if="(!fullStatuses && property.enumValue.value == 'PU' && (property.legid % 100 > 0) && (pdaParams.multileg && property.numlegs > 1) )" class="input-label" style="width:100%;">
-				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)"
+				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)" ng-disabled="syncInProgress"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Deliver

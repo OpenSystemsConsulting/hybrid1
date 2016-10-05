@@ -53,6 +53,7 @@ angular.module('JobsIndexCtrl', [])
 		$scope.$apply();
 	});
 
+
 	$scope.logonDriver = function() {
 		pdaParams.logonDriver();
 		eventService.sendMsg('LOGON'); 
@@ -263,14 +264,13 @@ angular.module('JobsIndexCtrl', [])
 					$scope.jobStatuses[job.mobjobStatus] = 1;
 			}
 			if(syncRequired) {
+				$rootScope.syncInProgress = true;
 				syncfilter = angular.copy(_syncfilter);
 				syncService.setCallingFunc("JobsIndexCtrl->Job.find");
 				syncService.hybridSync(onChange,syncfilter);
 			}
 
-		      		// Show Dates in a shortened format...
-
-		      $scope.titleWithTotal = "Jobs " + " (" + $scope.jobs.length + ")";
+			$scope.titleWithTotal = "Jobs " + " (" + $scope.jobs.length + ")";
 
 			$scope.$apply();
 		});
@@ -625,7 +625,7 @@ angular.module('JobsIndexCtrl', [])
 	Job.on('conflicts', function (conflicts) {
 		$scope.localConflicts = conflicts;
 
-		log.error("conflicts:"+JSON.stringify(conflicts));
+		log.error(conflicts.length+" conflicts:"+JSON.stringify(conflicts));
 
 		conflicts.forEach(function (conflict) {
 
@@ -644,13 +644,15 @@ angular.module('JobsIndexCtrl', [])
 
 					// Maybe simply clobber the remote end with the local data
 					// as resolveUsingSource doesn't appear to do what we want
-					log.error("conflicts: NOW CALLING RemoteJob.upsert()");
-					RemoteJob.upsert(conflict.source, function(err,model) {
-						if(err)
-							log.error("upsert:error:"+JSON.stringify(err));
-						if(model)
-							log.info("upsert: model:"+JSON.stringify(model));
-					});
+					if(conflict.source) {
+						log.error("conflicts: NOW CALLING RemoteJob.upsert()");
+						RemoteJob.upsert(conflict.source, function(err,model) {
+							if(err)
+								log.error("upsert:error:"+JSON.stringify(err));
+							if(model)
+								log.info("upsert: model:"+JSON.stringify(model));
+						});
+					}
 
 				});
 
@@ -710,7 +712,10 @@ angular.module('JobsIndexCtrl', [])
 		});
 	};
 
-	function refreshConflicts() {
+	function refreshConflicts(err) {
+		if(err) {
+			log.error("refreshConflicts:"+err);
+		}
 		$scope.localConflicts = [];
 		$scope.$apply();
 		syncfilter = angular.copy(_syncfilter);

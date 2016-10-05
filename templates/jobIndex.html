@@ -45,7 +45,7 @@
 
       <ion-item ng-repeat="job in jobs track by $index" type="item-text-wrap" href="#/tab/jobs/{{job.mobjobSeq}}" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 
-		<div class="list"> 
+		<div class="list" ng-disabled="syncInProgress" > 
 
 			<span ng-switch on="job.mobjobStatus">
    				<img class="left" ng-switch-when="DL" src='img/Del.jpg' >

@@ -57,6 +57,14 @@ angular.module('osc-services', [])
 		return localdriver.driverId;
 	};
 
+/*	// Injecting $q in this serverice causes a circular dependancy
+	pda_params.getDriverIdPromise = function() {
+		var deferred = $q.defer();
+		deferred.resolve(getDriverId());
+		return deferred.promise;
+	};
+*/
+
 	pda_params.getSiteId = function() {
 /*
 		localdriver = getParams();
@@ -624,6 +632,96 @@ angular.module('osc-services', [])
 
 	return messageService;
 })
+.factory('jseaService', function(pdaParams, Logger,$rootScope ){
+
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'jseaService'};
+	var log = Logger.getInstance(logParams);
+
+	 //STARTof day is for Start of Day agreements, PERJOB is for JOb agreements
+	var jseaServiceTypes = new Array();
+	jseaServiceTypes["SOD"] = "STARTOFDAY";
+	jseaServiceTypes["PJB"] = "PERJOB";
+	var myConfiguredForJsea = false;
+
+	var jseaServiceType = jseaServiceTypes["SOD"]; //Default
+
+	var jseaService = {
+
+		setJseaIsCaptured: function(YN){   
+			if(jseaServiceType == jseaServiceTypes["SOD"] )
+			{
+				localStorage.setItem('JSEA_SOD_CAPTURED',YN);
+			}
+		},
+
+
+		setJseaType: function(larg) {
+			var match = false;
+			log.debug('Setting JseaType passed ' + larg);
+			for(var li=0;li<jseaServiceTypes.length;li++)
+			{
+				if(larg == jseaServiceTypes[li])
+				{
+					match = true;
+					jseaServiceType = jseaServiceTypes[li];
+					log.debug('Setting JseaType got a match on ' + larg + " To " + jseaServiceTypes[li]);
+					myConfiguredForJsea = true;
+				}	
+			}
+			if( match == false)
+			{
+				log.debug('Setting JseaType NO MATCH on ' + larg + ' Will be Set to default: ' + jseaServiceType);
+			}
+		},
+		setJseaTypePerJob: function(){
+			log.debug('Setting JseaType to Per Job');
+			jseaServiceType = jseaServiceTypes["PJB"];
+		},
+		setJseaTypeStartOfDay: function(){
+			log.debug('Setting JseaType to StartOfDay');
+			jseaServiceType = jseaServiceTypes["SOD"];
+		},
+
+		getJseaType: function() {
+			return jseaServiceType;
+		},
+		isJseaStartOfDay: function() {
+			return (jseaServiceType == jseaServiceTypes["SOD"]);
+		},
+		getJseaIsCaptured: function() {
+			log.debug('Getting JseaIsCaptured');
+
+			//I fwe havnt been configured then dont stop the person doing things in the app
+			if ( myConfiguredForJsea == false )
+			{
+				log.debug('myConfiguredForJsea = ' + myConfiguredForJsea + ' So will return true');
+				return true;
+			}
+
+			if(this.isJseaStartOfDay())
+			{
+				var lstr;
+				log.debug('Getting JseaIsCaptured jseaServiceType = ' + jseaServiceType + ' From Local storage');
+				lstr = localStorage.getItem('JSEA_SOD_CAPTURED');
+				return (lstr == 'Y');
+			}
+		}
+
+	}
+	//App.js will have broadcast this
+	$rootScope.$on('SOD_IS_NEW_DAY', function(event){
+		mystr = "SOD_IS_NEW_DAY Event recieved";
+		log.debug(mystr);
+
+		if(jseaService.isJseaStartOfDay())
+		{
+			//Update the value to be No and then when the guy uses the ctrler this will make it Yes
+			localStorage.setItem('JSEA_SOD_CAPTURED','N');
+		}
+	});
+
+	return jseaService;
+})
 .factory('siteService', function( clientConfig, dataSources){
 
 	// dataSources are loopback generated datasource objects created during the loopback boot phase
@@ -903,6 +1001,8 @@ angular.module('osc-services', [])
 	var today; 
 	var now;
 	var type;
+	//var myNumYnKeysRetrieved = 0;
+	//var ynkeylist = [ 'BARCODE_SUPP_BCODEISJOBNUM', 'FULL_JOB_STATUSES', 'PDA_BARCODES', 'PDA_JSEA_ON','PDA_PICKUP_ALL' ];
 
 	//When App starts Get from localstorage
 
@@ -916,22 +1016,30 @@ angular.module('osc-services', [])
 
 	log.debug('Instantiating mycurday = :' + mycurday); 
 
+/*
 	var getConfigsFromServer = function(type) {
+		myNumYnKeysRetrieved = 0;
 		switch(type) {
 			case 'YN':
 				// list of site config keys with y/n values
-				var keylist = [ 'BARCODE_SUPP_BCODEISJOBNUM', 'FULL_JOB_STATUSES', 'PDA_BARCODES', 'PDA_JSEA_ON','PDA_PICKUP_ALL' ];
-				var len = keylist.length;
+				var len = ynkeylist.length;
 				for(var i=0; i < len; i++) {
-					var key = keylist[i];
+					var key = ynkeylist[i];
 					siteConfig.getSiteConfigYN(key, {useServer: true}).then(function(YN) {
 						//localStorage.setItem(key,YN ); // getSiteConfig stores for us
 						//log.info("getSiteConfigYN for key:"+key+" returns:"+YN);		// key is always last one  - need a "this"
+						myYnNumKeysRetrieved ++;
+			
+						log.debug('isYnKeylistLoaded: myYnNumKeysRetrieved = ' + myYnNumKeysRetrieved + ' ynKeyList.lenght = ' + ynKeyList.lenght);
+						if( myYnNumKeysRetrieved  == ynKeyList.lenght)
+							$rootScope.$broadcast('SITE_CONFIG_LOADED');
+							
 					});
 				}
 			break;
 		}
 	};
+*/
 
 	var sodService = {
 			
@@ -964,9 +1072,9 @@ angular.module('osc-services', [])
 						messageService.clearChangeData();
 						log.debug(" prevResumeDay != mycurday mycurday = " + mycurday);
 
+						$rootScope.$broadcast('SODSERVICE_IS_NEW_DAY');
 						// Get site config parameters from server
-						getConfigsFromServer('YN');
-
+						siteConfig.getAllConfigsFromServer();
 					}
 					else {
 						log.debug('Not new date');
@@ -982,17 +1090,15 @@ angular.module('osc-services', [])
 					messageService.clearChangeData();
 
 					// Get site config parameters from server
-					getConfigsFromServer('YN');
+					siteConfig.getAllConfigsFromServer();
 
 				}
 
 				// Get site config parameters from server
 				//getConfigsFromServer('YN');	// not every time - only first ever or on new date
-			}
-		},
 
-		reloadConfigsFromServer: function() {
-			getConfigsFromServer('YN');
+				//siteConfig.getAllConfigsFromServer();
+			}
 		}
 	}
 
@@ -1010,129 +1116,69 @@ angular.module('osc-services', [])
 
 	return sodService;
 })
-.factory('siteConfig', function(pdaParams,Logger,SiteConfig,$q){
+.factory('siteConfig', function(pdaParams,Logger,SiteConfig,$q,$rootScope){
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'siteConfig'};
 	var log = Logger.getInstance(logParams);
 
+	var keylist = [
+				'BARCODE_SUPP_BCODEISJOBNUM',
+				'FULL_JOB_STATUSES',
+				'PDA_BARCODES',
+				'PDA_JSEA_ON',
+				'PDA_JSEA_TYPE',
+				'PDA_PICKUP_ALL'
+			];
+
 	var siteConfig = {
-		getSiteConfigYN: function(key, options) {
-			//var filter = { "filter": { "where": { and: [{ "CONF_KEY": key, "CONF_ACTIVE": 'Y' } ] } } };
-			var filter = { "filter": { "where": { and: [{ "confKey": key, "confActive": true } ] } } };
+		getAllConfigsFromServer: function() {
+			var filter = { "filter": 
+							{ "where": 
+								{ and:	[
+											{ "confActive": true },
+											{ "confKey": { "inq": keylist } }
+										] 
+								} 
+							}
+						};
 
-			var options = options || {};
-/*
-			SiteConfig.find(filter, function( err, siteconfigs) {
-				if(err) {
-					log.error('err:'+err);
-				}
-			});
-*/
-/*
-			SiteConfig.find(filter)
-				.$promise
-				.then(function(siteconfigs) {
-					log.debug(JSON.stringify(siteconfigs));	
-					return siteconfigs[0].confValue;
-				},function(err) {
-					log.error(JSON.stringify(err));
-					return null;
-				});
-*/
-			if( options.useServer) {
-				var promise = SiteConfig.find(filter)
+				SiteConfig.find(filter)
 					.$promise
 					.then(function(siteconfigs) {
-						var retval = "";
 						log.debug(JSON.stringify(siteconfigs));
 
-						if(siteconfigs.length == 0)		// not found
-							retval = 'N';			// TODO - is this the correct default return value if no key found?
-						else
-							retval = siteconfigs[0].confValue;
+						var len = siteconfigs.length;
+						if(len == 0) {		// not found
+							log.error("No site config values found");
+						} else {
 
-						// store in local storage for future use
-						// TODO - store in individual keys or as a site_config key for an object with all keys?
-						localStorage.setItem( key, retval);
-						return retval;
-					});
+							for(var i=0; i < len; i++) {
 
-				return promise;
-			}
-			else {
-				var retval = localStorage.getItem(key);
-				if(!retval) {
-					// If nothing found put a default value in for next time
-					retval = 'N';
-					localStorage.setItem( key, retval);
-				}
-				//return( $q.when(localStorage.getItem(key)));
-				return( $q.when(retval));
-			}
-		},
-		getSiteConfigTF: function(key, options) {
-			//var filter = { "filter": { "where": { and: [{ "CONF_KEY": key, "CONF_ACTIVE": 'Y' } ] } } };
-			var filter = { "filter": { "where": { and: [{ "confKey": key, "confActive": true } ] } } };
-
-			var options = options || {};
-/*
-			SiteConfig.find(filter, function( err, siteconfigs) {
-				if(err) {
-					log.error('err:'+err);
-				}
-			});
-*/
-/*
-			SiteConfig.find(filter)
-				.$promise
-				.then(function(siteconfigs) {
-					log.debug(JSON.stringify(siteconfigs));	
-					return siteconfigs[0].confValue;
-				},function(err) {
-					log.error(JSON.stringify(err));
-					return null;
-				});
-*/
-			if( options.useServer) {
-				var promise = SiteConfig.find(filter)
-					.$promise
-					.then(function(siteconfigs) {
-						//DEFAULT here is true watch out
-						var retval = true;
-						var ltmp = "";
-						log.debug(JSON.stringify(siteconfigs));
-
-						if(siteconfigs.length == 0)		// not found
-							retval = false;			// TODO - is this the correct default return value if no key found?
-						else
-						{
-							ltmp = siteconfigs[0].confValue;
-							if (ltmp == 'Y')
-								retval = true;
-							else
-								retval = false;
+								// store in local storage for future use
+								// TODO - store in individual keys or as a site_config key for an object with all keys?
+								localStorage.setItem( siteconfigs[i].confKey, siteconfigs[i].confValue);
+							}
+							localStorage.setItem('SITE_CONFIG_LOADED',true );
+							$rootScope.$broadcast('SITE_CONFIG_LOADED');
 						}
-
-						// store in local storage for future use
-						// TODO - store in individual keys or as a site_config key for an object with all keys?
-						localStorage.setItem( key, retval);
-						return retval;
 					});
-
-				return promise;
+		},
+		// returns a promise as we are using it in app.js to resolve routes
+		getSiteConfigYN: function(key) {
+			var retval = localStorage.getItem(key);
+			if(!retval) {
+				retval = 'N';
 			}
-			else {
-				var retval = localStorage.getItem(key);
-				if(!retval) {
-					// If nothing found put a default value in for next time
-					retval = false;
-					localStorage.setItem( key, retval);
-				}
-				//return( $q.when(localStorage.getItem(key)));
-				return( $q.when(retval));
+			return( $q.when(retval));
+		},
+		getSiteConfig: function(key) {
+			var retval = localStorage.getItem(key);
+			if(!retval) {
+				retval = '';
 			}
+			return( $q.when(retval));
 		}
-
+			
 	}
 
 	return siteConfig;
