@@ -84,13 +84,6 @@
 		Always attempt foreground GPS even if logged off
 	</ion-checkbox>
 
-	<ion-item class="item item-button-right" >
-		Reload Site Config
-		<button class="button button-light" ng-click="reloadSiteConfig()">
-			Reload
-		</button>
-	</ion-item>
-
 	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.jobDetailOneDayOnly" >
 		Query one date only
 	</ion-checkbox>
@@ -144,18 +137,34 @@
 	<div class="item item-divider">
 		Database
 	</div>
+	<ion-item class="item item-button-right" >
+		Reload Site Config
+		<button class="button button-positive" ng-click="reloadSiteConfig()">
+			Reload
+		</button>
+	</ion-item>
+
 	<ion-item class="item" >
 		Local Storage usage
 		<span class="item-note">
 			{{usedStorage}}
 		</span>
 	</ion-item>
+
 	<ion-item class="item" ng-repeat="(key, value) in localStorageList">
 		{{key}}
 		<span class="item-note">
 			{{value}}
 		</span>
 	</ion-item>
+<!-- 
+	<ion-item class="item" ng-repeat="storage in localStorageList">
+		{{storage.key}}
+		<span class="item-note">
+			{{storage.value}}
+		</span>
+	</ion-item>
+-->
 
 	<div class="item item-divider">
 		Network properties

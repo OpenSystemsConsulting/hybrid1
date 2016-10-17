@@ -92,6 +92,7 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 			if(res) {
 				// confirmed
 				localStorage.clear();
+				// TODO -  clear images if required - see /app/strongloop/loopback-clientservices-osc-images/client/js/deviceCtrl.js
 				$state.go('login');
 			} else {
 				// Cancelled
@@ -114,7 +115,9 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 */
 
 	$scope.reloadSiteConfig = function() {
+		siteConfig.deleteLocalConfigs();
 		siteConfig.getAllConfigsFromServer();
+		localStorageUsage();
 	}
 
 	$scope.usedStorage = Math.round(JSON.stringify(localStorage).length / 1024) + " KB";

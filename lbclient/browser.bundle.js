@@ -18418,9 +18418,7 @@ exports = module.exports = function bootBrowserApp(app, options) {
 
 exports.execute = execute;
 
-},{"./lib/executor":95}],"loopback-boot#instructions":[function(require,module,exports){
-module.exports=require('qT+Bxl');
-},{}],"qT+Bxl":[function(require,module,exports){
+},{"./lib/executor":95}],"qT+Bxl":[function(require,module,exports){
 module.exports={
   "config": {},
   "dataSources": {
@@ -19173,6 +19171,14 @@ module.exports={
             "scale": 6,
             "label": "Arrive delivery"
           },
+          "mobjobTimeDp": {
+            "type": "Date",
+            "required": false,
+            "length": 11,
+            "precision": null,
+            "scale": 6,
+            "label": "Depart Pickup"
+          },
           "onDeviceTime": {
             "type": "Date",
             "required": true,
@@ -19420,6 +19426,8 @@ module.exports={
     ]
   }
 }
+},{}],"loopback-boot#instructions":[function(require,module,exports){
+module.exports=require('qT+Bxl');
 },{}],95:[function(require,module,exports){
 (function (process){
 var assert = require('assert');

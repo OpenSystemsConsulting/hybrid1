@@ -36,7 +36,9 @@ angular.module('starter', ['ionic',
 							'ngIdle',
 							'BarcodeCtrl',
 							'TabCtrl',
-							'JseaCtrl'
+							'JseaCtrl',
+							'imageCapture',
+							'ImageCtrl'
 							])
 
 // default client config values - will be populated correctly after login
@@ -114,6 +116,12 @@ angular.module('starter', ['ionic',
     .state('tab', {
       url: '/tab',
       abstract: true,
+	  resolve: {
+	 	pda_full_statuses: 
+            function(siteConfig) {
+               return siteConfig.getSiteConfigYN('PDA_FULL_STATUSES');
+			}
+      },
       templateUrl: 'templates/tabs.html',
 	  controller: 'TabCtrl'
     })
@@ -141,7 +149,12 @@ angular.module('starter', ['ionic',
                return siteConfig.getSiteConfigYN('PDA_PICKUP_ALL');
 			}
 /*
-			,
+	 	pda_full_statuses: 
+            function(siteConfig) {
+               return siteConfig.getSiteConfigYN('PDA_FULL_STATUSES');
+			}
+*/
+/*
 		driverId:
 			function(pdaParams) {
 				return pdaParams.getDriverIdPromise();
@@ -168,9 +181,18 @@ angular.module('starter', ['ionic',
 
 	.state('tab.job-detail', {
 	  url: '/jobs/:jobId',
+/**
+	  resolve: {
+	 	pda_full_statuses_det: 
+            function(siteConfig) {
+               return siteConfig.getSiteConfigYN('PDA_FULL_STATUSES');
+			}
+      },
+**/
 	  views: {
 		'job-edit': {
-		  templateUrl: 'templates/jobDetail.html'
+		  templateUrl: 'templates/jobDetail.html',
+		controller: 'JobDetailCtrl'
 		}
 	  }
 	})
@@ -294,6 +316,7 @@ angular.module('starter', ['ionic',
         }
       }
     })
+
     .state('tab.jseas', {
       url: '/jseas',
 	  resolve: {
@@ -308,6 +331,24 @@ angular.module('starter', ['ionic',
         'jsea-tab': {
           templateUrl: 'templates/jseaQuestions.html',
           controller: 'JseaCtrl'
+        }
+      }
+    })
+
+	.state('tab.images', {
+      url: '/images',
+      resolve: {
+        pda_images:
+            // This will only load images tab once the config has been retrieved
+            // and the value is made available to the controlller in the injectable variable pda_images
+            function(siteConfig) {
+                return siteConfig.getSiteConfigYN('PDA_IMAGES');
+            }
+      },
+      views: {
+        'images-tab': {
+          templateUrl: 'templates/images.html',
+          controller: 'ImageCtrl'
         }
       }
     })
@@ -331,7 +372,7 @@ angular.module('starter', ['ionic',
 // phase first and then it will execute the "Run" phase. At that point, all of
 // the run() blocks are executed. During this phase, we no longer have access
 // to any of the providers but we can finally access the services.
-.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate,$state,sodService,jseaService,siteConfig) {
+.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate,$state,sodService,jseaService,siteConfig,imageService) {
 
 /* NOTE: the run function gets called at app startup so any services injected here
  * will be instantiated at that time
@@ -389,8 +430,12 @@ angular.module('starter', ['ionic',
 	// Start monitoring for messages
 	messageService.startWatching();
 
+	// Start monitoring images for auto upload
+	//imageService.startWatching();			// TODO - enable
 
-		//This should potentially be called once a day from SOD service
+	//This should potentially be called once a day from SOD service
+	// TODO - should naybe put this into the service and have a startWatching() function
+	// to listen for the event and do what's necessary
 
 	$rootScope.$on('SITE_CONFIG_LOADED', function(event){
 		if(pdaParams.getDriverId() <= 0 )

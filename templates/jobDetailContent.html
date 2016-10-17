@@ -8,6 +8,36 @@
         </div>
       </div>
 
+
+	<!--   PHOTO THUMBNAIL CAROUSEL -->
+    <div ng-if="images.length > 0">
+
+<!-- <img ng-repeat="image in allImages" ng-src="{{image.src}}" ng-click="showImages($index)" class="image-list-thumb"/>
+<ion-item class="item" ng-repeat="image in images.slice().reverse() track by $index" type="item-text-wrap">
+</ion-item>
+-->
+
+            <!-- this displays images side by side -->
+            <ion-scroll direction="x">
+                <img ng-repeat="image in images.slice().reverse() track by $index" data-ng-src="{{image.nativeURL}}" height="50px" class="img-frame">
+            </ion-scroll>
+
+<!--    This shows images  - puts them to the right of the view tiled vertically
+    <ion-list>
+        <ion-item class="item" ng-repeat="image in images.slice().reverse() track by $index" type="item-text-wrap">
+
+            <img data-ng-src="{{image.nativeURL}}" height="100px">
+
+            <span class="item-note">
+                {{image.name}}
+            </span>
+
+        </ion-item>
+
+    </ion-list>
+-->
+    </div>
+
 	<div ng-repeat="property in data track by $index" ng-show="(property.index > 1)  && (!property.omitFromForm)"
 	  			class="item item-input noBorder disable-user-behaviour">
 
@@ -55,6 +85,12 @@
 			>
 				Accept
 			</button>
+		</div>
+
+		<!--   IMAGE CAPTURE -->
+		<div ng-if="( pdaImages && property.property == 'mobjobNumber' )" class="input-label" >
+			<!-- the metadata here will be passed into the directive as an object and then stored as part of the image properties -->
+			<camera-button metadata="{basejob: property.basejob, legid: property.legid, legStatus: property.legStatus}"/>
 		</div>
 
 		<!-- ============================================================================================== -->

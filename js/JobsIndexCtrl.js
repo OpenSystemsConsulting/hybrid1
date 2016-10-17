@@ -16,8 +16,8 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig','pda_pickup_all',
-	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig,pda_pickup_all) { 
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig','pda_pickup_all','pda_full_statuses',
+	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig,pda_pickup_all,pda_full_statuses) { 
 	$scope.jobs = [];
 	$scope.jobStatuses = {};
 
@@ -35,15 +35,7 @@ angular.module('JobsIndexCtrl', [])
 	/*
 	 * New functionality to get arrive/depart pickup/delivery times
 	 */
-/*
-	siteConfig.getSiteConfigYN('FULL_JOB_STATUSES').then(function(YN) {
-		if(YN == "Y")
-			$scope.fullStatuses = true;
-		else
-			$scope.fullStatuses = false;
-	});
-*/
-	$scope.fullStatuses = false;		// off by default for this version
+	$scope.fullStatuses = (pda_full_statuses == 'Y');		// off by default for this version
 
 	// initialise the current new message count in this scope
 	$scope.newMessageCount = messageService.getNewMesssageCount();
@@ -741,7 +733,7 @@ angular.module('JobsIndexCtrl', [])
 	}
 
 	$scope.multiDepartPickup = function() {
-		updateSelectedJobs('PU');				// FULL_JOB_STATUSES
+		updateSelectedJobs('PU');				// PDA_FULL_STATUSES
 	}
 
 	function updateSelectedJobs(oldstatus) {
@@ -765,7 +757,7 @@ angular.module('JobsIndexCtrl', [])
 			newstatus = 'AC';
 		if(oldstatus === 'AC')
 			newstatus = 'PU';
-		if(oldstatus === 'PU')					// FULL_JOB_STATUSES
+		if(oldstatus === 'PU')					// PDA_FULL_STATUSES
 			newstatus = 'Dp';
 
 		// This is async - TODO should we block?  how to handle this?

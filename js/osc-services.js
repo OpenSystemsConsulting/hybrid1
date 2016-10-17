@@ -1001,8 +1001,6 @@ angular.module('osc-services', [])
 	var today; 
 	var now;
 	var type;
-	//var myNumYnKeysRetrieved = 0;
-	//var ynkeylist = [ 'BARCODE_SUPP_BCODEISJOBNUM', 'FULL_JOB_STATUSES', 'PDA_BARCODES', 'PDA_JSEA_ON','PDA_PICKUP_ALL' ];
 
 	//When App starts Get from localstorage
 
@@ -1015,31 +1013,6 @@ angular.module('osc-services', [])
 	mycurday = today.getDate();
 
 	log.debug('Instantiating mycurday = :' + mycurday); 
-
-/*
-	var getConfigsFromServer = function(type) {
-		myNumYnKeysRetrieved = 0;
-		switch(type) {
-			case 'YN':
-				// list of site config keys with y/n values
-				var len = ynkeylist.length;
-				for(var i=0; i < len; i++) {
-					var key = ynkeylist[i];
-					siteConfig.getSiteConfigYN(key, {useServer: true}).then(function(YN) {
-						//localStorage.setItem(key,YN ); // getSiteConfig stores for us
-						//log.info("getSiteConfigYN for key:"+key+" returns:"+YN);		// key is always last one  - need a "this"
-						myYnNumKeysRetrieved ++;
-			
-						log.debug('isYnKeylistLoaded: myYnNumKeysRetrieved = ' + myYnNumKeysRetrieved + ' ynKeyList.lenght = ' + ynKeyList.lenght);
-						if( myYnNumKeysRetrieved  == ynKeyList.lenght)
-							$rootScope.$broadcast('SITE_CONFIG_LOADED');
-							
-					});
-				}
-			break;
-		}
-	};
-*/
 
 	var sodService = {
 			
@@ -1094,10 +1067,7 @@ angular.module('osc-services', [])
 
 				}
 
-				// Get site config parameters from server
-				//getConfigsFromServer('YN');	// not every time - only first ever or on new date
-
-				//siteConfig.getAllConfigsFromServer();
+				// TODO - maybe get site config parameters from server here?
 			}
 		}
 	}
@@ -1123,11 +1093,13 @@ angular.module('osc-services', [])
 
 	var keylist = [
 				'BARCODE_SUPP_BCODEISJOBNUM',
-				'FULL_JOB_STATUSES',
 				'PDA_BARCODES',
 				'PDA_JSEA_ON',
 				'PDA_JSEA_TYPE',
-				'PDA_PICKUP_ALL'
+				'PDA_PICKUP_ALL',
+				'PDA_FULL_STATUSES',
+				'PDA_IMAGES',
+				'PDA_IMAGES_URL'
 			];
 
 	var siteConfig = {
@@ -1163,6 +1135,16 @@ angular.module('osc-services', [])
 						}
 					});
 		},
+		deleteLocalConfigs: function() {
+			// Remove all config key/value pairs from local storage
+			// NOTE this should in general ALWAYS be followed by a getAllConfigsFromServer() call to repopulate
+			var len = keylist.length;
+			for(var i=0; i < len; i++) {
+				if(localStorage.getItem(keylist[i]) !== null) {
+					localStorage.removeItem(keylist[i]);
+				}
+			}
+		},
 		// returns a promise as we are using it in app.js to resolve routes
 		getSiteConfigYN: function(key) {
 			var retval = localStorage.getItem(key);
@@ -1182,6 +1164,560 @@ angular.module('osc-services', [])
 	}
 
 	return siteConfig;
+})
+.service('fileUpload',['$http','imageFileService', function($http,imageFileService){
+
+	this.uploadFileToUrl = function(file, uploadUrl, successCallback, errorCallback){
+		var fd = new FormData();
+
+		window.resolveLocalFileSystemURL(file.nativeURL, function( fileEntry) {
+
+			fileEntry.file(function(file) {
+
+				// file is in scope here - save the file name
+				var filename = file.name;
+				var imagedata = imageFileService.image(file.name) || {};
+
+				var reader = new FileReader();
+
+				reader.onloadend = function(e) {
+
+					// Add the file to the form data
+					var imgBlob = new Blob([ this.result ], { type: "image/jpeg" } );
+					fd.append('file', imgBlob, filename);		// file name is 3rd arg
+
+					// Add any file notes and/or metadata
+					fd.append('notes', imagedata.notes);
+					var metadata = imagedata.metadata || {};
+					for( var property in metadata) {
+						if (metadata.hasOwnProperty(property)) {
+							fd.append(property, metadata[property]);
+						}
+					}
+
+					// Now post it to the files endpoint
+					// TODO - return promise?
+					$http.post(uploadUrl, fd, { transformRequest: angular.identity, headers: {'Content-Type': undefined } })
+					.success(function(data){
+						console.log("Succeeded to fileUpload");
+						if(successCallback) successCallback(data);
+					})
+					.error(function(err){
+						console.log("Failed to fileUpload");
+						if(errorCallback) errorCallback(err);
+					});
+				};
+
+				reader.readAsArrayBuffer(file);
+
+			}, function(err) {
+				console.log("resolveLocalFileSystemURL failed:"+ err);
+				if(errorCallback) errorCallback(err);
+			});
+
+		}, function(err) {
+			console.log("resolveLocalFileSystemURL failed:"+ err);
+			if(errorCallback) errorCallback(err);
+		});
+
+	}
+}])
+
+.factory('imageService',['$rootScope', '$timeout', 'cordovaReady', '$cordovaFile', '$q', 'pdaParams', '$cordovaFileTransfer', 'Logger','$cordovaCamera','imageFileService','siteConfig','fileUpload','Job',
+	function($rootScope, $timeout, cordovaReady, $cordovaFile, $q, pdaParams, $cordovaFileTransfer, Logger, $cordovaCamera, imageFileService,siteConfig,fileUpload,Job){
+ 
+	// Service to handle image files
+
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'imageService'};
+	var log = Logger.getInstance(logParams);
+
+	var fileList = [];
+	var calls = 0;
+	var pollTime = pdaParams.imagePollTime || (60000 * 5);			// 30000 = 30 secs
+	//var uploadUrl = "http://opensyscon.com.au:5679/images";
+	var uploadUrl = "";
+
+	imageFileService.images();			// retrieve any image meta data from local storage
+
+	var poller = function pollDir() {
+		// read through image dir and grab any files
+
+		if(uploadUrl == "") {
+			siteConfig.getSiteConfig('PDA_IMAGES_URL').then(function(val) {
+				uploadUrl = val;
+				log.info('uploadUrl set to:['+uploadUrl+']');
+			});
+		}
+
+		log.debug('poller: cordovaReady.isready:'+cordovaReady.isready+', uploadUrl:'+uploadUrl);
+		if( cordovaReady.isready) {
+			uploadAllImages();
+		}
+
+		calls++;
+
+		// TODO - maybe use idle service?  Not sure what it's called
+		pollTime = pdaParams.imagePollTime || (60000 * 5);			// re-read from pda params
+
+		if( pollTime < 10000)
+			pollTime = 10000;					// min allowed 10 seconds
+
+		$timeout(poller, pollTime);
+	};
+
+	var uploadAllImages = function() {
+		log.info('uploadAllImages: checking...');
+		getImageList().then(function uploadImages(images) {
+
+			log.debug('uploadAllImages: found '+images.length+' images, check if ready for upload');
+			images.forEach(function(image) {
+				// if already uploaded don't do it again
+				var uploaded = imageFileService.get(image.name, 'uploaded');
+				var readyForUpload = imageFileService.get(image.name, 'readyForUpload');
+
+				log.debug('uploadAllImages: readyForUpload:'+readyForUpload+', uploaded:',+uploaded+', pdaParams.imageUpload:'+pdaParams.imageUpload);
+
+				// if not ready don't upload - e.g. maybe still adding notes
+				if( readyForUpload == null || readyForUpload == false)
+					return;			// stop processing this iteration
+
+
+				if( uploaded != null && !uploaded && pdaParams.imageUpload) {
+					uploadImage(image);
+				}
+			});
+		});
+	};
+
+	var uploadImage = function(image, callback) {
+		//var notes = imageFileService.get(image.name, 'notes');
+		var imagedata = imageFileService.image(image.name) || {};
+
+		var cb = callback;
+
+		var options = new FileUploadOptions();
+		options.fileKey = "file";
+		options.fileName = image.name;
+		options.mimeType = "image/jpeg";
+
+		// Whatever you populate options.params with, will be available in req.body at the server-side.
+		options.params = {
+			"description": "Image from PDA",
+			"notes": imagedata.notes
+		};
+
+		// If we have a metadata object retrieve each property and add to options.params
+		var metadata = imagedata.metadata || {};
+		for( var property in metadata) {
+			if (metadata.hasOwnProperty(property)) {
+				options.params[property] = metadata[property];
+			}
+		}
+
+		if(uploadUrl != "") {
+			log.info('About to upload:'+image.nativeURL+' to: '+uploadUrl);
+			fileUpload.uploadFileToUrl(image, uploadUrl, function(result) {
+				log.info('uploadFileToUrl returns:'+JSON.stringify(result));
+
+				imageFileService.set(image.name, 'uploaded', true);		// mark as uploaded on success
+
+				if(cb) cb(result);
+
+			}, function (error) {
+				log.err('uploadFileToUrl failed: error:'+JSON.stringify(error));
+			});
+		} else {
+			log.info('uploadUrl:['+uploadUrl+'], so getSiteConfig');
+			siteConfig.getSiteConfig('PDA_IMAGES_URL').then(function(val) {
+				uploadUrl = val;
+				log.info('uploadUrl set to:['+uploadUrl+']');
+			});
+		}
+	};
+
+	var getImageList = function(imageId) {
+			if( cordovaReady.isready) {
+				var deferred = $q.defer();
+				var prefix = imageId || "";			// optional image name to search for (first x chars no suffix)
+
+				window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function( fileSystem) {
+					var directoryReader = fileSystem.createReader();
+					directoryReader.readEntries( function( entries) {
+
+						var numFilesAndDirs = entries.length;
+						fileList = [];
+						for( i=0; i<numFilesAndDirs; i++) {
+							
+							var fileEntry = entries[i];
+
+							if( fileEntry.isFile) {
+								var imgfile = {};
+
+								var isImage = (/\.(gif|jpg|jpeg|tiff|png)$/i).test(fileEntry.name);
+								var isMatch = true;		// TODO - is this the correct default value?  Maybe false?
+								if(prefix) {
+									//(/^20160229067395.*_.*$/i).test(fileEntry.name)
+									var re = new RegExp('^'+prefix+'.*_.*$','i');
+									isMatch = re.test(fileEntry.name);
+								}
+
+								if( isImage && isMatch) {
+									imgfile.nativeURL = fileEntry.nativeURL;
+									imgfile.name = fileEntry.name;
+									fileList.push(imgfile);
+								}
+							}
+						}
+						deferred.resolve(fileList);
+						
+					}, function (error) {
+							deferred.reject(error);
+					})
+					
+				}, function (error) {
+						deferred.reject(error);
+				})
+				return deferred.promise;
+			}
+			else {
+				return $q.when( [] );		// empty list if no cordova
+			}
+		};
+
+	var deleteImagesForPrefix = function(imageId) {
+			if( cordovaReady.isready) {
+				var deferred = $q.defer();
+				var prefix = imageId || "";			//if supplied - all up to '_'
+
+				window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function( fileSystem) {
+					// TODO - log here
+					var directoryReader = fileSystem.createReader();
+					directoryReader.readEntries( function( entries) {
+
+						var numFilesAndDirs = entries.length;
+						fileList = [];
+						for( i=0; i<numFilesAndDirs; i++) {
+							
+							var fileEntry = entries[i];
+
+							if( fileEntry.isFile) {
+								var imgfile = {};
+
+								var isImage = (/\.(gif|jpg|jpeg|tiff|png)$/i).test(fileEntry.name);
+								var isMatch = true;		// TODO - is this the correct default value?  Maybe false?
+								if(prefix) {
+									//(/^20160229067395.*_.*$/i).test(fileEntry.name)
+									var re = new RegExp('^'+prefix+'.*_.*$','i');
+									isMatch = re.test(fileEntry.name);
+								}
+
+								log.debug('deleteImagesForPrefix: prefix:['+prefix+'], file:'+fileEntry.name+', isIamge:'+isImage, +', isMatch:'+isMatch);
+								if( isImage && isMatch) {
+									imgfile.nativeURL = fileEntry.nativeURL;
+									imgfile.name = fileEntry.name;
+
+									// delete image and add to list of deleted files
+									$cordovaFile.removeFile(cordova.file.dataDirectory, imgfile.name).then(function(success) {
+										fileList.push(imgfile);
+									});
+								}
+							}
+						}
+						deferred.resolve(fileList);
+						
+					}, function (error) {
+							deferred.reject(error);
+					})
+					
+				}, function (error) {
+						deferred.reject(error);
+				})
+				return deferred.promise;
+			}
+			else {
+				return $q.when( [] );
+			}
+		};
+
+	var deleteSingleImage = function(imageId) {
+			if( cordovaReady.isready) {
+				var deferred = $q.defer();
+
+				if( !imageId) {
+					deferred.reject('imageId must be supplied');
+				}
+
+				var isImage = (/\.(gif|jpg|jpeg|tiff|png)$/i).test(imageId);
+
+				if( isImage) {
+					//deferred.resolve($cordovaFile.removeFile(cordova.file.dataDirectory, imageId));
+					$cordovaFile.removeFile(cordova.file.dataDirectory, imageId).then(function(success) {
+
+						imageFileService.set(imageId, 'uploaded', true);		// TESTING DEBUG
+						imageFileService.removeImage(imageId);
+
+						deferred.resolve(success);
+					});
+				}
+				else {
+					deferred.reject('Not an image file:'+imageId);
+				}
+				return deferred.promise;
+			}
+		};
+
+	var takePhoto = function(photoId) {
+		console.log(new Date().toISOString()+': imageService.takePhoto: starts');		//DEBUG
+
+			// See: https://devdactic.com/complete-image-guide-ionic/
+			// and use promises? : https://docs.angularjs.org/api/ng/service/$q
+			var deferred = $q.defer();
+		//return $q(function(resolve, reject) {
+			var options = {
+					quality: pdaParams.imageQuality || 50,
+					destinationType: Camera.DestinationType.FILE_URI,
+					sourceType: Camera.PictureSourceType.CAMERA,
+					encodingType: Camera.EncodingType.JPEG,
+					cameraDirection: 1,
+					saveToPhotoAlbum: true
+			};
+
+			$cordovaCamera.getPicture(options).then(function(imageURI) {
+				// TODO - place picture on form
+				// TODO - get some optional notes
+				// TODO - get confirmation all ok
+				// TODO - save the picture
+
+				//storeImageURI(photoId, imageURI);			// image successfully captured by device so store it
+
+				console.log(new Date().toISOString()+': imageService.takePhoto: resolved');		//DEBUG
+				deferred.resolve(imageURI);
+			}, function (err) {
+				//alert(err);
+				console.log(new Date().toISOString()+': imageService.takePhoto: rejected');		//DEBUG
+				deferred.reject(err);
+			});
+
+			//$cordovaCamera.cleanup() 			// TODO - required for iOS - see docs for details.
+
+			return deferred.promise;
+		//});
+		console.log(new Date().toISOString()+': imageService.takePhoto: ends');		//DEBUG
+	};
+
+	function dirname(path) {
+		return path.replace(/\/[^\/]*$/,'');
+	}
+
+	var storeImageURI = function(photoId, imageURI, metadata) {
+
+		console.log(new Date().toISOString()+': camera.storeImageURI: starts');		//DEBUG
+		var deferred = $q.defer();
+
+		//Grab the file name of the photo in the temporary directory
+		var currentName = imageURI.replace(/^.*[\\\/]/, '');
+
+		//Create a new name for the photo
+		var d = new Date(),
+			n = d.getTime(),
+			baseFileName = photoId + "_" + n;
+			newFileName = baseFileName+".jpg";
+
+		var currentDirectory = dirname(imageURI);
+
+		// moves file from temp camera area on device to the app's local file system
+		$cordovaFile.moveFile(currentDirectory, currentName, cordova.file.dataDirectory, newFileName).then(function (success) {
+			// success
+			var data = {};
+			data.savedImageURI = cordova.file.dataDirectory+newFileName;
+			data.baseFileName = baseFileName;
+			data.newFileName = newFileName;
+			//deferred.resolve(cordova.file.dataDirectory+newFileName, baseFileName);		// can only resolve one value
+
+			var imageData = {
+				fileName: newFileName,
+				uploaded: false,
+				readyForUpload: false
+			};
+
+			// If metadata object supplied add properties to imageData
+			if( metadata) {
+				/*
+				for( var property in metadata) {
+					if (metadata.hasOwnProperty(property)) {
+						imageData[property] = metadata[property];
+					}
+				}
+				*/
+				imageData.metadata = metadata;
+			}
+
+			imageFileService.storeImage(imageData);			// store name/status in local storage
+
+			deferred.resolve(data);
+
+		}, function (error) {
+			deferred.reject(err);
+		});
+
+		return deferred.promise;
+	};
+
+	/*
+	 *** NOTE *** this is NOT complete and fully functional with nested async calls within multiple loop constructs
+	 * TODO - work this shit out
+	 */
+	var deleteObsoleteImages = function() {
+		var deferred = $q.defer();
+		getImageList().then(function(images) {
+			// For each image we need to check if its job is no longer on the device
+			// or if it's older than x days/weeks and remove it
+			var len = images.length;
+			var result = {};
+			result.noImages = len;
+			result.delImages = 0;
+
+			var promises=[];
+
+			log.info('deleteObsoleteImages: images found:'+len);
+			if(len == 0) {
+				deferred.resolve(result);				// no images - don't go any further
+			}
+
+			for( var i = 0; i < len; i++) {
+				var image = images[i];
+				var name = image.name;
+				var jobSeq = name.substring(0, name.indexOf('_'));
+				var filter = { "where": {"mobjobSeq": jobSeq} };
+
+				log.debug('deleteObsoleteImages: name:'+name+', jobSeq:'+jobSeq);
+
+				Job.find(filter, function (err, jobs) {
+					// should only ever find 0 or 1
+					var jobslen = jobs.length;
+
+					if(err) {
+						deferred.reject(err);
+					}
+
+					if(jobslen == 0) {
+						// no job found
+						deleteSingleImage(name).then(function(success) {
+							result.delImages += 1;
+							promises.push(result);
+						}, function(err) {
+							log.err('deleteObsoleteImages: faile to delete:'+name+', err:'+err);
+						});
+					}
+					else {
+						promises.push(result);
+					}
+				});
+			}
+			return $q.all(promises);
+		});
+		return deferred.promise;
+	};
+
+	var imageService = {
+
+		startWatching: function(){
+			siteConfig.getSiteConfigYN('PDA_IMAGES').then(function(YN) {
+				if(YN === 'Y') {
+					log.info('startWatching: PDA_IMAGES:'+YN+', calling poller()');
+					poller();
+				}
+				else {
+					log.info('startWatching: PDA_IMAGES:'+YN+', NO polling');
+				}
+			});
+		},
+
+		getCount: function() { return(calls) },
+
+		getImageList: getImageList,
+		deleteImagesForPrefix: deleteImagesForPrefix,
+		deleteSingleImage: deleteSingleImage,
+		uploadImage: uploadImage,
+		takePhoto: takePhoto,
+		storeImageURI: storeImageURI,
+		deleteObsoleteImages: deleteObsoleteImages
+	};
+
+	return imageService;
+}])
+
+.factory('imageFileService', function() {
+	// see: https://devdactic.com/complete-image-guide-ionic/
+  var images;
+  var IMAGE_STORAGE_KEY = 'images';
+ 
+  // Gets a list of image names from local storage - not the file system
+  function getImages() {
+    var img = window.localStorage.getItem(IMAGE_STORAGE_KEY);
+    if (img) {
+      images = JSON.parse(img);
+    } else {
+      images = [];
+    }
+    return images;
+  };
+ 
+  function addImage(img) {
+    images.push(img);
+    window.localStorage.setItem(IMAGE_STORAGE_KEY, JSON.stringify(images));
+  };
+
+  function deleteImage(imageId) {
+	var i = images.length;
+	while(i--) {
+		if( images[i].fileName === imageId) {
+			images.splice(i,1);
+			window.localStorage.setItem(IMAGE_STORAGE_KEY, JSON.stringify(images));
+			break;
+		}
+	}
+  };
+ 
+  function setImageProperty(imageId, key, value) {
+	var i = images.length;
+	while(i--) {
+		if( images[i].fileName === imageId) {
+			images[i][key] = value;
+			window.localStorage.setItem(IMAGE_STORAGE_KEY, JSON.stringify(images));
+			break;
+		}
+	}
+  };
+
+  function getImageProperty(imageId, key) {
+	var i = images.length;
+	while(i--) {
+		if( images[i].fileName === imageId) {
+			return(images[i][key]);
+		}
+	}
+	return null;		// didn't find what we were looking for
+  };
+
+  function getImage(imageId) {
+	var i = images.length;
+	while(i--) {
+		if( images[i].fileName === imageId) {
+			return(images[i]);
+		}
+	}
+	return null;		// didn't find what we were looking for
+  };
+
+  return {
+    storeImage: addImage,
+    removeImage: deleteImage,
+    set: setImageProperty,
+    get: getImageProperty,
+    image: getImage,
+    images: getImages
+  }
 })
 .factory('driverMessageService', function(DespatchToDriverMessages) {
 
