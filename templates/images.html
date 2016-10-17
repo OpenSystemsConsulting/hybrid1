@@ -1,0 +1,50 @@
+<ion-view title="Driver: ({{pdaParams.driverId}}) V: {{pdaParams.getAppVersion()}}">
+<!--
+	<ion-nav-buttons side="right">
+		<button ng-click="toggleSearchBox()" class="button button-icon ion-ios7-email-outline">
+			<span class="badge badge-assertive icon-badge">5</span>
+		</button>
+    </ion-nav-buttons>
+-->
+	<ion-content ng-class="{ 'overflow-scroll': (desktopBrowserScrolling == true) }">
+
+	<strong ng-if="images.length === 0">
+		No images
+<!--
+		<form action="/upload" enctype="multipart/form-data" method="post">
+			<input type="text" name="title"><br>
+
+			<input type="file" file-model="myFile"/>
+			<button ng-click="uploadFile()">HTTP UPLOAD me</button>
+      	</form>
+-->
+	</strong>
+
+	<ion-list>
+		<ion-item class="item ite,-thumbnail-left" ng-repeat="image in images.slice().reverse() track by $index">
+
+			<img data-ng-src="{{image.nativeURL}}" height="100px">
+			{{image.notes}}
+			<h2>{{image.name}}</h2>
+
+			<!-- <button ng-click="uploadFile(image)" class="button button-small">Upload File</button> -->
+
+			<button ng-click="uploadImage(image)" class="button button-small">Upload Image</button>
+			<button ng-click="deleteImage(image.name)" class="button button-small">Delete Image</button>
+
+			<label class="checkbox">
+				Uploaded
+				<input type="checkbox" class="item-checkbox-right" ng-checked="{{image.uploaded}}" ng-disabled="true">
+			</label>
+
+		</ion-item>
+
+		<ion-footer>
+			{{uploadProgress}}
+		</ion-footer>
+
+	</ion-list>
+
+	<button ng-click="deleteObsoleteImages()" class="button button-small">Delete obsolete images</button>
+	</ion-content>
+</ion-view>
