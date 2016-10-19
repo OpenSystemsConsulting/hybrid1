@@ -16,8 +16,8 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig','pda_pickup_all','pda_full_statuses',
-	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig,pda_pickup_all,pda_full_statuses) { 
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig',
+	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig) { 
 	$scope.jobs = [];
 	$scope.jobStatuses = {};
 
@@ -31,11 +31,13 @@ angular.module('JobsIndexCtrl', [])
 	$rootScope.syncInProgress = false;
 
 
-	$scope.pda_pickup_all = pda_pickup_all;
+	// pickup all button 
+	$scope.pda_pickup_all = (siteConfig.getSiteConfigValue('PDA_PICKUP_ALL') == 'Y');
+
 	/*
 	 * New functionality to get arrive/depart pickup/delivery times
 	 */
-	$scope.fullStatuses = (pda_full_statuses == 'Y');		// off by default for this version
+	$scope.fullStatuses = (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y');
 
 	// initialise the current new message count in this scope
 	$scope.newMessageCount = messageService.getNewMesssageCount();

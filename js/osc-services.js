@@ -1102,8 +1102,11 @@ angular.module('osc-services', [])
 				'PDA_IMAGES_URL'
 			];
 
+	var g_siteconfigs = null;
+
 	var siteConfig = {
 		getAllConfigsFromServer: function() {
+			var deferred = $q.defer();
 			var filter = { "filter": 
 							{ "where": 
 								{ and:	[
@@ -1114,26 +1117,42 @@ angular.module('osc-services', [])
 							}
 						};
 
-				SiteConfig.find(filter)
-					.$promise
-					.then(function(siteconfigs) {
-						log.debug(JSON.stringify(siteconfigs));
+			// TODO - MAYBE - if already have site configs don't do http call again
+/*
+			var loaded = localStorage.getItem('SITE_CONFIG_LOADED');
+			if (loaded) {
+				return( $q.when(g_siteconfigs));
+			}
+*/
 
-						var len = siteconfigs.length;
-						if(len == 0) {		// not found
-							log.error("No site config values found");
-						} else {
+			SiteConfig.find(filter)
+				.$promise
+				.then(function(siteconfigs) {
+					log.info("Retrieved:"+JSON.stringify(siteconfigs));
 
-							for(var i=0; i < len; i++) {
+					g_siteconfigs = siteconfigs;
 
-								// store in local storage for future use
-								// TODO - store in individual keys or as a site_config key for an object with all keys?
-								localStorage.setItem( siteconfigs[i].confKey, siteconfigs[i].confValue);
-							}
-							localStorage.setItem('SITE_CONFIG_LOADED',true );
-							$rootScope.$broadcast('SITE_CONFIG_LOADED');
+					var len = siteconfigs.length;
+					if(len == 0) {		// not found
+						log.error("No site config values found");
+					} else {
+
+						for(var i=0; i < len; i++) {
+
+							// store in local storage for future use
+							// TODO - store in individual keys or as a site_config key for an object with all keys?
+							localStorage.setItem( siteconfigs[i].confKey, siteconfigs[i].confValue);
 						}
-					});
+						localStorage.setItem('SITE_CONFIG_LOADED',true );
+						$rootScope.$broadcast('SITE_CONFIG_LOADED');
+
+					}
+					deferred.resolve(siteconfigs);
+				}, function(error) {
+					deferred.reject('Error:'+error);
+				});
+
+			return deferred.promise;
 		},
 		deleteLocalConfigs: function() {
 			// Remove all config key/value pairs from local storage
@@ -1159,7 +1178,15 @@ angular.module('osc-services', [])
 				retval = '';
 			}
 			return( $q.when(retval));
-		}
+		},
+		// no promise on this one so it can be used in inline synchronous code
+		getSiteConfigValue: function(key) {
+			var retval = localStorage.getItem(key);
+			if(!retval) {
+				retval = 'N';
+			}
+			return(retval);
+		},
 			
 	}
 

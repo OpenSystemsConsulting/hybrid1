@@ -8,8 +8,8 @@ angular.module('JobDetailCtrl', [])
 })
 
 // For the View which is Displaying and Editing a Job or for the Creation of a new Job...
-.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','pda_full_statuses',
-	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService,pda_full_statuses) {
+.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService',
+	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -26,7 +26,7 @@ angular.module('JobDetailCtrl', [])
 	/*
 	 * New functionality to get arrive/depart pickup/delivery times
 	 */
-	$scope.fullStatuses =  (pda_full_statuses== 'Y');		// off by default for this version
+	$scope.fullStatuses = (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y');
 
 	function getJob() {
 			mystr = 'getJob';

@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('JseaCtrl', [])
-	.controller('JseaCtrl', [ '$rootScope', '$scope', 'siteConfig','JseaDriverQuestions','pdaParams','Logger','pda_jsea_on','$ionicPopup','$window','jseaService',
-		function ($rootScope, $scope, siteConfig,JseaDriverQuestions,pdaParams,Logger,pda_jsea_on,$ionicPopup,$window,jseaService) {
+	.controller('JseaCtrl', [ '$rootScope', '$scope', 'siteConfig','JseaDriverQuestions','pdaParams','Logger','$ionicPopup','$window','jseaService',
+		function ($rootScope, $scope, siteConfig,JseaDriverQuestions,pdaParams,Logger,$ionicPopup,$window,jseaService) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JseaCtrl'};
 	var log = Logger.getInstance(logParams);
+
+		var pda_jsea_on = siteConfig.getSiteConfigValue('PDA_JSEA_ON');
 
 		if(pda_jsea_on != 'Y') {
             var alertPopup = $ionicPopup.alert({

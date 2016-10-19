@@ -2,7 +2,7 @@
 
 angular.module('BarcodeCtrl', [])
 .controller('BarcodeCtrl', [ '$rootScope', '$scope', '$cordovaBarcodeScanner', 'cordovaReady', 'Logger', 'pdaParams', '$ionicPopup','BarcodeHist','LocalBarcodeHist','barcode_sync', 'Job', '$cordovaDevice','barcodeService','siteConfig','pda_barcodes','$window',
-	function ($rootScope, $scope, $cordovaBarcodeScanner, cordovaReady, Logger, pdaParams,$ionicPopup,BarcodeHist,LocalBarcodeHist,barcode_sync, Job, $cordovaDevice, barcodeService,siteConfig,pda_barcodes ,$window ) {
+	function ($rootScope, $scope, $cordovaBarcodeScanner, cordovaReady, Logger, pdaParams,$ionicPopup,BarcodeHist,LocalBarcodeHist,barcode_sync, Job, $cordovaDevice, barcodeService,siteConfig,pda_barcodes,$window ) {
 
 		var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'BarcodeCtrl'};
 		var log = Logger.getInstance(logParams);
@@ -15,7 +15,6 @@ angular.module('BarcodeCtrl', [])
 		var my_scan_session_type;
 		var my_is_scan_on = true;
 		var matchedJobsPieces = 0;
-
 
 		if(pda_barcodes != 'Y') {
             var alertPopup = $ionicPopup.alert({

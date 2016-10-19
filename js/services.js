@@ -22,6 +22,8 @@ angular.module('services', [])
 				deferred.resolve(name);
 			} else if (name == 'wpe' && pw == 'wpe') {
 				deferred.resolve(name);
+			} else if (name == 'aptold' && pw == 'aptold') {
+				deferred.resolve(name);
 			} else if (name == 'apt' && pw == 'apt') {
 				deferred.resolve(name);
 			} else if (name == 'ces' && pw == 'ces') {

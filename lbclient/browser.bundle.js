@@ -18463,13 +18463,21 @@ module.exports={
       "serverPort": 3115,
       "url": "http://203.45.85.163:3115/api"
     },
-    "apt": {
+    "aptold": {
       "connector": "remote",
       "debug": "true",
       "clientId": "APT",
       "serverIP": "allpur2.lnk.telstra.net",
       "serverPort": 3000,
       "url": "http://allpur2.lnk.telstra.net:3000/api"
+    },
+    "apt": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "APT",
+      "serverIP": "tplus.allpurpose.com.au",
+      "serverPort": 3000,
+      "url": "http://tplus.allpurpose.com.au:3000/api"
     },
     "ces": {
       "connector": "remote",

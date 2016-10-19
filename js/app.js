@@ -117,9 +117,14 @@ angular.module('starter', ['ionic',
       url: '/tab',
       abstract: true,
 	  resolve: {
-	 	pda_full_statuses: 
-            function(siteConfig) {
-               return siteConfig.getSiteConfigYN('PDA_FULL_STATUSES');
+		config:
+			// Ensure site config loaded before we can do pretty much anything else in the app
+			// e.g. http://www.jvandemo.com/how-to-resolve-application-wide-resources-centrally-in-angularjs-with-ui-router/
+			// This returns a promise that will be esolved before you can transition to any other state.
+			// Because getAllConfigsFromServer() populates local storage this means that controllers will have
+			// any local storage parameters available to them at time of invocation
+			function(siteConfig) {
+				return siteConfig.getAllConfigsFromServer();
 			}
       },
       templateUrl: 'templates/tabs.html',
@@ -140,27 +145,6 @@ angular.module('starter', ['ionic',
 
     .state('tab.job-index', {
       url: '/jobs',
-
-	  resolve: {
-        pda_pickup_all:
-            // This will only load the tab once the config has been retrieved
-            // and the value is made available to the controlller in the injectable variable
-            function(siteConfig) {
-               return siteConfig.getSiteConfigYN('PDA_PICKUP_ALL');
-			}
-/*
-	 	pda_full_statuses: 
-            function(siteConfig) {
-               return siteConfig.getSiteConfigYN('PDA_FULL_STATUSES');
-			}
-*/
-/*
-		driverId:
-			function(pdaParams) {
-				return pdaParams.getDriverIdPromise();
-			}
-*/
-      },
       views: {
         'jobs-tab': {
           templateUrl: 'templates/jobIndex.html',
@@ -181,14 +165,6 @@ angular.module('starter', ['ionic',
 
 	.state('tab.job-detail', {
 	  url: '/jobs/:jobId',
-/**
-	  resolve: {
-	 	pda_full_statuses_det: 
-            function(siteConfig) {
-               return siteConfig.getSiteConfigYN('PDA_FULL_STATUSES');
-			}
-      },
-**/
 	  views: {
 		'job-edit': {
 		  templateUrl: 'templates/jobDetail.html',
@@ -319,14 +295,6 @@ angular.module('starter', ['ionic',
 
     .state('tab.jseas', {
       url: '/jseas',
-	  resolve: {
-        pda_jsea_on:
-            // This will only load the tab once the config has been retrieved
-            // and the value is made available to the controlller in the injectable variable
-            function(siteConfig) {
-                return siteConfig.getSiteConfigYN('PDA_JSEA_ON');
-            }
-      },
       views: {
         'jsea-tab': {
           templateUrl: 'templates/jseaQuestions.html',
@@ -404,7 +372,7 @@ angular.module('starter', ['ionic',
 	});
 
 	$rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams, error){
-		mystr = '$stateChangeError fired when an error occurs during transition.';
+		mystr = '$stateChangeError:'+error;
 		log.debug(mystr);
 	});
 
@@ -437,6 +405,12 @@ angular.module('starter', ['ionic',
 	// TODO - should naybe put this into the service and have a startWatching() function
 	// to listen for the event and do what's necessary
 
+/*
+ * LT - commented out after adding the resolve to the abstract state which ensures site config
+ * is loaded before we go to any state.  Caused an infinite loop for jsea sites where the abstract
+ * state loaded config, emitted SITE_CONFIG_LOADED event, which was caught here which then did
+ * $state.go() which triggered the resolve of the abstract state
+ *
 	$rootScope.$on('SITE_CONFIG_LOADED', function(event){
 		if(pdaParams.getDriverId() <= 0 )
 		{
@@ -479,4 +453,6 @@ angular.module('starter', ['ionic',
 			});
 		}
 	});
+*/
+
 })
