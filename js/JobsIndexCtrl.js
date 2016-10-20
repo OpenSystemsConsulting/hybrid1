@@ -34,6 +34,8 @@ angular.module('JobsIndexCtrl', [])
 	// pickup all button 
 	$scope.pda_pickup_all = (siteConfig.getSiteConfigValue('PDA_PICKUP_ALL') == 'Y');
 
+	$scope.pda_dpt_pickup_all = (siteConfig.getSiteConfigValue('PDA_DPT_PICKUP_ALL') == 'Y');
+
 	/*
 	 * New functionality to get arrive/depart pickup/delivery times
 	 */
