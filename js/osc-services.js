@@ -1097,7 +1097,7 @@ angular.module('osc-services', [])
 				'PDA_JSEA_ON',
 				'PDA_JSEA_TYPE',
 				'PDA_PICKUP_ALL',
-				'PDA_DPT_PICKUP_ALL',
+				'PDA_DELIVER_ALL',
 				'PDA_FULL_STATUSES',
 				'PDA_IMAGES',
 				'PDA_IMAGES_URL'

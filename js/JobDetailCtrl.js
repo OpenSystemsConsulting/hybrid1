@@ -26,7 +26,7 @@ angular.module('JobDetailCtrl', [])
 	/*
 	 * New functionality to get arrive/depart pickup/delivery times
 	 */
-	$scope.fullStatuses = (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y');
+	$scope.fullStatuses = (pdaParams.pda_full_statuses || (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y'));
 
 	function getJob() {
 			mystr = 'getJob';
@@ -219,7 +219,7 @@ angular.module('JobDetailCtrl', [])
 			//DOnt need to match seqid just have this there for later when
 			// we want to have individual signatures for each leg
 
-			// TODO - we need to change PU to e.g. PC (pod captured) for each leg of a multi leg
+			// we need to change PU to PC (pod captured) for each leg of a multi leg
 			// job, and once all legs are PC we can the update all legs to DL
 
 			if(pdaParams.multileg)
@@ -237,6 +237,9 @@ angular.module('JobDetailCtrl', [])
 					if( job.mobjobLegNumber == 0)
 						job.mobjobStatus = 'PC';		// pod captured
 */
+					// If at least one POD mark leg 0 for access by templates etc. where we only have leg 0
+					if( job.mobjobLegNumber == 0)
+						job.mobjobHasPod = true;
 
 					// Add POD for current leg only (not pickup leg 0)
 					if (job.mobjobSeq == seqid && job.mobjobLegNumber > 0)

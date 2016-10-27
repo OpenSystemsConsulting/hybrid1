@@ -34,7 +34,7 @@ angular.module('services', [])
 				deferred.resolve(name);
 			} else if (name == 'cct' && pw == 'cct') {				// City Crane
 				deferred.resolve(name);
-			} else if (name == 'itc' && pw == 'itc') {				// Intime
+			} else if (name == 'itd' && pw == 'itd') {				// Intime
 				deferred.resolve(name);
 			} else if (name == 'glc' && pw == 'glc') {				// Greenlight
 				deferred.resolve(name);

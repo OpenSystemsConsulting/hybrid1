@@ -31,21 +31,42 @@
 <!--
 	  <ion-item ng-if="{{jobStatus['NJ']}}">
 -->
-	<ion-item class="button-bar" ng-if="pdaParams.multiSelect && ( ( jobStatuses['NJ'] || jobStatuses['AC'] ) || (fullStatuses && jobStatuses['PU']) )">
+	<ion-item class="button-bar" ng-if="pdaParams.multiSelect && ( jobStatuses['NJ'] || jobStatuses['AC'] || jobStatuses['PU'] || jobStatuses['Ad'])">
 		<button class="button button-assertive" ng-click="multiAccept()" ng-if="jobStatuses['NJ']" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 			Accept {{ jobStatuses['NJ'] }}
 		</button>
 		<button class="button button-energized" ng-click="multiPickup()" ng-if="pda_pickup_all && jobStatuses['AC']" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 			Pickup {{ jobStatuses['AC'] }}
 		</button>
-		<button class="button button-balanced" ng-click="multiDepartPickup()" ng-if="pda_dpt_pickup_all && fullStatuses && jobStatuses['PU']" ng-disabled="syncInProgress"  ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+		<button class="button button-balanced" ng-click="multiDepartPickup()" ng-if="fullStatuses && jobStatuses['PU']" ng-disabled="syncInProgress"  ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 			Depart {{ jobStatuses['PU'] }}
 		</button>
+
+		<button class="button button-energized" ng-click="multiDeliver()" ng-if="pda_deliver_all && ((jobStatuses['PU'] && !fullStatuses) || (jobStatuses['Ad'] && fullStatuses))" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+			Deliver selected
+		</button>
+
+
+		<!-- this need to set up "accessor" object used by controller to talk directly to signaturepad directive -->
+		<tnf-signature-pad data-accessor="accessor" pod-name="podname" my-save-callback="signatureCallback(signatureOne,podname)" ng-model="signatureOne" class="floatLeft" ng-hide=true></tnf-signature-pad>
+
 	</ion-item>
 
-      <ion-item ng-repeat="job in jobs track by $index" type="item-text-wrap" href="#/tab/jobs/{{job.mobjobSeq}}" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+
+      <ion-item ng-repeat="job in jobs track by $index" type="item-text-wrap" ng-click="showDetail({{job.mobjobSeq}})" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+
+
 
 		<div class="list" ng-disabled="syncInProgress" > 
+
+			<!-- http://codepen.io/brandyshea/pen/vOXQoy -->
+			<!-- checkbox for multi job delivery and signature capture LEFT EDGE OF SCREEN -->
+			<!-- display if job at PU and not using full statuses, or job at Ad when using full statuses -->
+			<label class="checkbox multiselect" ng-if="pda_deliver_all && ((job.mobjobStatus == 'Ad' && fullStatuses) || (job.mobjobStatus == 'PU' && !fullStatuses))  && !job.mobjobHasPod">
+				  <input type="checkbox" class="left" name="job.mobjobBasejobNum" ng-model="job.checked" ng-click="$event.stopPropagation();">
+            </label>
+<!--
+-->
 
 			<span ng-switch on="job.mobjobStatus">
    				<img class="left" ng-switch-when="DL" src='img/Del.jpg' >
@@ -61,21 +82,35 @@
 
 			<div class="jobdetails" >
 
+
 				<span class="jobFromSubspan"> {{ job.mobjobSuburb }} </span>
 				-  
 				<span class="jobToSubspan"> {{ job.mobjobToSuburb }} </span> 
 				<span class="jobServicespan"> ({{ job.mobjobServiceCode }}) </span>
 
-				<span class="jobdatespan"> {{ job.mobjobBookingDay | date:'dd-MM-yyyy' }} </span>  
-				<h3>{{generateJobHeader(job)}}</h3>
+				<div class="rightJobData">
+					<span class="jobdatespan"> {{ job.mobjobBookingDay | date:'dd-MM-yyyy' }} </span>  
 				
+					<!-- checkbox for multi job delivery and signature capture RIGHT EDGE OF SCREEN -->
+<!--
+					<label class="checkbox multiselect" ng-if="pda_deliver_all && job.mobjobStatus == 'PU'">
+					  <input type="checkbox" class="left" name="job.mobjobBasejobNum" ng-model="job.checked" ng-click="$event.stopPropagation();">
+					</label>
+-->
+
+				</div>
+
+				<h3>{{generateJobHeader(job)}}</h3>
 
 			</div>
 	
+
 		</div>
 		
       </ion-item>
+
     </ion-list>
+
 	<ion-item class="button-bar" >
 			<button class="button button-assertive" ng-disabled="isDrvLoggedOff() || syncInProgress" ng-click="logoffDriver()">
 				L/OFF
@@ -215,6 +250,7 @@
 </section>
 
 	<section id="debug" class="debug" ng-if="pdaParams.debugMode">
+<!--
 		<button ng-click="sync()" ng-class="{deltas: needSync}">Sync</button>
 		<button ng-click="connect()">Connect</button>
 		<button ng-click="disconnect()">Disconnect</button>
@@ -222,9 +258,15 @@
 		<button ng-click="full_sync_and_load()">Remove/Resync</button>
 		<button ng-click="clearReplicationData()">Clear local repl</button>
 		<button ng-click="exitTplusMobile()" >Exit TplusMobile</button>
+-->
 		<!-- <a href="/debug" target="_blank">Debug</a> -->
 		<strong> connected: {{ connected() }} </strong>
 		<strong> syncing: {{ syncInProgress }} </strong>
+		<strong> pda_pickup_all: {{ pda_pickup_all }} </strong>
+		<strong> pda_deliver_all: {{ pda_deliver_all }} </strong>
+		<strong> fullStatuses: {{ fullStatuses }} </strong>
+		<strong> jobStatuses['PU']: {{ jobStatuses['PU'] }} </strong>
+		<strong> jobStatuses['Ad']: {{ jobStatuses['Ad'] }} </strong>
 	</section>
 
 

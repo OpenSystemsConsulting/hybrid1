@@ -9,7 +9,8 @@ angular.module('tnf.IonicUtils', ['ionic'])
 		id: '@signatId',
 		callback: '&mySaveCallback',
 		data: '=myKey',
-		podname: '=podName'
+		podname: '=podName',
+		accessor: '='
 	  },
 
 
@@ -20,6 +21,12 @@ angular.module('tnf.IonicUtils', ['ionic'])
 		$scope.$on('BarcodeScanOff',function(event,data){
             $scope.openSignatureModal();
         });
+
+		if( $scope.accessor) {
+			$scope.accessor.openSignatureModal = function() {
+				$scope.openSignatureModal();
+			}
+		}
 
 		$scope.signaturePadModel = {};
 		$scope.signaturePadModel.podname = "";

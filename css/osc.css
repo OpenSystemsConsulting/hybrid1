@@ -42,7 +42,7 @@ gridlabel{
     color:blue;
     font-size: 14px;
     font-weight: black;
-    float: right;
+    float: left;
     /*width: 100px;*/
 }
 
@@ -67,6 +67,10 @@ gridlabel{
     width: 60px;
     float: left;
     display: block:
+}
+
+.multicomplete {
+	float: right;
 }
 
 .item-input {
@@ -201,3 +205,25 @@ textarea#styled{
   border: 1px solid rgba(81, 203, 238, 1);
 }
 
+.left-checkbox.item-checkbox {
+  padding-left: 0;
+}
+
+.left-checkbox.item-checkbox .checkbox {
+  right: auto;
+}
+
+.left-checkbox.item-checkbox .input-label {
+  padding-left: 60px;
+}
+
+.rightJobData{
+	float: right;
+}
+
+.checkbox.multiselect {
+	margin-top: 3px;
+	margin-left: -8px;
+	padding: 7px 7px 7px 2px;
+	float: left;
+}

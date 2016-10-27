@@ -101,6 +101,14 @@
 		Enable experimental features
 	</ion-checkbox>
 
+	<ion-checkbox ng-if="pdaParams.experimental" class="item-checkbox-right" ng-model="pdaParams.pda_deliver_all" >
+		Mutliple deliveries one POD
+	</ion-checkbox>
+
+	<ion-checkbox ng-if="pdaParams.experimental" class="item-checkbox-right" ng-model="pdaParams.pda_full_statuses" >
+		Additional job statuses
+	</ion-checkbox>
+
 
 	<span ng-if="pdaParams.debugMode">
 		<div class="item item-divider">

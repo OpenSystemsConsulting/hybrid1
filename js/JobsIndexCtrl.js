@@ -31,15 +31,19 @@ angular.module('JobsIndexCtrl', [])
 	$rootScope.syncInProgress = false;
 
 
+	$scope.showDetail = function(mobjobSeq) {
+		$state.go('tab.job-detail', {jobId: mobjobSeq});
+	}
+
 	// pickup all button 
 	$scope.pda_pickup_all = (siteConfig.getSiteConfigValue('PDA_PICKUP_ALL') == 'Y');
-
-	$scope.pda_dpt_pickup_all = (siteConfig.getSiteConfigValue('PDA_DPT_PICKUP_ALL') == 'Y');
 
 	/*
 	 * New functionality to get arrive/depart pickup/delivery times
 	 */
-	$scope.fullStatuses = (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y');
+	$scope.fullStatuses = (pdaParams.pda_full_statuses || (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y'));
+
+	$scope.pda_deliver_all = (pdaParams.pda_deliver_all || (siteConfig.getSiteConfigValue('PDA_DELIVER_ALL') == 'Y'));
 
 	// initialise the current new message count in this scope
 	$scope.newMessageCount = messageService.getNewMesssageCount();
@@ -178,6 +182,9 @@ angular.module('JobsIndexCtrl', [])
 
 			for (var i = 0; i < $scope.jobs.length; i++) {
 				$scope.convertDates($scope.jobs[i], $rootScope.jobMetadata);
+
+				// Add checked property for possible multi delivery
+				$scope.jobs[i].checked = false;
 
 					var job = $scope.jobs[i];
 					if( job.mobjobStatus == 'UJ') {
@@ -796,6 +803,175 @@ angular.module('JobsIndexCtrl', [])
 			//$scope.$apply();
 		});
 	}
+
+	/*
+	 ***************************************************************
+	 * Multiple deliveries with one signature
+	 */
+	$scope.accessor = {};			// empty object on scope to access signature directive
+	$scope.checkedJobs = {};
+
+	$scope.multiDeliver = function() {
+		deliverSelectedJobs();
+	}
+	function deliverSelectedJobs() {
+		$scope.checkedJobs = [];
+		var len = $scope.jobs.length;
+		if(pdaParams.isDrvLoggedOff())
+		{
+			 var alertPopup = $ionicPopup.alert({
+						title: 'Log On/Off Issue',
+						template: "Please Log on to action jobs"
+					});
+			return;
+		}
+		for (var i = 0; i < len; i++) {
+			var job = $scope.jobs[i];
+			log.debug("job:"+job.mobjobSeq+", checked:"+job.checked);
+			if(job.checked) {
+				$scope.checkedJobs.push({
+										mobjobBasejobNum: job.mobjobBasejobNum,
+										mobjobBookingDay: job.mobjobBookingDay,
+										mobjobSeq: job.mobjobSeq
+										});
+			}
+		}
+
+		if( $scope.checkedJobs.length > 0) {
+			// at least one job selected
+			if($scope.accessor.openSignatureModal) {
+				$scope.accessor.openSignatureModal();
+			}
+		}
+	}
+	$scope.signatureCallback = function(signat,podname) {
+
+		if( $scope.checkedJobs.length > 0) {
+
+			// So at this point we have a signature, a podname, and an array of 1 or more basejob numbers
+			log.info(podname);
+
+			// get array of basejob no.s from object
+			var baseJobs = $scope.checkedJobs.map(function(a) { return a.mobjobBasejobNum;});
+
+			var basejobfilter =
+				{
+					"where": {and: 
+								[
+									{"mobjobDriver": pdaParams.getDriverId()},
+									{"mobjobStatus": { "neq": "DL"}} ,
+									{"mobjobBasejobNum": { "inq": baseJobs } }
+								]
+							},
+					"order": 'mobjobSeq ASC'
+				};
+
+/*
+			// build where filter for selected basejob/date combinations
+			// Here's the basic filter
+			var basejobfilter =
+				{
+					"where": {and: 
+								[
+									{"mobjobDriver": pdaParams.getDriverId()},
+									{"mobjobStatus": { "neq": "DL"}}
+								]
+							},
+					"order": 'mobjobSeq ASC'
+				};
+*/
+
+
+			// Now we need to add in the 'or' clauses for our list of basejobs and dates
+			// Note that the date filter must be a date object
+/*
+ * Can't get the syntax correct for the query so read thru all for basejob and check dates in loop
+ *
+			var jobdetailfilter = [];
+			var filterObj = { };
+
+			filterObj = {and: [
+					{"mobjobBasejobNum": checkedJobs[0].basejob, "mobjobBookingDay": checkedJobs[0].bookingday }
+				]};
+			basejobfilter.where.and.push(filterObj);
+
+			for (var i = 1; i < checkedJobs.length; i++) {
+
+				filterObj = {or: [
+						{"mobjobBasejobNum": checkedJobs[i].basejob, "mobjobBookingDay": checkedJobs[i].bookingday }
+					]};
+
+				basejobfilter.where.and.push(filterObj);
+			}
+*/
+
+
+			Job.find(basejobfilter, function (err, jobs) {
+
+				if(err) {
+					log.error(err);
+					return;
+				}
+
+				var len = jobs.length;
+				var syncRequired = 0;
+				var oldstatus = "";
+				var checkedJobs = $scope.checkedJobs;
+
+				var found = false;
+
+				// so we have ALL jobs that matched base jobs selected - need to ensure date is valid selection too
+				// for permaanent jobs can have same job no but different dates on device simultaneously
+				for (var i = 0; i < len; i++) {
+					var job = jobs[i];
+
+					found = false;
+					for( var j = 0; j < checkedJobs.length; j++) {
+						if( checkedJobs[j].mobjobBasejobNum == job.mobjobBasejobNum &&
+							checkedJobs[j].mobjobBookingDay.getTime() == job.mobjobBookingDay.getTime()) {
+							found = true;	
+							break;
+						}
+					}
+					
+					if( ! found) {
+						continue;
+					}
+
+					oldstatus = job.mobjobStatus;
+
+					job.mobjobStatus = 'DL';
+					if( job.mobjobLegNumber > 0)
+					{
+						job.mobjobSignat = signat || "";
+
+						if(podname) {
+							job.mobjobPodName = podname;
+							job.mobjobPodTime = new Date().toISOString();
+						}
+					}
+
+					job.save();
+
+					logstr = 'deliverSelectedJobs:' + job.mobjobSeq + ' updated from ' + oldstatus + ' -> ' + job.mobjobStatus;
+					log.info(logstr);
+
+					syncRequired++;
+				}
+
+				if(syncRequired) {
+					$rootScope.syncInProgress = true;
+					syncfilter = angular.copy(_syncfilter);
+					syncService.setCallingFunc("JobsIndexCtrl->deliverSelectedJobs");
+					syncService.hybridSync(onChange,syncfilter);
+				}
+			});
+		}
+	}
+	/*
+	 ***************************************************************
+	 */
+
 
 		// LT - don't require this functionality atm
 /*
