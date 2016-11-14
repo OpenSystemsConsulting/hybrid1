@@ -407,7 +407,7 @@ angular.module('osc-services', [])
 
 	return( jobreclocal );
 })
-.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork, pdaParams, Logger){
+.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork, pdaParams, Logger, network){
  
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'ConnectivityMonitor'};
 	var log = Logger.getInstance(logParams);
@@ -430,25 +430,31 @@ angular.module('osc-services', [])
 	startWatching: function(){
 		if(ionic.Platform.isWebView()){
  
+			// NOTE - this doesn't always seem reliable - can get an offline event while
+			// still being online - e.g. wifi->4g can trigger offline with no online
 		  $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
 			//console.log("went online:"+networkState);
+			//network.isConnected = true;
 			log.info("went online:"+networkState);
 		  });
  
 		  $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
 			//console.log("went offline:"+networkState);
 			log.info("went offline:"+networkState);
+			//network.isConnected = false;
 		  });
  
 		}
 		else {
  
 		  window.addEventListener("online", function(e) {
+			//network.isConnected = true;
 			console.log("went online");
 		  }, false);	
  
 		  window.addEventListener("offline", function(e) {
 			console.log("went offline");
+			//network.isConnected = false;
 		  }, false);  
 		}		
 	}
@@ -632,7 +638,7 @@ angular.module('osc-services', [])
 
 	return messageService;
 })
-.factory('jseaService', function(pdaParams, Logger,$rootScope ){
+.factory('jseaService', function(pdaParams, Logger,$rootScope,siteConfig ){
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'jseaService'};
 	var log = Logger.getInstance(logParams);
@@ -642,6 +648,10 @@ angular.module('osc-services', [])
 	jseaServiceTypes["SOD"] = "STARTOFDAY";
 	jseaServiceTypes["PJB"] = "PERJOB";
 	var myConfiguredForJsea = false;
+	
+	var myDetailJobnum = 0;
+	var myDetailJobdate ;
+	var myDetailJobJseaCaptured =false;
 
 	var jseaServiceType = jseaServiceTypes["SOD"]; //Default
 
@@ -652,22 +662,30 @@ angular.module('osc-services', [])
 			{
 				localStorage.setItem('JSEA_SOD_CAPTURED',YN);
 			}
+			if(jseaServiceType == jseaServiceTypes["PJB"] )
+			{
+				myDetailJobJseaCaptured = (YN == "Y");
+			}
 		},
 
 
 		setJseaType: function(larg) {
 			var match = false;
 			log.debug('Setting JseaType passed ' + larg);
-			for(var li=0;li<jseaServiceTypes.length;li++)
-			{
-				if(larg == jseaServiceTypes[li])
+
+			for (var key in jseaServiceTypes) {
+    			let lvalue = jseaServiceTypes[key];
+				log.debug(' lvalue : ' + lvalue);
+				if(larg == lvalue)
 				{
-					match = true;
-					jseaServiceType = jseaServiceTypes[li];
-					log.debug('Setting JseaType got a match on ' + larg + " To " + jseaServiceTypes[li]);
-					myConfiguredForJsea = true;
-				}	
+				    match = true;
+                    jseaServiceType = jseaServiceTypes[key];
+                    log.debug('Setting JseaType got a match on ' + lvalue + " To " + jseaServiceTypes[key]);
+                    myConfiguredForJsea = true;
+
+				}
 			}
+
 			if( match == false)
 			{
 				log.debug('Setting JseaType NO MATCH on ' + larg + ' Will be Set to default: ' + jseaServiceType);
@@ -688,14 +706,14 @@ angular.module('osc-services', [])
 		isJseaStartOfDay: function() {
 			return (jseaServiceType == jseaServiceTypes["SOD"]);
 		},
-		getJseaIsCaptured: function() {
+		getJseaConfig: function() {
 			log.debug('Getting JseaIsCaptured');
 
 			//I fwe havnt been configured then dont stop the person doing things in the app
 			if ( myConfiguredForJsea == false )
 			{
 				log.debug('myConfiguredForJsea = ' + myConfiguredForJsea + ' So will return true');
-				return true;
+				return 'NA';
 			}
 
 			if(this.isJseaStartOfDay())
@@ -703,22 +721,83 @@ angular.module('osc-services', [])
 				var lstr;
 				log.debug('Getting JseaIsCaptured jseaServiceType = ' + jseaServiceType + ' From Local storage');
 				lstr = localStorage.getItem('JSEA_SOD_CAPTURED');
-				return (lstr == 'Y');
+				if (lstr == 'Y')
+				{
+					return 'SOD_YES'
+				}
+				else
+				{
+					return 'SOD_NO'
+				}
 			}
-		}
+			else
+			{
+				return 'PJB_CHECK';
+			}
+			
+		},
+		startWatching: function(){
 
+			$rootScope.$on('SODSERVICE_IS_NEW_DAY', function(event){
+
+				log.debug('SODSERVICE_IS_NEW_DAY Event triggered');
+				if(jseaService.isJseaStartOfDay())
+				{
+					log.debug('SODSERVICE_IS_NEW_DAY isJseaStartOfDay is TRUE ');
+					//Update the value to be No and then when the guy uses the ctrler this will make it Yes
+					localStorage.setItem('JSEA_SOD_CAPTURED','N');
+				}
+				else
+				{
+					log.debug('SODSERVICE_IS_NEW_DAY isJseaStartOfDay is NOT TRUE assume PER JOB');
+				}
+			});
+
+			$rootScope.$on('SITE_CONFIG_LOADED', function(event){
+				log.debug('SITE_CONFIG_LOADED Event triggered');
+				if(siteConfig.getSiteConfigValue('PDA_JSEA_ON') == 'Y')
+				{
+                    //Now get the type value
+                    var lvar = siteConfig.getSiteConfigValue('PDA_JSEA_TYPE');
+					if(lvar != '')
+					{
+						mystr = "getSiteConfig returned  " + lvar;
+						log.debug(mystr);
+						//Set the TYpe in the service
+						jseaService.setJseaType(lvar);
+					}
+					else
+					{
+						mystr = "getSiteConfig returned nothing !!!!";
+						log.debug(mystr);
+					}
+				}
+			});
+			
+			// more watchers if required
+		},
+		setJobJseaDetails: function(jobnum,jobdate,iscaptured) {
+			log.debug('setJobJseaDetails' +  ' Jobnum: ' + jobnum + ' Jobdate ' + jobdate + ' IsCaptured ' + iscaptured);
+			myDetailJobnum = jobnum;
+    		myDetailJobdate = jobdate;
+    		myDetailJobJseaCaptured = (iscaptured == 'Y');
+		},
+		getServiceJobNum: function() {
+			return myDetailJobnum;
+		},
+		getServiceJobDate: function() {
+			return myDetailJobdate;
+		},
+		checkJobDateJseaCaptured: function(jobnum,jobdate) {
+			log.debug('checkJobDate' +  ' Passed Jobnum: ' + jobnum + ' Passed Jobdate ' + jobdate );
+            if ( jobnum == myDetailJobnum && jobdate == myDetailJobdate )
+            {
+                log.debug('updateJobIsCaptured' +  ' Svc Jobnum: ' + jobnum + ' Svc Jobdate ' + jobdate );
+                return (myDetailJobJseaCaptured);
+            }   
+			return false;
+		}
 	}
-	//App.js will have broadcast this
-	$rootScope.$on('SOD_IS_NEW_DAY', function(event){
-		mystr = "SOD_IS_NEW_DAY Event recieved";
-		log.debug(mystr);
-
-		if(jseaService.isJseaStartOfDay())
-		{
-			//Update the value to be No and then when the guy uses the ctrler this will make it Yes
-			localStorage.setItem('JSEA_SOD_CAPTURED','N');
-		}
-	});
 
 	return jseaService;
 })
@@ -1150,7 +1229,7 @@ angular.module('osc-services', [])
 					}
 					deferred.resolve(siteconfigs);
 				}, function(error) {
-					deferred.reject('Error:'+error);
+					deferred.reject(error);
 				});
 
 			return deferred.promise;
@@ -1271,10 +1350,9 @@ angular.module('osc-services', [])
 		// read through image dir and grab any files
 
 		if(uploadUrl == "") {
-			siteConfig.getSiteConfig('PDA_IMAGES_URL').then(function(val) {
-				uploadUrl = val;
-				log.info('uploadUrl set to:['+uploadUrl+']');
-			});
+			var val = siteConfig.getSiteConfigValue('PDA_IMAGES_URL');
+			uploadUrl = val;
+			log.info('uploadUrl set to:['+uploadUrl+']');
 		}
 
 		log.debug('poller: cordovaReady.isready:'+cordovaReady.isready+', uploadUrl:'+uploadUrl);
@@ -1352,7 +1430,7 @@ angular.module('osc-services', [])
 				if(cb) cb(result);
 
 			}, function (error) {
-				log.err('uploadFileToUrl failed: error:'+JSON.stringify(error));
+				log.error('uploadFileToUrl failed: error:'+JSON.stringify(error));
 			});
 		} else {
 			log.info('uploadUrl:['+uploadUrl+'], so getSiteConfig');
@@ -1634,7 +1712,7 @@ angular.module('osc-services', [])
 							result.delImages += 1;
 							promises.push(result);
 						}, function(err) {
-							log.err('deleteObsoleteImages: faile to delete:'+name+', err:'+err);
+							log.error('deleteObsoleteImages: faile to delete:'+name+', err:'+err);
 						});
 					}
 					else {

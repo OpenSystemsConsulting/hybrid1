@@ -22,4 +22,6 @@ angular.module('starter')
   .value('clientlog', client.clientlog)
   .value('deleteChangeData', client.deleteChangeData)
   .value('dataSources', client.dataSources)
+  .value('LocalJseaDriverAnswers', client.models.LocalJseaDriverAnswers)
+  .value('jseaAnswers_sync', client.jseaAnswers_sync)
 ;

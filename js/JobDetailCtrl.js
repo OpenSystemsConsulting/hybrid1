@@ -17,11 +17,13 @@ angular.module('JobDetailCtrl', [])
 
 	var testing = 0;
 
-	// TODO - image handling from /app/strongloop/loopback-clientservices-osc-images/client/js/JobDetailCtrl.js
+	// for button to take photos
+	$scope.pdaImages = (pdaParams.pda_images || (siteConfig.getSiteConfigValue('PDA_IMAGES') == 'Y'));
 
 	jobChangedService.setlastjobedited(false);
 
 	$scope.bNewItem = false;		// Just looking at an existing Job by default
+
 
 	/*
 	 * New functionality to get arrive/depart pickup/delivery times
@@ -139,14 +141,6 @@ angular.module('JobDetailCtrl', [])
                         });
                 return;  
 			}
-			if(jseaService.getJseaIsCaptured() == false)
-			{
-				 var alertPopup = $ionicPopup.alert({
-                            title: 'Job Safety Sheet Not Filled out.',
-                            template: "Please fill in your Job Safety Sheet to before continuing."
-                        });
-                return;  
-			}
 
 	 		//console.log("Found " + results.length + " job legs");
 
@@ -156,6 +150,46 @@ angular.module('JobDetailCtrl', [])
 			//$scope.data = results;
 			  $rootScope.job = $scope.job =  $scope.base.currentItem = results;
 				// Isolate the Single Job and set the CurrentItem in the Base Class...
+
+			
+
+			if(jseaService.getJseaConfig() == 'PJB_CHECK' )
+			{
+				var ljob = $scope.jobs[0];
+				
+				if ( ljob.jseaCaptured == "N" || !ljob.jseaCaptured )
+				{
+					var ljobDate = Math.round($state.params.jobId / 100000000);
+					
+					log.debug('Perjob Jsea Check , job: ' + jobId + ' Date: ' + ljobDate + ' Captured = false');
+					
+
+					/*------------- ATTENTION ------------------*/
+
+					//If first time into this job detail
+					// then the service wont have the captured = True/Y so it will push the 
+					// user to the Jsea Form
+					// subsequent time the service will have been updated from the form submit
+					// and we will save the job with a Y so no more checking
+
+
+					/*---------- So DONT GET CONFUSED when you have just submitted a JSEA form --
+					  -----------AND you have clicked the same job again and it stll has jseaCaptured == "N"
+					  ----------- because it needs to check the service and then change to Y and save */
+
+					if (jseaService.checkJobDateJseaCaptured(jobId,ljobDate) == true)
+					{
+						ljob.jseaCaptured = "Y";
+						ljob.save();
+					}
+					else
+					{
+						jseaService.setJobJseaDetails( jobId,ljobDate,ljob.jseaCaptured);
+						window.location.href = "#/tab/jseas";
+						return;
+					}
+				}
+			}
 
 			  $scope.data = $scope.base.currentData = $scope.combineValuesAndLabels($scope.job, $rootScope.jobMetadata);
 								// Set up the Metadata to control the Display of this Job...

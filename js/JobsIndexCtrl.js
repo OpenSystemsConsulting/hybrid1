@@ -16,8 +16,8 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig',
-	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig) { 
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig', 'jseaService',
+	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig, jseaService) { 
 	$scope.jobs = [];
 	$scope.jobStatuses = {};
 
@@ -30,6 +30,21 @@ angular.module('JobsIndexCtrl', [])
 	//Idle.watch();						// TODO - idle - check if idle and maybe auto refresh
 	$rootScope.syncInProgress = false;
 
+
+				
+	//When this is called at present it can 1 of 2 situations
+	// A SOD JSEA is required or a per job SOD is required.
+	// The service knows which one. 
+	// if its a per job one then 
+
+	var jsea_retval = jseaService.getJseaConfig();
+	log.info('jsea_retval = ' + jsea_retval);
+
+	if( jsea_retval == 'SOD_NO')
+	{
+		$state.go('tab.jseas');
+	}
+	
 
 	$scope.showDetail = function(mobjobSeq) {
 		$state.go('tab.job-detail', {jobId: mobjobSeq});

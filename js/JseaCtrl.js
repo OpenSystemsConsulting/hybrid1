@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('JseaCtrl', [])
-	.controller('JseaCtrl', [ '$rootScope', '$scope', 'siteConfig','JseaDriverQuestions','pdaParams','Logger','$ionicPopup','$window','jseaService',
-		function ($rootScope, $scope, siteConfig,JseaDriverQuestions,pdaParams,Logger,$ionicPopup,$window,jseaService) {
+	.controller('JseaCtrl', [ '$rootScope', '$scope', 'siteConfig','JseaDriverQuestions','pdaParams','Logger','$ionicPopup','$window','jseaService','LocalJseaDriverAnswers','jseaAnswers_sync',
+		function ($rootScope, $scope, siteConfig,JseaDriverQuestions,pdaParams,Logger,$ionicPopup,$window,jseaService,LocalJseaDriverAnswers,jseaAnswers_sync) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JseaCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -22,9 +22,49 @@ angular.module('JseaCtrl', [])
             });
         } else {
 
-
-
 		$scope.jseaQuestions = [];
+
+
+		var doSubmitWork = function()
+		{
+			var li;
+			var llen;
+			//They Have Submited a list of Ticks Y/N and
+			// we now have to create an array of answers
+			// one row for each answer	
+			var ljobnum = jseaService.getServiceJobNum();
+			var ljobdate = jseaService.getServiceJobDate();
+
+			llen = $scope.jseaQuestions.length;
+
+			for(li = 0; li < llen; li++)
+			{
+				
+				var AnswerSession = new LocalJseaDriverAnswers();
+				AnswerSession.jdaSeqnum = 0;
+				AnswerSession.jdaJobNum = ljobnum;
+
+                var year = Math.round(ljobdate/10000);
+                var mon = Math.round((ljobdate % 10000) / 100);
+                var day = Math.round((ljobdate % 100));
+
+
+                var njobDate = new Date(Date.UTC(year, mon-1, day, 0, 0, 0, 0));
+
+				AnswerSession.jdaJobBday = njobDate;
+
+				AnswerSession.jdaDriverId = pdaParams.getDriverId();
+				AnswerSession.jdaiFormType = $scope.jseaQuestions[li].jdqType ;
+				AnswerSession.jdaFormLeg = 1;
+				AnswerSession.jdaOrder = 1;
+				AnswerSession.jdaCheckBox = $scope.jseaQuestions[li].jdqCbox;
+				AnswerSession.save();
+			}
+
+			jseaAnswers_sync();
+		}
+
+
 		var _allfilter =	
 			  {
 				"where": {"jdq_type": "JSEA"},
@@ -73,6 +113,8 @@ angular.module('JseaCtrl', [])
 						log.debug('User has Submitted the Jsea session');
 
 						jseaService.setJseaIsCaptured("Y");
+						//Handle Answers
+						doSubmitWork();
 						window.location.href = "#/tab/jobs";
 						return; 
 							

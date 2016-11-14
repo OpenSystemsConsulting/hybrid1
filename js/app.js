@@ -340,7 +340,7 @@ angular.module('starter', ['ionic',
 // phase first and then it will execute the "Run" phase. At that point, all of
 // the run() blocks are executed. During this phase, we no longer have access
 // to any of the providers but we can finally access the services.
-.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate,$state,sodService,jseaService,siteConfig,imageService) {
+.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate,$state,sodService,jseaService,siteConfig,imageService,$ionicPopup) {
 
 /* NOTE: the run function gets called at app startup so any services injected here
  * will be instantiated at that time
@@ -372,8 +372,27 @@ angular.module('starter', ['ionic',
 	});
 
 	$rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams, error){
-		mystr = '$stateChangeError:'+error;
+		mystr = '$stateChangeError:to:'+ toState.name + ':' + JSON.stringify(error);
 		log.debug(mystr);
+
+/*
+		// This will popup a message on error and then retry loading the tab
+		// TODO - maybe have to check for certain errors only?  for resolve?
+		// TODO - maybe always try and reload job index tab?
+		var myPopup = $ionicPopup.show({
+			title: 'Error',
+			subTitle: JSON.stringify(error),
+		 	buttons:
+			[
+				{
+					text: 'Try again',
+					onTap: function(e) {
+						$state.go(toState.name);
+					}
+				}
+			]
+		});
+*/
 	});
 
 	$rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
@@ -397,6 +416,7 @@ angular.module('starter', ['ionic',
 
 	// Start monitoring for messages
 	messageService.startWatching();
+	jseaService.startWatching();
 
 	// Start monitoring images for auto upload
 	//imageService.startWatching();			// TODO - enable
