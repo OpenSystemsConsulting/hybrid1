@@ -198,7 +198,9 @@ function($rootScope, $scope, $state, Job, History, util, $ionicActionSheet, $ion
 												strong: curProp.strong || false,
 												type: (curProp.inputType || ''),
 												numlegs: interimitem.mobjobTotalLegs,
-												legid: interimitem.mobjobSeq
+												legid: interimitem.mobjobSeq,
+												legStatus: interimitem.mobjobStatus,
+												basejob: interimitem.mobjobBasejobNum
 											}
 							// Ionic / Angular now have Data and Metadata combined for rendering...
 

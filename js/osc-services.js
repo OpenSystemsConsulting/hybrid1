@@ -1306,11 +1306,11 @@ angular.module('osc-services', [])
 					// TODO - return promise?
 					$http.post(uploadUrl, fd, { transformRequest: angular.identity, headers: {'Content-Type': undefined } })
 					.success(function(data){
-						console.log("Succeeded to fileUpload");
+						console.log("Succeeded to fileUpload:"+data.fileName + ", url:" + uploadUrl);
 						if(successCallback) successCallback(data);
 					})
 					.error(function(err){
-						console.log("Failed to fileUpload");
+						console.log("Failed to fileUpload:"+JSON.stringify(err));
 						if(errorCallback) errorCallback(err);
 					});
 				};
@@ -1423,21 +1423,20 @@ angular.module('osc-services', [])
 		if(uploadUrl != "") {
 			log.info('About to upload:'+image.nativeURL+' to: '+uploadUrl);
 			fileUpload.uploadFileToUrl(image, uploadUrl, function(result) {
-				log.info('uploadFileToUrl returns:'+JSON.stringify(result));
+				log.info('uploadFileToUrl OK to:' + uploadUrl + ', result:'+JSON.stringify(result));
 
 				imageFileService.set(image.name, 'uploaded', true);		// mark as uploaded on success
 
 				if(cb) cb(result);
 
 			}, function (error) {
-				log.error('uploadFileToUrl failed: error:'+JSON.stringify(error));
+				log.error('uploadFileToUrl failed to:' + uploadUrl + ', error:'+JSON.stringify(error));
 			});
 		} else {
 			log.info('uploadUrl:['+uploadUrl+'], so getSiteConfig');
-			siteConfig.getSiteConfig('PDA_IMAGES_URL').then(function(val) {
-				uploadUrl = val;
-				log.info('uploadUrl set to:['+uploadUrl+']');
-			});
+			var val = siteConfig.getSiteConfigValue('PDA_IMAGES_URL');
+			uploadUrl = val;
+			log.info('uploadUrl set to:['+uploadUrl+']');
 		}
 	};
 
@@ -1557,12 +1556,12 @@ angular.module('osc-services', [])
 
 				if( isImage) {
 					//deferred.resolve($cordovaFile.removeFile(cordova.file.dataDirectory, imageId));
-					$cordovaFile.removeFile(cordova.file.dataDirectory, imageId).then(function(success) {
+					$cordovaFile.removeFile(cordova.file.dataDirectory, imageId).then(function(result) {
 
-						imageFileService.set(imageId, 'uploaded', true);		// TESTING DEBUG
 						imageFileService.removeImage(imageId);
+						log.info('deleteSingleImage:'+JSON.stringify(result));
 
-						deferred.resolve(success);
+						deferred.resolve(result);
 					});
 				}
 				else {

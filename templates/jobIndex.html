@@ -53,7 +53,7 @@
 	</ion-item>
 
 
-      <ion-item ng-repeat="job in jobs track by $index" type="item-text-wrap" ng-click="showDetail({{job.mobjobSeq}})" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+      <ion-item ng-repeat="job in jobs track by $index" type="item-text-wrap" ng-click="showDetail(job.mobjobSeq)" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 
 
 
