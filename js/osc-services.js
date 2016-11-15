@@ -678,7 +678,7 @@ angular.module('osc-services', [])
 			log.debug('Setting JseaType passed ' + larg);
 
 			for (var key in jseaServiceTypes) {
-    			let lvalue = jseaServiceTypes[key];
+    			var lvalue = jseaServiceTypes[key];
 				log.debug(' lvalue : ' + lvalue);
 				if(larg == lvalue)
 				{
