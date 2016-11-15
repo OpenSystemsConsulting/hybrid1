@@ -165,6 +165,8 @@ angular.module('osc-services', [])
 
 	pda_params.imagePollTime = 60000 * 5;			// 5 minute default
 
+	pda_params.imageUpload = true;
+
 	return pda_params;
 }])
 
