@@ -419,60 +419,6 @@ angular.module('starter', ['ionic',
 	jseaService.startWatching();
 
 	// Start monitoring images for auto upload
-	//imageService.startWatching();			// TODO - enable
-
-	//This should potentially be called once a day from SOD service
-	// TODO - should naybe put this into the service and have a startWatching() function
-	// to listen for the event and do what's necessary
-
-/*
- * LT - commented out after adding the resolve to the abstract state which ensures site config
- * is loaded before we go to any state.  Caused an infinite loop for jsea sites where the abstract
- * state loaded config, emitted SITE_CONFIG_LOADED event, which was caught here which then did
- * $state.go() which triggered the resolve of the abstract state
- *
-	$rootScope.$on('SITE_CONFIG_LOADED', function(event){
-		if(pdaParams.getDriverId() <= 0 )
-		{
-			mystr = "Site config is LOADED but Driver is <= 0" ;
-			log.debug(mystr);
-		}
-		else
-		{
-		    //This assumes that sod service has emitted the Event
-			mystr = "Site config is LOADED";
-			log.debug(mystr);
-			siteConfig.getSiteConfigYN('PDA_JSEA_ON').then(function(YN) {
-				//Returns value of Param in YN
-				if(YN == 'Y') {
-					//Now get the type value
-					siteConfig.getSiteConfig('PDA_JSEA_TYPE').then(function(value) {
-
-						if(value != '')
-						{
-							mystr = "getSiteConfig returned  " + value;
-							log.debug(mystr);
-							//Set the TYpe in the service
-							jseaService.setJseaType(value);
-
-							//If its a start of day then goto the Jsea Controller
-							if(jseaService.isJseaStartOfDay())
-							{
-								//Let the service know 
-								$rootScope.$broadcast('SOD_IS_NEW_DAY');
-								$state.go('tab.jseas');
-							}
-						}
-						else
-						{
-							mystr = "getSiteConfig returned nothing !!!!";
-							log.debug(mystr);
-						}
-					});
-				}
-			});
-		}
-	});
-*/
+	imageService.startWatching();
 
 })

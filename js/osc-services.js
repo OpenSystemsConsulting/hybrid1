@@ -163,6 +163,8 @@ angular.module('osc-services', [])
 
 	pda_params.jobDetailOneDayOnly = true;
 
+	pda_params.imagePollTime = 60000 * 5;			// 5 minute default
+
 	return pda_params;
 }])
 
@@ -1363,6 +1365,7 @@ angular.module('osc-services', [])
 		calls++;
 
 		// TODO - maybe use idle service?  Not sure what it's called
+		// TODO - maybe have site config for this?
 		pollTime = pdaParams.imagePollTime || (60000 * 5);			// re-read from pda params
 
 		if( pollTime < 10000)
@@ -1727,7 +1730,10 @@ angular.module('osc-services', [])
 	var imageService = {
 
 		startWatching: function(){
-			siteConfig.getSiteConfigYN('PDA_IMAGES').then(function(YN) {
+			// Wait for site config to load and then start polling service if required
+			$rootScope.$on('SITE_CONFIG_LOADED', function(event){
+
+				var YN = siteConfig.getSiteConfigValue('PDA_IMAGES');
 				if(YN === 'Y') {
 					log.info('startWatching: PDA_IMAGES:'+YN+', calling poller()');
 					poller();
@@ -1735,6 +1741,7 @@ angular.module('osc-services', [])
 				else {
 					log.info('startWatching: PDA_IMAGES:'+YN+', NO polling');
 				}
+
 			});
 		},
 

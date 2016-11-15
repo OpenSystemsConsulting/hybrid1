@@ -89,6 +89,10 @@
 		Query one date only
 	</ion-checkbox>
 
+	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.imageUpload" >
+		Auto image upload
+	</ion-checkbox>
+
 	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.debugMode" ng-change="pdaParams.setDebugMode(pdaParams.debugMode)">
 		Debug Mode
 	</ion-checkbox>
@@ -113,6 +117,13 @@
 		Images
 	</ion-checkbox>
 
+	<!-- TODO - make this editable -->
+	<ion-item class="item" ng-if="pdaParams.experimental">
+		Image poll time
+		<span class="item-note">
+			{{pdaParams.imagePollTime}}
+		</span>
+	</ion-item>
 
 	<span ng-if="pdaParams.debugMode">
 		<div class="item item-divider">

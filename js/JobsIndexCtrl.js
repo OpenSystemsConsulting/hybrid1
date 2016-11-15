@@ -801,6 +801,20 @@ angular.module('JobsIndexCtrl', [])
 				var job = jobs[i];
 				if( job.mobjobStatus === oldstatus && newstatus != 'XX') {
 					job.mobjobStatus = newstatus;
+
+					// Also set appropriate timestamp
+					switch(job.mobjobStatus) {
+						case 'AC':
+							job.mobjobTimeAC = Date.now();
+							break;
+						case 'PU':
+							job.mobjobTimePU = Date.now();
+							break;
+						case 'Dp':
+							job.mobjobTimeDp = Date.now();
+							break;
+					}
+
 					job.save();
 
 					logstr = 'updateSelectedJobs:' + job.mobjobSeq + ' updated from ' + oldstatus + ' -> ' + job.mobjobStatus;
