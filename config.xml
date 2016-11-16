@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="au.com.opensyscon.tplusmobile" version="2.57.17" versionCode="25717" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"  CFBundleVersion="1.0.0">
+<widget id="au.com.opensyscon.tplusmobile" version="2.57.19" versionCode="25719" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"  CFBundleVersion="1.0.0">
 
 	<!-- version is the app version -->
 	<!-- versionCode is for Android only used by the play store so must be greater than the last one uploaded -->

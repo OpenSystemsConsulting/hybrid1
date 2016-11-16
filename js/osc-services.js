@@ -1386,7 +1386,7 @@ angular.module('osc-services', [])
 				var uploaded = imageFileService.get(image.name, 'uploaded');
 				var readyForUpload = imageFileService.get(image.name, 'readyForUpload');
 
-				log.debug('uploadAllImages: readyForUpload:'+readyForUpload+', uploaded:',+uploaded+', pdaParams.imageUpload:'+pdaParams.imageUpload);
+				log.debug('uploadAllImages: image:'+image.name+', readyForUpload:'+readyForUpload+', uploaded:'+uploaded+', pdaParams.imageUpload:'+pdaParams.imageUpload);
 
 				// if not ready don't upload - e.g. maybe still adding notes
 				if( readyForUpload == null || readyForUpload == false)
@@ -1733,15 +1733,18 @@ angular.module('osc-services', [])
 
 		startWatching: function(){
 			// Wait for site config to load and then start polling service if required
+			var poller_started = false;
 			$rootScope.$on('SITE_CONFIG_LOADED', function(event){
 
 				var YN = siteConfig.getSiteConfigValue('PDA_IMAGES');
-				if(YN === 'Y') {
+				log.info('startWatching: PDA_IMAGES:'+YN+', poll_started:'+poller_started);
+				if(YN === 'Y' && !poller_started) {
 					log.info('startWatching: PDA_IMAGES:'+YN+', calling poller()');
+					poller_started = true;
 					poller();
 				}
 				else {
-					log.info('startWatching: PDA_IMAGES:'+YN+', NO polling');
+					log.info('startWatching: PDA_IMAGES:'+YN+', NO polling or already started');
 				}
 
 			});
