@@ -64,12 +64,14 @@ angular.module('JseaCtrl', [])
 			jseaAnswers_sync();
 		}
 
+				//"order": 'jdqOrder ASC'
 
-		var _allfilter =	
+		var _allfilter = { "filter":
 			  {
-				"where": {"jdq_type": "JSEA"},
-				"order": 'jdq_order ASC'
-			  };
+				"where": {"jdqType": "JSEA" },
+				"order": "jdqOrder ASC"
+			  }
+			};
 
 		var filter = angular.copy(_allfilter);
 
