@@ -24,6 +24,55 @@ angular.module('JseaCtrl', [])
 
 		$scope.jseaQuestions = [];
 
+		$scope.checkJdqResponse = function( jdqCbox,jdqType,jdqOrder,jdqNewForm,jdqNewFormType) {
+			// check response when items are changed in case we need to do
+			// any additional work e.g. load some more questions
+			var here_to_enable_breakpoint_in_debugger = 0;
+
+			if(jdqCbox) {				// box has been ticked
+				if(jdqNewForm) {		// new form required
+					// jdqNewFormType has the type we need
+
+					var filter = { "filter":
+						  {
+							"where": {"jdqType": jdqNewFormType },
+							"order": "jdqOrder ASC"
+						  }
+						};
+
+					JseaDriverQuestions.find(filter) 
+							.$promise
+							.then(function(questsarr) {
+
+							var len = questsarr.length;
+
+/*
+							// TODO - Attempt to maybe add a divider in between each set of questions
+							var divider = {};
+
+							divider.jdqQuestionText = jdqNewFormType;
+							divider.jdqDivider = true;
+							$scope.jseaQuestions.push(divider);
+*/
+
+							for(var i = 0; i < len; i++) {
+								$scope.jseaQuestions.push(questsarr[i]);
+							}
+
+					});
+				}
+			}
+			else {		// box unticked - might need to remove additional form data
+				if(jdqNewForm) {		// new form required
+					for (var i=$scope.jseaQuestions.length-1; i>=0; i--) {
+						if ($scope.jseaQuestions[i].jdqType === jdqNewFormType) {
+							$scope.jseaQuestions.splice(i, 1);
+							// break;       //<-- Uncomment  if only the first term has to be removed
+						}
+					}
+				}
+			}
+		};
 
 		var doSubmitWork = function()
 		{
@@ -34,6 +83,7 @@ angular.module('JseaCtrl', [])
 			// one row for each answer	
 			var ljobnum = jseaService.getServiceJobNum();
 			var ljobdate = jseaService.getServiceJobDate();
+			var jobStatusType = jseaService.getServiceStatusType();
 
 			llen = $scope.jseaQuestions.length;
 
@@ -44,6 +94,7 @@ angular.module('JseaCtrl', [])
 				AnswerSession.jdaSeqnum = 0;
 				AnswerSession.jdaJobNum = ljobnum;
 
+/*
                 var year = Math.round(ljobdate/10000);
                 var mon = Math.round((ljobdate % 10000) / 100);
                 var day = Math.round((ljobdate % 100));
@@ -52,12 +103,16 @@ angular.module('JseaCtrl', [])
                 var njobDate = new Date(Date.UTC(year, mon-1, day, 0, 0, 0, 0));
 
 				AnswerSession.jdaJobBday = njobDate;
+*/
+				AnswerSession.jdaJobBday = ljobdate;		// is a date object already 
 
 				AnswerSession.jdaDriverId = pdaParams.getDriverId();
 				AnswerSession.jdaiFormType = $scope.jseaQuestions[li].jdqType ;
 				AnswerSession.jdaFormLeg = 1;
-				AnswerSession.jdaOrder = 1;
+				AnswerSession.jdaOrder = $scope.jseaQuestions[li].jdqOrder;
 				AnswerSession.jdaCheckBox = $scope.jseaQuestions[li].jdqCbox;
+
+				AnswerSession.jdaJobStatusType = jobStatusType;
 				AnswerSession.save();
 			}
 
@@ -65,10 +120,11 @@ angular.module('JseaCtrl', [])
 		}
 
 				//"order": 'jdqOrder ASC'
+		var formType = jseaService.getServiceFormType();
 
 		var _allfilter = { "filter":
 			  {
-				"where": {"jdqType": "JSEA" },
+				"where": {"jdqType": formType },
 				"order": "jdqOrder ASC"
 			  }
 			};
@@ -100,58 +156,58 @@ angular.module('JseaCtrl', [])
 			//$scope.titleWithTotal = "Jobs " + " (" + $scope.jobs.length + ")";
 
 		});
-			/*========================================*/
-			/*      JSEA SUBMIT   */
-			/*========================================*/
-			$scope.jseaSubmit = function()
-			{
-				var subconfirmPopup = $ionicPopup.confirm({
-				title: 'Jsea Session Confirm',
-				template: 'Are you sure you want to submit your Answers session to the database ?'
-				});
+		/*========================================*/
+		/*      JSEA SUBMIT   */
+		/*========================================*/
+		$scope.jseaSubmit = function()
+		{
+			var subconfirmPopup = $ionicPopup.confirm({
+			title: 'Jsea Session Confirm',
+			template: 'Are you sure you want to submit your Answers session to the database ?'
+			});
 
-				subconfirmPopup.then(function(res) {
-					if(res) {
-						log.debug('User has Submitted the Jsea session');
+			subconfirmPopup.then(function(res) {
+				if(res) {
+					log.debug('User has Submitted the Jsea session');
 
-						jseaService.setJseaIsCaptured("Y");
-						//Handle Answers
-						doSubmitWork();
-						window.location.href = "#/tab/jobs";
-						return; 
-							
-					} else {
-
-						log.debug('User has CANCELLED out of a Jsea session SUBMIT Doing nothing');
-						return; 
-					}
-				});
-			}
-
-			/*========================================*/
-			/*        SCAN SESSION CANCEL   */
-			/*========================================*/
-			$scope.jseaCancel = function () {
-
-				var confirmPopup = $ionicPopup.confirm({
-				title: 'CANCEL Jsea Session',
-				template: 'Are you sure you want to CANCEL this jsea session (You will lose all data )?'
-				});
-
-				confirmPopup.then(function(res) {
-					if(res) {
-						log.debug('User has Cancelled the jsea session');
-
-						// go back to job list
-						window.location.href = "#/tab/jobs";
-						return; 
+					jseaService.setJseaIsCaptured("Y");
+					//Handle Answers
+					doSubmitWork();
+					window.location.href = "#/tab/jobs";
+					return; 
 						
-					} else {
-						log.debug('User has CANCELLED out of a Jsea session CANCEL');
-					}
-				});
-				
-			}
+				} else {
+
+					log.debug('User has CANCELLED out of a Jsea session SUBMIT Doing nothing');
+					return; 
+				}
+			});
+		}
+
+		/*========================================*/
+		/*        SCAN SESSION CANCEL   */
+		/*========================================*/
+		$scope.jseaCancel = function () {
+
+			var confirmPopup = $ionicPopup.confirm({
+			title: 'CANCEL Jsea Session',
+			template: 'Are you sure you want to CANCEL this jsea session (You will lose all data )?'
+			});
+
+			confirmPopup.then(function(res) {
+				if(res) {
+					log.debug('User has Cancelled the jsea session');
+
+					// go back to job list
+					window.location.href = "#/tab/jobs";
+					return; 
+					
+				} else {
+					log.debug('User has CANCELLED out of a Jsea session CANCEL');
+				}
+			});
+			
+		}
 
 		}
 	  }

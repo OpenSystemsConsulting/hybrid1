@@ -19677,6 +19677,21 @@ module.exports={
               "dataPrecision": null,
               "dataScale": null,
               "nullable": "Y"
+            },
+            "jdaStatusType": {
+              "type": "String",
+              "required": false,
+              "length": 20,
+              "precision": null,
+              "scale": null,
+              "oracle": {
+                "columnName": "JDA_STATUS_TYPE",
+                "dataType": "VARCHAR2",
+                "dataLength": 20,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+              }
             }
           }
         }

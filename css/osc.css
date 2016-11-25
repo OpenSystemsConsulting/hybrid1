@@ -69,6 +69,16 @@ gridlabel{
     float: left;
     display: block:
 }
+.jobTotalLegsInput {
+    text-align:center;
+    color:blue;
+    font-size: 21px;
+    font-weight: black;
+    width: 60px;
+	-webkit-flex: 1 0 140px !important;
+    float: left;
+    display: block:
+}
 
 .multicomplete {
 	float: right;
@@ -94,7 +104,7 @@ gridlabel{
 .jsea-item {
     font-size: 12px !important;
 	line-height: 0.08 !important;
-	font-weight:bold !important;
+	/*font-weight:bold !important;*/
     padding: 1px;
 }
 

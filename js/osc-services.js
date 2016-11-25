@@ -656,6 +656,8 @@ angular.module('osc-services', [])
 	var myDetailJobnum = 0;
 	var myDetailJobdate ;
 	var myDetailJobJseaCaptured =false;
+	var myJobStatusType ;
+	var myFormType ;
 
 	var jseaServiceType = jseaServiceTypes["SOD"]; //Default
 
@@ -780,17 +782,25 @@ angular.module('osc-services', [])
 			
 			// more watchers if required
 		},
-		setJobJseaDetails: function(jobnum,jobdate,iscaptured) {
-			log.debug('setJobJseaDetails' +  ' Jobnum: ' + jobnum + ' Jobdate ' + jobdate + ' IsCaptured ' + iscaptured);
+		setJobJseaDetails: function(jobnum,jobdate,iscaptured,statusType,formType) {
+			log.debug('setJobJseaDetails' +  ' Jobnum: ' + jobnum + ' Jobdate ' + jobdate + ' IsCaptured ' + iscaptured,' StatusTYpe' + statusType , ' FormType ' + formType);
 			myDetailJobnum = jobnum;
     		myDetailJobdate = jobdate;
     		myDetailJobJseaCaptured = (iscaptured == 'Y');
+			myJobStatusType = statusType;
+			myFormType = formType;
 		},
 		getServiceJobNum: function() {
 			return myDetailJobnum;
 		},
 		getServiceJobDate: function() {
 			return myDetailJobdate;
+		},
+		getServiceStatusType: function() {
+			return myJobStatusType;
+		},
+		getServiceFormType: function() {
+			return myFormType;
 		},
 		checkJobDateJseaCaptured: function(jobnum,jobdate) {
 			log.debug('checkJobDate' +  ' Passed Jobnum: ' + jobnum + ' Passed Jobdate ' + jobdate );

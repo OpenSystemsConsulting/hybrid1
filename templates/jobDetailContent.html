@@ -55,9 +55,11 @@
 
 		<!-- this is the field value -->
 	    <input ng-readonly="true" ng-if="(property.type != '') && (property.type != 'toggle') && (property.type != 'enum')  && (!property.omitFromForm) && property.value " 
-	    	ng-class="{'jobnumberspan': ((property.property == 'mobjobNumber')), 'requiredInput': ((property.required == true) && (property.value == '')),'addressfields': ((property.property == 'mobjobAddress1' || property.property == 'mobjobAddress2' || property.property == 'mobjobAddress3' || property.property == 'mobjobAddress4' || property.property == 'mobjobAddress5' || property.property == 'mobjobClientName')) , 'suburbfield': ((property.property == 'mobjobSuburb')) , 'servicefield': ((property.property == 'mobjobServiceCode')), 'centered': ((property.centered)), 'strong': ((property.strong)) }" 
+	    	ng-class="{'jobnumberspan': ((property.property == 'mobjobNumber')), 'requiredInput': ((property.required == true) && (property.value == '')),'addressfields': ((property.property == 'mobjobAddress1' || property.property == 'mobjobAddress2' || property.property == 'mobjobAddress3' || property.property == 'mobjobAddress4' || property.property == 'mobjobAddress5' || property.property == 'mobjobClientName')) , 'suburbfield': ((property.property == 'mobjobSuburb')) , 'servicefield': ((property.property == 'mobjobServiceCode')), 'centered': ((property.centered)), 'strong': ((property.strong)),'jobTotalLegsInput' : ((property.property == 'mobjobTotalLegs')) }" 
 	    	type="{{property.type}}" value="{{property.value}}"
 	    	class="standardInput">
+
+	    	<!--class="standardInput"-->
 	    </input>
 
 
@@ -77,6 +79,7 @@
 	    	class="jobStatusInput">
 	    </input>
 
+
 		<!--   ACCEPT  JOB -->
 		<div ng-if="(property.enumValue.value == 'NJ' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
@@ -91,6 +94,25 @@
 		<div ng-if="( pdaImages && property.property == 'mobjobNumber' )" class="input-label" >
 			<!-- the metadata here will be passed into the directive as an object and then stored as part of the image properties -->
 			<camera-button metadata="{basejob: property.basejob, legid: property.legid, legStatus: property.legStatus}"/>
+		</div>
+
+		<!--   JSEA PER JOB  -->
+		<div ng-if="(jseaPerJob && property.property == 'mobjobTotalLegs' && (property.legid % 100 == 0) && (property.legStatus != 'NJ' && property.legStatus != 'AC'))" class="input-label" style="width:100%;"
+					>
+			<button class="button button-assertive floatLeft" ng-click="doJseaSubType('MULTIDEL')" ng-disabled="syncInProgress"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				MULTIDEL
+			</button>
+
+			<!--
+			<button class="button button-positive floatLeft" ng-click="doJseaSubType('OVERDIM')" ng-disabled="syncInProgress"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				ODIM
+			</button>
+			-->
+
 		</div>
 
 		<!-- ============================================================================================== -->

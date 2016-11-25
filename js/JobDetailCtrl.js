@@ -14,6 +14,8 @@ angular.module('JobDetailCtrl', [])
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
 	var mystr;
+	var basejob;
+	var basejobDate;
 
 	var testing = 0;
 
@@ -29,6 +31,8 @@ angular.module('JobDetailCtrl', [])
 	 * New functionality to get arrive/depart pickup/delivery times
 	 */
 	$scope.fullStatuses = (pdaParams.pda_full_statuses || (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y'));
+
+	$scope.jseaPerJob = (jseaService.getJseaConfig() == 'PJB_CHECK' );
 
 	function getJob() {
 			mystr = 'getJob';
@@ -153,6 +157,7 @@ angular.module('JobDetailCtrl', [])
 
 			
 
+/***
 			if(jseaService.getJseaConfig() == 'PJB_CHECK' )
 			{
 				var ljob = $scope.jobs[0];
@@ -164,7 +169,7 @@ angular.module('JobDetailCtrl', [])
 					log.debug('Perjob Jsea Check , job: ' + jobId + ' Date: ' + ljobDate + ' Captured = false');
 					
 
-					/*------------- ATTENTION ------------------*/
+					------------- ATTENTION ------------------
 
 					//If first time into this job detail
 					// then the service wont have the captured = True/Y so it will push the 
@@ -173,9 +178,9 @@ angular.module('JobDetailCtrl', [])
 					// and we will save the job with a Y so no more checking
 
 
-					/*---------- So DONT GET CONFUSED when you have just submitted a JSEA form --
+					---------- So DONT GET CONFUSED when you have just submitted a JSEA form --
 					  -----------AND you have clicked the same job again and it stll has jseaCaptured == "N"
-					  ----------- because it needs to check the service and then change to Y and save */
+					  ----------- because it needs to check the service and then change to Y and save 
 
 					if (jseaService.checkJobDateJseaCaptured(jobId,ljobDate) == true)
 					{
@@ -190,6 +195,7 @@ angular.module('JobDetailCtrl', [])
 					}
 				}
 			}
+****/
 
 			  $scope.data = $scope.base.currentData = $scope.combineValuesAndLabels($scope.job, $rootScope.jobMetadata);
 								// Set up the Metadata to control the Display of this Job...
@@ -225,14 +231,35 @@ angular.module('JobDetailCtrl', [])
 	  }
 
 
+	$scope.doJseaSubType = function(formtype) {
+			var jobStatus;
+			
+			//formtype is MDEL or ODIM or JSEA
+
+			basejob = $scope.job[0].mobjobNumber;
+		 	basejobDate = $scope.job[0].mobjobBookingDay;
+		
+			if ( $scope.job[0].mobjobStatus == 'PU' || $scope.job[0].mobjobStatus == 'Dp')
+				jobStatus = 'PICKUP';
+
+			if ( $scope.job[0].mobjobStatus == 'Ad' )
+				jobStatus = 'DELIVER';
+				
+			
+			jseaService.setJobJseaDetails( basejob,basejobDate,'N',jobStatus,formtype);
+			window.location.href = "#/tab/jseas";
+	}
 	//The func below should only be called when a button is clicked EG 
 	// Accept / Pickup / Tap to Sign 
 
 	$scope.handleJobStatusChange = function(seqid,signat,podname) {
 
 			// seqid id the mobjobSeq of the job that's just changed e.g. 2015123103038500
-			mystr = 'handleJobStatusChange:seqid:'+seqid;
+		mystr = 'handleJobStatusChange:seqid:'+seqid;
 			log.debug(mystr);
+		var jseaMaybeRequired = false;
+		var wasPickup = false;
+		var wasArriveDeliver = false;
 
 			//console.log("In handleJobStatusChange ");
 			//console.log("In job =  ",seqid);
@@ -245,6 +272,15 @@ angular.module('JobDetailCtrl', [])
 		
 		var podCount = 0;
 		var legCount = $scope.jobs.length;
+//TESTING
+		if(jseaService.getJseaConfig() == 'PJB_CHECK' )
+		{
+			basejob = $scope.job[0].mobjobNumber;
+		 	basejobDate = $scope.job[0].mobjobBookingDay;
+			jseaMaybeRequired = true;
+		}
+///END TESTING
+
 		for( var iac = 0; iac < legCount; iac++)  
 		{
 			var job = $scope.jobs[iac];
@@ -383,6 +419,7 @@ angular.module('JobDetailCtrl', [])
 */
 				if ( oldStatus == 'AC')
 				{
+					wasPickup = true;
 					job.mobjobStatus = 'PU';
 					job.mobjobTimePU = Date.now();
 				}
@@ -403,6 +440,7 @@ angular.module('JobDetailCtrl', [])
 				}
 				if ( oldStatus == 'Dp')
 				{
+					wasArriveDeliver = true;
 					job.mobjobStatus = 'Ad';
 					job.mobjobTimeAd = Date.now();
 				}
@@ -462,6 +500,22 @@ angular.module('JobDetailCtrl', [])
 					jobChangedService.setlastjobedited(true);
 				}
 			}
+		}
+
+		//If we are here then a Jsea Form is required for a job Pu and Del
+		// So now check if is a pickup etc
+		if(jseaMaybeRequired && (wasPickup || wasArriveDeliver))
+		{
+			var lstr;
+			if(wasPickup)
+				lstr = 'PICKUP';
+			else
+				lstr = 'DELIVER';
+				
+			jseaService.setJobJseaDetails( basejob,basejobDate,'N',lstr,'JSEA');
+
+			window.location.href = "#/tab/jseas";
+			return;
 		}
 
 		// After save go back to job list
