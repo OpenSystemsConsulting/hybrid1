@@ -117,6 +117,10 @@
 		Images
 	</ion-checkbox>
 
+	<ion-checkbox ng-if="pdaParams.experimental" class="item-checkbox-right" ng-model="pdaParams.pda_notes" >
+		Notes
+	</ion-checkbox>
+
 	<!-- TODO - make this editable -->
 	<ion-item class="item" ng-if="pdaParams.experimental">
 		Image poll time

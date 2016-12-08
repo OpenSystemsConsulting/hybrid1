@@ -658,6 +658,7 @@ angular.module('osc-services', [])
 	var myDetailJobJseaCaptured =false;
 	var myJobStatusType ;
 	var myFormType ;
+	var myFormLeg;
 
 	var jseaServiceType = jseaServiceTypes["SOD"]; //Default
 
@@ -782,13 +783,14 @@ angular.module('osc-services', [])
 			
 			// more watchers if required
 		},
-		setJobJseaDetails: function(jobnum,jobdate,iscaptured,statusType,formType) {
-			log.debug('setJobJseaDetails' +  ' Jobnum: ' + jobnum + ' Jobdate ' + jobdate + ' IsCaptured ' + iscaptured,' StatusTYpe' + statusType , ' FormType ' + formType);
+		setJobJseaDetails: function(jobnum,jobdate,iscaptured,statusType,formType,formLeg) {
+			log.debug('setJobJseaDetails' +  ' Jobnum: ' + jobnum + ' Jobdate ' + jobdate + ' IsCaptured ' + iscaptured,' StatusTYpe' + statusType , ' FormType ' + formType, ' FormLeg' + formLeg);
 			myDetailJobnum = jobnum;
     		myDetailJobdate = jobdate;
     		myDetailJobJseaCaptured = (iscaptured == 'Y');
 			myJobStatusType = statusType;
 			myFormType = formType;
+			myFormLeg = formLeg
 		},
 		getServiceJobNum: function() {
 			return myDetailJobnum;
@@ -801,6 +803,9 @@ angular.module('osc-services', [])
 		},
 		getServiceFormType: function() {
 			return myFormType;
+		},
+		getServiceFormLeg: function() {
+			return myFormLeg;
 		},
 		checkJobDateJseaCaptured: function(jobnum,jobdate) {
 			log.debug('checkJobDate' +  ' Passed Jobnum: ' + jobnum + ' Passed Jobdate ' + jobdate );
@@ -1193,7 +1198,8 @@ angular.module('osc-services', [])
 				'PDA_DELIVER_ALL',
 				'PDA_FULL_STATUSES',
 				'PDA_IMAGES',
-				'PDA_IMAGES_URL'
+				'PDA_IMAGES_URL',
+				'PDA_NOTES'
 			];
 
 	var g_siteconfigs = null;

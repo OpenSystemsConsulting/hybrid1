@@ -92,7 +92,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				var serverIP = siteService.getServerIP();
 				var serverPort = siteService.getServerPort();
 
-				// LT - 30/11/2015 - TODO - http.get.success has been deprecated use .then instead
+				// LT - 30/11/2015 - TODO - http.get.success has been deprecated use .then instead - depends on angular version
 				// see https://docs.angularjs.org/api/ng/service/$http
 				$http.get('http://'+ serverIP + ':' + serverPort + '/api/installations'+'?filter='+encodeURIComponent(JSON.stringify(filter))).success(function (data) {
 					//console.log(data);			// this works
@@ -104,17 +104,23 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 					if( data.length == 0) {		// no current registration found
 
-						log.info(platform+':$cordovaPush.register: no current registration found in installations');
+						log.info(platform+':$cordovaPushV5.register: no current registration found in installations, saving...');
 
 						//This registers the Google Token with Strongloop and our Database
-						$http.post('http://' + serverIP + ':' + serverPort + '/api/installations', installation_object);
+						$http.post('http://' + serverIP + ':' + serverPort + '/api/installations', installation_object)
+							.success(function (data, status, headers) {
 
-						// Save data to local storage (it also gets put into $rootScope below)
-						localStorage.setItem('osc-push-credentials', JSON.stringify(installation_object));
+							log.info(platform+':$cordovaPushV5.register: success status:'+status);
 
-						var alertPopup = $ionicPopup.alert({
-							title: 'Device registered',
-							template: token
+							// Save data to local storage (it also gets put into $rootScope below)
+							localStorage.setItem('osc-push-credentials', JSON.stringify(installation_object));
+
+							var alertPopup = $ionicPopup.alert({
+								title: 'Device registered',
+								template: token
+							});
+						}).error(function (data, status) {
+							log.error(platform+':$cordovaPushV5.register: failed status:'+status);
 						});
 					}
 					else {

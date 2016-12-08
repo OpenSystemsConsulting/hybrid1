@@ -27,6 +27,7 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 	$scope.version = appConfig.version;
 
 /*
+	// LT - only works on a phone and only for wifi connections
 	// http://www.gajotres.net/retrieving-ip-adress-using-cordova-without-external-service/
 	networkinterface.getIPAddress(function(ip) {
 		$scope.IPAddress = ip;

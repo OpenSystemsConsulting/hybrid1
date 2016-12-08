@@ -84,6 +84,7 @@ angular.module('JseaCtrl', [])
 			var ljobnum = jseaService.getServiceJobNum();
 			var ljobdate = jseaService.getServiceJobDate();
 			var jobStatusType = jseaService.getServiceStatusType();
+			var formLeg = jseaService.getServiceFormLeg();
 
 			llen = $scope.jseaQuestions.length;
 
@@ -108,7 +109,7 @@ angular.module('JseaCtrl', [])
 
 				AnswerSession.jdaDriverId = pdaParams.getDriverId();
 				AnswerSession.jdaiFormType = $scope.jseaQuestions[li].jdqType ;
-				AnswerSession.jdaFormLeg = 1;
+				AnswerSession.jdaFormLeg = formLeg;
 				AnswerSession.jdaOrder = $scope.jseaQuestions[li].jdqOrder;
 				AnswerSession.jdaCheckBox = $scope.jseaQuestions[li].jdqCbox;
 

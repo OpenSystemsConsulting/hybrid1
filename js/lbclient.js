@@ -24,4 +24,6 @@ angular.module('starter')
   .value('dataSources', client.dataSources)
   .value('LocalJseaDriverAnswers', client.models.LocalJseaDriverAnswers)
   .value('jseaAnswers_sync', client.jseaAnswers_sync)
+  .value('LocalNote',client.models.LocalNote)
+  .value('job_note_sync',client.job_note_sync)
 ;

@@ -8,8 +8,8 @@ angular.module('JobDetailCtrl', [])
 })
 
 // For the View which is Displaying and Editing a Job or for the Creation of a new Job...
-.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService',
-	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService) {
+.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','$ionicModal','LocalNote','job_note_sync',
+	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService, $ionicModal,LocalNote,job_note_sync) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -21,6 +21,7 @@ angular.module('JobDetailCtrl', [])
 
 	// for button to take photos
 	$scope.pdaImages = (pdaParams.pda_images || (siteConfig.getSiteConfigValue('PDA_IMAGES') == 'Y'));
+	$scope.pdaNotes = (pdaParams.pda_notes || (siteConfig.getSiteConfigValue('PDA_NOTES') == 'Y'));
 
 	jobChangedService.setlastjobedited(false);
 
@@ -246,7 +247,7 @@ angular.module('JobDetailCtrl', [])
 				jobStatus = 'DELIVER';
 				
 			
-			jseaService.setJobJseaDetails( basejob,basejobDate,'N',jobStatus,formtype);
+			jseaService.setJobJseaDetails( basejob,basejobDate,'N',jobStatus,formtype,2);
 			window.location.href = "#/tab/jseas";
 	}
 	//The func below should only be called when a button is clicked EG 
@@ -512,7 +513,7 @@ angular.module('JobDetailCtrl', [])
 			else
 				lstr = 'DELIVER';
 				
-			jseaService.setJobJseaDetails( basejob,basejobDate,'N',lstr,'JSEA');
+			jseaService.setJobJseaDetails( basejob,basejobDate,'N',lstr,'JSEA',1);
 
 			window.location.href = "#/tab/jseas";
 			return;
@@ -629,44 +630,89 @@ angular.module('JobDetailCtrl', [])
 	  		// A meaningful Header Title is generated...
 	  }
 
-  	$scope.getModelMetadata(Job, "jobMetadata", function(metadata) {
+		$scope.getModelMetadata(Job, "jobMetadata", function(metadata) {
 
-		mystr = 'getModelMetadata';
-		//log.debug(mystr);
+			mystr = 'getModelMetadata';
+			//log.debug(mystr);
 
-  		// Don't move forward until we get the Metadata...
-	 	//console.log("Steve Is Here ");
-		if(testing < 1)
-			getJob();
-  	});
+			// Don't move forward until we get the Metadata...
+			//console.log("Steve Is Here ");
+			if(testing < 1)
+				getJob();
+		});
 
-	$scope.$on('CANCEL', function(event, payload) {
+		$scope.$on('CANCEL', function(event, payload) {
 
-		log.info('Received a CANCEL event');
-		log.info(payload.platform+":"+event+':'+JSON.stringify(payload));
+			log.info('Received a CANCEL event');
+			log.info(payload.platform+":"+event+':'+JSON.stringify(payload));
 
-		if(typeof payload.data != "undefined") {
+			if(typeof payload.data != "undefined") {
 
-			if(payload.data.type == "CANCEL") {
-				var alertPopup = $ionicPopup.alert({
-					title: 'Job Cancellation',
-					template: 'A Job has Been Cancelled by Base - resyncing.'
-				});
+				if(payload.data.type == "CANCEL") {
+					var alertPopup = $ionicPopup.alert({
+						title: 'Job Cancellation',
+						template: 'A Job has Been Cancelled by Base - resyncing.'
+					});
 
-				alertPopup.then(function(res) {
-					window.location.href = "#/tab/jobs"
-				});
-				
+					alertPopup.then(function(res) {
+						window.location.href = "#/tab/jobs"
+					});
+					
+				}
+				else
+					log.info('payload.data.type <> Cancel, help !!!!');
 			}
-			else
-				log.info('payload.data.type <> Cancel, help !!!!');
-		}
-		else {
-			log.info('payload.data = undefined, help !!!!');
-		}
-	});
+			else {
+				log.info('payload.data = undefined, help !!!!');
+			}
+		});
 
+		// ---------- text box for job notes -----------------
+		$ionicModal.fromTemplateUrl('templates/notes.html', {
+			scope: $scope
+		}).then(function(modal) {
+			$scope.modal = modal;
+			$scope.note = {};
+			$scope.note.text = "";
+		});
 
+		$scope.clear = function () {
+			$scope.note.text = "";
+			//$scope.$apply();
+		};
+
+		//Cleanup the modal when we're done with it!
+		$scope.$on('$destroy', function() {
+			$scope.note.text = "";
+			$scope.modal.remove();
+		});
+
+		$scope.enterNotes = function(seqid) {
+			// TODO - do we need to save seqid?  Should all be in $scope.job[0]
+			$scope.note.seqid = seqid;
+			$scope.modal.show();
+		};
+
+		$scope.save = function () {
+
+			var seqid = $scope.note.seqid;
+			var note = $scope.note.text;
+			var ln = new LocalNote();
+
+			//LocalNote.noteuid
+			ln.jnJobNum = $scope.job[0].mobjobNumber;
+		 	ln.jnJobBday = $scope.job[0].mobjobBookingDay;
+			ln.jnText = $scope.note.text;
+			ln.jnCreateTime = Date.now();
+
+			ln.save();
+			
+			job_note_sync();		// TODO - check for errors
+
+			$scope.note.text = "";
+			$scope.modal.hide();
+		};
+		// ---------- text box for job notes -----------------
 
 	}
 ])

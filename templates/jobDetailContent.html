@@ -55,7 +55,7 @@
 
 		<!-- this is the field value -->
 	    <input ng-readonly="true" ng-if="(property.type != '') && (property.type != 'toggle') && (property.type != 'enum')  && (!property.omitFromForm) && property.value " 
-	    	ng-class="{'jobnumberspan': ((property.property == 'mobjobNumber')), 'requiredInput': ((property.required == true) && (property.value == '')),'addressfields': ((property.property == 'mobjobAddress1' || property.property == 'mobjobAddress2' || property.property == 'mobjobAddress3' || property.property == 'mobjobAddress4' || property.property == 'mobjobAddress5' || property.property == 'mobjobClientName')) , 'suburbfield': ((property.property == 'mobjobSuburb')) , 'servicefield': ((property.property == 'mobjobServiceCode')), 'centered': ((property.centered)), 'strong': ((property.strong)),'jobTotalLegsInput' : ((property.property == 'mobjobTotalLegs')) }" 
+	    	ng-class="{'jobnumberspan': ((property.property == 'mobjobNumber')), 'requiredInput': ((property.required == true) && (property.value == '')),'addressfields': ((property.property == 'mobjobAddress1' || property.property == 'mobjobAddress2' || property.property == 'mobjobAddress3' || property.property == 'mobjobAddress4' || property.property == 'mobjobAddress5' || property.property == 'mobjobClientName')) , 'suburbfield': ((property.property == 'mobjobSuburb')) , 'servicefield': ((property.property == 'mobjobServiceCode')), 'centered': ((property.centered)), 'strong': ((property.strong)),'jobTotalLegsInput' : ((property.property == 'mobjobTotalLegs' && jseaPerJob)) }" 
 	    	type="{{property.type}}" value="{{property.value}}"
 	    	class="standardInput">
 
@@ -94,6 +94,15 @@
 		<div ng-if="( pdaImages && property.property == 'mobjobNumber' )" class="input-label" >
 			<!-- the metadata here will be passed into the directive as an object and then stored as part of the image properties -->
 			<camera-button metadata="{basejob: property.basejob, legid: property.legid, legStatus: property.legStatus}"/>
+		</div>
+
+		<!-- job notes -->
+		<div ng-if="( pdaNotes && property.property == 'mobjobNumber' )" class="input-label" >
+			<button class="button button-positive floatLeft" ng-click="enterNotes(property.legid)" ng-disabled="syncInProgress"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				Notes
+			</button>
 		</div>
 
 		<!--   JSEA PER JOB  -->

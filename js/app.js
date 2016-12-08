@@ -38,7 +38,8 @@ angular.module('starter', ['ionic',
 							'TabCtrl',
 							'JseaCtrl',
 							'imageCapture',
-							'ImageCtrl'
+							'ImageCtrl',
+							'expandingTextarea'
 							])
 
 // default client config values - will be populated correctly after login
@@ -178,7 +179,7 @@ angular.module('starter', ['ionic',
 	  resolve: {
         pda_barcodes:
             // This will only load the tab once the config has been retrieved
-            // and the value is made available to the controlller in the injectable variable pda_barcodes
+            // and the value is made available to the controller in the injectable variable pda_barcodes
             function(siteConfig) {
                 return siteConfig.getSiteConfigYN('PDA_BARCODES');
             }
