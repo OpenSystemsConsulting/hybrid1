@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget CFBundleVersion="1.0.0" id="au.com.opensyscon.tplusmobile" version="2.58.01" versionCode="25801" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget CFBundleVersion="1.0.0" id="au.com.opensyscon.tplusmobile" version="2.58.05" versionCode="25805" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Tplus Mobile</name>
     <description>
         Copyright Open Systems Consulting Pty Ltd 2016 (Tplus Mobile Application)

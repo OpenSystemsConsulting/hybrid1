@@ -1,7 +1,7 @@
 angular.module('pushService', [])
 
-.factory('pushService',[ '$rootScope','$ionicPlatform','$cordovaPush','$http','pdaParams', 'cordovaReady','$ionicPopup','$cordovaMedia','siteService','Logger','$cordovaDevice','$cordovaPushV5',
-function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaReady, $ionicPopup, $cordovaMedia, siteService, Logger, $cordovaDevice, $cordovaPushV5) {
+.factory('pushService',[ '$rootScope','$ionicPlatform','$cordovaPush','$http','pdaParams', 'cordovaReady','$ionicPopup','$cordovaMedia','siteService','Logger','$cordovaDevice','$cordovaPushV5','Installation',
+function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaReady, $ionicPopup, $cordovaMedia, siteService, Logger, $cordovaDevice, $cordovaPushV5, Installation) {
 
 	// "senderID" is "Project Number" from Google Developers Console (https://console.developers.google.com)
 	// NOTE that there is also a server component involved - see API key in /app/strongloop/OSC-API/server/gcm_config.js
@@ -45,6 +45,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 		var openPopup = true;
 
+		// TODO - check installations collection to see if we already have any registration?
+		// TODO - need to try and maintain one document only in installations collection
 		log.debug('registerForPush: isready:' + cordovaReady.isready + ', driverId:' + pdaParams.driverId + ', registered:'+push_service.registered);
 		//If Device ready , driver > 0 and we are not already registered then do it
 		if (cordovaReady.isready && pdaParams.driverId > 0 && push_service.registered == false )
@@ -100,6 +102,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 					// Try and ensure that there only ever one row for a driver or a token
 					// TODO - remove any registrations for this token but NOT for this driver
 					// TODO - remove any registrations for this driver but NOT for this token
+
 					// Then register current token for current driver
 
 					if( data.length == 0) {		// no current registration found
@@ -134,7 +137,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				// TODO - do we need an 'error' function for the get? - NO - see above - .error now deprecated - needs updating
 			}, function(err) {
 				// Error
-				log.error(platform+':$cordovaPush.register: Error:'+err);
+				log.error(platform+':$cordovaPushV5.register: Error:'+err);
 			});
 
 			// Event handler for notifications
@@ -241,6 +244,10 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				  // Error
 					log.error(platform+':unregister:error:'+err);
 				})
+
+				// LT - unregister appeared to work on testing but I did not receive a popup or any error logging
+				// Set to false anyway so we can try and get another token
+				push_service.registered = false;
 			}
 	}
 

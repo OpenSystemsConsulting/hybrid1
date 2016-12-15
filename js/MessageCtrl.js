@@ -1,5 +1,9 @@
 'use strict';
 
+// TODO - maybe implement messages per chat type application
+// see https://forum.ionicframework.com/t/ionic-elastichat-chat-demo-w-auto-resizing-textarea/13562
+// and http://codepen.io/rossmartin/pen/XJmpQr
+
 angular.module('MessageCtrl', [])
 	.controller('MessageCtrl', [ '$rootScope', '$scope', 'messageService','siteConfig','$ionicPopup','Logger','pdaParams','driverMessageService',
 		function ($rootScope, $scope, messageService, siteConfig,$ionicPopup,Logger,pdaParams,driverMessageService) {

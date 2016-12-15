@@ -123,6 +123,11 @@ angular.module('JobsIndexCtrl', [])
 								]
 							}
 						};
+
+	if( pdaParams.syncDL) {
+		_syncfilter = { "where":{"mobjobDriver": pdaParams.getDriverId()}};
+	}
+
 	var syncfilter = angular.copy(_syncfilter);
 
 

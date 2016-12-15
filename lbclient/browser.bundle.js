@@ -18637,7 +18637,9 @@ exports = module.exports = function bootBrowserApp(app, options) {
 
 exports.execute = execute;
 
-},{"./lib/executor":111}],"qT+Bxl":[function(require,module,exports){
+},{"./lib/executor":111}],"loopback-boot#instructions":[function(require,module,exports){
+module.exports=require('qT+Bxl');
+},{}],"qT+Bxl":[function(require,module,exports){
 module.exports={
   "config": {},
   "dataSources": {
@@ -19889,6 +19891,16 @@ module.exports={
             "index": 130,
             "label": "Note"
           },
+          "jnDriver": {
+            "type": "Number",
+            "required": true,
+            "length": 5,
+            "precision": 0,
+            "scale": null,
+            "inputType": "number",
+            "index": 130,
+            "label": "Driver"
+          },
           "jnCreateTime": {
             "type": "Date",
             "required": false,
@@ -19940,8 +19952,6 @@ module.exports={
     ]
   }
 }
-},{}],"loopback-boot#instructions":[function(require,module,exports){
-module.exports=require('qT+Bxl');
 },{}],111:[function(require,module,exports){
 (function (process){
 var assert = require('assert');

@@ -1,0 +1,25 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">Notes for job</h1>
+  </ion-header-bar>
+
+  <ion-content>
+
+	<textarea 
+      rows="4" cols="50"
+      expanding-textarea
+      ng-model="note.text"
+      placeholder="Enter job notes here"
+	  autofocus
+	>
+	</textarea>
+
+		<div class="button-bar padding">
+		  <button class="button" ng-click="clear(); modal.hide()">Cancel</button>
+		  <button class="button" ng-click="clear()">Clear</button>
+		  <button class="button button-positive"  ng-click="save()">Save</button>
+		</div>
+
+  </ion-content>
+
+</ion-modal-view>

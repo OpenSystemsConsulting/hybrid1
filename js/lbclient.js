@@ -26,4 +26,5 @@ angular.module('starter')
   .value('jseaAnswers_sync', client.jseaAnswers_sync)
   .value('LocalNote',client.models.LocalNote)
   .value('job_note_sync',client.job_note_sync)
+  .value('Installation',client.model.Installation)
 ;

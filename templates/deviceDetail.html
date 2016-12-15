@@ -93,6 +93,13 @@
 		Auto image upload
 	</ion-checkbox>
 
+	<ion-item class="item item-button-right" >
+		View change data
+		<a class="button button-positive" href="#/tab/change">
+			View data
+		</a>
+	</ion-item>
+
 	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.debugMode" ng-change="pdaParams.setDebugMode(pdaParams.debugMode)">
 		Debug Mode
 	</ion-checkbox>
@@ -119,6 +126,10 @@
 
 	<ion-checkbox ng-if="pdaParams.experimental" class="item-checkbox-right" ng-model="pdaParams.pda_notes" >
 		Notes
+	</ion-checkbox>
+
+	<ion-checkbox ng-if="pdaParams.experimental" class="item-checkbox-right" ng-model="pdaParams.syncDL" >
+		Sync DL
 	</ion-checkbox>
 
 	<!-- TODO - make this editable -->
@@ -156,7 +167,7 @@
 		</div>
 		<ion-item class="item item-button-right" >
 			Reset app (deletes all data)
-			<button class="button button-positive" ng-click="resetApp()">
+			<button class="button button-assertive" ng-click="resetApp()">
 				Reset
 			</button>
 		</ion-item>
@@ -164,6 +175,12 @@
 			Clear change data
 			<button class="button button-positive" ng-click="clearChangeData()">
 				Clear
+			</button>
+		</ion-item>
+		<ion-item class="item item-button-right" >
+			Delete old jobs
+			<button class="button button-assertive" ng-click="deleteOldJobs()">
+				Delete
 			</button>
 		</ion-item>
 	</span>

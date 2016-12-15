@@ -82,7 +82,7 @@
   </tr>
 </table>
 
-<footer class="debug">
+<footer class="debug" ng-if="show_this">
 	<button ng-click="sync()" ng-class="{deltas: needSync}">Sync</button>
 	<button ng-click="connect()">Connect</button>
 	<button ng-click="disconnect()">Disconnect</button>

@@ -167,6 +167,8 @@ angular.module('osc-services', [])
 
 	pda_params.imageUpload = true;
 
+	pda_params.syncDL = false;						// sync DL jobs as well
+
 	return pda_params;
 }])
 
@@ -372,6 +374,7 @@ angular.module('osc-services', [])
 		else {
 			message.data = {
 				driverId: pdaParams.getDriverId(),
+				appVersion: pdaParams.getAppVersion(),
 				messageText: data,
 				deviceHost: $window.location.host			// NOTE - this works in a browser only
 			};
@@ -464,7 +467,7 @@ angular.module('osc-services', [])
 	}
   }
 })
-.factory('messageService', function($rootScope, pdaParams, Logger, FixedQueue, deleteChangeData, Job, deviceService){
+.factory('messageService', function($rootScope, pdaParams, Logger, FixedQueue, deleteChangeData, Job, deviceService, jobService){
  
 	// Service to handle incoming PDA messages 
 
@@ -575,6 +578,12 @@ angular.module('osc-services', [])
 			}
 		},
 
+		deleteOldJobs: function(params) {
+			// REST API params object e.g.  { "daysback": 14 }
+			var daysback = params.daysback || 7;		// default to 7 days
+			jobService.deleteOldJobs(daysback);
+		},
+
 		startWatching: function(){
 
 			// PDA commands 
@@ -601,6 +610,10 @@ angular.module('osc-services', [])
 
 					case 'deleteJobs':
 						messageService.deleteJobs(payload.params);
+						break;
+
+					case 'deleteOldJobs':
+						messageService.deleteOldJobs(payload.params);
 						break;
 
 					default:
@@ -1090,7 +1103,7 @@ angular.module('osc-services', [])
 
 	return backgroundGeoService;
 }])
-.factory('sodService', function($rootScope,pdaParams,Logger,eventService,messageService,siteConfig){
+.factory('sodService', function($rootScope,pdaParams,Logger,eventService,messageService,siteConfig,jobService){
 
 	//Start of Day Service
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'sodService'};
@@ -1146,6 +1159,8 @@ angular.module('osc-services', [])
 						$rootScope.$broadcast('SODSERVICE_IS_NEW_DAY');
 						// Get site config parameters from server
 						siteConfig.getAllConfigsFromServer();
+
+						jobService.deleteOldJobs();
 					}
 					else {
 						log.debug('Not new date');
@@ -1199,7 +1214,8 @@ angular.module('osc-services', [])
 				'PDA_FULL_STATUSES',
 				'PDA_IMAGES',
 				'PDA_IMAGES_URL',
-				'PDA_NOTES'
+				'PDA_NOTES',
+				'PDA_DEL_DAYSBACK'
 			];
 
 	var g_siteconfigs = null;
@@ -1276,6 +1292,13 @@ angular.module('osc-services', [])
 			var retval = localStorage.getItem(key);
 			if(!retval) {
 				retval = '';
+			}
+			return( $q.when(retval));
+		},
+		getSiteConfigInt: function(key) {
+			var retval = +localStorage.getItem(key);		// the "+" causes a cast to an integer
+			if(!retval) {
+				retval = 0;
 			}
 			return( $q.when(retval));
 		},
@@ -1695,12 +1718,13 @@ angular.module('osc-services', [])
 	 */
 	var deleteObsoleteImages = function() {
 		var deferred = $q.defer();
+		// ASYNC
 		getImageList().then(function(images) {
 			// For each image we need to check if its job is no longer on the device
 			// or if it's older than x days/weeks and remove it
 			var len = images.length;
 			var result = {};
-			result.noImages = len;
+			result.numImages = len;
 			result.delImages = 0;
 
 			var promises=[];
@@ -1710,7 +1734,7 @@ angular.module('osc-services', [])
 				deferred.resolve(result);				// no images - don't go any further
 			}
 
-			for( var i = 0; i < len; i++) {
+			for( var i = 0; i < len; i++) {			// for each image
 				var image = images[i];
 				var name = image.name;
 				var jobSeq = name.substring(0, name.indexOf('_'));
@@ -1718,8 +1742,9 @@ angular.module('osc-services', [])
 
 				log.debug('deleteObsoleteImages: name:'+name+', jobSeq:'+jobSeq);
 
-				Job.find(filter, function (err, jobs) {
-					// should only ever find 0 or 1
+				// ASYNC
+				Job.find(filter, function (err, jobs) {		// check if job exists for image
+					// should only ever find 0 or 1 as we are querying on the sequence
 					var jobslen = jobs.length;
 
 					if(err) {
@@ -1728,6 +1753,7 @@ angular.module('osc-services', [])
 
 					if(jobslen == 0) {
 						// no job found
+						// ASYNC
 						deleteSingleImage(name).then(function(success) {
 							result.delImages += 1;
 							promises.push(result);
@@ -1743,6 +1769,69 @@ angular.module('osc-services', [])
 			return $q.all(promises);
 		});
 		return deferred.promise;
+	};
+	var deleteOldImages = function() {
+		/*
+		 * For each image file check if there is still a job (jobSeq) for it
+		 * and if not then delete the image from the file system and any metadata
+		 * from local storage
+		 */
+		var promises = [];			// array of promises for $q.all
+		var deferredAllImages = $q.defer();
+		var result = {};
+		result.numImages = 0;
+		result.delImages = 0;
+		result.errImages = 0;
+		result.failed = [];			// array of filename/errors on error
+
+		getImageList().then(function(images) {
+
+			result.numImages = images.length;
+			log.info('deleteObsoleteImages: images found to check:'+result.numImages);
+
+			images.forEach(function (image) {
+
+				var deferredImage = $q.defer();
+
+				var name = image.name;
+				var jobSeq = name.substring(0, name.indexOf('_'));
+				var filter = { "where": {"mobjobSeq": jobSeq} };
+
+				log.debug('deleteObsoleteImages: check name:'+name+', jobSeq:'+jobSeq);
+
+				Job.find(filter).then(function(jobs) {
+
+					if( jobs.length == 0) {		// no job found
+
+						deleteSingleImage(name).then(function(success) {
+							result.delImages += 1;
+							log.info("deleteObsoleteImages: deleted:"+success.fileRemoved.name);
+						}, function(err) {
+							log.error('deleteObsoleteImages: failed to delete:'+name+', err:'+err);
+							result.errImages += 1;
+							var failed = {};
+							failed.name = name;
+							failed.err = err;
+							result.failed.push(failed);
+						});
+						deferredImage.resolve();
+					}
+					else {
+						deferredImage.resolve();
+					}
+				});
+
+				promises.push(deferredImage.promise);
+
+			});
+
+			$q.all(promises).then( function() {
+				deferredAllImages.resolve(result);
+			});
+
+		});
+
+		return deferredAllImages.promise;
 	};
 
 	var imageService = {
@@ -1774,7 +1863,8 @@ angular.module('osc-services', [])
 		uploadImage: uploadImage,
 		takePhoto: takePhoto,
 		storeImageURI: storeImageURI,
-		deleteObsoleteImages: deleteObsoleteImages
+		deleteObsoleteImages: deleteObsoleteImages,
+		deleteOldImages: deleteOldImages
 	};
 
 	return imageService;
@@ -1891,5 +1981,43 @@ angular.module('osc-services', [])
 	getMessages: getMessages,
 	addMessage: addMessage
   }
+})
+.factory('jobService', function(Job, pdaParams, Logger, siteConfig ){
+
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'jobService'};
+	var log = Logger.getInstance(logParams);
+
+	function deleteOldJobs(daysback) {
+		// delete old jobs
+		// if daysback parameter provided use it otherwise use site config value
+		siteConfig.getSiteConfigInt('PDA_DEL_DAYSBACK').then(function(val) {
+			daysback = daysback || val;
+
+			var queryDate = new Date();
+			queryDate.setDate(queryDate.getDate() - daysback);
+
+			log.info("deleteOldJobs: daysback:" + daysback + ", queryDate:" + queryDate);
+
+			if( daysback > 1) {
+				var delfilter = { "where": {"mobjobBookingDay": {"lt":queryDate} } };
+				log.info("deleteOldJobs: delfilter:"+JSON.stringify(delfilter));
+
+				Job.find(delfilter, function (err, jobs) {
+					var len = jobs.length;
+					log.info("deleteOldJobs: deleting:"+len+" job legs");
+
+					for( var leg = 0; leg < len; leg++) {
+						var job = jobs[leg];
+						log.info("deleteOldJobs: delete leg:"+leg+" job:" + job.mobjobSeq);
+						job.delete();
+					}
+				});
+			}
+		});
+	}
+
+	return {
+		deleteOldJobs: deleteOldJobs
+	}
 })
 ;

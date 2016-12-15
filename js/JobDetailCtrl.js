@@ -668,6 +668,13 @@ angular.module('JobDetailCtrl', [])
 		});
 
 		// ---------- text box for job notes -----------------
+		function jnSyncCallback(err,conflicts) {
+			if(err)
+				log.error('jnSyncCallback: err:'+err);
+			if(conflicts.length)
+				log.error('jnSyncCallback: conflicts:'+conflicts);
+		};
+
 		$ionicModal.fromTemplateUrl('templates/notes.html', {
 			scope: $scope
 		}).then(function(modal) {
@@ -699,15 +706,15 @@ angular.module('JobDetailCtrl', [])
 			var note = $scope.note.text;
 			var ln = new LocalNote();
 
-			//LocalNote.noteuid
 			ln.jnJobNum = $scope.job[0].mobjobNumber;
 		 	ln.jnJobBday = $scope.job[0].mobjobBookingDay;
 			ln.jnText = $scope.note.text;
+			ln.jnDriver = pdaParams.getDriverId();
 			ln.jnCreateTime = Date.now();
 
 			ln.save();
 			
-			job_note_sync();		// TODO - check for errors
+			job_note_sync(jnSyncCallback);
 
 			$scope.note.text = "";
 			$scope.modal.hide();
