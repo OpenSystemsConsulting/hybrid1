@@ -54,8 +54,7 @@ angular.module('ImageCtrl', [])
 		}	
 
 		$scope.deleteObsoleteImages = function() {
-			//imageService.deleteObsoleteImages().then(function(success) {
-			imageService.deleteOldImages().then(function(success) {
+			imageService.deleteObsoleteImages().then(function(success) {
 				getImages();
 			}, function(err) {
 				console.log(err);

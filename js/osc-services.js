@@ -1401,6 +1401,7 @@ angular.module('osc-services', [])
 		log.debug('poller: cordovaReady.isready:'+cordovaReady.isready+', uploadUrl:'+uploadUrl);
 		if( cordovaReady.isready) {
 			uploadAllImages();
+			deleteObsoleteImages();
 		}
 
 		calls++;
@@ -1712,65 +1713,7 @@ angular.module('osc-services', [])
 		return deferred.promise;
 	};
 
-	/*
-	 *** NOTE *** this is NOT complete and fully functional with nested async calls within multiple loop constructs
-	 * TODO - work this shit out
-	 */
 	var deleteObsoleteImages = function() {
-		var deferred = $q.defer();
-		// ASYNC
-		getImageList().then(function(images) {
-			// For each image we need to check if its job is no longer on the device
-			// or if it's older than x days/weeks and remove it
-			var len = images.length;
-			var result = {};
-			result.numImages = len;
-			result.delImages = 0;
-
-			var promises=[];
-
-			log.info('deleteObsoleteImages: images found:'+len);
-			if(len == 0) {
-				deferred.resolve(result);				// no images - don't go any further
-			}
-
-			for( var i = 0; i < len; i++) {			// for each image
-				var image = images[i];
-				var name = image.name;
-				var jobSeq = name.substring(0, name.indexOf('_'));
-				var filter = { "where": {"mobjobSeq": jobSeq} };
-
-				log.debug('deleteObsoleteImages: name:'+name+', jobSeq:'+jobSeq);
-
-				// ASYNC
-				Job.find(filter, function (err, jobs) {		// check if job exists for image
-					// should only ever find 0 or 1 as we are querying on the sequence
-					var jobslen = jobs.length;
-
-					if(err) {
-						deferred.reject(err);
-					}
-
-					if(jobslen == 0) {
-						// no job found
-						// ASYNC
-						deleteSingleImage(name).then(function(success) {
-							result.delImages += 1;
-							promises.push(result);
-						}, function(err) {
-							log.error('deleteObsoleteImages: faile to delete:'+name+', err:'+err);
-						});
-					}
-					else {
-						promises.push(result);
-					}
-				});
-			}
-			return $q.all(promises);
-		});
-		return deferred.promise;
-	};
-	var deleteOldImages = function() {
 		/*
 		 * For each image file check if there is still a job (jobSeq) for it
 		 * and if not then delete the image from the file system and any metadata
@@ -1863,8 +1806,7 @@ angular.module('osc-services', [])
 		uploadImage: uploadImage,
 		takePhoto: takePhoto,
 		storeImageURI: storeImageURI,
-		deleteObsoleteImages: deleteObsoleteImages,
-		deleteOldImages: deleteOldImages
+		deleteObsoleteImages: deleteObsoleteImages
 	};
 
 	return imageService;

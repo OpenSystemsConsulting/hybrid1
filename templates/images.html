@@ -45,6 +45,6 @@
 
 	</ion-list>
 
-	<button ng-click="deleteObsoleteImages()" class="button button-small">Delete obsolete images</button>
+	<button ng-if="pdaParams.debugMode" ng-click="deleteObsoleteImages()" class="button button-small">Delete obsolete images</button>
 	</ion-content>
 </ion-view>
