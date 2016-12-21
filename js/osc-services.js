@@ -1962,4 +1962,25 @@ angular.module('osc-services', [])
 		deleteOldJobs: deleteOldJobs
 	}
 })
+.factory('errorModalService', function( $ionicPopup, pdaParams, Logger){
+
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'errorModalService'};
+	var log = Logger.getInstance(logParams);
+
+	function showModal(modalOptions) {
+		var errortext = "Status:"+modalOptions.error.status + " url:" + modalOptions.error.config.url;
+
+		// TODO popup or modal?
+		var alertPopup = $ionicPopup.alert({
+				title: pdaParams.getAppVersion,
+				subTitle: modalOptions.headerText,
+				template: errortext
+			});
+		log.error('Error:'+JSON.stringify(modalOptions.error));
+	};
+
+	return {
+		showModal: showModal
+	}
+})
 ;

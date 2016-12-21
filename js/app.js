@@ -124,8 +124,23 @@ angular.module('starter', ['ionic',
 			// This returns a promise that will be esolved before you can transition to any other state.
 			// Because getAllConfigsFromServer() populates local storage this means that controllers will have
 			// any local storage parameters available to them at time of invocation
-			function(siteConfig) {
-				return siteConfig.getAllConfigsFromServer();
+			// TODO - complete error handler with maybe a popup e.g.
+			// http://stackoverflow.com/questions/32525649/error-handling-when-data-is-not-resolved-in-angular-ui-router
+			function(siteConfig, errorModalService) {
+				return siteConfig.getAllConfigsFromServer().then(
+					function(data) {
+						return data;
+					},
+					function(error) {
+						var modalOptions = {
+							closeButtonText: 'Close',
+							headerText: 'resolve:config',
+							bodyText: JSON.stringify(error),
+							error: error
+						};
+						errorModalService.showModal(modalOptions);
+					}
+				);
 			}
       },
       templateUrl: 'templates/tabs.html',
