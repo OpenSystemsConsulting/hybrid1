@@ -108,7 +108,7 @@ angular.module('JseaCtrl', [])
 				AnswerSession.jdaJobBday = ljobdate;		// is a date object already 
 
 				AnswerSession.jdaDriverId = pdaParams.getDriverId();
-				AnswerSession.jdaiFormType = $scope.jseaQuestions[li].jdqType ;
+				AnswerSession.jdaFormType = $scope.jseaQuestions[li].jdqType ;
 				AnswerSession.jdaFormLeg = formLeg;
 				AnswerSession.jdaOrder = $scope.jseaQuestions[li].jdqOrder;
 				AnswerSession.jdaCheckBox = $scope.jseaQuestions[li].jdqCbox;
