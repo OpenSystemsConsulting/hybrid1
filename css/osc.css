@@ -104,7 +104,7 @@ gridlabel{
 }
 .jsea-item {
     font-size: 12px !important;
-	line-height: 0.08 !important;
+	/*line-height: 0.08 !important; - caused item-text-wrap to fail */
 	/*font-weight:bold !important;*/
     padding: 1px;
 }
