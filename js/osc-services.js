@@ -660,7 +660,7 @@ angular.module('osc-services', [])
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'jseaService'};
 	var log = Logger.getInstance(logParams);
 
-	 //STARTof day is for Start of Day agreements, PERJOB is for JOb agreements
+	 //STARTOFDAY is for Start of Day agreements, PERJOB is for Job agreements
 	var jseaServiceTypes = new Array();
 	jseaServiceTypes["SOD"] = "STARTOFDAY";
 	jseaServiceTypes["PJB"] = "PERJOB";
@@ -669,11 +669,16 @@ angular.module('osc-services', [])
 	var myDetailJobnum = 0;
 	var myDetailJobdate ;
 	var myDetailJobJseaCaptured =false;
-	var myJobStatusType ;
-	var myFormType ;
-	var myFormLeg;
+	var myJobStatusType = 'N/A';
+	var myFormType = 'JSEA';
+	var myFormLeg = 0;
+
+
 
 	var jseaServiceType = jseaServiceTypes["SOD"]; //Default
+
+	myDetailJobdate = new Date();				//Default to current day
+	myDetailJobdate.setHours(0,0,0,0);			//remove time portion
 
 	var jseaService = {
 
@@ -729,7 +734,7 @@ angular.module('osc-services', [])
 		getJseaConfig: function() {
 			log.debug('Getting JseaIsCaptured');
 
-			//I fwe havnt been configured then dont stop the person doing things in the app
+			//If we havn't been configured then don't stop the person doing things in the app
 			if ( myConfiguredForJsea == false )
 			{
 				log.debug('myConfiguredForJsea = ' + myConfiguredForJsea + ' So will return true');
@@ -775,7 +780,7 @@ angular.module('osc-services', [])
 
 			$rootScope.$on('SITE_CONFIG_LOADED', function(event){
 				log.debug('SITE_CONFIG_LOADED Event triggered');
-				if(siteConfig.getSiteConfigValue('PDA_JSEA_ON') == 'Y')
+				if(siteConfig.getSiteConfigValue('PDA_JSEA_ON') == 'Y' || pdaParams.pda_jsea_on)
 				{
                     //Now get the type value
                     var lvar = siteConfig.getSiteConfigValue('PDA_JSEA_TYPE');
