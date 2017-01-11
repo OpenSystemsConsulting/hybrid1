@@ -132,6 +132,10 @@
 		Sync DL
 	</ion-checkbox>
 
+	<ion-checkbox ng-if="pdaParams.experimental" class="item-checkbox-right" ng-model="pdaParams.pda_jsea_on" >
+		JSEA applicable
+	</ion-checkbox>
+
 	<!-- TODO - make this editable -->
 	<ion-item class="item" ng-if="pdaParams.experimental">
 		Image poll time
