@@ -8,8 +8,9 @@ angular.module('JseaCtrl', [])
 	var log = Logger.getInstance(logParams);
 
 		var pda_jsea_on = siteConfig.getSiteConfigValue('PDA_JSEA_ON');
+		var lpda_jsea_on = pdaParams.pda_jsea_on ? 'Y' : 'N';
 
-		if(pda_jsea_on != 'Y') {
+		if(pda_jsea_on != 'Y' && lpda_jsea_on != 'Y') {
             var alertPopup = $ionicPopup.alert({
                 title: 'Module not installed',
                 template: 'This module is not installed.'
