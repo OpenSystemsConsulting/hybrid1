@@ -900,46 +900,6 @@ angular.module('JobsIndexCtrl', [])
 					"order": 'mobjobSeq ASC'
 				};
 
-/*
-			// build where filter for selected basejob/date combinations
-			// Here's the basic filter
-			var basejobfilter =
-				{
-					"where": {and: 
-								[
-									{"mobjobDriver": pdaParams.getDriverId()},
-									{"mobjobStatus": { "neq": "DL"}}
-								]
-							},
-					"order": 'mobjobSeq ASC'
-				};
-*/
-
-
-			// Now we need to add in the 'or' clauses for our list of basejobs and dates
-			// Note that the date filter must be a date object
-/*
- * Can't get the syntax correct for the query so read thru all for basejob and check dates in loop
- *
-			var jobdetailfilter = [];
-			var filterObj = { };
-
-			filterObj = {and: [
-					{"mobjobBasejobNum": checkedJobs[0].basejob, "mobjobBookingDay": checkedJobs[0].bookingday }
-				]};
-			basejobfilter.where.and.push(filterObj);
-
-			for (var i = 1; i < checkedJobs.length; i++) {
-
-				filterObj = {or: [
-						{"mobjobBasejobNum": checkedJobs[i].basejob, "mobjobBookingDay": checkedJobs[i].bookingday }
-					]};
-
-				basejobfilter.where.and.push(filterObj);
-			}
-*/
-
-
 			Job.find(basejobfilter, function (err, jobs) {
 
 				if(err) {
