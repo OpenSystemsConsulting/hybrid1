@@ -1137,7 +1137,7 @@ angular.module('osc-services', [])
 			//Get What is stored from last initial resum on a day in past
 			var prevResumeDateStr = localStorage.getItem('FIRST_RESUME_DATE');
 
-			if( type = 'FIRST_RESUME')
+			if( type == 'FIRST_RESUME')
 			{
 				today = new Date();
     			mycurday = today.getDate();
@@ -1187,6 +1187,14 @@ angular.module('osc-services', [])
 
 				// TODO - maybe get site config parameters from server here?
 			}
+			else {
+				log.error('unknown type:'+type);
+			}
+		},
+
+		clearSODDate: function() {
+			// This will force a start of day
+			localStorage.removeItem('FIRST_RESUME_DATE');
 		}
 	}
 
