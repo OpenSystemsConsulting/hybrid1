@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget CFBundleVersion="1.0.1" id="au.com.opensyscon.tplusmobile" version="2.58.11" versionCode="25811" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-	<!-- CFBundleVersion is used as the build number for iOS apps - if there are any errors uploading to iTunes you may need to increment this -->
+<widget ios-CFBundleVersion="1.0.1" id="au.com.opensyscon.tplusmobile" version="2.58.11" versionCode="25811" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+	<!-- ios-CFBundleVersion is used as the build number for iOS apps - if there are any errors uploading to iTunes you may need to increment this -->
     <name>Tplus Mobile</name>
     <description>
         Copyright Open Systems Consulting Pty Ltd 2017 (Tplus Mobile Application)
