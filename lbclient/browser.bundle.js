@@ -18637,9 +18637,7 @@ exports = module.exports = function bootBrowserApp(app, options) {
 
 exports.execute = execute;
 
-},{"./lib/executor":111}],"loopback-boot#instructions":[function(require,module,exports){
-module.exports=require('qT+Bxl');
-},{}],"qT+Bxl":[function(require,module,exports){
+},{"./lib/executor":111}],"qT+Bxl":[function(require,module,exports){
 module.exports={
   "config": {},
   "dataSources": {
@@ -18680,9 +18678,9 @@ module.exports={
       "connector": "remote",
       "debug": "true",
       "clientId": "WPE",
-      "serverIP": "203.45.85.163",
+      "serverIP": "remote.wpedubbo.com.au",
       "serverPort": 3115,
-      "url": "http://203.45.85.163:3115/api"
+      "url": "http://remote.wpedubbo.com.au:3115/api"
     },
     "aptold": {
       "connector": "remote",
@@ -19952,6 +19950,8 @@ module.exports={
     ]
   }
 }
+},{}],"loopback-boot#instructions":[function(require,module,exports){
+module.exports=require('qT+Bxl');
 },{}],111:[function(require,module,exports){
 (function (process){
 var assert = require('assert');
