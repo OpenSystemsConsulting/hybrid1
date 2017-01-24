@@ -226,27 +226,27 @@ angular.module('JobsIndexCtrl', [])
 			for (var i = 0; i < $scope.jobs.length; i++) {
 				$scope.convertDates($scope.jobs[i], $rootScope.jobMetadata);
 
-				job.displayDate = job[displayDate];
-
 				// Add checked property for possible multi delivery
 				$scope.jobs[i].checked = false;
 
-					var job = $scope.jobs[i];
-					if( job.mobjobStatus == 'UJ') {
-						job.mobjobStatus = 'NJ';
-						job.onDeviceTime = new Date().toISOString();
+				var job = $scope.jobs[i];
+				job.displayDate = job[displayDate];
 
-						mystr = 'getJobs:' + job.mobjobSeq + ' updated from ' + 'UJ' + ' -> ' + job.mobjobStatus;
-						log.info(mystr);
+				if( job.mobjobStatus == 'UJ') {
+					job.mobjobStatus = 'NJ';
+					job.onDeviceTime = new Date().toISOString();
 
-						job.save();
-					}
+					mystr = 'getJobs:' + job.mobjobSeq + ' updated from ' + 'UJ' + ' -> ' + job.mobjobStatus;
+					log.info(mystr);
 
-					// keep a count of the various job statuses
-					if($scope.jobStatuses[job.mobjobStatus])
-						$scope.jobStatuses[job.mobjobStatus] += 1;
-					else
-						$scope.jobStatuses[job.mobjobStatus] = 1;
+					job.save();
+				}
+
+				// keep a count of the various job statuses
+				if($scope.jobStatuses[job.mobjobStatus])
+					$scope.jobStatuses[job.mobjobStatus] += 1;
+				else
+					$scope.jobStatuses[job.mobjobStatus] = 1;
 			}
 
 			$scope.titleWithTotal = "Jobs " + " (" + $scope.jobs.length + ")";
