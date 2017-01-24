@@ -1228,7 +1228,9 @@ angular.module('osc-services', [])
 				'PDA_IMAGES',
 				'PDA_IMAGES_URL',
 				'PDA_NOTES',
-				'PDA_DEL_DAYSBACK'
+				'PDA_DEL_DAYSBACK',
+				'PDA_SORT_COL1',
+				'PDA_DISPLAY_DATE'
 			];
 
 	var g_siteconfigs = null;
@@ -1319,7 +1321,7 @@ angular.module('osc-services', [])
 		getSiteConfigValue: function(key) {
 			var retval = localStorage.getItem(key);
 			if(!retval) {
-				retval = 'N';
+				retval = '';
 			}
 			return(retval);
 		},
