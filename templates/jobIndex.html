@@ -92,7 +92,11 @@
 				<span class="jobServicespan"> ({{ job.mobjobServiceCode }}) </span>
 
 				<div class="rightJobData">
-					<span class="jobdatespan"> {{ job.mobjobBookingDay | date:'dd-MM-yyyy' }} </span>  
+					<span class="jobdatespan"> {{ job.displayDate | date:'dd-MM-yyyy' }} </span>  
+<!--
+					<br>
+					<span class="jobdatespan"> {{ job.mobjobEtaTime | date:'dd-MM-yyyy' }} </span>  
+-->
 				
 					<!-- checkbox for multi job delivery and signature capture RIGHT EDGE OF SCREEN -->
 <!--
