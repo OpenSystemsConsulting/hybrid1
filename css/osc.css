@@ -68,7 +68,7 @@ gridlabel{
     width: 60px;
 	-webkit-flex: 1 0 140px !important;
     float: left;
-    display: block:
+    display: block;
 }
 .jobTotalLegsInput {
     text-align:center;
@@ -78,7 +78,7 @@ gridlabel{
     width: 60px;
 	-webkit-flex: 1 0 140px !important;
     float: left;
-    display: block:
+    display: block;
 }
 
 .multicomplete {
@@ -207,7 +207,7 @@ overflowhidden-demystified/ */
 }
 
 .signature-item-body {
-	padding: 10px; !important
+	padding: 10px; !important;
 }
 
 textarea#styled{
