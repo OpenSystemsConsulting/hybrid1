@@ -19337,7 +19337,7 @@ module.exports={
             "scale": 2,
             "inputType": "number",
             "label": "Wgt",
-            "index": 280,
+            "index": 465,
             "oracle": {
               "columnName": "MOBJOB_WEIGHT",
               "dataType": "NUMBER",
@@ -19424,6 +19424,106 @@ module.exports={
             "scale": null,
             "inputType": "text",
             "label": "Jsea Captured"
+          },
+          "mobjobPupInstructions": {
+            "type": "String",
+            "required": false,
+            "index": 300,
+            "length": 80,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": "Pup"
+          },
+          "mobjobDelInstructions": {
+            "type": "String",
+            "required": false,
+            "index": 310,
+            "length": 80,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": "Del"
+          },
+          "mobjobDrvName": {
+            "type": "String",
+            "required": false,
+            "index": 320,
+            "length": 80,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": "Drv"
+          },
+          "mobjobDrvSurname": {
+            "type": "String",
+            "required": false,
+            "index": 330,
+            "length": 80,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": " "
+          },
+          "mobjobTrailerDesc": {
+            "type": "String",
+            "required": false,
+            "index": 410,
+            "length": 80,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": "Trl"
+          },
+          "mobjobTrailerReg": {
+            "type": "String",
+            "required": false,
+            "index": 420,
+            "length": 10,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": "Reg"
+          },
+          "mobjobVehicleType": {
+            "type": "String",
+            "required": false,
+            "index": 400,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": "Veh"
+          },
+          "mobjobCeta": {
+            "type": "String",
+            "required": false,
+            "index": 440,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": "Ceta"
+          },
+          "mobjobLength": {
+            "type": "String",
+            "required": false,
+            "index": 450,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": "Lth"
+          },
+          "mobjobWidth": {
+            "type": "String",
+            "required": false,
+            "index": 460,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": "Wth"
           },
           "lastModified": {
             "type": "Date",
