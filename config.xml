@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget ios-CFBundleVersion="1.0.0" id="au.com.opensyscon.tplusmobile" version="2.58.19" versionCode="25819" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="au.com.opensyscon.tplusmobile" ios-CFBundleVersion="1.0.0" version="2.58.20" versionCode="25820" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
 	<!-- ios-CFBundleVersion is used as the build number for iOS apps - if there are any errors uploading to iTunes you may need to increment this -->
     <name>Tplus Mobile</name>
     <description>
@@ -8,7 +8,7 @@
     <author email="steven.green@opensyscon.com.au" href="http://www.oscsoftware.com.au">
         OSC Developer Team
     </author>
-	<preference name="phonegap-version" value="cli-6.3.1" /> 
+    <preference name="phonegap-version" value="cli-6.3.1" />
     <content src="index.html" />
     <access origin="*" />
     <preference name="android-minSdkVersion" value="16" />
@@ -24,20 +24,21 @@
     <plugin name="cordova-plugin-velda-devicefeedback" source="npm" spec="0.0.2" />
     <plugin name="cordova-plugin-whitelist" source="npm" spec="1.3.0" />
     <plugin name="cordova-plugin-camera" source="npm" spec="2.1.0">
-		<variable name="CAMERA_USAGE_DESCRIPTION" value="The app would like to access the camera when you attach photos to content." />
-		<variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="The app would like to access the photo library when you attach images to content." />
-	</plugin>
+    <plugin name="cordova-plugin-inappbrowser" source="npm" spec="~1.6.1" />
+        <variable name="CAMERA_USAGE_DESCRIPTION" value="The app would like to access the camera when you attach photos to content." />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="The app would like to access the photo library when you attach images to content." />
+    </plugin>
     <plugin name="cordova-plugin-media" source="npm" spec="2.4.0" />
     <plugin name="phonegap-plugin-barcodescanner" source="npm" spec="6.0.2" />
     <plugin name="phonegap-plugin-push" source="npm" spec="1.5.3" />
     <plugin name="cordova-plugin-cipherlab-rs30" spec="https://github.com/mribbons/cordova-plugin-cipherlab-rs30" />
     <platform name="ios">
-		<config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
-			<string>The app would like to access the camera when you attach photos to content.</string>
-		</config-file>
-		<config-file parent="NSPhotoLibraryUsageDescription" platform="ios" target="*-Info.plist">
-			<string>The app would like to access the photo library when you attach images to content.</string>
-		</config-file>
+        <config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
+            <string>The app would like to access the camera when you attach photos to content.</string>
+        </config-file>
+        <config-file parent="NSPhotoLibraryUsageDescription" platform="ios" target="*-Info.plist">
+            <string>The app would like to access the photo library when you attach images to content.</string>
+        </config-file>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
         <icon height="40" src="resources/ios/icon/icon-40.png" width="40" />
