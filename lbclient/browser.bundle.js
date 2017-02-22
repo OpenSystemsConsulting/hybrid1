@@ -19465,7 +19465,18 @@ module.exports={
             "inputType": "text",
             "label": " "
           },
+          "mobjobTrailerId": {
+            "type": "String",
+            "required": false,
+            "index": 400,
+            "length": 10,
+            "precision": null,
+            "scale": null,
+            "inputType": "text",
+            "label": "Id"
+          },
           "mobjobTrailerDesc": {
+            "omitFromForm": true,
             "type": "String",
             "required": false,
             "index": 410,
@@ -19476,6 +19487,7 @@ module.exports={
             "label": "Trl"
           },
           "mobjobTrailerReg": {
+            "omitFromForm": true,
             "type": "String",
             "required": false,
             "index": 420,
@@ -19488,7 +19500,7 @@ module.exports={
           "mobjobVehicleType": {
             "type": "String",
             "required": false,
-            "index": 400,
+            "index": 405,
             "length": 50,
             "precision": null,
             "scale": null,
