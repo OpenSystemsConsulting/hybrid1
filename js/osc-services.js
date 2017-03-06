@@ -1755,29 +1755,37 @@ angular.module('osc-services', [])
 				var jobSeq = name.substring(0, name.indexOf('_'));
 				var filter = { "where": {"mobjobSeq": jobSeq} };
 
-				log.debug('deleteObsoleteImages: check name:'+name+', jobSeq:'+jobSeq);
+				// Check image has been uploaded and that the job no longer exists
+				var uploaded = imageFileService.get(image.name, 'uploaded');
+				log.debug('deleteObsoleteImages: check name:'+name+', uploaded:'+uploaded+', jobSeq:'+jobSeq);
 
-				Job.find(filter).then(function(jobs) {
+				if( uploaded) {
+					Job.find(filter).then(function(jobs) {
 
-					if( jobs.length == 0) {		// no job found
+						log.debug('deleteObsoleteImages: found:'+jobs.length+' job legs');
+						if( jobs.length == 0) {		// no job found
 
-						deleteSingleImage(name).then(function(success) {
-							result.delImages += 1;
-							log.info("deleteObsoleteImages: deleted:"+success.fileRemoved.name);
-						}, function(err) {
-							log.error('deleteObsoleteImages: failed to delete:'+name+', err:'+err);
-							result.errImages += 1;
-							var failed = {};
-							failed.name = name;
-							failed.err = err;
-							result.failed.push(failed);
-						});
-						deferredImage.resolve();
-					}
-					else {
-						deferredImage.resolve();
-					}
-				});
+							deleteSingleImage(name).then(function(success) {
+								result.delImages += 1;
+								log.info("deleteObsoleteImages: deleted:"+success.fileRemoved.name);
+							}, function(err) {
+								log.error('deleteObsoleteImages: failed to delete:'+name+', err:'+err);
+								result.errImages += 1;
+								var failed = {};
+								failed.name = name;
+								failed.err = err;
+								result.failed.push(failed);
+							});
+							deferredImage.resolve();
+						}
+						else {
+							deferredImage.resolve();
+						}
+					});
+				}
+				else {
+					deferredImage.resolve();
+				}
 
 				promises.push(deferredImage.promise);
 
