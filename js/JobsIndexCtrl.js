@@ -30,6 +30,7 @@ angular.module('JobsIndexCtrl', [])
 	//Idle.watch();						// TODO - idle - check if idle and maybe auto refresh
 	$rootScope.syncInProgress = false;
 
+	$scope.syncstatus = syncstatus.syncInProgress;
 
 				
 	//When this is called at present it can 1 of 2 situations
@@ -59,6 +60,26 @@ angular.module('JobsIndexCtrl', [])
 	$scope.fullStatuses = (pdaParams.pda_full_statuses || (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y'));
 
 	$scope.pda_deliver_all = (pdaParams.pda_deliver_all || (siteConfig.getSiteConfigValue('PDA_DELIVER_ALL') == 'Y'));
+
+	var sortKey = siteConfig.getSiteConfigValue('PDA_SORT_COL1') || 'mobjobBookingDay';
+	var displayDate = siteConfig.getSiteConfigValue('PDA_DISPLAY_DATE') || 'mobjobBookingDay';
+
+	function sortFunction(a,b) {
+		if (a[sortKey] > b[sortKey])
+			return 1;
+		if (a[sortKey] < b[sortKey])
+			return -1;
+		return 0;
+	}
+/*
+	function sortByEtaTime(a,b) {
+		if (a.mobjobEtaTime > b.mobjobEtaTime)
+			return 1;
+		if (a.mobjobEtaTime < b.mobjobEtaTime)
+			return -1;
+		return 0;
+	}
+*/
 
 	// initialise the current new message count in this scope
 	$scope.newMessageCount = messageService.getNewMesssageCount();
@@ -200,28 +221,33 @@ angular.module('JobsIndexCtrl', [])
 			// TODO - need to check error and only show jobs if no error
 			$scope.jobs = jobs;
 
+			if( sortKey && sortKey != '')
+				$scope.jobs.sort(sortFunction);
+
 			for (var i = 0; i < $scope.jobs.length; i++) {
 				$scope.convertDates($scope.jobs[i], $rootScope.jobMetadata);
 
 				// Add checked property for possible multi delivery
 				$scope.jobs[i].checked = false;
 
-					var job = $scope.jobs[i];
-					if( job.mobjobStatus == 'UJ') {
-						job.mobjobStatus = 'NJ';
-						job.onDeviceTime = new Date().toISOString();
+				var job = $scope.jobs[i];
+				job.displayDate = job[displayDate];
 
-						mystr = 'getJobs:' + job.mobjobSeq + ' updated from ' + 'UJ' + ' -> ' + job.mobjobStatus;
-						log.info(mystr);
+				if( job.mobjobStatus == 'UJ') {
+					job.mobjobStatus = 'NJ';
+					job.onDeviceTime = new Date().toISOString();
 
-						job.save();
-					}
+					mystr = 'getJobs:' + job.mobjobSeq + ' updated from ' + 'UJ' + ' -> ' + job.mobjobStatus;
+					log.info(mystr);
 
-					// keep a count of the various job statuses
-					if($scope.jobStatuses[job.mobjobStatus])
-						$scope.jobStatuses[job.mobjobStatus] += 1;
-					else
-						$scope.jobStatuses[job.mobjobStatus] = 1;
+					job.save();
+				}
+
+				// keep a count of the various job statuses
+				if($scope.jobStatuses[job.mobjobStatus])
+					$scope.jobStatuses[job.mobjobStatus] += 1;
+				else
+					$scope.jobStatuses[job.mobjobStatus] = 1;
 			}
 
 			$scope.titleWithTotal = "Jobs " + " (" + $scope.jobs.length + ")";
@@ -261,12 +287,17 @@ angular.module('JobsIndexCtrl', [])
 			// TODO - maybe need to check error and only show jobs if no error
 			$scope.jobs = jobs;
 
+			if( sortKey && sortKey != '')
+				$scope.jobs.sort(sortFunction);
+
 			var syncRequired = 0;
 
 			for (var i = 0; i < $scope.jobs.length; i++) {
 		      	$scope.convertDates($scope.jobs[i], $rootScope.jobMetadata);
 
 				var job = $scope.jobs[i];
+
+				job.displayDate = job[displayDate];
 
 				// ACK the job - notifies despatch job received by pda
 				if( job.mobjobStatus == 'UJ') {
