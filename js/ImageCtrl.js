@@ -1,11 +1,10 @@
 'use strict';
 
 angular.module('ImageCtrl', [])
-	.controller('ImageCtrl', [ '$rootScope', '$scope', 'imageService','imageFileService','fileUpload','$cordovaFileTransfer','$cordovaFile','pda_images','$window','$ionicPopup','pdaParams',
-		function ($rootScope, $scope, imageService, imageFileService, fileUpload, $cordovaFileTransfer, $cordovaFile, pda_images, $window, $ionicPopup, pdaParams) {
+	.controller('ImageCtrl', [ '$rootScope', '$scope', 'imageService','imageFileService','fileUpload','$cordovaFileTransfer','$cordovaFile','pda_images','$window','$ionicPopup',
+		function ($rootScope, $scope, imageService, imageFileService, fileUpload, $cordovaFileTransfer, $cordovaFile, pda_images, $window, $ionicPopup) {
 
-		var lpda_images = pdaParams.pda_images ? 'Y' : 'N';;
-		if(pda_images != 'Y' && lpda_images != 'Y') {
+		if(pda_images != 'Y') {
 			var alertPopup = $ionicPopup.alert({
 				title: 'Module not installed',
 				template: 'This module is not installed.'
