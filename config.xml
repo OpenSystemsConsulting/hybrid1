@@ -77,7 +77,6 @@
   <plugin name="phonegap-plugin-push" spec="~1.5.3"/>
   <plugin name="cordova-plugin-whitelist" spec="~1.2.1"/>
   <plugin name="cordova-plugin-insomnia" spec="~4.2.0"/>
-  <plugin name="com.tiltshiftfocus.cordova.plugin.clearCache" spec="~1.0.5"/>
   <plugin name="cordova-plugin-device" spec="~1.1.1"/>
   <plugin name="cordova-plugin-camera" spec="~2.1.0"/>
   <plugin name="cordova-plugin-cipherlab-rs30" spec="https://github.com/mribbons/cordova-plugin-cipherlab-rs30"/>
