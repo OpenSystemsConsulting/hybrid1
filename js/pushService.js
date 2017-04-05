@@ -61,83 +61,83 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 			// initialise the push plugin - phonegap-plugin-push
 			$cordovaPushV5.initialize(pushOptions).then(function(result) {
 				log.info(platform+':$cordovaPushV5.initialize: Success:'+result);
-			}, function(err) {
-				log.error(platform+':$cordovaPushV5.initialize: Error:'+err);
-			});
-
-			// register with message service
-			log.debug(platform+': About to $cordovaPush.register: driver:' + push_service.mycurrent_drivernum);
-
-			//Ask Google for a Token , token is returned in the then callback
-			$cordovaPushV5.register().then(function(token) {
 
 				// Success - register for notifications
 				$cordovaPushV5.onError();				// send $cordovaPushV5:errorOccurred event on error
 				$cordovaPushV5.onNotification();		// send $cordovaPushV5:notificationReceived on notification
 
-				var msg = '$cordovaPushV5.register for Driver ' + push_service.mycurrent_drivernum + ' : token:'+ token;
-				log.info(msg);
+				// register with message service
+				log.debug(platform+': About to $cordovaPush.register: driver:' + push_service.mycurrent_drivernum);
 
-				
-				//Init an Object to insert into installation table if our filter below gets empty or filter 
-				// returns not the same as the current token just got from Google
-				var installation_object = {
-					"appId"			: "osc-push-demo",
-					"userId"		: push_service.mycurrent_drivernum,
-					"deviceToken"	: token,
-					"deviceType"	: deviceType,
-					"pdaVersion"	: pdaParams.getAppVersion()
-				};
-				var filter = { "where": { "deviceToken": token }};
-				log.debug(platform+':$cordovaPushV5.register: check for current registration, filter:'+JSON.stringify(filter));
+				//Ask push provider for a Token , token is returned in the then callback
+				$cordovaPushV5.register().then(function(token) {
 
-				var serverIP = siteService.getServerIP();
-				var serverPort = siteService.getServerPort();
+					var msg = '$cordovaPushV5.register for Driver ' + push_service.mycurrent_drivernum + ' : token:'+ token;
+					log.info(msg);
+					
+					//Init an Object to insert into installation table if our filter below gets empty or filter 
+					// returns not the same as the current token just got from Google
+					var installation_object = {
+						"appId"			: "osc-push-demo",
+						"userId"		: push_service.mycurrent_drivernum,
+						"deviceToken"	: token,
+						"deviceType"	: deviceType,
+						"pdaVersion"	: pdaParams.getAppVersion()
+					};
+					var filter = { "where": { "deviceToken": token }};
+					log.debug(platform+':$cordovaPushV5.register: check for current registration, filter:'+JSON.stringify(filter));
 
-				// LT - 30/11/2015 - TODO - http.get.success has been deprecated use .then instead - depends on angular version
-				// see https://docs.angularjs.org/api/ng/service/$http
-				$http.get('http://'+ serverIP + ':' + serverPort + '/api/installations'+'?filter='+encodeURIComponent(JSON.stringify(filter))).success(function (data) {
-					//console.log(data);			// this works
+					var serverIP = siteService.getServerIP();
+					var serverPort = siteService.getServerPort();
 
-					// Try and ensure that there only ever one row for a driver or a token
-					// TODO - remove any registrations for this token but NOT for this driver
-					// TODO - remove any registrations for this driver but NOT for this token
+					// LT - 30/11/2015 - TODO - http.get.success has been deprecated use .then instead - depends on angular version
+					// see https://docs.angularjs.org/api/ng/service/$http
+					$http.get('http://'+ serverIP + ':' + serverPort + '/api/installations'+'?filter='+encodeURIComponent(JSON.stringify(filter))).success(function (data) {
+						//console.log(data);			// this works
 
-					// Then register current token for current driver
+						// Try and ensure that there only ever one row for a driver or a token
+						// TODO - remove any registrations for this token but NOT for this driver
+						// TODO - remove any registrations for this driver but NOT for this token
 
-					if( data.length == 0) {		// no current registration found
+						// Then register current token for current driver
 
-						log.info(platform+':$cordovaPushV5.register: no current registration found in installations, saving...');
+						if( data.length == 0) {		// no current registration found
 
-						//This registers the Google Token with Strongloop and our Database
-						$http.post('http://' + serverIP + ':' + serverPort + '/api/installations', installation_object)
-							.success(function (data, status, headers) {
+							log.info(platform+':$cordovaPushV5.register: no current registration found in installations, saving...');
 
-							log.info(platform+':$cordovaPushV5.register: success status:'+status);
+							//This registers the Google Token with Strongloop and our Database
+							$http.post('http://' + serverIP + ':' + serverPort + '/api/installations', installation_object)
+								.success(function (data, status, headers) {
 
-							// Save data to local storage (it also gets put into $rootScope below)
-							localStorage.setItem('osc-push-credentials', JSON.stringify(installation_object));
+								log.info(platform+':$cordovaPushV5.register: success status:'+status);
 
-							var alertPopup = $ionicPopup.alert({
-								title: 'Device registered',
-								template: token
+								// Save data to local storage (it also gets put into $rootScope below)
+								localStorage.setItem('osc-push-credentials', JSON.stringify(installation_object));
+
+								var alertPopup = $ionicPopup.alert({
+									title: 'Device registered',
+									template: token
+								});
+							}).error(function (data, status) {
+								log.error(platform+':$cordovaPushV5.register: failed status:'+status);
 							});
-						}).error(function (data, status) {
-							log.error(platform+':$cordovaPushV5.register: failed status:'+status);
-						});
-					}
-					else {
-						log.info(platform+':$cordovaPush.register: current registration already found in installations');
-						log.debug(platform+':$cordovaPush.register: data:'+JSON.stringify(data));
-					}
+						}
+						else {
+							log.info(platform+':$cordovaPush.register: current registration already found in installations');
+							log.debug(platform+':$cordovaPush.register: data:'+JSON.stringify(data));
+						}
 
-					push_service.registered = true;		// we've either just registered or we were already registered
+						push_service.registered = true;		// we've either just registered or we were already registered
 
+					});
+					// TODO - do we need an 'error' function for the get? - NO - see above - .error now deprecated - needs updating
+				}, function(err) {
+					// Error
+					log.error(platform+':$cordovaPushV5.register: Error:'+err);
 				});
-				// TODO - do we need an 'error' function for the get? - NO - see above - .error now deprecated - needs updating
+
 			}, function(err) {
-				// Error
-				log.error(platform+':$cordovaPushV5.register: Error:'+err);
+				log.error(platform+':$cordovaPushV5.initialize: Error:'+err);
 			});
 
 			// Event handler for notifications
