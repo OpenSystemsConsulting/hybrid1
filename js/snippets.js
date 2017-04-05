@@ -52,4 +52,61 @@ filter: {
 
 
 
+//------------------------------------------------
+//Checking permissions
 
+			// TODO - this has issues when a request is already in progress
+			// so maybe need to use isRequestingPermission
+			cordova.plugins.diagnostic.getPermissionsAuthorizationStatus(onCheckPermissions, onCheckPermissionsError, oscPermissions);
+
+			function onCheckPermissions(statuses){
+				for(var permission in statuses){
+					status = statuses[permission];
+					log.debug("permission:"+permission+", status:"+status);
+
+					switch(status) {
+						case "GRANTED":
+							// All good
+							break;
+						case "DENIED_ALWAYS":
+							// User denied access to this permission and checked "Never Ask Again" box.
+							// Can't do anything here - TODO - maybe alert box for user to change manually?
+							break;
+						case "DENIED":
+							// Has been turned off in settings without checking "Never Ask Again"
+							// so request again
+							requestPermission(permission);
+							break;
+						case "NOT_REQUESTED":
+							// Never been requested so ask for permission
+							requestPermission(permission);
+							break;
+					}
+				}
+			};
+
+			function onCheckPermissionsError(error){
+				alert("Failed retrieving permissions");
+			};
+
+			function requestPermission(permission){
+				// Camera
+				if(permission == cordova.plugins.diagnostic.permission.CAMERA) {
+					cordova.plugins.diagnostic.requestCameraAuthorization(function(status){
+						log.info("CAMERA:"+status);
+					}, function(error){
+						log.error(error);
+					});
+				};
+
+				// Location services
+				if(permission == cordova.plugins.diagnostic.permission.ACCESS_FINE_LOCATION
+						|| permission == cordova.plugins.diagnostic.permission.ACCESS_COARSE_LOCATION) {
+					cordova.plugins.diagnostic.requestLocationAuthorization(function(status){
+							log.info("LOCATION:"+status);
+						}, function(error){
+							log.error(error);
+						});
+
+				};
+			};
