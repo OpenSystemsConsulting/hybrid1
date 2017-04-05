@@ -112,6 +112,8 @@ module.exports = function (client) {
 
 },{"bunyan":103}],"loopback-boot#boot#logging.js":[function(require,module,exports){
 module.exports=require('smdeOZ');
+},{}],"loopback-boot#boot#replication.js":[function(require,module,exports){
+module.exports=require('kn1c3t');
 },{}],"kn1c3t":[function(require,module,exports){
 // TODO(bajtos) Move the bi-di replication to loopback core,
 // add model settings to enable the replication.
@@ -131,23 +133,6 @@ module.exports = function (client) {
 	var lastFilter = {};
 
 	var d = new Date();
-
-	//var syncInProgress = false;
-	//var log = bunyan.createLogger({name: 'PDAClient'});
-/*
-// NOTE: error: net.Socket is not a function
-	var tcplog = bunyan.createLogger({
-		name: 'PDAClient',
-		streams: [
-			{
-				level: 'debug',
-				stream: tcpStream,
-				type: 'raw',
-				closeOnExit: true
-			}
-		]
-	});
-*/
 
 	function sleep(milliseconds) {
 		var start = new Date().getTime();
@@ -170,6 +155,7 @@ module.exports = function (client) {
         }
     };
 
+	// refer to this getter/setter in this source as client.syncstatus.syncInProgress
     client.syncstatus = {
         _syncInProgress: false,
         get syncInProgress() {
@@ -221,21 +207,10 @@ module.exports = function (client) {
 		}
 
 		var counter = 0;
-		//alert('Checking: syncInProgress:'+client.syncstatus.syncInProgress);
         //if (client.network.isConnected && client.syncstatus.syncInProgress == false) 		// now done via syncService
         if (client.network.isConnected) {
 
 			client.syncstatus.syncInProgress = true;
-			//console.log('syncInProgress:'+client.syncstatus.syncInProgress);
-			//alert('About to replicate: syncInProgress:'+client.syncstatus.syncInProgress);
-
-			// LT - original code from Strongloop sample code
-			// NOTE - this does remote changes first - this is as supplied originally from strongloop
-/*
-            RemoteJob.replicate(LocalJob, function () {
-                LocalJob.replicate(RemoteJob, cb);
-            });
-*/
 
 			// LT - 11/09/2015 - test replication starting from scratch each time
 			// LT - 02/10/2015 - loading jobs still appears slow on the device even
@@ -269,6 +244,9 @@ module.exports = function (client) {
 
 					since.pull = cps;
 					//console.log(new Date().toISOString()+':Calling: LocalJob.replicate(), since:%j',since);
+
+					// TODO - should we check conflicts here?
+
 					LocalJob.replicate(
 					since.push,
 					RemoteJob,
@@ -276,124 +254,55 @@ module.exports = function (client) {
 					function pushed(err, conflicts, cps) {
 						since.push = cps;
 
-/*
-						// LT - artificially slow replication for debug purposes
-						// NOTE did not work as required - blocked so nothing could be done on device
-						if(filter.where.mobjobDriver == 999) {
-							sleep(30000);
-						}
-*/
-
 						// end of replication
 						client.syncstatus.syncInProgress = false;
-						//console.log('syncInProgress:'+client.syncstatus.syncInProgress);
-						//alert('Finished replicate: syncInProgress:'+client.syncstatus.syncInProgress);
+						console.log(new Date().toISOString()+': finished replication, conflicts:'+conflicts.length);
 
-/*
-						if(filter.where.mobjobDriver == 999) {
-						// LT - artificially slow replication for debug purposes
-							setTimeout(function(){
-								console.log(new Date().toISOString()+': finished replication');
-								cb && cb(err,conflicts);
-							}, 20000);
-						}
-						else {
-*/
-							console.log(new Date().toISOString()+': finished replication, conflicts:'+conflicts.length);
-							if(conflicts.length > 0) {
-								console.log('sync: conflicts:'+JSON.stringify(conflicts));
-								conflicts.forEach(function (conflict) {
+						// TODO - if we check conflicts in controller do we need to do it here
+						if(conflicts.length > 0) {
+							console.log('sync: conflicts:'+JSON.stringify(conflicts));
+							conflicts.forEach(function (conflict) {
 
-									conflict.type(function (err, type) {
-										conflict.type = type;
-										conflict.models(function (err, source, target) {
-											conflict.source = source;
-											conflict.target = target;
-											conflict.manual = new conflict.SourceModel(source || target);
+								conflict.type(function (err, type) {
+									conflict.type = type;
+									conflict.models(function (err, source, target) {
+										conflict.source = source;
+										conflict.target = target;
+										conflict.manual = new conflict.SourceModel(source || target);
 
-											// log the conflict details
-											console.log("conflicts: source:"+JSON.stringify(conflict.source));
-											console.log("conflicts: target:"+JSON.stringify(conflict.target));
+										// log the conflict details
+										console.log("conflicts: source:"+JSON.stringify(conflict.source));
+										console.log("conflicts: target:"+JSON.stringify(conflict.target));
 
-										});
-										conflict.changes(function (err, source, target) {
-											conflict.sourceChange = source;
-											conflict.targetChange = target;
+									});
+									conflict.changes(function (err, source, target) {
+										conflict.sourceChange = source;
+										conflict.targetChange = target;
 
-											var sourceType = conflict.sourceChange.type();
-											var targetType = conflict.targetChange.type();
+										var sourceType = conflict.sourceChange.type();
+										var targetType = conflict.targetChange.type();
 
-											// log the conflict details
-											console.log("conflicts: source type:" +sourceType + ", sourceChange:"+JSON.stringify(conflict.sourceChange));
-											console.log("conflicts: target type:" +targetType + ", targetChange:"+JSON.stringify(conflict.targetChange));
+										// log the conflict details
+										console.log("conflicts: source type:" +sourceType + ", sourceChange:"+JSON.stringify(conflict.sourceChange));
+										console.log("conflicts: target type:" +targetType + ", targetChange:"+JSON.stringify(conflict.targetChange));
 
-											// TODO - automatically resolve conflicts
-											if( sourceType == 'update' && targetType == 'delete') {
-												conflict.resolveUsingTarget(refreshConflicts);
-											}
-											else {
-												conflict.resolveUsingSource(refreshConflicts);
-											}
-										});
+										// TODO - automatically resolve conflicts
+										if( sourceType == 'update' && targetType == 'delete') {
+											conflict.resolveUsingTarget(refreshConflicts);
+										}
+										else {
+											conflict.resolveUsingSource(refreshConflicts);
+										}
 									});
 								});
-							}
-							cb && cb(err,conflicts);
-						/*}*/
+							});
+						}
+
+
+						cb && cb(err,conflicts);
 					});
 			});
 
-/*
-			// LT - 10/12/2015 - updated code - does local first per todo example at:
-			// https://github.com/strongloop/loopback-example-offline-sync/blob/master/client/lbclient/boot/replication.js
-			// Added for v2.23 ------------------------------------------
-			LocalJob.replicate(
-				since.push,
-				RemoteJob,
-				options,
-				function pushed(err, conflicts, cps) {
-					since.push = cps;
-
-					RemoteJob.replicate(
-						since.pull,
-						LocalJob,
-						options,
-						function pulled(err, conflicts, cps) {
-							since.pull = cps;
-
-							console.log(new Date().toISOString()+': finished replication');
-							cb && cb(err,conflicts);
-						});
-				});
-			// END: Added for v2.23 ------------------------------------------
-*/
-
-/*
-			// LT - from https://gist.github.com/bajtos/63b415629a341ef5d0c9
-			// It is important to push local changes first,
-			// that way any conflicts are resolved at the client
-			// 02/09/2015 - BUT - this gave a 400 error when replicating (GET):
-//GET http://58.108.229.60:3000/api/Jobs/changes?since=4&filter%5Bwhere%5D%5BmobjobDriver%5D=199&filter%5Bwhere%5D%5Bmobjobuid%5D%5Binq%5D%5B0%5D=825364f0-5138-11e5-92f0-a92cbf3396d1&filter%5Bwhere%5D%5Bmobjobuid%5D%5Binq%5D%5B1%5D=825316d0-5138-11e5-92f0-a92cbf3396d1&filter%5Bfields%5D%5Bmobjobuid%5D=true&filter%5Border%5D%5B0%5D%5Bkey%5D=mobjobuid&filter%5Border%5D%5B0%5D%5Breverse%5D=1&filter%5Border%5D%5B1%5D%5Bkey%5D=mobjobSeq&filter%5Border%5D%5B1%5D%5Breverse%5D=1
-*/
-
-/*
-			// Local job first
-			LocalJob.replicate(
-				since.push,
-				RemoteJob,
-				options,
-				function pushed(err, conflicts, cps) {
-					since.push = cps;
-					RemoteJob.replicate(
-					since.pull,
-					LocalJob,
-					options,
-					function pulled(err, conflicts, cps) {
-						since.pull = cps;
-						cb && cb();
-					});
-			});
-*/
 
         }
     }
@@ -416,20 +325,6 @@ module.exports = function (client) {
 		next();
 		sync();
 	});
-
-/*
-	// Added for v2.23 ------------------------------------------
-    // sync local changes if connected
-	LocalJob.observe('after save', function(ctx, next) {
-		next();
-		sync(lastFilter);
-	});
-	LocalJob.observe('after delete', function(ctx, next) {
-		next();
-		sync(lastFilter);
-	});
-	// END: Added for v2.23 ------------------------------------------
-*/
 
 	// LT - 22/12/2015 - added per Strongloop support to remove now
 	// obsolete job-change and checkpoint records
@@ -480,8 +375,6 @@ module.exports = function (client) {
 */
 };
 
-},{}],"loopback-boot#boot#replication.js":[function(require,module,exports){
-module.exports=require('kn1c3t');
 },{}],"loopback-boot#boot#replication_barcode.js":[function(require,module,exports){
 module.exports=require('C+pBxP');
 },{}],"C+pBxP":[function(require,module,exports){
