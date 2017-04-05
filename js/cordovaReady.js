@@ -14,6 +14,8 @@ angular.module('cordovaReady', [])
 
 	var cordova_ready = { };
 
+	var location_allowed = false;
+
 	isready = false;
 
 	cordova_ready.isready = false;
@@ -80,6 +82,62 @@ angular.module('cordovaReady', [])
 			log.debug("Device is NOT !!!! a CipherLab RS30 HEAD scanning NOT Available " + model);
 		}
 
+		/* ----------------------------------------------------------------------------------- */
+		// new Android permissions methodology - done at runtime not on install
+		// check/set we have the permissions for our app
+		// https://github.com/dpa99c/cordova-diagnostic-plugin
+		// https://github.com/dpa99c/cordova-diagnostic-plugin-example
+		if( platform == "Android" && parseInt(version) >= 6) {
+			var oscPermissions = [
+				cordova.plugins.diagnostic.permission.ACCESS_FINE_LOCATION,
+				cordova.plugins.diagnostic.permission.ACCESS_COARSE_LOCATION,
+				cordova.plugins.diagnostic.permission.CAMERA
+			];
+
+/*
+ * This can crash the app on startup but is the recommended way
+ * https://github.com/dpa99c/cordova-diagnostic-plugin/issues/154
+ * This is because Android puts app into background to get perms
+ */
+			cordova.plugins.diagnostic.requestRuntimePermissions(onRequestPermissions, onRequestPermissionsError, oscPermissions);
+
+			function onRequestPermissions(statuses){
+				for(var permission in statuses){
+					status = statuses[permission];
+					log.debug("onRequestPermissions: permission:"+permission+", status:"+status);
+
+					switch(status) {
+						case "GRANTED":
+							// All good
+							if(permission == cordova.plugins.diagnostic.permission.ACCESS_FINE_LOCATION
+									|| permission == cordova.plugins.diagnostic.permission.ACCESS_COARSE_LOCATION) {
+								location_allowed = true;
+							}
+							break;
+						case "DENIED_ALWAYS":
+							// User denied access to this permission and checked "Never Ask Again" box.
+							// Can't do anything here - TODO - maybe alert box for user to change manually?
+							break;
+						case "DENIED":
+							// Has been turned off in settings without checking "Never Ask Again"
+							// so request again
+							break;
+						case "NOT_REQUESTED":
+							// Never been requested so ask for permission
+							break;
+					}
+				}
+			};
+
+			function onRequestPermissionsError(error){
+				log.error("onRequestPermissionsError:"+error);
+			};
+		}
+		else {
+			// We are on iOS or an older version of Android
+			location_allowed = true;
+		}
+		/* ----------------------------------------------------------------------------------- */
 	}
 
 	cordova_ready.isDeviceReady = function isDeviceReady()
@@ -88,8 +146,10 @@ angular.module('cordovaReady', [])
 	}
 
 	function onPause() {
-		log.debug('onPause About to call BGGS.start()');
-		BackgroundGeolocationService.start();	
+		log.debug('onPause About to call BGGS.start(), location_allowed:'+location_allowed);
+
+		if(location_allowed)
+			BackgroundGeolocationService.start();	
 
 		$rootScope.$broadcast('PAUSE');
 	}
@@ -100,7 +160,7 @@ angular.module('cordovaReady', [])
 	}
 
 	/*
-	 * For future use - maybe write to log file on device that can be send to OSX
+	 * For future use - maybe write to log file on device that can be send to OSC
 	 * or maybe viewed on a tab on the device
 
 	function writeLog(str) {
