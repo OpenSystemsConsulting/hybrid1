@@ -18758,9 +18758,9 @@ module.exports={
       "connector": "remote",
       "debug": "true",
       "clientId": "CITYCRANE",
-      "serverIP": "150.101.228.1",
+      "serverIP": "remote.citycranetrucks.com.au",
       "serverPort": 3000,
-      "url": "http://150.101.228.1:3000/api"
+      "url": "http://remote.citycranetrucks.com.au:3000/api"
     },
     "swift2": {
       "connector": "remote",
