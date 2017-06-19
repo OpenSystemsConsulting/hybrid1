@@ -188,9 +188,21 @@
 			</button>
 		</ion-item>
 		<ion-item class="item item-button-right" >
-			Clear current date (for SOD testing)
+			Delete old JSEA
+			<button class="button button-assertive" ng-click="deleteOldJSEA()">
+				Delete
+			</button>
+		</ion-item>
+		<ion-item class="item item-button-right" >
+			SOD testing - clear date
 			<button class="button button-positive" ng-click="clearSODDate()">
 				Clear
+			</button>
+		</ion-item>
+		<ion-item class="item item-button-right" >
+			SOD testing - set date yesterday
+			<button class="button button-positive" ng-click="setSODDate()">
+				Set
 			</button>
 		</ion-item>
 	</span>

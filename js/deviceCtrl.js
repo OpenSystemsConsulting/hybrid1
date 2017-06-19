@@ -2,8 +2,8 @@ angular.module('deviceCtrl', [])
 
 
 .controller('deviceCtrl', [
-'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', 'deviceService', 'network','fullreplication', '$cordovaNetwork',"appConfig",'siteService','$ionicPopup','siteConfig','messageService','jobService','sodService',
-function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, deviceService, network, fullreplication, $cordovaNetwork, appConfig, siteService, $ionicPopup,siteConfig,messageService, jobService, sodService) {
+'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', 'deviceService', 'network','fullreplication', '$cordovaNetwork',"appConfig",'siteService','$ionicPopup','siteConfig','messageService','jobService','sodService','jseaService',
+function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, deviceService, network, fullreplication, $cordovaNetwork, appConfig, siteService, $ionicPopup,siteConfig,messageService, jobService, sodService, jseaService) {
 
 	// TODO - maybe have array of key/value pairs - then can simply iterate with ng-repeat on template
 	var devicectrl = { };
@@ -117,8 +117,9 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 
 	$scope.reloadSiteConfig = function() {
 		siteConfig.deleteLocalConfigs();
-		siteConfig.getAllConfigsFromServer();
-		localStorageUsage();
+		siteConfig.getAllConfigsFromServer().then(function() {
+			$scope.localStorageList = localStorageUsage();
+		});
 	}
 
 	$scope.usedStorage = Math.round(JSON.stringify(localStorage).length / 1024) + " KB";
@@ -149,12 +150,21 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 		jobService.deleteOldJobs(0);
 	}
 
+	$scope.deleteOldJSEA = function() {
+		jseaService.deleteOldData(0);
+	}
+
 	$scope.viewChangeData = function() {
 		$state.go('tab.change');
 	}
 
 	$scope.clearSODDate = function() {
 		sodService.clearSODDate();
+	}
+
+	$scope.setSODDate = function() {
+		sodService.setSODDate();
+		$scope.localStorageList = localStorageUsage();
 	}
 
 }]);
