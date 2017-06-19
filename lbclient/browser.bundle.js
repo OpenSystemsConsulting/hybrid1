@@ -433,8 +433,46 @@ module.exports = function (client) {
 
 	// LT - 22/12/2015 - added per Strongloop support to remove now
 	// obsolete job-change and checkpoint records
-	function deleteChangeData(callback) {
+	// TODO - maybe extend to do all?  Using async?
+	function deleteJobChangeData(callback) {
 		var Model = client.models.LocalJob;
+
+		var Change = Model.getChangeModel();
+		var Checkpoint = Change.getCheckpointModel();
+
+		var changeData = {};
+
+		Change.deleteAll({ rev: null }, function(err, info) {
+		  if (err) return console.error('Cannot delete old changes:', err);
+		  //console.log('Deleted %s old changes.', info.count);
+			changeData.changes = info;
+
+		  Checkpoint.current(function(err, cp) {
+			if (err) return console.error('Cannot obtain current checkpoint:', err);
+			//console.log('Current checkpoint:', cp);
+
+
+			Checkpoint.deleteAll({ seq: { lt: cp } }, function(err, info) {
+			  if (err) return console.error('Cannot delete old checkpoints:', err);
+			  //console.log('Deleted %s old checkpoints', info.count);
+
+				changeData.checkpoints = info;
+
+			  // The MongoDB connection pool is blocking exit,
+			  // we need to exit explicitely
+			  //process.exit(0);
+
+
+				callback && callback(err,changeData);
+			});
+		  });
+		});	
+	}
+
+	// Copy of above but for JSEA
+	// TODO - this should be refactored to avoid all of this duplicate code
+	function deleteJseaChangeData(callback) {
+		var Model = client.models.LocalJseaDriverAnswers;
 
 		var Change = Model.getChangeModel();
 		var Checkpoint = Change.getCheckpointModel();
@@ -470,7 +508,8 @@ module.exports = function (client) {
 
     client.sync = sync;
 
-	client.deleteChangeData = deleteChangeData;
+	client.deleteJobChangeData = deleteJobChangeData;
+	client.deleteJseaChangeData = deleteJseaChangeData;
 
 /*
 	// sync the data every 2 seconds
