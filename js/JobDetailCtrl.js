@@ -21,8 +21,14 @@ angular.module('JobDetailCtrl', [])
 
 	// for button to take photos
 	$scope.pdaImages = (pdaParams.pda_images || (siteConfig.getSiteConfigValue('PDA_IMAGES') == 'Y'));
+
 	$scope.pdaNotes = (pdaParams.pda_notes || (siteConfig.getSiteConfigValue('PDA_NOTES') == 'Y'));
 
+	// signature on pickup
+	$scope.pdaSignatOnPU = (pdaParams.pda_signat_on_pu || (siteConfig.getSiteConfigValue('PDA_SIGNATURE_PUP') == 'Y'));
+
+	var multidelText = siteConfig.getSiteConfigValue('PDA_MULTIDEL_NOTE_TEXT');
+	
 	jobChangedService.setlastjobedited(false);
 
 	$scope.bNewItem = false;		// Just looking at an existing Job by default
@@ -233,38 +239,50 @@ angular.module('JobDetailCtrl', [])
 
 
 	$scope.doJseaSubType = function(formtype) {
+
+			var job = $scope.job[0];
 			var jobStatus;
 			
 			//formtype is MDEL or ODIM or JSEA
 
-			basejob = $scope.job[0].mobjobNumber;
-		 	basejobDate = $scope.job[0].mobjobBookingDay;
+			basejob = job.mobjobNumber;
+		 	basejobDate = job.mobjobBookingDay;
 		
-			if ( $scope.job[0].mobjobStatus == 'PU' || $scope.job[0].mobjobStatus == 'Dp')
+			if ( job.mobjobStatus == 'PU' || job.mobjobStatus == 'Dp')
 				jobStatus = 'PICKUP';
 
 			if ( $scope.job[0].mobjobStatus == 'Ad' )
 				jobStatus = 'DELIVER';
 				
-			
 			jseaService.setJobJseaDetails( basejob,basejobDate,'N',jobStatus,formtype,2);
-			window.location.href = "#/tab/jseas";
+
+			// if MULTIDEL prompt for notes prior to entering jsea details
+			// designed to allow operator to enter address/suburb details
+			// which will then appear on CCT's invoices to clients
+			if(formtype == 'MULTIDEL') {
+				// wait for the modal form to be closed before going to the next page
+				$scope.$on('modal.hidden', function() {
+					window.location.href = "#/tab/jseas";
+				});
+				$scope.enterNotes(job.mobjobSeq, multidelText, formtype);
+			}
+			else {
+				window.location.href = "#/tab/jseas";
+			}
 	}
 	//The func below should only be called when a button is clicked EG 
 	// Accept / Pickup / Tap to Sign 
 
 	$scope.handleJobStatusChange = function(seqid,signat,podname) {
 
-			// seqid id the mobjobSeq of the job that's just changed e.g. 2015123103038500
+		// seqid id the mobjobSeq of the job that's just changed e.g. 2015123103038500
 		mystr = 'handleJobStatusChange:seqid:'+seqid;
-			log.debug(mystr);
+		log.debug(mystr);
+
 		var jseaMaybeRequired = false;
 		var wasPickup = false;
 		var wasArriveDeliver = false;
 
-			//console.log("In handleJobStatusChange ");
-			//console.log("In job =  ",seqid);
-		
 		var dateTime = new Date().getTime();
 		var timestamp = Math.floor(dateTime / 1000);
 
@@ -287,7 +305,7 @@ angular.module('JobDetailCtrl', [])
 			var job = $scope.jobs[iac];
 			var oldStatus = job.mobjobStatus;
 			
-			//DOnt need to match seqid just have this there for later when
+			// Don't need to match seqid just have this there for later when
 			// we want to have individual signatures for each leg
 
 			// we need to change PU to PC (pod captured) for each leg of a multi leg
@@ -353,6 +371,16 @@ angular.module('JobDetailCtrl', [])
 				{
 					job.mobjobStatus = 'PU';
 					job.mobjobTimePU = Date.now();
+
+					if( job.mobjobLegNumber == 0) {
+						// Possible signature on pickup
+						job.mobjobSignat = signat || "";
+
+						if(podname) {
+							job.mobjobPodName = podname;
+							job.mobjobPodTime = new Date().toISOString();
+						}
+					}
 				}
 				else
 				if ( oldStatus == 'PU')
@@ -423,6 +451,16 @@ angular.module('JobDetailCtrl', [])
 					wasPickup = true;
 					job.mobjobStatus = 'PU';
 					job.mobjobTimePU = Date.now();
+
+					if( job.mobjobLegNumber == 0) {
+						// Possible signature on pickup
+						job.mobjobSignat = signat || "";
+
+						if(podname) {
+							job.mobjobPodName = podname;
+							job.mobjobPodTime = new Date().toISOString();
+						}
+					}
 				}
 				else
 				// Arrive pickup - not used atm
@@ -694,9 +732,11 @@ angular.module('JobDetailCtrl', [])
 			$scope.modal.remove();
 		});
 
-		$scope.enterNotes = function(seqid) {
+		$scope.enterNotes = function(seqid, placeholder, formtype) {
 			// TODO - do we need to save seqid?  Should all be in $scope.job[0]
 			$scope.note.seqid = seqid;
+			$scope.placeholderText = placeholder || "Enter job notes here";
+			$scope.note.formtype = formtype || "";
 			$scope.modal.show();
 		};
 
@@ -708,7 +748,11 @@ angular.module('JobDetailCtrl', [])
 
 			ln.jnJobNum = $scope.job[0].mobjobNumber;
 		 	ln.jnJobBday = $scope.job[0].mobjobBookingDay;
-			ln.jnText = $scope.note.text;
+			// prepend formtype if set e.g. "MULTIDEL:...."
+			if($scope.note.formtype)
+				ln.jnText = $scope.note.formtype + ':' + $scope.note.text;
+			else
+				ln.jnText = $scope.note.text;
 			ln.jnDriver = pdaParams.getDriverId();
 			ln.jnCreateTime = Date.now();
 

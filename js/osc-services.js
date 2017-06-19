@@ -467,7 +467,7 @@ angular.module('osc-services', [])
 	}
   }
 })
-.factory('messageService', function($rootScope, pdaParams, Logger, FixedQueue, deleteChangeData, Job, deviceService, jobService){
+.factory('messageService', function($rootScope, pdaParams, Logger, FixedQueue, deleteJobChangeData, deleteJseaChangeData, Job, deviceService, jobService){
  
 	// Service to handle incoming PDA messages 
 
@@ -523,7 +523,16 @@ angular.module('osc-services', [])
 			var logmsg = {};
 			logmsg.type = 'clearChangeData';
 			// clear job-change and checkpoint data from local storage then log contents
-			deleteChangeData( function( err, changeData) {
+			deleteJobChangeData( function( err, changeData) {
+				if(err)
+					log.error(err);
+				if(changeData)
+					log.debug(changeData);
+				logmsg.data = JSON.parse(localStorage.getItem('osc-local-db'));
+				log.info(logmsg);
+			});
+			// clear jsea change data
+			deleteJseaChangeData( function( err, changeData) {
 				if(err)
 					log.error(err);
 				if(changeData)
@@ -655,7 +664,7 @@ angular.module('osc-services', [])
 
 	return messageService;
 })
-.factory('jseaService', function(pdaParams, Logger,$rootScope,siteConfig ){
+.factory('jseaService', function(LocalJseaDriverAnswers, pdaParams, Logger, $rootScope, siteConfig, deleteJseaChangeData ){
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'jseaService'};
 	var log = Logger.getInstance(logParams);
@@ -833,6 +842,44 @@ angular.module('osc-services', [])
                 return (myDetailJobJseaCaptured);
             }   
 			return false;
+		},
+		deleteOldData: function(daysback) {
+			// delete old data
+			// if daysback parameter provided use it otherwise use site config value
+			siteConfig.getSiteConfigInt('PDA_DEL_DAYSBACK').then(function(val) {
+				daysback = daysback || val;
+
+				var queryDate = new Date();
+				queryDate.setDate(queryDate.getDate() - daysback);
+
+				log.info("deleteOldData: daysback:" + daysback + ", queryDate:" + queryDate);
+
+				if( daysback > 1) {
+					var delfilter = { "where": {"jdaJobBday": {"lt":queryDate} } };
+					log.info("deleteOldData: delfilter:"+JSON.stringify(delfilter));
+
+					LocalJseaDriverAnswers.find(delfilter, function (err, answers) {
+						var len = answers.length;
+						log.info("deleteOldData: deleting:"+len+" answers");
+
+						for( var i = 0; i < len; i++) {
+							var answer = answers[i];
+							log.info("deleteOldData: delete answer:"+i+" job:" + answer.jdaJobNum + " date:" + answer.jdaJobBday + " order:" + answer.jdaOrder);
+							answer.delete();
+						}
+
+						// clear jsea change data if we've deleted any old answers
+						if( len > 1) {
+							deleteJseaChangeData( function( err, changeData) {
+								if(err)
+									log.error(err);
+								if(changeData)
+									log.debug(changeData);
+							});
+						}
+					});
+				}
+			});
 		}
 	}
 
@@ -1108,7 +1155,7 @@ angular.module('osc-services', [])
 
 	return backgroundGeoService;
 }])
-.factory('sodService', function($rootScope,pdaParams,Logger,eventService,messageService,siteConfig,jobService){
+.factory('sodService', function($rootScope,pdaParams,Logger,eventService,messageService,siteConfig,jobService,jseaService){
 
 	//Start of Day Service
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'sodService'};
@@ -1158,7 +1205,6 @@ angular.module('osc-services', [])
 						localStorage.setItem('FIRST_RESUME_DATE',now );
 						pdaParams.logoffDriver();
 						eventService.sendMsg('LOGOFF');
-						messageService.clearChangeData();
 						log.debug(" prevResumeDay != mycurday mycurday = " + mycurday);
 
 						$rootScope.$broadcast('SODSERVICE_IS_NEW_DAY');
@@ -1166,6 +1212,11 @@ angular.module('osc-services', [])
 						siteConfig.getAllConfigsFromServer();
 
 						jobService.deleteOldJobs();
+						jseaService.deleteOldData();
+
+						// NOTE - should really be done only after we've deleted data
+						// so perhaps in a callback wrapper?
+						messageService.clearChangeData();
 					}
 					else {
 						log.debug('Not new date');
@@ -1193,8 +1244,15 @@ angular.module('osc-services', [])
 		},
 
 		clearSODDate: function() {
-			// This will force a start of day
+			// This will force an initial start of day
 			localStorage.removeItem('FIRST_RESUME_DATE');
+		},
+
+		setSODDate: function() {
+			// This will force a start of day by setting date to yesterday
+			d = new Date();
+			d.setDate(d.getDate() - 1);
+			localStorage.setItem('FIRST_RESUME_DATE',d );
 		}
 	}
 
@@ -1230,7 +1288,9 @@ angular.module('osc-services', [])
 				'PDA_NOTES',
 				'PDA_DEL_DAYSBACK',
 				'PDA_SORT_COL1',
-				'PDA_DISPLAY_DATE'
+				'PDA_DISPLAY_DATE',
+				'PDA_SIGNATURE_PUP',
+				'PDA_MULTIDEL_NOTE_TEXT'
 			];
 
 	var g_siteconfigs = null;
