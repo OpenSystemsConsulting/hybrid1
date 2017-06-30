@@ -18808,6 +18808,14 @@ module.exports={
       "serverIP": "roy1220545.lnk.telstra.net",
       "serverPort": 3000,
       "url": "http://roy1220545.lnk.telstra.net:3000/api"
+    },
+    "wads": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "WADS",
+      "serverIP": "wads.opensyscon.com.au",
+      "serverPort": 3061,
+      "url": "http://wads.opensyscon.com.au:3061/api"
     }
   },
   "models": [
@@ -19411,6 +19419,7 @@ module.exports={
             "length": 11,
             "precision": null,
             "scale": 6,
+            "omitFromForm": true,
             "label": "Accepted time"
           },
           "mobjobTimePU": {
@@ -19419,6 +19428,7 @@ module.exports={
             "length": 11,
             "precision": null,
             "scale": 6,
+            "omitFromForm": true,
             "label": "Picked Up time"
           },
           "mobjobTimeAp": {
@@ -19427,6 +19437,7 @@ module.exports={
             "length": 11,
             "precision": null,
             "scale": 6,
+            "omitFromForm": true,
             "label": "Arrive pickup"
           },
           "mobjobTimeAd": {
@@ -19435,6 +19446,7 @@ module.exports={
             "length": 11,
             "precision": null,
             "scale": 6,
+            "omitFromForm": true,
             "label": "Arrive delivery"
           },
           "mobjobTimeDp": {
@@ -19443,6 +19455,7 @@ module.exports={
             "length": 11,
             "precision": null,
             "scale": 6,
+            "omitFromForm": true,
             "label": "Depart Pickup"
           },
           "onDeviceTime": {
