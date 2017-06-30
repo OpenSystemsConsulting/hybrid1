@@ -1281,6 +1281,7 @@ angular.module('osc-services', [])
 				'PDA_JSEA_ON',
 				'PDA_JSEA_TYPE',
 				'PDA_PICKUP_ALL',
+				'PDA_DEPART_ALL',
 				'PDA_DELIVER_ALL',
 				'PDA_FULL_STATUSES',
 				'PDA_IMAGES',
@@ -1290,6 +1291,8 @@ angular.module('osc-services', [])
 				'PDA_SORT_COL1',
 				'PDA_DISPLAY_DATE',
 				'PDA_SIGNATURE_PUP',
+				'PDA_SIGNATURE_DPUP',
+				'PDA_DISCRETE_DEL_SIGNAT',
 				'PDA_MULTIDEL_NOTE_TEXT'
 			];
 
