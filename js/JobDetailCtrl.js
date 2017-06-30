@@ -24,8 +24,17 @@ angular.module('JobDetailCtrl', [])
 
 	$scope.pdaNotes = (pdaParams.pda_notes || (siteConfig.getSiteConfigValue('PDA_NOTES') == 'Y'));
 
+	// The following two are mutually exclusive so should never be set together - if they are we use depart pickup
 	// signature on pickup
 	$scope.pdaSignatOnPU = (pdaParams.pda_signat_on_pu || (siteConfig.getSiteConfigValue('PDA_SIGNATURE_PUP') == 'Y'));
+	// signature on depart pickup
+	$scope.pdaSignatOnDepPU = (pdaParams.pda_signat_on_dpu || (siteConfig.getSiteConfigValue('PDA_SIGNATURE_DPUP') == 'Y'));
+	if($scope.pdaSignatOnDepPU && $scope.pdaSignatOnPU) {
+		$scope.pdaSignatOnPU = false;
+	}
+
+	// separate delivery signature and delivery event
+	$scope.pdaDiscreteDelSignat = (pdaParams.pda_discrete_del_signat || (siteConfig.getSiteConfigValue('PDA_DISCRETE_DEL_SIGNAT') == 'Y'));
 
 	var multidelText = siteConfig.getSiteConfigValue('PDA_MULTIDEL_NOTE_TEXT');
 	
@@ -112,7 +121,7 @@ angular.module('JobDetailCtrl', [])
 				//Old code which we think is buggy
 				// Caused a problem on 1st September 2016 prior to 10:00am AEST !!!
 				// So the find did not return the job and so it went straight back to the jobs screen
-				// Something to do with the way we create then set?
+				// Something to do with the way we create first then set?
 				//var jobDateFilter = new Date();
 				//jobDateFilter.setUTCFullYear(year);
 				//jobDateFilter.setUTCMonth(mon-1);			// 0 - 11
@@ -156,59 +165,26 @@ angular.module('JobDetailCtrl', [])
 	 		//console.log("Found " + results.length + " job legs");
 
 		  //for(var i=0; i<results.length; i++)
-		  
+			$scope.legs = results.length;
 			$scope.jobs = results;
+
+			// Check if last leg is at 'PC' status for discrete signature before delivery
+			if( $scope.jobs[$scope.legs-1].mobjobStatus == 'PC')
+				$scope.discreteDelSignat = true;
+			else
+				$scope.discreteDelSignat = false;
+
+			if( $scope.discreteDelSignat && $scope.pdaDiscreteDelSignat) {
+				$scope.showDelButtonNoSignat = true;			// used on template in ng-if
+			}
+		  
 			//$scope.data = results;
 			  $rootScope.job = $scope.job =  $scope.base.currentItem = results;
 				// Isolate the Single Job and set the CurrentItem in the Base Class...
 
-			
-
-/***
-			if(jseaService.getJseaConfig() == 'PJB_CHECK' )
-			{
-				var ljob = $scope.jobs[0];
-				
-				if ( ljob.jseaCaptured == "N" || !ljob.jseaCaptured )
-				{
-					var ljobDate = Math.round($state.params.jobId / 100000000);
-					
-					log.debug('Perjob Jsea Check , job: ' + jobId + ' Date: ' + ljobDate + ' Captured = false');
-					
-
-					------------- ATTENTION ------------------
-
-					//If first time into this job detail
-					// then the service wont have the captured = True/Y so it will push the 
-					// user to the Jsea Form
-					// subsequent time the service will have been updated from the form submit
-					// and we will save the job with a Y so no more checking
-
-
-					---------- So DONT GET CONFUSED when you have just submitted a JSEA form --
-					  -----------AND you have clicked the same job again and it stll has jseaCaptured == "N"
-					  ----------- because it needs to check the service and then change to Y and save 
-
-					if (jseaService.checkJobDateJseaCaptured(jobId,ljobDate) == true)
-					{
-						ljob.jseaCaptured = "Y";
-						ljob.save();
-					}
-					else
-					{
-						jseaService.setJobJseaDetails( jobId,ljobDate,ljob.jseaCaptured);
-						window.location.href = "#/tab/jseas";
-						return;
-					}
-				}
-			}
-****/
-
 			  $scope.data = $scope.base.currentData = $scope.combineValuesAndLabels($scope.job, $rootScope.jobMetadata);
 								// Set up the Metadata to control the Display of this Job...
 								// Set base.currentData so Edits can be sensed...
-
-			//	console.log("Steve Is Here [" + JSON.stringify($scope.data) + "]");
 
 				//var idscode = util.findArrayItemByKey($scope.data, "property", "mobjobServiceCode");
 			//	console.log("Found Service code [" + JSON.stringify(idscode) + "]");
@@ -217,9 +193,6 @@ angular.module('JobDetailCtrl', [])
 					// No Data changed at this point...
           	$rootScope.tabHeader = $scope.generateJobHeader($scope.job);
           		// Generate a meaningful Header Title...
-
-			// LT - added to see if fixes slowness when retrieving job details
-			//$scope.$apply();
 
         });
 	  }
@@ -476,6 +449,16 @@ angular.module('JobDetailCtrl', [])
 				{
 					job.mobjobStatus = 'Dp';
 					job.mobjobTimeDp = Date.now();
+
+					if( job.mobjobLegNumber == 0) {
+						// Possible signature on depart pickup
+						job.mobjobSignat = signat || "";
+
+						if(podname) {
+							job.mobjobPodName = podname;
+							job.mobjobPodTime = new Date().toISOString();
+						}
+					}
 				}
 				if ( oldStatus == 'Dp')
 				{
@@ -505,7 +488,26 @@ angular.module('JobDetailCtrl', [])
 				else
 				if ( oldStatus == 'PC')
 				{
-					podCount++;
+					// if oldStatus is PC it means we've just captured a POD or, if there is 
+					// a separate signature capture, it means we've just had a deliver event
+
+					// If we want a separate PC (signature capture) and then a discrete DEL deliver event
+					// don't increment podCount as we don't want to complete at this stage
+
+					// If we were at 'PC' AND we have site config set AND discreteDelSignat is set
+					// (last leg is at 'PC' status)
+					// we do want to increment podCount because we do want to complete the job now
+					if( $scope.pdaDiscreteDelSignat && !$scope.discreteDelSignat) {
+						// do nothing
+					}
+					else
+					if( $scope.showDelButtonNoSignat) {
+						podCount++;
+					}
+					else {
+						podCount++;			// normal default behaviour
+					}
+					log.debug('handleJobStatusChange: ' +job.mobjobSeq+ ' oldStatus:'+oldStatus+' showDelButtonNoSignat:'+$scope.showDelButtonNoSignat + ' podCount:' + podCount);
 				}
 			}
 
@@ -668,13 +670,14 @@ angular.module('JobDetailCtrl', [])
 	  		// A meaningful Header Title is generated...
 	  }
 
+		// This is the "main" function that runs which will het the metadata for 'Job'
+		// and then call getJob() in the callback which will retrieve the job leg details
 		$scope.getModelMetadata(Job, "jobMetadata", function(metadata) {
 
 			mystr = 'getModelMetadata';
 			//log.debug(mystr);
 
 			// Don't move forward until we get the Metadata...
-			//console.log("Steve Is Here ");
 			if(testing < 1)
 				getJob();
 		});

@@ -125,6 +125,7 @@
 		</div>
 
 		<!--   PICKUP  JOB -->
+			<!-- possible signature at time of pickup -->
 		<div ng-if="(pdaSignatOnPU && property.enumValue.value == 'AC' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;" >
 			<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)" ng-disabled="syncInProgress"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
@@ -155,7 +156,16 @@
 -->
 
 		<!--   Depart Pup -->
-		<div ng-if="(fullStatuses && property.enumValue.value == 'PU' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
+			<!-- possible signature at time of depart pickup -->
+		<div ng-if="(pdaSignatOnDepPU && fullStatuses && property.enumValue.value == 'PU' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
+					>
+			<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)" ng-disabled="syncInProgress"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				Depart P/up
+			</button>
+		</div>
+		<div ng-if="(!pdaSignatOnDepPU && fullStatuses && property.enumValue.value == 'PU' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
 			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)" ng-disabled="syncInProgress"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
@@ -185,8 +195,19 @@
 			</button>
 		</div>
 -->
+
+		<!--   COMPLETE JOB -->
+
+		<!-- fullStatuses turned on in site config -->
 		<!-- no multileg parameter or single leg job has one "tap to sign" on first leg -->
-		<div ng-if="(fullStatuses && property.enumValue.value == 'Ad' && (property.legid % 100 == 0) && (!pdaParams.multileg || property.numlegs < 2))" class="input-label" style="width:100%;">
+		<div ng-if="(showDelButtonNoSignat && fullStatuses && property.enumValue.value == 'Ad' && (property.legid % 100 == 0) && (!pdaParams.multileg || property.numlegs < 2))" class="input-label" style="width:100%;">
+			<button class="button button-positive floatLeft" ng-click="handleJobStatusChange(property.legid)" ng-disabled="syncInProgress"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				Deliver
+            </button>
+		</div> 
+		<div ng-if="(! showDelButtonNoSignat && fullStatuses && property.enumValue.value == 'Ad' && (property.legid % 100 == 0) && (!pdaParams.multileg || property.numlegs < 2))" class="input-label" style="width:100%;">
 				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)" ng-disabled="syncInProgress"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
@@ -202,9 +223,7 @@
             </button>
 		</div> 
 		<!-- ============================================================================================== -->
-
-		<!--   COMPLETE JOB -->
-
+		<!-- fullStatuses NOT turned on in site config -->
 		<!-- no multileg parameter or single leg job has one "tap to sign" on first leg -->
 		<div ng-if="(!fullStatuses && property.enumValue.value == 'PU' && (property.legid % 100 == 0) && (!pdaParams.multileg || property.numlegs < 2))" class="input-label" style="width:100%;">
 				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)" ng-disabled="syncInProgress"
@@ -222,6 +241,7 @@
 				Deliver
             </button>
 		</div> 
+		<!-- ============================================================================================== -->
 
 		<!--   TODO - show an icon or indicator if this leg already has POD captured?  -->
 
@@ -233,10 +253,6 @@
 		</select>
 
 -->
-
-
-
-
 
 
 	</div>
