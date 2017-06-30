@@ -58,6 +58,7 @@ angular.module('JobsIndexCtrl', [])
 	 */
 	$scope.fullStatuses = (pdaParams.pda_full_statuses || (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y'));
 
+	$scope.pda_depart_all = (pdaParams.pda_depart_all || (siteConfig.getSiteConfigValue('PDA_DEPART_ALL') == 'Y'));
 	$scope.pda_deliver_all = (pdaParams.pda_deliver_all || (siteConfig.getSiteConfigValue('PDA_DELIVER_ALL') == 'Y'));
 
 	var sortKey = siteConfig.getSiteConfigValue('PDA_SORT_COL1') || 'mobjobBookingDay';
@@ -251,7 +252,7 @@ angular.module('JobsIndexCtrl', [])
 
 			$scope.titleWithTotal = "Jobs " + " (" + $scope.jobs.length + ")";
 
-			$scope.$apply();
+			//$scope.$apply();
 		});
 	}
 

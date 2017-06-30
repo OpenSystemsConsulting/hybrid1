@@ -41,7 +41,7 @@
 		<button class="button button-energized" ng-click="multiPickup()" ng-if="pda_pickup_all && jobStatuses['AC']" ng-disabled="syncInProgress" ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 			Pickup {{ jobStatuses['AC'] }}
 		</button>
-		<button class="button button-balanced" ng-click="multiDepartPickup()" ng-if="fullStatuses && jobStatuses['PU']" ng-disabled="syncInProgress"  ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
+		<button class="button button-balanced" ng-click="multiDepartPickup()" ng-if="pda_depart_all && jobStatuses['PU']" ng-disabled="syncInProgress"  ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()">
 			Depart {{ jobStatuses['PU'] }}
 		</button>
 
