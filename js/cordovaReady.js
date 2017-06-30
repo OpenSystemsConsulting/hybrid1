@@ -69,7 +69,9 @@ angular.module('cordovaReady', [])
 		var model =  $cordovaDevice.getModel();
 		var platform =  $cordovaDevice.getPlatform();
 		var version = $cordovaDevice.getVersion();
-		log.debug("Device Model:" + model + ", platform:" + platform + ", OS ver:" + version);
+		//log.debug("Device Model:" + model + ", platform:" + platform + ", OS ver:" + version);
+
+		log.info(JSON.stringify($cordovaDevice.getDevice()));
 
 		if( model == 'CipherLab RS30')
 		{
