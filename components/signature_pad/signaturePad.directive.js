@@ -10,6 +10,7 @@ angular.module('tnf.IonicUtils', ['ionic'])
 		callback: '&mySaveCallback',
 		data: '=myKey',
 		podname: '=podName',
+		buttonLabel: '=?buttonLabel',
 		accessor: '='
 	  },
 
@@ -30,6 +31,12 @@ angular.module('tnf.IonicUtils', ['ionic'])
 
 		$scope.signaturePadModel = {};
 		$scope.signaturePadModel.podname = "";
+		if( typeof buttonLabel !== 'undefined') {
+			$scope.buttonLabel = buttonLabel || 'Tap to sign';
+		}
+		else {
+			$scope.buttonLabel = 'Tap to sign';
+		}
 
 		// This is the template with the canvas element where we can draw the signature
 		$ionicModal.fromTemplateUrl('components/signature_pad/signaturePad.html', {
