@@ -86,6 +86,9 @@
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
-	<gap:config-file platform="ios" parent="UIBackgroundModes" overwrite="true">
+	<gap:config-file platform="ios" parent="UIBackgroundModes" mode="delete">
+		<array>
+			<string>location</string>
+		</array>
 	</gap:config-file>
 </widget>
