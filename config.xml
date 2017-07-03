@@ -39,6 +39,8 @@
         <config-file parent="NSPhotoLibraryUsageDescription" platform="ios" target="*-Info.plist">
             <string>The app would like to access the photo library when you attach images to content.</string>
         </config-file>
+		<config-file parent="UIBackgroundModes" overwrite="true">
+		<config-file>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
         <icon height="40" src="resources/ios/icon/icon-40.png" width="40" />
@@ -86,6 +88,4 @@
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
-	<gap:config-file platform="ios" parent="UIBackgroundModes" overwrite="true">
-	</gap:config-file>
 </widget>
