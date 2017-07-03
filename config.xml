@@ -86,7 +86,7 @@
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
-	<gap:config-file platform="ios" parent="UIBackgroundModes" mode="replace">
+	<gap:config-file platform="ios" parent="UIBackgroundModes" overwrite="true">
 		<array>
 			<string>remote-notification</string>
 		</array>
