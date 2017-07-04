@@ -1134,7 +1134,7 @@ angular.module('osc-services', [])
 			distanceFilter: 30,
 			locationTimeout: 60,			// Android - The minimum time interval between location updates in seconds
 			activityType: 'AutomotiveNavigation',			// iOS hint
-			useSignificantChangesOnly: true,	// iOS
+			saveBatteryOnBackground: true,	// iOS
 			debug: false,					// <-- enable this hear sounds for background-geolocation life-cycle
 			stopOnTerminate: true			// <-- enable this to clear background location settings when the app terminates
 		};
