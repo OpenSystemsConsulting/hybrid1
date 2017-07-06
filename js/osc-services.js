@@ -1133,12 +1133,12 @@ angular.module('osc-services', [])
 			stationaryRadius: 20,
 			distanceFilter: 30,
 			locationTimeout: 60,			// Android - The minimum time interval between location updates in seconds
-			activityType: 'AutomotiveNavigation',			// iOS hint
 			saveBatteryOnBackground: true,	// iOS
 			debug: false,					// <-- enable this hear sounds for background-geolocation life-cycle
 			stopOnTerminate: true			// <-- enable this to clear background location settings when the app terminates
 		};
 
+			//activityType: 'AutomotiveNavigation',			// iOS hint
 
 		log.debug('BGGS START: configure with:'+JSON.stringify(bgOptions)); 
 		backgroundGeoLocation.configure(callbackFn, failureFn, bgOptions);
