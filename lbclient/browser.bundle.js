@@ -18816,6 +18816,14 @@ module.exports={
       "serverIP": "wads.opensyscon.com.au",
       "serverPort": 3061,
       "url": "http://wads.opensyscon.com.au:3061/api"
+    },
+    "univ": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "UNIVERSAL",
+      "serverIP": "universal.opensyscon.com.au",
+      "serverPort": 3062,
+      "url": "http://universal.opensyscon.com.au:3062/api"
     }
   },
   "models": [
