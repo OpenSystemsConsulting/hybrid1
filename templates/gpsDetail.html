@@ -16,46 +16,53 @@
 	</div>
 -->
   <ion-content padding="true">
+	<!-- <ion-refresher on-refresh="doRefresh()"></ion-refresher> -->
 
-	<!-- ion-list for tpm_pda_controller data -->
+	<div class="item item-divider">
+		Current position
+	</div>
 		<!-- This should return one row only in a production environment -->
 	<div class="row" ng-show="showResult()">
 		<ion-list>
-            <ion-item >
-	    	<label> Position Data: </label>
-	    	<span  class="normalFontWeight"> {{position.coords.latitude}} </span>
+            <ion-item class="item">
+				Latitude: <span class="item-note"> {{ position.coords.latitude }} </span>
             </ion-item>
-
-            <ion-item type="item-text-wrap">
-    		Latitude: {{ position.coords.latitude }} 
+            <ion-item class="item">
+				Longitude: <span class="item-note"> {{ position.coords.longitude }}</span>
             </ion-item>
-            <ion-item type="item-text-wrap">
-    		Longitude: {{ position.coords.longitude }}
+            <ion-item class="item">
+				Altitude: <span class="item-note"> {{ position.coords.altitude }}</span>
             </ion-item>
-            <ion-item type="item-text-wrap">
-          	Altitude: {{ position.coords.altitude }}
+            <ion-item class="item">
+				Accuracy: <span class="item-note"> {{ position.coords.accuracy }}</span>
             </ion-item>
-            <ion-item type="item-text-wrap">
-          	Accuracy: {{ position.coords.accuracy }}
+            <ion-item class="item">
+				Altitude Accuracy: <span class="item-note"> {{ position.coords.altitudeAccuracy }}</span>
             </ion-item>
-            <ion-item type="item-text-wrap">
-          	Altitude Accuracy: {{ position.coords.altitudeAccuracy }}
+            <ion-item class="item">
+				Heading: <span class="item-note"> {{ position.coords.heading }}</span>
             </ion-item>
-            <ion-item type="item-text-wrap">
-          	Heading: {{ position.coords.heading }}
+            <ion-item class="item">
+				Speed: <span class="item-note"> {{ position.coords.speed }} </span>
             </ion-item>
-            <ion-item type="item-text-wrap">
-          	Speed: {{ position.coords.speed }} 
-            </ion-item>
-            <ion-item type="item-text-wrap">
-          	Timestamp: {{ position.timestamp }} 
+            <ion-item class="item">
+				Timestamp: <span class="item-note"> {{ position.timestamp }} </span>
             </ion-item>
 		</ion-list>
     </div>
     <div class="row" ng-show="!showResult()">
-           Error : {{error}}
-           Error Code: {{error.code}}
+           Error : {{err}}
+           Error Code: {{err.code}}
     </div>       
+
+	<ion-list>
+		<div class="item item-divider">
+			GPS History
+		</div>
+		<ion-item class=item ng-repeat="gps in gpshistory | reverse">
+			{{ gps.gps_timestamp | gpsdate }}: {{ gps.gps_latitude }} , {{ gps.gps_longitude }}
+		</ion-item>
+	</ion-list>
 
 	<section id="debug" ng-if="debug">
 		<button ng-click="xxx()">BG GPS Start</button>

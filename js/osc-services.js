@@ -1004,7 +1004,51 @@ angular.module('osc-services', [])
 
 	return barcodeService;
 })
-.factory('BackgroundGeolocationService',['Logger','pdaParams','gpsHistory','$cordovaDevice',function (Logger,pdaParams,gpsHistory,$cordovaDevice) {
+.filter('gpsdate', function() {
+	return function(gpsdate) {
+		// the gps date was converted on input to local time but without any TZ info
+		// I assume becuase we are storing in Oracle DB without TZ info
+		// So reverse the input conversion to display local time
+		gpsdate = gpsdate || '';
+
+		var ldate = new Date(gpsdate);
+		var oset = ldate.getTimezoneOffset();
+		ldate -= (oset * -1)  * 60	* 1000;
+		
+		var newdate = new Date(ldate);
+		return newdate.toLocaleTimeString();
+	};
+})
+.filter("reverse", function(){
+	return function(items){
+		return items.slice().reverse(); // Create a copy of the array and reverse the order of the items
+	};
+})
+.factory('gpsAudit',['Logger','pdaParams','FixedQueue','CBuffer',
+function (Logger,pdaParams,FixedQueue,CBuffer) {
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'gpsAudit'};
+	var log = Logger.getInstance(logParams);
+
+	var gpsAudit = {};
+
+	// Store last x no. of gps locations while tracking so we can display for audit purposes
+	// TODO - choose which one of FixedQueue or CBuffer
+	var gpsHistory = FixedQueue(1000);
+	//var gpsHistory = CBuffer(1000);
+
+	gpsAudit.saveGps = function(gpsData) {
+		// gpsData is an object of gpsHistory
+		gpsHistory.push(gpsData);
+	}
+
+	gpsAudit.getHistory = function() {
+		return(gpsHistory);
+	}
+
+	return gpsAudit;
+}])
+.factory('BackgroundGeolocationService',['Logger','pdaParams','gpsHistory','$cordovaDevice','gpsAudit',
+function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 
 	// background gps plugin from: https://github.com/mauron85/cordova-plugin-background-geolocation
 	// GPS timestamps are in milliseconds since epoch - iOS also has a fractional part
@@ -1060,13 +1104,12 @@ angular.module('osc-services', [])
 
 		lastGPSsecs = lgps.gps_timestamp/1000;				// store last GPS time in seconds for next time
 
+		// lgps.gps_timestamp is UTC at this point
 		var ldate = new Date(lgps.gps_timestamp);
-
 		var oset = ldate.getTimezoneOffset();
-		//log.debug("BGGS new date: " + ldate + ", oset: " + oset );
-									
+
+		// lgps.gps_timestamp converted to local time - no timezone now
 		lgps.gps_timestamp += (oset * -1)  * 60  * 1000;
-		//log.debug("BGGS gps_timestamp: now:" + lgps.gps_timestamp );
 
 		lgps.gps_latitude = location.latitude.toFixed(6);
 		lgps.gps_longitude = location.longitude.toFixed(6);
@@ -1080,6 +1123,8 @@ angular.module('osc-services', [])
 		var loggedOn = log.pdaParams.isDrvLoggedOn();
 
 		log.debug("BGGS driver:" + lgps.gps_driver_id + ", loggedOn:" + loggedOn + ", lgps:"+ JSON.stringify(lgps));
+
+		gpsAudit.saveGps(lgps);
 
 		// TODO - do we need any more criteria to create history record?  if connected?
 		if( lgps.gps_driver_id > 0 && diffGPSsecs > threshold && loggedOn)
