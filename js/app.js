@@ -39,7 +39,8 @@ angular.module('starter', ['ionic',
 							'JseaCtrl',
 							'imageCapture',
 							'ImageCtrl',
-							'expandingTextarea'
+							'expandingTextarea',
+							'cbuffer'
 							])
 
 // default client config values - will be populated correctly after login
