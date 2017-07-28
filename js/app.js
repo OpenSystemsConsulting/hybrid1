@@ -357,7 +357,7 @@ angular.module('starter', ['ionic',
 // phase first and then it will execute the "Run" phase. At that point, all of
 // the run() blocks are executed. During this phase, we no longer have access
 // to any of the providers but we can finally access the services.
-.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate,$state,sodService,jseaService,siteConfig,imageService,$ionicPopup) {
+.run(function($rootScope,$cordovaPush,$http,ConnectivityMonitor,Logger,pdaParams,messageService,Idle,$animate,$state,sodService,jseaService,siteConfig,imageService,$ionicPopup,$ionicPlatform) {
 
 /* NOTE: the run function gets called at app startup so any services injected here
  * will be instantiated at that time
@@ -365,6 +365,31 @@ angular.module('starter', ['ionic',
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'appServRun'};
 	var log = Logger.getInstance(logParams);
 	var mystr;
+
+	// Taken from: http://www.gajotres.net/ionic-framework-handling-android-back-button-like-a-pro/
+	// Disable BACK button when no history
+	// TODO - maybe should be when $state.current.name == 'tab.job-index'
+	$ionicPlatform.registerBackButtonAction(function(event) {
+		if ($rootScope.$viewHistory.backView) {
+			mystr = 'backbutton: found some history so no exit, tab:'+$state.current.name;
+			log.debug(mystr);
+			$rootScope.$viewHistory.backView.go();
+		} else {
+		  $ionicPopup.confirm({
+			title: 'Warning',
+			template: 'This will close the app and disable GPS tracking.  Are you sure you want to exit?'
+		  }).then(function(res) {
+			if (res) {
+				mystr = 'backbutton: operator selected OK to exit app, tab:'+$state.current.name;
+				log.info(mystr);
+			  ionic.Platform.exitApp();
+			}
+		  })
+
+			event.preventDefault();
+			return false;
+		}
+	}, 101);		// 1 more priority than back button
 
 	// Assist debugging angular ui router
 	$rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
