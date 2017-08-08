@@ -1338,7 +1338,10 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				'PDA_SIGNATURE_PUP',
 				'PDA_SIGNATURE_DPUP',
 				'PDA_DISCRETE_DEL_SIGNAT',
-				'PDA_MULTIDEL_NOTE_TEXT'
+				'PDA_MULTIDEL_NOTE_TEXT',
+				'PDA_GPS_ON_EVENTS',
+				'PDA_DISPLAY_FROM',
+				'PDA_DISPLAY_TO'
 			];
 
 	var g_siteconfigs = null;
