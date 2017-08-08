@@ -86,13 +86,20 @@
 			<div class="jobdetails" >
 
 
-				<span class="jobFromSubspan"> {{ job.mobjobSuburb }} </span>
+				<span class="jobFromSubspan"> {{ job.mobjobSuburb | changeDisplayFrom:job }} </span>
 				-  
-				<span class="jobToSubspan"> {{ job.mobjobToSuburb }} </span> 
-				<span class="jobServicespan"> ({{ job.mobjobServiceCode }}) </span>
+				<span class="jobToSubspan"> {{ job.mobjobToSuburb | changeDisplayTo:job }} </span> 
+				<span class="jobServicespan"> {{ job.mobjobServiceCode  | changeDisplaySvc:pdaParams }} </span>
 
-				<div class="rightJobData">
-					<span class="jobdatespan"> {{ job.displayDate | date:'dd-MM-yyyy' }} </span>  
+				<div ng-if="pdaParams.siteId === 'WADS'">
+					{{generateWadsHeader(job)}} {{ job.displayDate | date:'dd-MM-yyyy' }}
+				</div>
+				
+				<div ng-if="pdaParams.siteId !== 'WADS'">
+					<h3>{{generateJobHeader(job)}}</h3>
+
+					<div class="rightJobData">
+						<span class="jobdatespan"> {{ job.displayDate | date:'dd-MM-yyyy' }} </span>  
 <!--
 					<br>
 					<span class="jobdatespan"> {{ job.mobjobEtaTime | date:'dd-MM-yyyy' }} </span>  
@@ -105,9 +112,9 @@
 					</label>
 -->
 
+					</div>
 				</div>
 
-				<h3>{{generateJobHeader(job)}}</h3>
 
 			</div>
 	

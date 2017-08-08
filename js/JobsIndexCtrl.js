@@ -14,6 +14,32 @@ angular.module('JobsIndexCtrl', [])
     return "ALLOCATED" ;
   };
 })
+.filter('changeDisplayFrom', function() {
+	return function(input, job) {
+
+		if( job.displayFrom)
+			return job.displayFrom;
+		return input;
+	};
+})
+.filter('changeDisplayTo', function() {
+	return function(input, job) {
+
+		if( job.displayTo)
+			return job.displayTo;
+		return input;
+	};
+})
+.filter('changeDisplaySvc', function() {
+	return function(input, pdaParams) {
+		var output = "("+input+")";
+
+		if(pdaParams.siteId === 'WADS')
+			return "";
+
+		return output;
+	};
+})
 
 // A simple controller that fetches a list of data from a service
 .controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteJobChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig', 'jseaService',
@@ -63,6 +89,8 @@ angular.module('JobsIndexCtrl', [])
 
 	var sortKey = siteConfig.getSiteConfigValue('PDA_SORT_COL1') || 'mobjobBookingDay';
 	var displayDate = siteConfig.getSiteConfigValue('PDA_DISPLAY_DATE') || 'mobjobBookingDay';
+	var displayFrom = siteConfig.getSiteConfigValue('PDA_DISPLAY_FROM') || 'mobjobSuburb';
+	var displayTo = siteConfig.getSiteConfigValue('PDA_DISPLAY_TO') || 'mobjobToSuburb';
 
 	function sortFunction(a,b) {
 		if (a[sortKey] > b[sortKey])
@@ -232,6 +260,7 @@ angular.module('JobsIndexCtrl', [])
 
 				var job = $scope.jobs[i];
 				job.displayDate = job[displayDate];
+				job.displayFrom = job[displayFrom];
 
 				if( job.mobjobStatus == 'UJ') {
 					job.mobjobStatus = 'NJ';
@@ -298,6 +327,7 @@ angular.module('JobsIndexCtrl', [])
 				var job = $scope.jobs[i];
 
 				job.displayDate = job[displayDate];
+				job.displayFrom = job[displayFrom];
 
 				// ACK the job - notifies despatch job received by pda
 				if( job.mobjobStatus == 'UJ') {
@@ -844,6 +874,7 @@ angular.module('JobsIndexCtrl', [])
 							job.mobjobTimeAC = Date.now();
 							break;
 						case 'PU':
+							// TODO - get GPS
 							job.mobjobTimePU = Date.now();
 							break;
 						case 'Dp':
@@ -965,6 +996,7 @@ angular.module('JobsIndexCtrl', [])
 
 					oldstatus = job.mobjobStatus;
 
+					// TODO - get GPS
 					job.mobjobStatus = 'DL';
 					if( job.mobjobLegNumber > 0)
 					{
@@ -1019,6 +1051,12 @@ angular.module('JobsIndexCtrl', [])
 			}, false);
 		};
 */
+	  $scope.generateWadsHeader = function(job) {
+		var output = 'WADS';
+
+		output = 'Inv: '+ job.mobjobClientRef2 + ' - ' + job.mobjobJobPieces + ' ' + job.mobjobServiceCode ;
+		return output;
+	  };
 
 	  $scope.generateJobHeader = function(item) {
 			mystr = 'generateJobHeader';
