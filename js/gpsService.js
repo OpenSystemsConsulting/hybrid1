@@ -197,6 +197,17 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope,gpsAudit) {
 
 	// LT - code added for background geolocation processing
 
+	gpsService.getCurrentPos = function getCurrentPos(cb) {
+		
+		$cordovaGeolocation
+		.getCurrentPosition(posOptions)
+		.then(function (position) {
+			cb(null,position);
+		},function(err) {
+			cb(err, null);
+		});
+	}
+
 	return gpsService;
 
 }]);
