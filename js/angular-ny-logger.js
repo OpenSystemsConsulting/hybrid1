@@ -1,6 +1,7 @@
 //https://github.com/naorye/angular-ny-logger
 // TODO - LT - need to implement the ability to disable/enable log levels, info, debug etc.
 angular.module('ny.logger', []).provider('Logger', [function () {
+	var seqno = 0;
     var isEnabled = true;
     this.enabled = function(_isEnabled) {
         isEnabled = !!_isEnabled;
@@ -110,10 +111,14 @@ angular.module('ny.logger', []).provider('Logger', [function () {
 				 * To overcome this  a direct ajax call should be made.
 				 * TODO - maybe use "request" https://github.com/request/request/blob/master/README.md instead of jQuery to reduce footprint
 				 */
+				seqno++;
+				if(seqno > 999)
+					seqno = 1;
 				var d = new Date();
 				var OSC_log = {
 					time:		Logger.getLogTimestamp(d),
 					localtime:	Logger.getLocalTimestamp(d),
+					seq:		seqno,
 					logtype:	originalFn,
 					context:	this.context,
 					message:	logstring
