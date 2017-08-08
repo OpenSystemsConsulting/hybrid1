@@ -745,7 +745,7 @@ angular.module('JobDetailCtrl', [])
 
 		//Cleanup the modal when we're done with it!
 		$scope.$on('$destroy', function() {
-			if(typeof $scope.note.text !== "undefined")
+			if(typeof $scope.note !== "undefined")
 				$scope.note.text = "";
 			$scope.modal.remove();
 		});

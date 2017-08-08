@@ -1341,7 +1341,8 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				'PDA_MULTIDEL_NOTE_TEXT',
 				'PDA_GPS_ON_EVENTS',
 				'PDA_DISPLAY_FROM',
-				'PDA_DISPLAY_TO'
+				'PDA_DISPLAY_TO',
+				'PDA_ROW1_FONT_SIZE'
 			];
 
 	var g_siteconfigs = null;

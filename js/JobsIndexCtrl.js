@@ -91,6 +91,7 @@ angular.module('JobsIndexCtrl', [])
 	var displayDate = siteConfig.getSiteConfigValue('PDA_DISPLAY_DATE') || 'mobjobBookingDay';
 	var displayFrom = siteConfig.getSiteConfigValue('PDA_DISPLAY_FROM') || 'mobjobSuburb';
 	var displayTo = siteConfig.getSiteConfigValue('PDA_DISPLAY_TO') || 'mobjobToSuburb';
+	$scope.fontSize = siteConfig.getSiteConfigValue('PDA_ROW1_FONT_SIZE') || '18px';
 
 	function sortFunction(a,b) {
 		if (a[sortKey] > b[sortKey])
