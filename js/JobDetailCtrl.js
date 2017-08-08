@@ -8,8 +8,8 @@ angular.module('JobDetailCtrl', [])
 })
 
 // For the View which is Displaying and Editing a Job or for the Creation of a new Job...
-.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','$ionicModal','LocalNote','job_note_sync',
-	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService, $ionicModal,LocalNote,job_note_sync) {
+.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','$ionicModal','LocalNote','job_note_sync','gpsService',
+	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService, $ionicModal,LocalNote,job_note_sync, gpsService) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -342,6 +342,7 @@ angular.module('JobDetailCtrl', [])
 				else
 				if ( oldStatus == 'AC')
 				{
+					// TODO - get GPS
 					job.mobjobStatus = 'PU';
 					job.mobjobTimePU = Date.now();
 
@@ -422,6 +423,17 @@ angular.module('JobDetailCtrl', [])
 				if ( oldStatus == 'AC')
 				{
 					wasPickup = true;
+					// TODO - get GPS
+/*
+					gpsService.getCurrentPos( function( err, pos) {
+						if(err)
+							log.error(err);
+						if(pos) {
+							log.debug(pos);
+						}
+					});
+*/
+
 					job.mobjobStatus = 'PU';
 					job.mobjobTimePU = Date.now();
 
@@ -471,6 +483,7 @@ angular.module('JobDetailCtrl', [])
 					// PC processing - no direct route to DL now - will either be PU or PC until all pods captured
 					if(!pdaParams.multileg)
 					{
+							// TODO - get GPS
 						job.mobjobStatus = 'DL';
 
 						// why did we store signature on pickup leg (leg 0)?
@@ -533,6 +546,7 @@ angular.module('JobDetailCtrl', [])
 				// TODO - do we need this test?  or just update every leg regardless?
 				if ( job.mobjobStatus == 'PU' || job.mobjobStatus == 'PC' || job.mobjobStatus == 'Ad')
 				{
+							// TODO - get GPS
 					job.mobjobStatus = 'DL';
 					job.save();		// save leg
 
@@ -731,7 +745,8 @@ angular.module('JobDetailCtrl', [])
 
 		//Cleanup the modal when we're done with it!
 		$scope.$on('$destroy', function() {
-			$scope.note.text = "";
+			if(typeof $scope.note.text !== "undefined")
+				$scope.note.text = "";
 			$scope.modal.remove();
 		});
 
