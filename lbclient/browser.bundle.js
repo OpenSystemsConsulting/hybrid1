@@ -19597,6 +19597,46 @@ module.exports={
             "inputType": "text",
             "label": "Wth"
           },
+          "gpsLatPU": {
+            "omitFromForm": true,
+            "type": "Number",
+            "required": false,
+            "length": 10,
+            "precision": 6,
+            "scale": null,
+            "inputType": "number",
+            "label": "Latitude"
+          },
+          "gpsLongPU": {
+            "omitFromForm": true,
+            "type": "Number",
+            "required": false,
+            "length": 10,
+            "precision": 6,
+            "scale": null,
+            "inputType": "number",
+            "label": "Longitude"
+          },
+          "gpsLatDL": {
+            "omitFromForm": true,
+            "type": "Number",
+            "required": false,
+            "length": 10,
+            "precision": 6,
+            "scale": null,
+            "inputType": "number",
+            "label": "Latitude"
+          },
+          "gpsLongDL": {
+            "omitFromForm": true,
+            "type": "Number",
+            "required": false,
+            "length": 10,
+            "precision": 6,
+            "scale": null,
+            "inputType": "number",
+            "label": "Longitude"
+          },
           "lastModified": {
             "type": "Date",
             "required": true,
