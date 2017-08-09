@@ -1028,6 +1028,7 @@ angular.module('osc-services', [])
 function (Logger,pdaParams,FixedQueue,CBuffer) {
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'gpsAudit'};
 	var log = Logger.getInstance(logParams);
+	var lastGps = {};
 
 	var gpsAudit = {};
 
@@ -1039,10 +1040,17 @@ function (Logger,pdaParams,FixedQueue,CBuffer) {
 	gpsAudit.saveGps = function(gpsData) {
 		// gpsData is an object of gpsHistory
 		gpsHistory.push(gpsData);
+
+		lastGps = angular.copy(gpsData);
 	}
 
 	gpsAudit.getHistory = function() {
 		return(gpsHistory);
+	}
+
+	gpsAudit.getLastGPS = function() {
+		// TODO - maybe have arg for time so only return GPS if within last x secs
+		return(lastGps);
 	}
 
 	return gpsAudit;
@@ -1339,9 +1347,9 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				'PDA_SIGNATURE_DPUP',
 				'PDA_DISCRETE_DEL_SIGNAT',
 				'PDA_MULTIDEL_NOTE_TEXT',
-				'PDA_GPS_ON_EVENTS',
 				'PDA_DISPLAY_FROM',
-				'PDA_DISPLAY_TO'
+				'PDA_DISPLAY_TO',
+				'PDA_ROW1_FONT_SIZE'
 			];
 
 	var g_siteconfigs = null;
