@@ -38,6 +38,7 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope,gpsAudit) {
 		// foreground
 		log.info("Received event:"+event.name);
 		getGps = true;
+		getPos();
 	});
 	$rootScope.$on('PAUSE', function(event) {
 		// background
