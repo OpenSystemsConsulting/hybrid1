@@ -8,8 +8,8 @@ angular.module('JobDetailCtrl', [])
 })
 
 // For the View which is Displaying and Editing a Job or for the Creation of a new Job...
-.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','$ionicModal','LocalNote','job_note_sync','gpsService',
-	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService, $ionicModal,LocalNote,job_note_sync, gpsService) {
+.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','$ionicModal','LocalNote','job_note_sync','gpsAudit','$ionicPopup',
+	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService, $ionicModal,LocalNote,job_note_sync, gpsAudit, $ionicPopup) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -342,9 +342,14 @@ angular.module('JobDetailCtrl', [])
 				else
 				if ( oldStatus == 'AC')
 				{
-					// TODO - get GPS
 					job.mobjobStatus = 'PU';
 					job.mobjobTimePU = Date.now();
+
+					var lgps = gpsAudit.getLastGPS();
+					if(lgps) {
+						job.gpsLatPU = lgps.gps_latitude;
+						job.gpsLongPU = lgps.gps_longitude;
+					}
 
 					if( job.mobjobLegNumber == 0) {
 						// Possible signature on pickup
@@ -423,19 +428,15 @@ angular.module('JobDetailCtrl', [])
 				if ( oldStatus == 'AC')
 				{
 					wasPickup = true;
-					// TODO - get GPS
-/*
-					gpsService.getCurrentPos( function( err, pos) {
-						if(err)
-							log.error(err);
-						if(pos) {
-							log.debug(pos);
-						}
-					});
-*/
 
 					job.mobjobStatus = 'PU';
 					job.mobjobTimePU = Date.now();
+
+					var lgps = gpsAudit.getLastGPS();
+					if(lgps) {
+						job.gpsLatPU = lgps.gps_latitude;
+						job.gpsLongPU = lgps.gps_longitude;
+					}
 
 					if( job.mobjobLegNumber == 0) {
 						// Possible signature on pickup
@@ -485,6 +486,12 @@ angular.module('JobDetailCtrl', [])
 					{
 							// TODO - get GPS
 						job.mobjobStatus = 'DL';
+
+						var lgps = gpsAudit.getLastGPS();
+						if(lgps) {
+							job.gpsLatDL = lgps.gps_latitude;
+							job.gpsLongDL = lgps.gps_longitude;
+						}
 
 						// why did we store signature on pickup leg (leg 0)?
 						if( job.mobjobLegNumber > 0)
@@ -548,6 +555,13 @@ angular.module('JobDetailCtrl', [])
 				{
 							// TODO - get GPS
 					job.mobjobStatus = 'DL';
+
+					var lgps = gpsAudit.getLastGPS();
+					if(lgps) {
+						job.gpsLatDL = lgps.gps_latitude;
+						job.gpsLongDL = lgps.gps_longitude;
+					}
+
 					job.save();		// save leg
 
 					mystr = 'handleJobStatusChange:DL' + job.mobjobSeq + ' updated from ' + oldStatus + ' -> ' + job.mobjobStatus;
@@ -745,7 +759,7 @@ angular.module('JobDetailCtrl', [])
 
 		//Cleanup the modal when we're done with it!
 		$scope.$on('$destroy', function() {
-			if(typeof $scope.note.text !== "undefined")
+			if(typeof $scope.note !== "undefined")
 				$scope.note.text = "";
 			$scope.modal.remove();
 		});
@@ -782,6 +796,33 @@ angular.module('JobDetailCtrl', [])
 			$scope.modal.hide();
 		};
 		// ---------- text box for job notes -----------------
+
+		// If we receive a cancel event for this job then inform operator
+		// Already have event handler - see above (CANCEL)
+/*
+		$scope.$on('CANCEL', function(event, payload) {
+			log.info(payload.platform+":"+event+':'+JSON.stringify(payload));
+
+			// Check For Cancellation and then delete job 
+			if(typeof payload.data != "undefined") {
+
+				// Belt and braces - we shouldn't get to the event handler if it's not a cancel
+				if(payload.data.type == "CANCEL") {
+					var baseJobNo = payload.data.baseJob;
+					var bookingDay = payload.data.bookingDay || 0;
+
+					if( $scope.job[0].mobjobNumber === baseJobNo && $scope.job[0].mobjobBookingDay === bookingDay) {
+						var alertPopup = $ionicPopup.alert({
+							title: 'Job cancelled by base',
+							template: 'Please do not make any changes.  Go to the main jobs screen for any updates'
+						});
+					}
+				}
+			}
+		});
+*/
+
+
 
 	}
 ])

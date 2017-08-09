@@ -42,8 +42,8 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteJobChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig', 'jseaService',
-	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteJobChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig, jseaService) { 
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteJobChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig', 'jseaService','gpsAudit',
+	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteJobChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig, jseaService, gpsAudit) { 
 	$scope.jobs = [];
 	$scope.jobStatuses = {};
 
@@ -91,6 +91,7 @@ angular.module('JobsIndexCtrl', [])
 	var displayDate = siteConfig.getSiteConfigValue('PDA_DISPLAY_DATE') || 'mobjobBookingDay';
 	var displayFrom = siteConfig.getSiteConfigValue('PDA_DISPLAY_FROM') || 'mobjobSuburb';
 	var displayTo = siteConfig.getSiteConfigValue('PDA_DISPLAY_TO') || 'mobjobToSuburb';
+	$scope.fontSize = siteConfig.getSiteConfigValue('PDA_ROW1_FONT_SIZE') || '18px';
 
 	function sortFunction(a,b) {
 		if (a[sortKey] > b[sortKey])
@@ -874,8 +875,12 @@ angular.module('JobsIndexCtrl', [])
 							job.mobjobTimeAC = Date.now();
 							break;
 						case 'PU':
-							// TODO - get GPS
 							job.mobjobTimePU = Date.now();
+							var lgps = gpsAudit.getLastGPS();
+							if(lgps) {
+								job.gpsLatPU = lgps.gps_latitude;
+								job.gpsLongPU = lgps.gps_longitude;
+							}
 							break;
 						case 'Dp':
 							job.mobjobTimeDp = Date.now();
@@ -996,8 +1001,14 @@ angular.module('JobsIndexCtrl', [])
 
 					oldstatus = job.mobjobStatus;
 
-					// TODO - get GPS
 					job.mobjobStatus = 'DL';
+
+					var lgps = gpsAudit.getLastGPS();
+					if(lgps) {
+						job.gpsLatDL = lgps.gps_latitude;
+						job.gpsLongDL = lgps.gps_longitude;
+					}
+
 					if( job.mobjobLegNumber > 0)
 					{
 						job.mobjobSignat = signat || "";
