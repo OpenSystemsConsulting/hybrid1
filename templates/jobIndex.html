@@ -86,9 +86,9 @@
 			<div class="jobdetails" >
 
 
-				<span class="jobFromSubspan"> {{ job.mobjobSuburb | changeDisplayFrom:job }} </span>
+				<span ng-style="{'font-size': fontSize}"> {{ job.mobjobSuburb | changeDisplayFrom:job }} </span>
 				-  
-				<span class="jobToSubspan"> {{ job.mobjobToSuburb | changeDisplayTo:job }} </span> 
+				<span ng-style="{'font-size': fontSize}"> {{ job.mobjobToSuburb | changeDisplayTo:job }} </span> 
 				<span class="jobServicespan"> {{ job.mobjobServiceCode  | changeDisplaySvc:pdaParams }} </span>
 
 				<div ng-if="pdaParams.siteId === 'WADS'">
