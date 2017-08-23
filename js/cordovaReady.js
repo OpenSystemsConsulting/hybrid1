@@ -98,6 +98,8 @@ angular.module('cordovaReady', [])
 
 	function onResume() {
 		log.debug('onresume: about to broadcast: RESUME event');
+		BackgroundGeolocationService.stop();
+
 		$rootScope.$broadcast('RESUME');
 	}
 
