@@ -145,6 +145,12 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 				log.debug(platform+':$cordovaPushV5:notificationReceived:' + JSON.stringify(notification));
 				// notification object will at least have "message" string and "additionalData" object
 
+				/* New possible elements in "additionalData":
+						foreground: true/false 			- sent by phonegap-plugin-push
+						content-available : "1"			- added by OSC-API server to allow background notifications
+
+				*/
+
 				// If there is a payload type we use that as the broadcast event with the supplied payload
 				var payload = notification.additionalData.payload || {};
 				if( payload.type ) {
