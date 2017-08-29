@@ -52,9 +52,16 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 		appService.exitTplusMobile();
 	}
 
+/*
 	$scope.connected = function () {
 		return network.isConnected;
 	};
+*/
+
+	$scope.isConnected = network.isConnected;
+	$scope.toggleNetworkConnection = function () {
+		network.isConnected = !network.isConnected;
+	}
 
 	$scope.fullreplication = fullreplication.fullReplication;
 	$scope.toggleFullReplication = function () {
