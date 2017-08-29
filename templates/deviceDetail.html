@@ -29,10 +29,6 @@
 		</span>
 	</ion-item>
 
-	<ion-checkbox class="item-checkbox-right" ng-checked="{{connected()}}" ng-disabled="true">
-		Network connection
-	</ion-checkbox>
-
 	<ion-checkbox class="item-checkbox-right" ng-checked="{{devicectrl.isGpsWorking}}" ng-disabled="true">
 		GPS Active
 	</ion-checkbox>
@@ -242,6 +238,11 @@
 	<div class="item item-divider">
 		Network properties
 	</div>
+
+	<ion-checkbox class="item-checkbox-right" ng-model="isConnected" ng-model-options="{ getterSetter: true }" ng-change="toggleNetworkConnection()" >
+		Connected
+	</ion-checkbox>
+
 	<ion-checkbox class="item-checkbox-right" ng-checked="{{isOnline}}" ng-disabled="true">
 		Online
 	</ion-checkbox>
