@@ -414,10 +414,11 @@ angular.module('osc-services', [])
 
 	return( jobreclocal );
 })
-.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork, pdaParams, Logger, network){
+.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork, pdaParams, Logger, network, siteConfig){
  
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'ConnectivityMonitor'};
 	var log = Logger.getInstance(logParams);
+	var monitorOnline = siteConfig.getSiteConfigValue('PDA_MONITOR_ONLINE') == 'Y';
 
   return {
 	isOnline: function(){
@@ -427,7 +428,7 @@ angular.module('osc-services', [])
 		return navigator.onLine;
 	  }
 	},
-	ifOffline: function(){
+	isOffline: function(){
 	  if(ionic.Platform.isWebView()){
 		return !$cordovaNetwork.isOnline();    
 	  } else {
@@ -440,28 +441,30 @@ angular.module('osc-services', [])
 			// NOTE - this doesn't always seem reliable - can get an offline event while
 			// still being online - e.g. wifi->4g can trigger offline with no online
 		  $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
-			//console.log("went online:"+networkState);
-			//network.isConnected = true;
 			log.info("went online:"+networkState);
+			if(monitorOnline)
+				network.isConnected = true;
 		  });
  
 		  $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
-			//console.log("went offline:"+networkState);
 			log.info("went offline:"+networkState);
-			//network.isConnected = false;
+			if(monitorOnline)
+				network.isConnected = false;
 		  });
  
 		}
 		else {
  
 		  window.addEventListener("online", function(e) {
-			//network.isConnected = true;
+			if(monitorOnline)
+				network.isConnected = true;
 			console.log("went online");
 		  }, false);	
  
 		  window.addEventListener("offline", function(e) {
 			console.log("went offline");
-			//network.isConnected = false;
+			if(monitorOnline)
+				network.isConnected = false;
 		  }, false);  
 		}		
 	}
@@ -1349,7 +1352,8 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				'PDA_MULTIDEL_NOTE_TEXT',
 				'PDA_DISPLAY_FROM',
 				'PDA_DISPLAY_TO',
-				'PDA_ROW1_FONT_SIZE'
+				'PDA_ROW1_FONT_SIZE',
+				'PDA_MONITOR_ONLINE'
 			];
 
 	var g_siteconfigs = null;
