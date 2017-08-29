@@ -55,6 +55,7 @@ angular.module('JobsIndexCtrl', [])
 	var notificationCount = 0;
 	//Idle.watch();						// TODO - idle - check if idle and maybe auto refresh
 	$rootScope.syncInProgress = false;
+	syncService.setSyncInProgress(false);		// not syncing now
 
 
 				
@@ -299,6 +300,7 @@ angular.module('JobsIndexCtrl', [])
 
 
 		$rootScope.syncInProgress = false;
+		syncService.setSyncInProgress(false);		// not syncing now
 		log.debug("SYNC: FINISH");
 
 		$scope.jobStatuses = {};
@@ -844,7 +846,7 @@ angular.module('JobsIndexCtrl', [])
 		// read all legs for this driver's jobs (no need to put into scope though?)
 		var all_legs_filter = angular.copy(_allfilter);
 
-		$rootScope.syncInProgress = true;	// TODO - template buttons use this - should be checking syncService
+		$rootScope.syncInProgress = syncService.getSyncInProgress();	// TODO - template buttons use this - should be checking syncService
 
 		if(oldstatus === 'NJ')
 			newstatus = 'AC';
@@ -1029,6 +1031,7 @@ angular.module('JobsIndexCtrl', [])
 
 				if(syncRequired) {
 					$rootScope.syncInProgress = true;
+					syncService.setSyncInProgress(false);		// not syncing now
 					syncfilter = angular.copy(_syncfilter);
 					syncService.setCallingFunc("JobsIndexCtrl->deliverSelectedJobs");
 					syncService.hybridSync(onChange,syncfilter);
