@@ -290,10 +290,10 @@ angular.module('JobsIndexCtrl', [])
 	// [ START - New code for syncing
 
 	function onChange(err, conflicts) {
-		if(err)
-			console.log(err);
-		if(conflicts.length)
-			console.log(conflicts);
+		if(err) 
+			log.error(JSON.stringify(err));
+		if(conflicts && conflicts.length)
+			log.debug(JSON.stringify(conflicts));
 
 		// TODO - should this be here?
 		pushService.registerForPush();
