@@ -396,6 +396,11 @@ module.exports = function (client) {
 */
 
         }
+		else {
+			// not connected to network
+			// if callback supplied call it 
+			cb && cb();
+		}
     }
 
 	function refreshConflicts() {
