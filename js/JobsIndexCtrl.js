@@ -54,6 +54,9 @@ angular.module('JobsIndexCtrl', [])
 
 	var notificationCount = 0;
 	//Idle.watch();						// TODO - idle - check if idle and maybe auto refresh
+
+	log.debug("syncInProgress:"+syncService.getSyncInProgress());		// log current sync status
+
 	$rootScope.syncInProgress = false;
 	syncService.setSyncInProgress(false);		// not syncing now
 
@@ -708,11 +711,31 @@ angular.module('JobsIndexCtrl', [])
 
 	// ] END - New code for syncing
 
+	// removeDuplicates from: https://gist.github.com/lmfresneda/9158e06a93a819a78b30cc175573a8d3
+	/**
+	 * Remove duplicates from an array of objects in javascript
+	 * @param arr - Array of objects
+	 * @param prop - Property of each object to compare
+	 * @returns {Array}
+	 */
+	function removeDuplicates( arr, prop ) {
+	  var obj = {};
+	  for ( var i = 0, len = arr.length; i < len; i++ ){
+		if(!obj[arr[i][prop]]) obj[arr[i][prop]] = arr[i];
+	  }
+	  var newArr = [];
+	  for ( var key in obj ) newArr.push(obj[key]);
+	  return newArr;
+	};
+
 	// [ Conflict resolution 
 	Job.on('conflicts', function (conflicts) {
 		$scope.localConflicts = conflicts;
 
 		log.error(conflicts.length+" conflicts:"+JSON.stringify(conflicts));
+
+		var uconflicts = removeDuplicates( conflicts, modelId);
+		log.debug(uconflicts.length+" uconflicts:"+JSON.stringify(uconflicts));
 
 		conflicts.forEach(function (conflict) {
 
@@ -952,7 +975,7 @@ angular.module('JobsIndexCtrl', [])
 		if( $scope.checkedJobs.length > 0) {
 
 			// So at this point we have a signature, a podname, and an array of 1 or more basejob numbers
-			log.info(podname);
+			log.info("podname:"+podname);
 
 			// get array of basejob no.s from object
 			var baseJobs = $scope.checkedJobs.map(function(a) { return a.mobjobBasejobNum;});
