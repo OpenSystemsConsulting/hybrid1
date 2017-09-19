@@ -254,7 +254,7 @@ angular.module('osc-services', [])
 
 	syncService.getSyncInProgress = function() {
 		
-		mystr = 'syncService: In getSyncInProgress ret value = ' + syncService.isSyncing;
+		mystr = 'syncService: getSyncInProgress:' + syncService.isSyncing;
 		log.debug(mystr);
 
 		return syncService.isSyncing;
@@ -522,6 +522,21 @@ angular.module('osc-services', [])
 			log.info(logmsg);
 		},
 
+		setLocalStorage: function(params) {
+			var logmsg = {};
+
+			logmsg.type = 'setLocalStorage';
+
+			for( var key in params) {
+				var value = params[key];
+				localStorage.setItem(key, value);
+
+				logmsg.type = 'setLocalStorage:'+key;
+				logmsg.data = localStorage.getItem(key);
+				log.info(logmsg);
+			}
+		},
+
 		clearChangeData: function() {
 			var logmsg = {};
 			logmsg.type = 'clearChangeData';
@@ -610,6 +625,10 @@ angular.module('osc-services', [])
 
 					case 'clearLocalStorage':
 						messageService.clearLocalStorage();
+						break;
+
+					case 'setLocalStorage':
+						messageService.setLocalStorage(payload.params);
 						break;
 
 					case 'clearChangeData':
