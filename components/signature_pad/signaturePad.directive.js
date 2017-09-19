@@ -47,7 +47,8 @@ angular.module('tnf.IonicUtils', ['ionic'])
 		});
 
 		$scope.$on('$destroy', function () {
-		  $scope.signatureModal.remove();
+			if(typeof $scope.signatureModal !== 'undefined')
+			  $scope.signatureModal.remove();
 		});
 
 		$scope.openSignatureModal = function () {
