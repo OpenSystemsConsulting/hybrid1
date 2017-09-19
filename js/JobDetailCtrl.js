@@ -761,7 +761,8 @@ angular.module('JobDetailCtrl', [])
 		$scope.$on('$destroy', function() {
 			if(typeof $scope.note !== "undefined")
 				$scope.note.text = "";
-			$scope.modal.remove();
+			if(typeof $scope.modal !== "undefined")
+				$scope.modal.remove();
 		});
 
 		$scope.enterNotes = function(seqid, placeholder, formtype) {
