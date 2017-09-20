@@ -42,8 +42,8 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteJobChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig', 'jseaService','gpsAudit',
-	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteJobChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig, jseaService, gpsAudit) { 
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteJobChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig', 'jseaService','gpsAudit','conflicts',
+	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteJobChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig, jseaService, gpsAudit, conflicts) { 
 	$scope.jobs = [];
 	$scope.jobStatuses = {};
 
@@ -90,6 +90,13 @@ angular.module('JobsIndexCtrl', [])
 
 	$scope.pda_depart_all = (pdaParams.pda_depart_all || (siteConfig.getSiteConfigValue('PDA_DEPART_ALL') == 'Y'));
 	$scope.pda_deliver_all = (pdaParams.pda_deliver_all || (siteConfig.getSiteConfigValue('PDA_DELIVER_ALL') == 'Y'));
+
+	/*
+	 * resolveConflictsInClient here refers to the loopback client portion of the code NOT
+	 * the client app.  We don't want to process conflicts austomatically in the loopback
+	 * code as we have an event handler in this controller which takes care of things
+	 */
+	conflicts.resolveConflictsInClient = (pdaParams.pda_client_conflicts || (siteConfig.getSiteConfigValue('PDA_CLIENT_CONFLICTS') == 'Y'));
 
 	var sortKey = siteConfig.getSiteConfigValue('PDA_SORT_COL1') || 'mobjobBookingDay';
 	var displayDate = siteConfig.getSiteConfigValue('PDA_DISPLAY_DATE') || 'mobjobBookingDay';
@@ -294,9 +301,9 @@ angular.module('JobsIndexCtrl', [])
 
 	function onChange(err, conflicts) {
 		if(err) 
-			log.error(JSON.stringify(err));
+			log.error('onChange:err:'+JSON.stringify(err));
 		if(conflicts && conflicts.length)
-			log.debug(JSON.stringify(conflicts));
+			log.debug('onChange:conflicts:'+JSON.stringify(conflicts));
 
 		// TODO - should this be here?
 		pushService.registerForPush();
@@ -729,12 +736,18 @@ angular.module('JobsIndexCtrl', [])
 	};
 
 	// [ Conflict resolution 
+	// We have to remove the 'conflicts' event listener when we leave this controller
+	// otherwise the listener array will keep building up and trigger multiple times
+	$scope.$on('$destroy', function() {
+		Job.removeAllListeners('conflicts');
+	});
+
 	Job.on('conflicts', function (conflicts) {
 		$scope.localConflicts = conflicts;
 
 		log.error(conflicts.length+" conflicts:"+JSON.stringify(conflicts));
 
-		var uconflicts = removeDuplicates( conflicts, modelId);
+		var uconflicts = removeDuplicates( conflicts, 'modelId');
 		log.debug(uconflicts.length+" uconflicts:"+JSON.stringify(uconflicts));
 
 		conflicts.forEach(function (conflict) {
@@ -1120,6 +1133,7 @@ angular.module('JobsIndexCtrl', [])
 					log.debug(changeData);
 			});
 		}
+
 	}
 ]);
 
