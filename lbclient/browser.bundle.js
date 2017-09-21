@@ -192,6 +192,17 @@ module.exports = function (client) {
         }
     };
 
+    client.conflicts = {
+        _resolveConflicts: false,
+        get resolveConflictsInClient() {
+            //console.log('isConnected?', this._isConnected);
+            return this._resolveConflicts;
+        },
+        set resolveConflictsInClient(value) {
+            this._resolveConflicts = value;
+        }
+    };
+
     // setup model replication
 	var since = { push: -1, pull: -1 };
     function sync(callback, filter) {
@@ -327,12 +338,14 @@ module.exports = function (client) {
 											console.log("conflicts: source type:" +sourceType + ", sourceChange:"+JSON.stringify(conflict.sourceChange));
 											console.log("conflicts: target type:" +targetType + ", targetChange:"+JSON.stringify(conflict.targetChange));
 
-											// TODO - automatically resolve conflicts
-											if( sourceType == 'update' && targetType == 'delete') {
-												conflict.resolveUsingTarget(refreshConflicts);
-											}
-											else {
-												conflict.resolveUsingSource(refreshConflicts);
+											if(client.conflicts.resolveConflictsInClient) {
+												// automatically resolve conflicts
+												if( sourceType == 'update' && targetType == 'delete') {
+													conflict.resolveUsingTarget(refreshConflicts);
+												}
+												else {
+													conflict.resolveUsingSource(refreshConflicts);
+												}
 											}
 										});
 									});
