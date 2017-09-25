@@ -68,6 +68,10 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 		fullreplication.fullReplication = !fullreplication.fullReplication;
 	};
 
+	$scope.setStatusBarOverlay = function() {
+		StatusBar.overlaysWebView(this.checked);
+	}
+
 	$scope.toggleDesktopBrowserScrolling = function () {
 		$rootScope.desktopBrowserScrolling = !$rootScope.desktopBrowserScrolling;
 	}
