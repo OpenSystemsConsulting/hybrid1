@@ -1903,6 +1903,8 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				log.debug('deleteObsoleteImages: check name:'+name+', uploaded:'+uploaded+', jobSeq:'+jobSeq);
 
 				if( uploaded) {
+					// This Job.find has issues on older Androids
+					// Error: Your Node runtime does support ES6 Promises.
 					Job.find(filter).then(function(jobs) {
 
 						log.debug('deleteObsoleteImages: found:'+jobs.length+' job legs');
