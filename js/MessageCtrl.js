@@ -22,6 +22,10 @@ angular.module('MessageCtrl', [])
 				messageService.resetNewMessageCount();
 			});
 
+			$scope.$on('messageToDriver', function(event, payload){
+				showMessages();
+			});
+
 			// Reshow messages as required from callbacks etc.
 			function showMessages(err) {
 				$scope.messages = driverMessageService.getMessages(pdaParams.getDriverId());
