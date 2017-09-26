@@ -25,6 +25,10 @@ angular.module('cordovaReady', [])
 
 		log.debug('onDeviceReady');
 
+		if (cordova.platformId == 'android') {
+			StatusBar.backgroundColorByHexString("#333");
+		}
+
 /*		// LT - I don't think we should clear cache/localstorage here on startup as e.g.
 		// if a driver completes jobs when offline and starts up next day we need those
 		// to sync rather than get a new set of data from the server
