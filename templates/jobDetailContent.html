@@ -159,7 +159,8 @@
 			<!-- possible signature at time of depart pickup -->
 		<div ng-if="(pdaSignatOnDepPU && fullStatuses && property.enumValue.value == 'PU' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"
 					>
-			<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)" ng-disabled="syncInProgress"
+			<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)" ng-disabled="syncInProgress" 
+				check-ok-for-signat="checkOkForSignat"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Depart P/up
@@ -209,6 +210,7 @@
 		</div> 
 		<div ng-if="(! showDelButtonNoSignat && fullStatuses && property.enumValue.value == 'Ad' && (property.legid % 100 == 0) && (!pdaParams.multileg || property.numlegs < 2))" class="input-label" style="width:100%;">
 				<button tnf-signature-pad ng-model="signatureOne" class="floatLeft" pod-name="podname" my-key="property.legid" my-save-callback="handleJobStatusChange(property.legid,signatureOne,podname)" ng-disabled="syncInProgress"
+				check-ok-for-signat="checkOkForSignat"
 				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
 			>
 				Deliver

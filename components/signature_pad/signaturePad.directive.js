@@ -10,7 +10,8 @@ angular.module('tnf.IonicUtils', ['ionic'])
 		callback: '&mySaveCallback',
 		data: '=myKey',
 		podname: '=podName',
-		buttonLabel: '=?buttonLabel',
+		//buttonlabel: '=buttonLabel',
+		checkOkForSignat: '=',
 		accessor: '='
 	  },
 
@@ -31,12 +32,16 @@ angular.module('tnf.IonicUtils', ['ionic'])
 
 		$scope.signaturePadModel = {};
 		$scope.signaturePadModel.podname = "";
-		if( typeof buttonLabel !== 'undefined') {
-			$scope.buttonLabel = buttonLabel || 'Tap to sign';
+		$scope.buttonLabel = 'Tap to sign';
+
+/*
+		if( typeof buttonlabel !== 'undefined') {
+			$scope.buttonlabel = buttonlabel || 'Tap to sign';
 		}
 		else {
-			$scope.buttonLabel = 'Tap to sign';
+			$scope.buttonlabel = 'Tap to sign';
 		}
+*/
 
 		// This is the template with the canvas element where we can draw the signature
 		$ionicModal.fromTemplateUrl('components/signature_pad/signaturePad.html', {
@@ -52,6 +57,13 @@ angular.module('tnf.IonicUtils', ['ionic'])
 		});
 
 		$scope.openSignatureModal = function () {
+
+			// Check if OK to do this - optional function supplied to directive
+			if($scope.checkOkForSignat) {
+				if(!$scope.checkOkForSignat($scope.data)) {
+					return;
+				}
+			}
 
 			// if signat exists in local storage use it
 			//$scope.signature.image = localStorage.getItem( "signature");

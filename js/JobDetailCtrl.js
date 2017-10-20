@@ -50,6 +50,9 @@ angular.module('JobDetailCtrl', [])
 
 	$scope.jseaPerJob = (jseaService.getJseaConfig() == 'PJB_CHECK' );
 
+	// Mandatory photos
+	$scope.pdaMandatoryPhotos = pdaMandatoryPhotos = (pdaParams.pda_mandatory_photos || (siteConfig.getSiteConfigValue('PDA_MANDATORY_PHOTOS') == 'Y'));
+
 	function getJob() {
 			mystr = 'getJob';
 
@@ -145,6 +148,10 @@ angular.module('JobDetailCtrl', [])
         .then(function(results)
 */
 		Job.find(localfilter, function (err, results) {
+
+			if(err) {
+				log.error('Job.find:'+JSON.stringify(err));
+			}
 
         	if (results.length === 0) {
         		window.location.href = "#/tab/jobs";
@@ -272,6 +279,54 @@ angular.module('JobDetailCtrl', [])
 			jseaMaybeRequired = true;
 		}
 ///END TESTING
+
+		// If mandatory photos required check all legs to make sure at least one 
+		// photo has been taken for the current status (anything > NJ)
+		// NOTE - the image could be attached to any leg
+		if(pdaMandatoryPhotos) {
+			var found = false;
+			// It's possible to have e.g. leg 0 @ Ad and leg 1 @ PC where the Ad photo
+			// was taken on leg 1 so get status from 1st leg ( leg 0 PU)
+			var jobStatus = $scope.jobs[0].mobjobStatus;	// get status from 1st leg (PU)
+			for(var i = 0; i < legCount; i++) {
+				var job = $scope.jobs[i];
+
+				// long status text is stored in $scope.data
+				statusString = getStatusString(seqid);
+
+				if(job.mobjobStatus === 'NJ') {
+					found = true;			// don't care about NJ
+					break;
+				}
+
+				if( typeof job.imageCount !== 'undefined') {
+
+					// We have some images - check if some for this status
+					var obj = getCurrentStatusObj(jobStatus, job.imageCount) || {};
+					if(obj.count > 0) {
+						found = true;
+						break;				// have at least one image
+					}
+				}
+			}
+
+			log.info('pdaMandatoryPhotos: seqid:'+seqid+', jobStatus:'+jobStatus+', found:'+found);
+			
+			if( !found) {
+				// no images found - don't allow operator to continue
+				var alertPopup = $ionicPopup.alert({
+					title: 'No photos yet for '+statusString,
+					template: "Please take at least one photo at this status before updating the job status"
+				});
+				alertPopup.then(function(res) {
+					return;
+				});
+
+				return;		// the alert is async - return here while popup does its job
+			}
+
+		}
+		
 
 		for( var iac = 0; iac < legCount; iac++)  
 		{
@@ -823,8 +878,112 @@ angular.module('JobDetailCtrl', [])
 		});
 */
 
+		$scope.$on('imageSaved', function imageSaved(event,fileData) {
+			// fileData contains image name and metadata with job no, legid, status
+			log.debug('imageSaved:' + JSON.stringify(fileData));
 
+			if(pdaMandatoryPhotos) {
+				var legid = fileData.metadata.legid;		// id of leg of saved image
+				var legStatus = fileData.metadata.legStatus;
+				var jobs = event.currentScope.jobs;			// this scope's list of jobs (legs)
+				var legCount = event.currentScope.jobs.length;
 
+				// find our leg and update the image status count
+				for(var i = 0; i < legCount; i++) {
+				var job = jobs[i];
+
+					if( legid == job.mobjobSeq) {
+						if( typeof job.imageCount === 'undefined') {
+							job.imageCount = [];		// create property if it doesn't exist yet (array of objects)
+						}
+						var obj = getCurrentStatusObj(legStatus, job.imageCount) || {};
+
+						if(obj.count === 0)
+							job.imageCount.push(obj);			// new array element
+						obj.count ++;
+
+						job.save();
+					}
+				}
+
+			}
+		});
+
+		function getCurrentStatusObj(legStatus,imageCountArr){
+			for(var i = 0; i < imageCountArr.length; i++) {
+				if(imageCountArr[i].jobStatus === legStatus) {
+					return imageCountArr[i];
+				}
+			}
+			return {"jobStatus": legStatus, "count": 0};
+		}
+
+		function getStatusString(seqid) {
+			var len = $scope.data.length;
+			for(var i = 0; i < len; i++) {
+				if($scope.data[i].legid === seqid && $scope.data[i].property === 'mobjobStatus') {
+					return($scope.data[i].enumValue.label);
+				}
+			}
+			return "";
+		}
+
+		$scope.checkOkForSignat = function (seqid) {
+			// check if images taken at this status to allow signature to go ahead
+			// This function is called from the signature pad directive and is therefore
+			// in an isolate scope which means we don't have access to the local scope
+			// in this controller.  We do have access to rootScope via this.$root
+
+			var retval = true;			// default behaviour
+
+			if(pdaMandatoryPhotos) {
+				// this.$root.job contains the list of legs - 1st should match seqid
+				log.debug("checkOkForSignat:pdaMandatoryPhotos: leg 0:"+this.$root.job[0].mobjobSeq+", seqid:"+seqid);
+				if(this.$root.job[0].mobjobSeq === seqid) {
+
+					retval = false;
+					var jobStatus;
+					var legCount = this.$root.job.length;
+
+					for(var i = 0; i < legCount; i++) {
+						var job = this.$root.job[i];
+
+						jobStatus = job.mobjobStatus;
+						// long status text is stored in $scope.data
+						statusString = getStatusString(seqid);
+
+						if(job.mobjobStatus === 'NJ') {
+							retval = true;			// don't care about NJ
+							break;
+						}
+
+						if( typeof job.imageCount !== 'undefined') {
+
+							// We have some images - check if some for this status
+							var obj = getCurrentStatusObj(job.mobjobStatus, job.imageCount) || {};
+							if(obj.count > 0) {
+								retval = true;
+								break;				// have at least one image
+							}
+						}
+					}
+				}
+				if( !retval) {
+					// no images found - don't allow operator to continue
+					var alertPopup = $ionicPopup.alert({
+						title: 'No photos yet for '+statusString,
+						template: "Please take at least one photo at this status before updating the job status"
+					});
+					alertPopup.then(function(res) {
+						return retval;			// where will this return to?
+					});
+
+					return retval;		// the alert is async - return here while popup does its job
+				}
+			}
+
+			return retval;
+		};
 	}
 ])
 
