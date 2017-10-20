@@ -1373,7 +1373,8 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				'PDA_DISPLAY_TO',
 				'PDA_ROW1_FONT_SIZE',
 				'PDA_MONITOR_ONLINE',
-				'PDA_CLIENT_CONFLICTS'
+				'PDA_CLIENT_CONFLICTS',
+				'PDA_MANDATORY_PHOTOS'
 			];
 
 	var g_siteconfigs = null;
@@ -1858,6 +1859,7 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				}
 				*/
 				imageData.metadata = metadata;
+				data.metadata = metadata;
 			}
 
 			imageFileService.storeImage(imageData);			// store name/status in local storage
