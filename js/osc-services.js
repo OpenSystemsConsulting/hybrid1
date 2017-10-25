@@ -2076,12 +2076,17 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 
 	function addMessage(driverId,message,cb) {
 		var driverMsg = {};
-		//var now = new Date();
-		var now = new Date().toISOString();
+		var now = new Date();			// UTC
+		var oset = now.getTimezoneOffset();
+		var tstamp = now.valueOf();
+
+		tstamp += (oset * -1)  * 60  * 1000;			// Local
+
+		var msgDate = new Date(tstamp);
 
 		driverMsg.drvmDriverId = driverId;
-		driverMsg.drvmDate = now;
-		driverMsg.drvmTimestamp = now;
+		driverMsg.drvmDate = msgDate;
+		driverMsg.drvmTimestamp = msgDate;
 		driverMsg.drvmMessage = message;		// TODO - should make sure <=512 chars
 		driverMsg.drvmSender = driverId;
 		driverMsg.drvmRecipient = "DESPATCH";	// for now will always be DESPATCH until we maybe have a reply concept
