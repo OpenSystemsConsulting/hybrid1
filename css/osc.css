@@ -239,3 +239,12 @@ textarea#styled{
 	padding: 7px 7px 7px 2px;
 	float: left;
 }
+
+.message-tstamp {
+	font-size: 75%;
+	font-weight:bold;
+}
+
+.osc-message {
+	padding: 10px;
+}

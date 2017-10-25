@@ -43,16 +43,17 @@
 	</strong>
 
 
-	<ion-list>
+	<ion-list class="item item-text-wrap">
 		<!-- <ion-item ng-repeat="message in messages.slice().reverse() track by $index" type="item-text-wrap"> -->
-		<ion-item ng-repeat="message in messages track by $index" type="item-text-wrap">
+		<ion-item ng-repeat="message in messages track by $index" class="osc-message">
 
-			<!-- {{message.drvmTimestamp}} -->
+			<!-- if message was from driver to despatch show right justified, otherwise show on left like traditional message app -->
+			<!-- {{message.drvmTimestamp}} {{message.drvmTimestamp | utcAsLocal:'yyyy-MM-dd HH:mm'}} -->
+			<div ng-show="{{pdaParams.driverId}}!={{message.drvmSender}}" class="text-left message-tstamp"> {{message.drvmTimestamp | utcAsLocal:'yyyy-MM-dd HH:mm'}}</div>
+			<div ng-show="{{pdaParams.driverId}}!={{message.drvmSender}}" class="text-left"> {{message.drvmMessage}} </div>
 
-			<!-- if message was from driver to despatch show on right, otherwise show on left like tradidiona; messages app -->
-			<span ng-show="{{pdaParams.driverId}}!={{message.drvmSender}}" class="left"> {{message.drvmMessage}} </span>
-
-			<span ng-show="{{pdaParams.driverId}}=={{message.drvmSender}}" class="right"> {{message.drvmMessage}} </span>
+			<div ng-show="{{pdaParams.driverId}}=={{message.drvmSender}}" class="text-right message-tstamp"> {{message.drvmTimestamp | utcAsLocal:'yyyy-MM-dd HH:mm'}} </div>
+			<div ng-show="{{pdaParams.driverId}}=={{message.drvmSender}}" class="text-right"> {{message.drvmMessage}} </div>
 
 		</ion-item>
 	</ion-list>

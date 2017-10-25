@@ -5,7 +5,25 @@
 // and http://codepen.io/rossmartin/pen/XJmpQr
 
 angular.module('MessageCtrl', [])
-	.controller('MessageCtrl', [ '$rootScope', '$scope', 'messageService','siteConfig','$ionicPopup','Logger','pdaParams','driverMessageService',
+.filter('utcAsLocal', function ($filter) {
+	// Query from Oracle returns date type with 'Z' suffix indicating it is UTC time
+	// however we have stored it in the DB as local time so need to ensure no local conversion
+	return function (utcDateString, format) {
+		// return if input date is null or undefined
+		if(!utcDateString) {
+			return;
+		}
+
+		// remove 'Z' at end of string so angular understands this to be local not utc
+		if (utcDateString.slice(-1) === 'Z') {
+			utcDateString = utcDateString.slice(0,-1);
+		}
+
+		// convert and format date using the built in angularjs date filter
+		return $filter('date')(utcDateString, format);
+	};
+})
+.controller('MessageCtrl', [ '$rootScope', '$scope', 'messageService','siteConfig','$ionicPopup','Logger','pdaParams','driverMessageService',
 		function ($rootScope, $scope, messageService, siteConfig,$ionicPopup,Logger,pdaParams,driverMessageService) {
 
 		var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'MessageCtrl'};
