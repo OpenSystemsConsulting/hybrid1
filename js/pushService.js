@@ -1,7 +1,7 @@
 angular.module('pushService', [])
 
-.factory('pushService',[ '$rootScope','$ionicPlatform','$cordovaPush','$http','pdaParams', 'cordovaReady','$ionicPopup','$cordovaMedia','siteService','Logger','$cordovaDevice','$cordovaPushV5','Installation',
-function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaReady, $ionicPopup, $cordovaMedia, siteService, Logger, $cordovaDevice, $cordovaPushV5, Installation) {
+.factory('pushService',[ '$rootScope','$ionicPlatform','$cordovaPush','$http','pdaParams', 'cordovaReady','$ionicPopup','$cordovaMedia','siteService','Logger','$cordovaDevice','$cordovaPushV5','Installation','$interval','siteConfig',
+function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaReady, $ionicPopup, $cordovaMedia, siteService, Logger, $cordovaDevice, $cordovaPushV5, Installation, $interval, siteConfig) {
 
 	// "senderID" is "Project Number" from Google Developers Console (https://console.developers.google.com)
 	// NOTE that there is also a server component involved - see API key in /app/strongloop/OSC-API/server/gcm_config.js
@@ -43,7 +43,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 	push_service.registerForPush = function () {
 
-		var openPopup = true;
+		var pda_notify_repeat = pdaParams.pda_notify_repeat || Number(siteConfig.getSiteConfigValue('PDA_NOTIFY_REPEAT'));
+		var pda_notify_interval = pdaParams.pda_notify_interval || Number(siteConfig.getSiteConfigValue('PDA_NOTIFY_INTERVAL'));
 
 		// TODO - check installations collection to see if we already have any registration?
 		// TODO - need to try and maintain one document only in installations collection
@@ -204,6 +205,35 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 									log.error(platform+':$cordovaPushV5:notificationReceived:play error:['+sound+']['+JSON.stringify(err)+']');
 									notificationSnd.release();
 								});
+ 
+								// If appropriate site configs set, set up nagging notifications
+								// create a popup modal and keep making a sound until acknowledged
+								// Note we will already have made the sound once at this point
+								if( pda_notify_repeat && pda_notify_interval && payload.type != 'commandToPDA') {
+									var inotificationSnd = $cordovaMedia.newMedia(sound);
+									var notify;
+									var count = pda_notify_repeat;
+									var interval = 1000 * pda_notify_interval;
+
+									log.debug(platform+':$cordovaPushV5:notificationReceived: nag '+ pda_notify_repeat +' times ' + pda_notify_interval + ' seconds apart');
+									notify = $interval(function playSound() {
+										inotificationSnd.play().then(function() {
+											//inotificationSnd.release();		// don't release until count is complete
+										}, function(err) {
+											log.error(platform+':$cordovaPushV5:notificationReceived:play error:['+sound+']['+JSON.stringify(err)+']');
+											inotificationSnd.release();
+										});
+									}, interval, count);
+
+									var alertPopup = $ionicPopup.alert({
+										title: 'New notification',
+										template: payload.type == 'NEWJOB' || payload.type == 'CANCEL' ? payload.type : payload.message
+									});
+									alertPopup.then(function(res) {
+										inotificationSnd.release();
+										$interval.cancel(notify);	// 
+									});
+								}
 							}
 						}
 					}
