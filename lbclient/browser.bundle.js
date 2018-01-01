@@ -24317,7 +24317,9 @@ exports = module.exports = function bootBrowserApp(app, options) {
 
 exports.execute = execute;
 
-},{"./lib/executor":112}],"qT+Bxl":[function(require,module,exports){
+},{"./lib/executor":112}],"loopback-boot#instructions":[function(require,module,exports){
+module.exports=require('qT+Bxl');
+},{}],"qT+Bxl":[function(require,module,exports){
 module.exports={
   "config": {},
   "dataSources": {
@@ -24433,6 +24435,14 @@ module.exports={
       "serverIP": "opensyscon.com.au",
       "serverPort": 3083,
       "url": "http://opensyscon.com.au:3083/api"
+    },
+    "rback": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "REDBACK",
+      "serverIP": "103.25.182.105",
+      "serverPort": 3083,
+      "url": "http://103.25.182.105:3083/api"
     },
     "cct": {
       "connector": "remote",
@@ -25803,8 +25813,6 @@ module.exports={
     ]
   }
 }
-},{}],"loopback-boot#instructions":[function(require,module,exports){
-module.exports=require('qT+Bxl');
 },{}],112:[function(require,module,exports){
 (function (process){
 var assert = require('assert');
