@@ -73,7 +73,8 @@ angular.module('TpmPdaControllerCtrl', [])
 
 		// modal window to update driver no
 		$ionicModal.fromTemplateUrl('templates/modal.html', {
-			scope: $scope
+			scope: $scope,
+			id: 'TpmPdaController'
 		}).then(function(modal) {
 			$scope.modal = modal;
 		});

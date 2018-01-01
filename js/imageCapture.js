@@ -36,7 +36,8 @@ angular.module('imageCapture', [])
 
 				// Create modal window
 				$ionicModal.fromTemplateUrl('templates/imagetext.html', {
-					scope: $scope
+					scope: $scope,
+					id: 'imageCapture'
 				}).then(function(modal) {
 					$scope.modal = modal;
 					$scope.photoMessage = {};
