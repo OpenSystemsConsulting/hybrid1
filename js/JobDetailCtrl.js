@@ -24,6 +24,12 @@ angular.module('JobDetailCtrl', [])
 
 	$scope.pdaNotes = (pdaParams.pda_notes || (siteConfig.getSiteConfigValue('PDA_NOTES') == 'Y'));
 
+	// default is must enter notes for image but can be overridden by having site config set to 'N'
+	if( siteConfig.getSiteConfigValue('PDA_IMAGE_NOTES') == 'N')
+		$scope.pdaImageNotes = false;
+	else
+		$scope.pdaImageNotes = pdaParams.pda_image_notes || true;
+
 	// The following two are mutually exclusive so should never be set together - if they are we use depart pickup
 	// signature on pickup
 	$scope.pdaSignatOnPU = (pdaParams.pda_signat_on_pu || (siteConfig.getSiteConfigValue('PDA_SIGNATURE_PUP') == 'Y'));
@@ -151,6 +157,9 @@ angular.module('JobDetailCtrl', [])
 
 			if(err) {
 				log.error('Job.find:'+JSON.stringify(err));
+				// back to main job tab
+        		window.location.href = "#/tab/jobs";
+        		return;
 			}
 
         	if (results.length === 0) {
@@ -241,10 +250,12 @@ angular.module('JobDetailCtrl', [])
 			// which will then appear on CCT's invoices to clients
 			if(formtype == 'MULTIDEL') {
 				// wait for the modal form to be closed before going to the next page
-				$scope.$on('modal.hidden', function() {
+				$scope.$on('modal.hidden', function(event, modal) {
+
+					// Now get jsea details
 					window.location.href = "#/tab/jseas";
 				});
-				$scope.enterNotes(job.mobjobSeq, multidelText, formtype);
+				$scope.enterNotes(job.mobjobSeq, multidelText, formtype);	// shows modal window
 			}
 			else {
 				window.location.href = "#/tab/jseas";
@@ -315,7 +326,7 @@ angular.module('JobDetailCtrl', [])
 			if( !found) {
 				// no images found - don't allow operator to continue
 				var alertPopup = $ionicPopup.alert({
-					title: 'No photos yet for '+statusString,
+					title: 'No photos yet at '+statusString,
 					template: "Please take at least one photo at this status before updating the job status"
 				});
 				alertPopup.then(function(res) {
@@ -800,7 +811,8 @@ angular.module('JobDetailCtrl', [])
 		};
 
 		$ionicModal.fromTemplateUrl('templates/notes.html', {
-			scope: $scope
+			scope: $scope,
+			id: 'enterNotes'
 		}).then(function(modal) {
 			$scope.modal = modal;
 			$scope.note = {};
@@ -816,8 +828,10 @@ angular.module('JobDetailCtrl', [])
 		$scope.$on('$destroy', function() {
 			if(typeof $scope.note !== "undefined")
 				$scope.note.text = "";
-			if(typeof $scope.modal !== "undefined")
+			if(typeof $scope.modal !== "undefined") {
+				$scope.modal._fromRemove = true;
 				$scope.modal.remove();
+			}
 		});
 
 		$scope.enterNotes = function(seqid, placeholder, formtype) {
