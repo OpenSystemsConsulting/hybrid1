@@ -30,6 +30,8 @@ angular.module('services', [])
 				deferred.resolve(name);
 			} else if (name == 'redback' && pw == 'redback') {
 				deferred.resolve(name);
+			} else if (name == 'rback' && pw == 'rback') {			// Redback's new server 2018
+				deferred.resolve(name);
 			} else if (name == 'swift2' && pw == 'swift2') {
 				deferred.resolve(name);
 			} else if (name == 'cct' && pw == 'cct') {				// City Crane
