@@ -1374,7 +1374,10 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				'PDA_ROW1_FONT_SIZE',
 				'PDA_MONITOR_ONLINE',
 				'PDA_CLIENT_CONFLICTS',
-				'PDA_MANDATORY_PHOTOS'
+				'PDA_MANDATORY_PHOTOS',
+				'PDA_IMAGE_NOTES',
+				'PDA_NOTIFY_REPEAT',
+				'PDA_NOTIFY_INTERVAL'
 			];
 
 	var g_siteconfigs = null;
