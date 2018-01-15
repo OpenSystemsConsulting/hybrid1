@@ -44,7 +44,10 @@
             <string>The app would like to access the photo library when you attach images to content.</string>
         </config-file>
 		<config-file parent="NSLocationWhenInUseUsageDescription" platform="ios" target="*-Info.plist">
-			<string>We may use GPS to determine your current location in order to update the despatch system at your office</string>
+			<string>We may use GPS to determine your current location in order to update the despatch system at your office. We will not share your current location with other users or partners.</string>
+		</config-file>
+		<config-file parent="NSLocationAlwaysUsageDescription" platform="ios" target="*-Info.plist">
+			<string>We may use GPS to determine your current location in order to update the despatch system at your office. We will not share your current location with other users or partners.</string>
 		</config-file>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
