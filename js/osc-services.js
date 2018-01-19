@@ -496,6 +496,9 @@ angular.module('osc-services', [])
 			var dblist = [ 'osc-local-db', 'osc-driver-info', 'osc-push-credentials' ];
 			var len = dblist.length;
 
+			var usedStorage = Math.round(JSON.stringify(localStorage).length / 1024);
+			log.info('dumpLocalStorage: usedStorage:' + usedStorage + ' KB');
+
 			// dump ALL items, not just out predefined ones
 			len = localStorage.length;
 
