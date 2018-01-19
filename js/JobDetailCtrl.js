@@ -8,8 +8,8 @@ angular.module('JobDetailCtrl', [])
 })
 
 // For the View which is Displaying and Editing a Job or for the Creation of a new Job...
-.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','$ionicModal','LocalNote','job_note_sync','gpsAudit','$ionicPopup',
-	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService, $ionicModal,LocalNote,job_note_sync, gpsAudit, $ionicPopup) {
+.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','$ionicModal','LocalNote','job_note_sync','gpsAudit','$ionicPopup','imageService','imageFileService',
+	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService, $ionicModal,LocalNote,job_note_sync, gpsAudit, $ionicPopup, imageService, imageFileService) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -251,6 +251,18 @@ angular.module('JobDetailCtrl', [])
 			if(formtype == 'MULTIDEL') {
 				// wait for the modal form to be closed before going to the next page
 				$scope.$on('modal.hidden', function(event, modal) {
+					// check if modal is defined - can get here on hide AND destroy events
+
+					// TODO - if mandatory photos required need to take a photo here also
+					if(pdaMandatoryPhotos && modal.id === 'enterNotes' && !modal._fromRemove) {
+						// Photo button is currently a directive, uses imageService and imageFileService
+						// puts takephoto() into scope so can call from here
+						//$scope.takephoto(job.mobjobSeq);		// doesn't work
+						//$scope.$broadcast('takePhoto',job.mobjobSeq);
+
+						// Don't use directive but call a function here that uses the imageService
+						takePhoto(job.mobjobSeq, job.mobjobNumber, job.mobjobStatus);
+					}
 
 					// Now get jsea details
 					window.location.href = "#/tab/jseas";
@@ -307,6 +319,17 @@ angular.module('JobDetailCtrl', [])
 
 				if(job.mobjobStatus === 'NJ') {
 					found = true;			// don't care about NJ
+					break;
+				}
+
+				// Maybe the "don't care" statuses should be configurable?
+				if(job.mobjobStatus === 'AC') {
+					found = true;			// CCT don't care about AC
+					break;
+				}
+
+				if(job.mobjobStatus === 'Dp') {
+					found = true;			// CCT don't care about Dp
 					break;
 				}
 
@@ -998,6 +1021,37 @@ angular.module('JobDetailCtrl', [])
 
 			return retval;
 		};
+
+		function takePhoto(legid, basejob, jobstatus) {
+
+			// function similar to that in imageCapture directive to take and store a photo
+			// note that this is only for CCT atm and they don't require notes for photos
+			imageService.takePhoto(legid).then(function(imageURI) {
+				// image successfully captured by device
+
+				// create metadata object with at least legid, basejob and legStatus properties
+				// which are used on the remote endpoint for reference in job_mobile_events table
+				var metadata = {
+					legid : legid,
+					basejob : basejob,
+					legStatus : jobstatus
+				};
+
+				imageService.storeImageURI(legid, imageURI, metadata).then(function(fileData) {
+					// image moved to app storage
+					imageFileService.set(fileData.newFileName, 'notes', 'MULTIDEL');
+					imageFileService.set(fileData.newFileName, 'readyForUpload', true);
+
+					$scope.$emit('imageSaved',fileData);
+
+				}, function (err) {
+					alert(JSON.stringify(err));
+				});
+
+			}, function (err) {
+				alert(JSON.stringify(err));
+			});
+		}
 	}
 ])
 
