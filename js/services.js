@@ -16,6 +16,8 @@ angular.module('services', [])
 			//else
 			if (name == 'oscvtest' && pw == 'oscvtest') {
 				deferred.resolve(name);
+			} else if (name == 'hybrid64' && pw == 'hybrid64') {
+				deferred.resolve(name);
 			} else if (name == 'scope' && pw == 'scope') {
 				deferred.resolve(name);
 			} else if (name == 'swift1' && pw == 'swift1') {
