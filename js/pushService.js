@@ -45,6 +45,11 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 		var pda_notify_repeat = pdaParams.pda_notify_repeat || Number(siteConfig.getSiteConfigValue('PDA_NOTIFY_REPEAT'));
 		var pda_notify_interval = pdaParams.pda_notify_interval || Number(siteConfig.getSiteConfigValue('PDA_NOTIFY_INTERVAL'));
+		var pda_sender_id = siteConfig.getSiteConfigValue('PDA_SENDER_ID');
+
+		if(pda_sender_id){
+			pushOptions.android.senderID = pda_sender_id;
+		}
 
 		// TODO - check installations collection to see if we already have any registration?
 		// TODO - need to try and maintain one document only in installations collection
