@@ -1,6 +1,6 @@
 angular.module('imageCapture', [])
-	.directive('cameraButton',[ '$cordovaFile','$ionicModal','$rootScope','pdaParams','$cordovaCamera','imageService','imageFileService','$parse',
-		function($cordovaFile,$ionicModal,$rootScope,pdaParams,$cordovaCamera, imageService, imageFileService, $parse) {
+	.directive('cameraButton',[ '$cordovaFile','$ionicModal','$rootScope','pdaParams','$cordovaCamera','imageService','imageFileService','$parse','siteConfig',
+		function($cordovaFile,$ionicModal,$rootScope,pdaParams,$cordovaCamera, imageService, imageFileService, $parse, siteConfig) {
 	return {
 			restrict: 'EA',
 			scope: true,
@@ -12,6 +12,11 @@ angular.module('imageCapture', [])
 				var metadata = $parse($attrs['metadata'])($scope);
 
 				console.log(new Date().toISOString()+': camera: starts');		//DEBUG
+
+				// default is must enter notes for image but can be overridden by having site config set to 'N'
+				var pdaImageNotes = pdaParams.pda_image_notes || true;
+				if( siteConfig.getSiteConfigValue('PDA_IMAGE_NOTES') === 'N')
+					pdaImageNotes = false;
 
 // Cancel button does clear then hide
 //<button class="button" ng-click="clear(); modal.hide()">Cancel</button>
@@ -103,7 +108,13 @@ angular.module('imageCapture', [])
 							var baseFileName = fileData.baseFileName;
 							var newFileName = fileData.newFileName;
 
-							getNotesForImage(savedImageURI, legid, baseFileName, newFileName);
+							if(pdaImageNotes) {
+								// get the notes associated with this image
+								getNotesForImage(savedImageURI, legid, baseFileName, newFileName);
+							} else {
+								// no notes, simply mark as ready for upload
+								imageFileService.set(newFileName, 'readyForUpload', true);
+							}
 
 							if(cb) cb($scope,fileData);
 
