@@ -25,6 +25,7 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 
 	//$scope.version = appConfig.version.toFixed(2);
 	$scope.version = appConfig.version;
+	$scope.build = appConfig.build;
 
 /*
 	// LT - only works on a phone and only for wifi connections
