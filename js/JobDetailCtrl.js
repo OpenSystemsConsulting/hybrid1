@@ -24,12 +24,6 @@ angular.module('JobDetailCtrl', [])
 
 	$scope.pdaNotes = (pdaParams.pda_notes || (siteConfig.getSiteConfigValue('PDA_NOTES') == 'Y'));
 
-	// default is must enter notes for image but can be overridden by having site config set to 'N'
-	if( siteConfig.getSiteConfigValue('PDA_IMAGE_NOTES') == 'N')
-		$scope.pdaImageNotes = false;
-	else
-		$scope.pdaImageNotes = pdaParams.pda_image_notes || true;
-
 	// The following two are mutually exclusive so should never be set together - if they are we use depart pickup
 	// signature on pickup
 	$scope.pdaSignatOnPU = (pdaParams.pda_signat_on_pu || (siteConfig.getSiteConfigValue('PDA_SIGNATURE_PUP') == 'Y'));
