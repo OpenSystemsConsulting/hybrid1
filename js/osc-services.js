@@ -1380,7 +1380,8 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				'PDA_MANDATORY_PHOTOS',
 				'PDA_IMAGE_NOTES',
 				'PDA_NOTIFY_REPEAT',
-				'PDA_NOTIFY_INTERVAL'
+				'PDA_NOTIFY_INTERVAL',
+				'PDA_SENDER_ID'
 			];
 
 	var g_siteconfigs = null;
