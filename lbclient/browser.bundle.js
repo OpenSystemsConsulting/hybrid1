@@ -24354,6 +24354,14 @@ module.exports={
       "serverPort": 3000,
       "url": "http://opensyscon.com.au:3000/api"
     },
+    "osctest": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "CES",
+      "serverIP": "couriers-express.com.au",
+      "serverPort": 3009,
+      "url": "http://couriers-express.com.au:3009/api"
+    },
     "hybrid64": {
       "connector": "remote",
       "debug": "true",
