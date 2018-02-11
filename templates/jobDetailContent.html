@@ -185,6 +185,16 @@
 			</button>
 		</div>
 
+        <!--   Navigation -->
+        <div ng-if="(reqsNavigation && property.property == 'mobjobNumber')" class="input-label" style="width:100%;"
+                    >
+            <button class="button button-positive floatLeft" ng-click="handleNavigation((property.legid % 100))" ng-disabled="syncInProgress"
+                ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+            >
+                NAV
+            </button>
+        </div>
+
 		<!--   Depart Delivery -->
 <!-- not used atm
 		<div ng-if="(fullStatuses && property.enumValue.value == 'Ad' && (property.legid % 100 == 0) )" class="input-label" style="width:100%;"

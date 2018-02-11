@@ -24800,7 +24800,7 @@ module.exports={
             "length": 30,
             "precision": null,
             "scale": null,
-            "index": 140,
+            "index": 90,
             "inputType": "text",
             "label": "Nam",
             "oracle": {

@@ -1381,7 +1381,8 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				'PDA_IMAGE_NOTES',
 				'PDA_NOTIFY_REPEAT',
 				'PDA_NOTIFY_INTERVAL',
-				'PDA_SENDER_ID'
+				'PDA_SENDER_ID',
+				'PDA_REQ_NAVIGATION'
 			];
 
 	var g_siteconfigs = null;

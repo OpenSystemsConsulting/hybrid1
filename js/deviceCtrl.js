@@ -2,8 +2,8 @@ angular.module('deviceCtrl', [])
 
 
 .controller('deviceCtrl', [
-'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', 'deviceService', 'network','fullreplication', '$cordovaNetwork',"appConfig",'siteService','$ionicPopup','siteConfig','messageService','jobService','sodService','jseaService',
-function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, deviceService, network, fullreplication, $cordovaNetwork, appConfig, siteService, $ionicPopup,siteConfig,messageService, jobService, sodService, jseaService) {
+'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', 'deviceService', 'network','fullreplication', '$cordovaNetwork',"appConfig",'siteService','$ionicPopup','siteConfig','messageService','jobService','sodService','jseaService','navigationService',
+function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, deviceService, network, fullreplication, $cordovaNetwork, appConfig, siteService, $ionicPopup,siteConfig,messageService, jobService, sodService, jseaService, navigationService) {
 
 	// TODO - maybe have array of key/value pairs - then can simply iterate with ng-repeat on template
 	var devicectrl = { };
@@ -94,6 +94,12 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 	$scope.pushRegister = function() {
 		pushService.registerForPush();
 	}
+
+    $scope.clearNavUserChoice = function() {
+
+        navigationService.clearUserChoice();
+    }
+
 
 	$scope.resetApp = function() {
 		var confirmPopup = $ionicPopup.confirm({

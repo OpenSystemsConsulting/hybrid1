@@ -61,12 +61,21 @@
 			Register
 		</button>
 	</ion-item>
+
 	<ion-item class="item item-button-right" >
 		UnRegister from Push
 		<button class="button button-light" ng-click="pushDeRegister()">
 			UnRegister
 		</button>
 	</ion-item>
+
+    <ion-item class="item item-button-right" >
+        Clear Navigator Preference
+        <button class="button button-positive" ng-click="clearNavUserChoice()">
+            Clear
+        </button>
+    </ion-item> 
+
 
 	<ion-checkbox class="item-checkbox-right" ng-model="desktopBrowserScrolling" ng-change="toggleDesktopBrowserScrolling()">
 		Desktop Scrolling Mode

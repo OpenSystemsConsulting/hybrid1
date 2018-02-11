@@ -27,10 +27,10 @@ gridlabel{
     color:blue !important;
     font-size: 21px;
     font-weight: black;
-    width: 80px;
+    width: 60px;
     display: block;
     text-align:center;
-	flex: 1 0 170px !important;
+	flex: 1 0 60px !important;
 }
 
 .jobdetails {

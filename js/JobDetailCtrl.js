@@ -8,8 +8,8 @@ angular.module('JobDetailCtrl', [])
 })
 
 // For the View which is Displaying and Editing a Job or for the Creation of a new Job...
-.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','$ionicModal','LocalNote','job_note_sync','gpsAudit','$ionicPopup','imageService','imageFileService',
-	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService, $ionicModal,LocalNote,job_note_sync, gpsAudit, $ionicPopup, imageService, imageFileService) {
+.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','$ionicModal','LocalNote','job_note_sync','gpsAudit','$ionicPopup','imageService','imageFileService','navigationService',
+	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService, $ionicModal,LocalNote,job_note_sync, gpsAudit, $ionicPopup, imageService, imageFileService,navigationService) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -49,6 +49,8 @@ angular.module('JobDetailCtrl', [])
 	$scope.fullStatuses = (pdaParams.pda_full_statuses || (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y'));
 
 	$scope.jseaPerJob = (jseaService.getJseaConfig() == 'PJB_CHECK' );
+
+	$scope.reqsNavigation = navigationService.reqNavigation;
 
 	// Mandatory photos
 	$scope.pdaMandatoryPhotos = pdaMandatoryPhotos = (pdaParams.pda_mandatory_photos || (siteConfig.getSiteConfigValue('PDA_MANDATORY_PHOTOS') == 'Y'));
@@ -267,6 +269,22 @@ angular.module('JobDetailCtrl', [])
 				window.location.href = "#/tab/jseas";
 			}
 	}
+
+
+
+    $scope.handleNavigation = function (legnum) {
+        var job = $scope.job[legnum];
+
+        //var myaddr = job.mobjobClientName + ' ' + job.mobjobAddress1 + ' ' + job.mobjobSuburb;
+        var myaddr = job.mobjobAddress2 + ' ' + job.mobjobSuburb;
+
+    //  alert("My New addr = [" + myaddr + "]");
+
+        navigationService.registerJobDetails(job.mobjobNumber,job.mobjobBookingDay,myaddr);
+
+        navigationService.navigate(myaddr);
+    }
+
 	//The func below should only be called when a button is clicked EG 
 	// Accept / Pickup / Tap to Sign 
 
