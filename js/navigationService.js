@@ -21,7 +21,7 @@ angular.module('navigationService', [])
 
 
 	navigatorService.registerJobDetails = function (jobnum,jobdate,address){
-		console.log("Registering jobDetails num " +  jobnum + " Date " + jobdate + ' Address = ' + address);
+		log.debug("Registering jobDetails num " +  jobnum + " Date " + jobdate + ' Address = ' + address);
 	    navigatorService.JobNumber = jobnum;
     	navigatorService.JobDate = jobdate;
     	navigatorService.myaddress = address;
@@ -29,38 +29,38 @@ angular.module('navigationService', [])
 
 	navigatorService.onSuccess = function (){
 		//navigator.notification.alert("Successfully launched navigator");
-		console.log("Successfully launched navigator for ");
+		log.debug("Successfully launched navigator for ");
 	};
 
 	navigatorService.onError = function (errMsg){
 		alert("Failed to  launch navigator error ="+errMsg);
-		console.log("Failed to  launch navigator error = " + errMsg);
+		log.debug("Failed to  launch navigator error = " + errMsg);
 	};
 	
 
 	navigatorService.clearUserChoice = function () {
 
-    	console.log("User wants Wants to clear preferred app");
+    	log.debug("User wants Wants to clear preferred app");
 		if ( !navigatorService.isReady)
 		{	
 			alert(myNotReadyErr);
-			console.log(myNotReadyErr);
+			log.debug(myNotReadyErr);
 			return;
 		}
 		if ( !navigationServAllowed)
 		{	
 			alert(myNotModuleInstalled);
-			console.log(myNotModuleInstalled);
+			log.debug(myNotModuleInstalled);
 			return;
 		}
 
 		launchnavigator.appSelection.userChoice.get(function(app){
-    		console.log("User preferred app currently is: " + launchnavigator.getAppDisplayName(app));
+    		log.debug("User preferred app currently is: " + launchnavigator.getAppDisplayName(app));
 		});
 		
 		
 		launchnavigator.appSelection.userChoice.clear(function(){
-    		console.log("Wants to clear app ,so now preferred app is cleared");
+    		log.debug("Wants to clear app ,so now preferred app is cleared");
 		});
 
 		alert("Your navigator choice has been cleared, you will be prompted the next time you decide to navigate");
@@ -76,12 +76,14 @@ angular.module('navigationService', [])
 		if ( !navigatorService.isReady)
 		{	
 			alert(myNotReadyErr);
+			log.debug(myNotReadyErr);
 			return;
 		}
 
 		if(!deststr){
 			//navigator.notification. alert("A destination must be specified");
 			alert("A destination must be specified");
+			log.debug("A destination must be specified");
 			return;
 		}
 
@@ -97,6 +99,7 @@ angular.module('navigationService', [])
 		else
 		{
 			alert("cordovaReady.isDeviceReady = false, cant use Navigator Plugin");
+			log.debug("cordovaReady.isDeviceReady = false, cant use Navigator Plugin");
 		}
 	};
 
