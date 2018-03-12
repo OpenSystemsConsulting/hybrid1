@@ -93,7 +93,7 @@ angular.module('JobsIndexCtrl', [])
 
 	/*
 	 * resolveConflictsInClient here refers to the loopback client portion of the code NOT
-	 * the client app.  We don't want to process conflicts austomatically in the loopback
+	 * the client app.  We don't want to process conflicts automatically in the loopback
 	 * code as we have an event handler in this controller which takes care of things
 	 */
 	conflicts.resolveConflictsInClient = (pdaParams.pda_client_conflicts || (siteConfig.getSiteConfigValue('PDA_CLIENT_CONFLICTS') == 'Y'));
@@ -103,6 +103,11 @@ angular.module('JobsIndexCtrl', [])
 	var displayFrom = siteConfig.getSiteConfigValue('PDA_DISPLAY_FROM') || 'mobjobSuburb';
 	var displayTo = siteConfig.getSiteConfigValue('PDA_DISPLAY_TO') || 'mobjobToSuburb';
 	$scope.fontSize = siteConfig.getSiteConfigValue('PDA_ROW1_FONT_SIZE') || '18px';
+
+	// New functionality to show client name ON by default - can be hidden with new key set explicitly to 'N'
+	$scope.showClientName = true;
+	if( siteConfig.getSiteConfigValue('PDA_SHOW_CLIENT_NAME') == 'N')
+		$scope.showClientName = false;
 
 	function sortFunction(a,b) {
 		if (a[sortKey] > b[sortKey])
