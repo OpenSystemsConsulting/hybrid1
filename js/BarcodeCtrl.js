@@ -296,6 +296,15 @@ angular.module('BarcodeCtrl', [])
 
 						bchSession.bchSeq = uniqId % 1000000;
 						bchSession.driver =  pdaParams.getDriverId();
+
+						/*
+						 * NOTE - BEWARE - TODO - needs checking on latest loopback
+						 * There appears to be a bug somewhere in loopback and/or strong-remoting
+						 * which causes a long numeric only string to be rounded on the remote end
+						 * (i.e. it's being treated as a number even though the data type is defined as a string)
+						 * So barcode: "5318723999092380192" within the app local storage
+						 * becomes:    "5318723999092381000" on the remote end
+						 */
 						bchSession.bchBarcode = barcodes[i]; 
 						bcode = bchSession.bchBarcode;
 				
@@ -366,46 +375,53 @@ angular.module('BarcodeCtrl', [])
 
 										log.debug("Before checking Barcode against Job: " + job.mobjobNumber + " JobsConnoteNumber: "+  myconnote_num + ' Barcode: ' + bcode);
 
-										//Only Compare the length of myconnote_num eg so if Bcode was WXLGHHH01 and myconn is WXLGHHH then OK
-										if( myconnote_num.length > 1 && strncmp(myconnote_num,bcode,myconnote_num.length) == 0)
-										{
-											log.debug('Scan OFF FOUND Barcode on Job:'+ jn + " On Date " + myconnote_num);
-											//window.location.href = '#/tab/jobs/' + job.mobjobSeq ;
-
-											foundJob = true;
-											//Should store the Pickup Leg of the Found Job
-											foundIdx = x;
-											foundJobNum = job.mobjobNumber;
-											foundJobDate = job.mobjobBookingDay;
-											matchedJobsPieces += job.mobjobJobPieces;
-											$scope.JobsPieces = matchedJobsPieces;
-
-											log.debug('Scan OFF recording JOb Index ' + foundIdx  + 'Pieces now = ' + matchedJobsPieces);
-
-											fjobarr.push(foundIdx);
-											break; // No need to keep looking we have found the job for this barcode
-
-	/***
-											if( false)  //job.mobjobJobPieces != len )
+										if( typeof myconnote_num !== 'undefined') {
+											//Only Compare the length of myconnote_num eg so if Bcode was WXLGHHH01 and myconn is WXLGHHH then OK
+											if( myconnote_num.length > 1 && strncmp(myconnote_num,bcode,myconnote_num.length) == 0)
 											{
-									
-												var OverUnderPopup = $ionicPopup.confirm({
-												title: 'Overs/Unders',
-												template: 'The Job you have scanned off has a different number of items (' + job.mobjobPieces + ')  to the number you scanned (' + len  + '), Ignore ?'
-												});
+												log.debug('Scan OFF FOUND Barcode on Job:'+ jn + " On Date " + myconnote_num);
+												//window.location.href = '#/tab/jobs/' + job.mobjobSeq ;
 
-												OverUnderPopup.then(function(res) {
+												foundJob = true;
+												//Should store the Pickup Leg of the Found Job
+												foundIdx = x;
+												foundJobNum = job.mobjobNumber;
+												foundJobDate = job.mobjobBookingDay;
+												matchedJobsPieces += job.mobjobJobPieces;
+												$scope.JobsPieces = matchedJobsPieces;
 
-												if(res) {
-													log.debug('User has chosen to ignore the scan diff Scanned (' + len + ') Job Pieces (' + job.mobjobPieces + ') Will save and Sync regardless');
-												} else {                                                                                                                                                                    
-													log.debug('User has chosen to NOT ACCEPT the scan diff Scanned (' + len + ') Job Pieces (' + job.mobjobPieces + ') No Save !!  No Sync');                                                                                             
-													return;                                                                                                                                                                 
-												}                                                                                                                                                                           
-												});                          
+												bchSession.bchJobno = foundJobNum;
+												bchSession.bchJobdate = foundJobDate;
+												log.debug('Scan OFF recording JOb Index ' + foundIdx  + 'Pieces now = ' + matchedJobsPieces);
+
+												fjobarr.push(foundIdx);
+												break; // No need to keep looking we have found the job for this barcode
+
+		/***
+												if( false)  //job.mobjobJobPieces != len )
+												{
+										
+													var OverUnderPopup = $ionicPopup.confirm({
+													title: 'Overs/Unders',
+													template: 'The Job you have scanned off has a different number of items (' + job.mobjobPieces + ')  to the number you scanned (' + len  + '), Ignore ?'
+													});
+
+													OverUnderPopup.then(function(res) {
+
+													if(res) {
+														log.debug('User has chosen to ignore the scan diff Scanned (' + len + ') Job Pieces (' + job.mobjobPieces + ') Will save and Sync regardless');
+													} else {                                                                                                                                                                    
+														log.debug('User has chosen to NOT ACCEPT the scan diff Scanned (' + len + ') Job Pieces (' + job.mobjobPieces + ') No Save !!  No Sync');                                                                                             
+														return;                                                                                                                                                                 
+													}                                                                                                                                                                           
+													});                          
+												}
+		***/
+
 											}
-	***/
-
+										}
+										else {
+											log.error("Error: myconnote_num:"+myconnote_num);
 										}
 									}
 							}
