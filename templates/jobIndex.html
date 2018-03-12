@@ -98,6 +98,11 @@
 				<div ng-if="pdaParams.siteId !== 'WADS'">
 					<h3>{{generateJobHeader(job)}}</h3>
 
+
+					<div ng-if="showClientName">
+						{{ job.mobjobClientName }}
+					</div>
+
 					<div class="rightJobData">
 						<span class="jobdatespan"> {{ job.displayDate | date:'dd-MM-yyyy' }} </span>  
 <!--
