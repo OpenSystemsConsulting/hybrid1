@@ -50,6 +50,8 @@ angular.module('services', [])
 				deferred.resolve(name);
 			} else if (name == 'flg' && pw == 'flg') {				// Fair Logistics
 				deferred.resolve(name);
+			} else if (name == 'transit' && pw == 'transit') {		// Transit
+				deferred.resolve(name);
 			} else if (name == 'wads' && pw == 'wads') {			// WADS
 				deferred.resolve(name);
 			} else if (name == 'univ' && pw == 'univ') {			// Universal
