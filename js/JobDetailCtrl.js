@@ -623,6 +623,7 @@ angular.module('JobDetailCtrl', [])
 					}
 					else
 					if( $scope.showDelButtonNoSignat) {
+						// CCT - we have a pod and have shown a discrete DELIVER button
 						podCount++;
 					}
 					else {
