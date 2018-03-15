@@ -16,6 +16,10 @@ angular.module('services', [])
 			//else
 			if (name == 'oscvtest' && pw == 'oscvtest') {
 				deferred.resolve(name);
+			} else if (name == 'osctest' && pw == 'osctest') {
+				deferred.resolve(name);
+			} else if (name == 'hybrid64' && pw == 'hybrid64') {
+				deferred.resolve(name);
 			} else if (name == 'scope' && pw == 'scope') {
 				deferred.resolve(name);
 			} else if (name == 'swift1' && pw == 'swift1') {
@@ -45,6 +49,8 @@ angular.module('services', [])
 			} else if (name == 'pam' && pw == 'pam') {				// P and M
 				deferred.resolve(name);
 			} else if (name == 'flg' && pw == 'flg') {				// Fair Logistics
+				deferred.resolve(name);
+			} else if (name == 'transit' && pw == 'transit') {		// Transit
 				deferred.resolve(name);
 			} else if (name == 'wads' && pw == 'wads') {			// WADS
 				deferred.resolve(name);
