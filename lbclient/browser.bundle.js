@@ -24317,9 +24317,7 @@ exports = module.exports = function bootBrowserApp(app, options) {
 
 exports.execute = execute;
 
-},{"./lib/executor":112}],"loopback-boot#instructions":[function(require,module,exports){
-module.exports=require('qT+Bxl');
-},{}],"qT+Bxl":[function(require,module,exports){
+},{"./lib/executor":112}],"qT+Bxl":[function(require,module,exports){
 module.exports={
   "config": {},
   "dataSources": {
@@ -24355,6 +24353,22 @@ module.exports={
       "serverIP": "opensyscon.com.au",
       "serverPort": 3000,
       "url": "http://opensyscon.com.au:3000/api"
+    },
+    "osctest": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "CES",
+      "serverIP": "couriers-express.com.au",
+      "serverPort": 3009,
+      "url": "http://couriers-express.com.au:3009/api"
+    },
+    "hybrid64": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "HYBRID64",
+      "serverIP": "opensyscon.com.au",
+      "serverPort": 3132,
+      "url": "http://opensyscon.com.au:3132/api"
     },
     "wpe": {
       "connector": "remote",
@@ -24408,9 +24422,9 @@ module.exports={
       "connector": "remote",
       "debug": "true",
       "clientId": "ACE",
-      "serverIP": "CPE-61-9-246-82.static.wa.bigpond.net.au",
+      "serverIP": "acecouriers.com.au",
       "serverPort": 3000,
-      "url": "http://CPE-61-9-246-82.static.wa.bigpond.net.au:3000/api"
+      "url": "http://acecouriers.com.au:3000/api"
     },
     "pam": {
       "connector": "remote",
@@ -24459,6 +24473,14 @@ module.exports={
       "serverIP": "roy1220545.lnk.telstra.net",
       "serverPort": 3000,
       "url": "http://roy1220545.lnk.telstra.net:3000/api"
+    },
+    "transit": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "TRANSIT",
+      "serverIP": "transit.opensyscon.com.au",
+      "serverPort": 3072,
+      "url": "http://transit.opensyscon.com.au:3072/api"
     },
     "wads": {
       "connector": "remote",
@@ -25813,6 +25835,8 @@ module.exports={
     ]
   }
 }
+},{}],"loopback-boot#instructions":[function(require,module,exports){
+module.exports=require('qT+Bxl');
 },{}],112:[function(require,module,exports){
 (function (process){
 var assert = require('assert');
