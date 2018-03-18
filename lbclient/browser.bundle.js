@@ -24317,9 +24317,7 @@ exports = module.exports = function bootBrowserApp(app, options) {
 
 exports.execute = execute;
 
-},{"./lib/executor":112}],"loopback-boot#instructions":[function(require,module,exports){
-module.exports=require('qT+Bxl');
-},{}],"qT+Bxl":[function(require,module,exports){
+},{"./lib/executor":112}],"qT+Bxl":[function(require,module,exports){
 module.exports={
   "config": {},
   "dataSources": {
@@ -24424,9 +24422,9 @@ module.exports={
       "connector": "remote",
       "debug": "true",
       "clientId": "ACE",
-      "serverIP": "CPE-61-9-246-82.static.wa.bigpond.net.au",
+      "serverIP": "acecouriers.com.au",
       "serverPort": 3000,
-      "url": "http://CPE-61-9-246-82.static.wa.bigpond.net.au:3000/api"
+      "url": "http://acecouriers.com.au:3000/api"
     },
     "pam": {
       "connector": "remote",
@@ -25837,6 +25835,8 @@ module.exports={
     ]
   }
 }
+},{}],"loopback-boot#instructions":[function(require,module,exports){
+module.exports=require('qT+Bxl');
 },{}],112:[function(require,module,exports){
 (function (process){
 var assert = require('assert');
