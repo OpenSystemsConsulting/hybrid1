@@ -7,29 +7,59 @@ angular.module('JseaCtrl', [])
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JseaCtrl'};
 	var log = Logger.getInstance(logParams);
 
-		var pda_jsea_on = siteConfig.getSiteConfigValue('PDA_JSEA_ON');
-		var lpda_jsea_on = pdaParams.pda_jsea_on ? 'Y' : 'N';
+	var pda_jsea_on = siteConfig.getSiteConfigValue('PDA_JSEA_ON');
+	var lpda_jsea_on = pdaParams.pda_jsea_on ? 'Y' : 'N';
 
-		if(pda_jsea_on != 'Y' && lpda_jsea_on != 'Y') {
-            var alertPopup = $ionicPopup.alert({
-                title: 'Module not installed',
-                template: 'This module is not installed.'
-            });
+	var pda_jsea_both_yn = siteConfig.getSiteConfigValue('PDA_JSEA_BOTH_YN') === 'Y';
+	$scope.pda_jsea_both_yn = pda_jsea_both_yn;
 
-            alertPopup.then(function(res) {
+	if(pda_jsea_on != 'Y' && lpda_jsea_on != 'Y') {
+		var alertPopup = $ionicPopup.alert({
+			title: 'Module not installed',
+			template: 'This module is not installed.'
+		});
 
-				$window.history.back();
-				//window.location.href = "#/tab/jobs"
-            });
-        } else {
+		alertPopup.then(function(res) {
+
+			$window.history.back();
+			//window.location.href = "#/tab/jobs"
+		});
+	} else {
 
 		$scope.jseaQuestions = [];
+		var formType = jseaService.getServiceFormType();
+
+		var _allfilter = { "filter":
+			  {
+				"where": {"jdqType": formType },
+				"order": "jdqOrder ASC"
+			  }
+			};
+
+		var filter = angular.copy(_allfilter);
+
+		JseaDriverQuestions.find(filter) 
+				.$promise
+				.then(function(questsarr) {
+
+			// TODO - need to check error and only show jobs if no error
+			$scope.jseaQuestions = questsarr;
+
+		});
+
 
 		$scope.checkJdqResponse = function( jdqCbox,jdqType,jdqOrder,jdqNewForm,jdqNewFormType) {
 			// check response when items are changed in case we need to do
 			// any additional work e.g. load some more questions
 			var here_to_enable_breakpoint_in_debugger = 0;
 
+			if(pda_jsea_both_yn) {
+				if( jdqCbox === 'Y')
+					jdqCbox = true;
+				else
+					jdqCbox = false;
+			}
+			
 			if(jdqCbox) {				// box has been ticked
 				if(jdqNewForm) {		// new form required
 					// jdqNewFormType has the type we need
@@ -121,48 +151,16 @@ angular.module('JseaCtrl', [])
 			jseaAnswers_sync();
 		}
 
-				//"order": 'jdqOrder ASC'
-		var formType = jseaService.getServiceFormType();
-
-		var _allfilter = { "filter":
-			  {
-				"where": {"jdqType": formType },
-				"order": "jdqOrder ASC"
-			  }
-			};
-
-		var filter = angular.copy(_allfilter);
-
-		JseaDriverQuestions.find(filter) 
-				.$promise
-				.then(function(questsarr) {
-
-			// TODO - need to check error and only show jobs if no error
-			$scope.jseaQuestions = questsarr;
-
-				/**
-					//var job = $scope.jobs[i];
-					//if( job.mobjobStatus == 'UJ') {
-						//job.mobjobStatus = 'NJ';
-						//job.onDeviceTime = new Date().toISOString();
-						//job.save();
-					//}
-
-					// keep a count of the various job statuses
-					//if($scope.jobStatuses[job.mobjobStatus])
-						//$scope.jobStatuses[job.mobjobStatus] += 1;
-					//else
-						//$scope.jobStatuses[job.mobjobStatus] = 1;
-				**/
-
-			//$scope.titleWithTotal = "Jobs " + " (" + $scope.jobs.length + ")";
-
-		});
 		/*========================================*/
 		/*      JSEA SUBMIT   */
 		/*========================================*/
 		$scope.jseaSubmit = function()
 		{
+			// check all questions have a Y or N answer before allowing submission
+			if( ! validateJseaAnswers()) {
+				return;
+			}
+
 			var subconfirmPopup = $ionicPopup.confirm({
 			title: 'Jsea Session Confirm',
 			template: 'Are you sure you want to submit your Answers session to the database ?'
@@ -209,6 +207,61 @@ angular.module('JseaCtrl', [])
 				}
 			});
 			
+		}
+
+
+		function validateJseaAnswers() {
+			var retval = true;
+			var llen = $scope.jseaQuestions.length;
+
+			var checked;
+			if( !pda_jsea_both_yn)
+				return true;
+
+			// jdqCbox is a boolean and comes in by default as either true or more normally false
+			// The form will set the value to either 'Y' or 'N' once a radio button has been checked
+			for(var li = 0; li < llen; li++) {
+				checked = $scope.jseaQuestions[li].jdqCbox;
+
+				if(checked !== 'N' && checked !== 'Y') {
+					// nothing explicitly checked so alert that all questions must be answered
+					var alertPopup = $ionicPopup.alert({
+						title: 'You must answer all questions',
+						template: $scope.jseaQuestions[li].jdqQuestionText
+					});
+					alertPopup.then(function(res) {
+						return false;
+					});
+					return false;
+				}
+			}
+
+			for(var li = 0; li < llen; li++) {
+				if(checked === 'N' && ! $scope.jseaQuestions[li].jdqFalseAllowed) {
+					// 'N" has been checked on a question that does not allow it - alert
+					var confirmPopup = $ionicPopup.confirm({
+						title: 'Have you filled in a full JSEA?',
+						template: 'You must fill in a full JSEA if you have answered NO to any questions\nPlease confirm OK to submit'
+					});
+					confirmPopup.then(function(res) {
+						if(res) {
+							log.info('User has been warned and confirmed OK to submit');
+							jseaService.setJseaIsCaptured("Y");
+							//Handle Answers
+							doSubmitWork();
+							window.location.href = "#/tab/jobs";
+							return true;
+						} else {
+							log.debug('User has CANCELLED out of a Jsea session warning doing nothing');
+							return false;
+						}
+					});
+
+					return false;
+				}
+			}
+
+			return retval;
 		}
 
 		}

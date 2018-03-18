@@ -1383,7 +1383,8 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				'PDA_NOTIFY_INTERVAL',
 				'PDA_SENDER_ID',
 				'PDA_REQ_NAVIGATION',
-				'PDA_SHOW_CLIENT_NAME'
+				'PDA_SHOW_CLIENT_NAME',
+				'PDA_JSEA_BOTH_YN'
 			];
 
 	var g_siteconfigs = null;
