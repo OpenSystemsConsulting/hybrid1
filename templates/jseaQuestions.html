@@ -12,18 +12,20 @@
 
         <ion-item class="jsea-item item-text-wrap" ng-repeat=" jseaQuestion in jseaQuestions track by $index" type="item-text-wrap">
 
+			<!-- styling a checkbox: https://forum.ionicframework.com/t/replace-the-check-in-a-checkbox-with-an-icon/8196 -->
+			<!-- this section is if we are showing both y/n checkboxes -->
 			<div ng-if="pda_jsea_both_yn" class="row">
 				<div class="col">
 				{{jseaQuestion.jdqQuestionText}} 
 				</div>
 
 				<div class="col-30">
-				<label class="checkbox item-checkbox-right floatRight jsea-checkbox" >
+				<label class="checkbox checkbox-assertive item-checkbox-right floatRight jsea-checkbox" >
 					<input type="radio" name={{$index}} ng-value="'N'" ng-model="jseaQuestion.jdqCbox"
 					ng-change="checkJdqResponse(jseaQuestion.jdqCbox,jseaQuestion.jdqType,jseaQuestion.jdqOrder,jseaQuestion.jdqNewForm,jseaQuestion.jdqNewFormType)"> 
 					</input>
 				</label>
-				<label class="checkbox item-checkbox-right floatRight jsea-checkbox" >
+				<label class="checkbox checkbox-balanced item-checkbox-right floatRight jsea-checkbox" >
 					<input type="radio" name={{$index}} ng-value="'Y'" ng-model="jseaQuestion.jdqCbox"
 					ng-change="checkJdqResponse(jseaQuestion.jdqCbox,jseaQuestion.jdqType,jseaQuestion.jdqOrder,jseaQuestion.jdqNewForm,jseaQuestion.jdqNewFormType)"> 
 					</input>
@@ -31,6 +33,7 @@
 				</div>
 			</div>
 
+			<!-- this is for original single radio button -->
 			<span ng-if="!pda_jsea_both_yn">
 			<ion-checkbox class="item-checkbox-right jsea-item jseaQuestion.jdqDivider?'item-divider':'' " ng-model="jseaQuestion.jdqCbox" 
 					ng-change="checkJdqResponse(jseaQuestion.jdqCbox,jseaQuestion.jdqType,jseaQuestion.jdqOrder,jseaQuestion.jdqNewForm,jseaQuestion.jdqNewFormType)"> 

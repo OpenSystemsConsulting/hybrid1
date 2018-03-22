@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('JseaCtrl', [])
-	.controller('JseaCtrl', [ '$rootScope', '$scope', 'siteConfig','JseaDriverQuestions','pdaParams','Logger','$ionicPopup','$window','jseaService','LocalJseaDriverAnswers','jseaAnswers_sync',
-		function ($rootScope, $scope, siteConfig,JseaDriverQuestions,pdaParams,Logger,$ionicPopup,$window,jseaService,LocalJseaDriverAnswers,jseaAnswers_sync) {
+	.controller('JseaCtrl', [ '$rootScope', '$scope', 'siteConfig','JseaDriverQuestions','pdaParams','Logger','$ionicPopup','$window','jseaService','LocalJseaDriverAnswers','jseaAnswers_sync','jobService',
+		function ($rootScope, $scope, siteConfig,JseaDriverQuestions,pdaParams,Logger,$ionicPopup,$window,jseaService,LocalJseaDriverAnswers,jseaAnswers_sync, jobService) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JseaCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -10,7 +10,7 @@ angular.module('JseaCtrl', [])
 	var pda_jsea_on = siteConfig.getSiteConfigValue('PDA_JSEA_ON');
 	var lpda_jsea_on = pdaParams.pda_jsea_on ? 'Y' : 'N';
 
-	var pda_jsea_both_yn = siteConfig.getSiteConfigValue('PDA_JSEA_BOTH_YN') === 'Y';
+	var pda_jsea_both_yn = false; //siteConfig.getSiteConfigValue('PDA_JSEA_BOTH_YN') === 'Y';
 	$scope.pda_jsea_both_yn = pda_jsea_both_yn;
 
 	if(pda_jsea_on != 'Y' && lpda_jsea_on != 'Y') {
@@ -109,13 +109,15 @@ angular.module('JseaCtrl', [])
 		{
 			var li;
 			var llen;
+			var jseaObj = {};
+
 			//They Have Submited a list of Ticks Y/N and
 			// we now have to create an array of answers
 			// one row for each answer	
-			var ljobnum = jseaService.getServiceJobNum();
-			var ljobdate = jseaService.getServiceJobDate();
-			var jobStatusType = jseaService.getServiceStatusType();
-			var formLeg = jseaService.getServiceFormLeg();
+			var ljobnum = jseaObj.jobNumber = jseaService.getServiceJobNum();
+			var ljobdate = jseaObj.jobBookingDay = jseaService.getServiceJobDate();
+			var jobStatusType = jseaObj.jobStatusType = jseaService.getServiceStatusType();
+			var formLeg = jseaObj.formLeg = jseaService.getServiceFormLeg();
 
 			llen = $scope.jseaQuestions.length;
 
@@ -142,10 +144,27 @@ angular.module('JseaCtrl', [])
 				AnswerSession.jdaFormType = $scope.jseaQuestions[li].jdqType ;
 				AnswerSession.jdaFormLeg = formLeg;
 				AnswerSession.jdaOrder = $scope.jseaQuestions[li].jdqOrder;
-				AnswerSession.jdaCheckBox = $scope.jseaQuestions[li].jdqCbox;
+
+				if(pda_jsea_both_yn) {
+					// When both buttons present they are Y/N - convert to boolean
+					if($scope.jseaQuestions[li].jdqCbox === 'Y')
+						AnswerSession.jdaCheckBox = true;
+					else
+						AnswerSession.jdaCheckBox = false;
+				}
+				else
+					AnswerSession.jdaCheckBox = $scope.jseaQuestions[li].jdqCbox;
 
 				AnswerSession.jdaJobStatusType = jobStatusType;
+
+				// TODO - store a timestamp of when answer saved
 				AnswerSession.save();
+			}
+
+			if(jobStatusType == 'PICKUP' || jobStatusType == 'DELIVER') {
+				$scope.$emit('jseaSaved',jseaObj);
+				var key = jseaObj.jobNumber + '-' + jseaObj.jobStatusType;
+				localStorage.setItem(key, 'Y');
 			}
 
 			jseaAnswers_sync();
@@ -209,61 +228,62 @@ angular.module('JseaCtrl', [])
 			
 		}
 
+	}
 
-		function validateJseaAnswers() {
-			var retval = true;
-			var llen = $scope.jseaQuestions.length;
+	// check all questions have either a Y or N answer before allowing submission
+	function validateJseaAnswers() {
+		var retval = true;
+		var llen = $scope.jseaQuestions.length;
 
-			var checked;
-			if( !pda_jsea_both_yn)
-				return true;
+		var checked;
+		if( !pda_jsea_both_yn)			// not checking both Y/N - old single radio button
+			return true;
 
-			// jdqCbox is a boolean and comes in by default as either true or more normally false
-			// The form will set the value to either 'Y' or 'N' once a radio button has been checked
-			for(var li = 0; li < llen; li++) {
-				checked = $scope.jseaQuestions[li].jdqCbox;
+		// jdqCbox is a boolean and comes in by default as either true or more normally false
+		// The form will set the value to either 'Y' or 'N' once a radio button has been checked
+		for(var li = 0; li < llen; li++) {
+			checked = $scope.jseaQuestions[li].jdqCbox;
 
-				if(checked !== 'N' && checked !== 'Y') {
-					// nothing explicitly checked so alert that all questions must be answered
-					var alertPopup = $ionicPopup.alert({
-						title: 'You must answer all questions',
-						template: $scope.jseaQuestions[li].jdqQuestionText
-					});
-					alertPopup.then(function(res) {
+			if(checked !== 'N' && checked !== 'Y') {
+				// nothing explicitly checked so alert that all questions must be answered
+				var alertPopup = $ionicPopup.alert({
+					title: 'You must answer all questions',
+					template: $scope.jseaQuestions[li].jdqQuestionText
+				});
+				alertPopup.then(function(res) {
+					return false;
+				});
+				return false;
+			}
+		}
+
+		for(var li = 0; li < llen; li++) {
+			var checked = $scope.jseaQuestions[li].jdqCbox;
+			if(checked === 'N' && ! $scope.jseaQuestions[li].jdqAllowNo) {
+				// 'N" has been checked on a question that does not allow it - alert
+				var confirmPopup = $ionicPopup.confirm({
+					title: 'Have you filled in a full paper JSEA?',
+					template: 'You must fill in a full paper JSEA if you have answered NO to any questions\nPlease click OK to confirm that you have done this'
+				});
+				confirmPopup.then(function(res) {
+					if(res) {
+						log.info('User has been warned and confirmed OK to submit');
+						jseaService.setJseaIsCaptured("Y");
+						//Handle Answers
+						doSubmitWork();
+						window.location.href = "#/tab/jobs";
+						return true;
+					} else {
+						log.debug('User has CANCELLED out of a Jsea session warning doing nothing');
 						return false;
-					});
-					return false;
-				}
+					}
+				});
+
+				return false;
 			}
-
-			for(var li = 0; li < llen; li++) {
-				if(checked === 'N' && ! $scope.jseaQuestions[li].jdqFalseAllowed) {
-					// 'N" has been checked on a question that does not allow it - alert
-					var confirmPopup = $ionicPopup.confirm({
-						title: 'Have you filled in a full JSEA?',
-						template: 'You must fill in a full JSEA if you have answered NO to any questions\nPlease confirm OK to submit'
-					});
-					confirmPopup.then(function(res) {
-						if(res) {
-							log.info('User has been warned and confirmed OK to submit');
-							jseaService.setJseaIsCaptured("Y");
-							//Handle Answers
-							doSubmitWork();
-							window.location.href = "#/tab/jobs";
-							return true;
-						} else {
-							log.debug('User has CANCELLED out of a Jsea session warning doing nothing');
-							return false;
-						}
-					});
-
-					return false;
-				}
-			}
-
-			return retval;
 		}
 
-		}
-	  }
+		return retval;
+	}
+  }
 ])

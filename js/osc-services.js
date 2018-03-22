@@ -614,6 +614,11 @@ angular.module('osc-services', [])
 			jobService.deleteOldJobs(daysback);
 		},
 
+		deleteJseaStatuses: function(params) {
+			// REST API params object e.g.  { "jobNum": 12345 }
+			jobService.deleteJseaStatuses(params.jobNum);
+		},
+
 		startWatching: function(){
 
 			// PDA commands 
@@ -648,6 +653,10 @@ angular.module('osc-services', [])
 
 					case 'deleteOldJobs':
 						messageService.deleteOldJobs(payload.params);
+						break;
+
+					case 'deleteJseaStatuses':
+						messageService.deleteJseaStatuses(payload.params);
 						break;
 
 					default:
@@ -842,7 +851,7 @@ angular.module('osc-services', [])
     		myDetailJobJseaCaptured = (iscaptured == 'Y');
 			myJobStatusType = statusType;
 			myFormType = formType;
-			myFormLeg = formLeg
+			myFormLeg = formLeg;
 		},
 		getServiceJobNum: function() {
 			return myDetailJobnum;
@@ -2109,7 +2118,7 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 	addMessage: addMessage
   }
 })
-.factory('jobService', function(Job, pdaParams, Logger, siteConfig ){
+.factory('jobService', function(Job, pdaParams, Logger, siteConfig){
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'jobService'};
 	var log = Logger.getInstance(logParams);
@@ -2137,14 +2146,33 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 						var job = jobs[leg];
 						log.info("deleteOldJobs: delete leg:"+leg+" job:" + job.mobjobSeq);
 						job.delete();
+
+						// Any additional tidy up after a job delete
+						deleteJseaStatuses(job.mobjobNumber);
 					}
 				});
 			}
 		});
 	}
 
+	function deleteJseaStatuses(jobNumber) {
+		// check local storage for PICKUP and DELIVER statuses for this job and delete if found
+		var key;
+		var statuses = ['PICKUP','DELIVER'];
+		var len = statuses.length;
+
+		for (var i=0; i< len; i++) {
+			key = jobNumber + '-' + statuses[i];
+			var lstr = localStorage.getItem(key);
+			if(lstr) {
+				localStorage.removeItem(key);
+			}
+		}
+	}
+
 	return {
-		deleteOldJobs: deleteOldJobs
+		deleteOldJobs: deleteOldJobs,
+		deleteJseaStatuses: deleteJseaStatuses
 	}
 })
 .factory('errorModalService', function( $ionicPopup, pdaParams, Logger){
