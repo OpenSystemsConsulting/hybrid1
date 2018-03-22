@@ -48,7 +48,7 @@ angular.module('JobDetailCtrl', [])
 	 */
 	$scope.fullStatuses = (pdaParams.pda_full_statuses || (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y'));
 
-	$scope.jseaPerJob = (jseaService.getJseaConfig() == 'PJB_CHECK' );
+	$scope.jseaPerJob = false;		// CCT TODO (jseaService.getJseaConfig() == 'PJB_CHECK' );
 
 	$scope.reqsNavigation = navigationService.reqNavigation;
 
@@ -275,14 +275,25 @@ angular.module('JobDetailCtrl', [])
     $scope.handleNavigation = function (legnum) {
         var job = $scope.job[legnum];
 
-        //var myaddr = job.mobjobClientName + ' ' + job.mobjobAddress1 + ' ' + job.mobjobSuburb;
-        var myaddr = job.mobjobAddress2 + ' ' + job.mobjobSuburb;
+		// button is always visible - popup "not installed" message here if not configured
+		if(!$scope.reqsNavigation) {
+			var alertPopup = $ionicPopup.alert({
+				title: 'Module not installed',
+				template: 'This module is not installed, please contact your office'
+			});
+			alertPopup.then(function(res) {
+				return;
+			});
 
-    //  alert("My New addr = [" + myaddr + "]");
+		} else {
+	
+			//var myaddr = job.mobjobClientName + ' ' + job.mobjobAddress1 + ' ' + job.mobjobSuburb;
+			var myaddr = job.mobjobAddress2 + ' ' + job.mobjobSuburb;
 
-        navigationService.registerJobDetails(job.mobjobNumber,job.mobjobBookingDay,myaddr);
+			navigationService.registerJobDetails(job.mobjobNumber,job.mobjobBookingDay,myaddr);
 
-        navigationService.navigate(myaddr);
+			navigationService.navigate(myaddr);
+		}
     }
 
 	//The func below should only be called when a button is clicked EG 
@@ -318,7 +329,7 @@ angular.module('JobDetailCtrl', [])
 		// If mandatory photos required check all legs to make sure at least one 
 		// photo has been taken for the current status (anything > NJ)
 		// NOTE - the image could be attached to any leg
-		if(pdaMandatoryPhotos) {
+		if(pdaMandatoryPhotos && window.cordova) {
 			var found = false;
 			// It's possible to have e.g. leg 0 @ Ad and leg 1 @ PC where the Ad photo
 			// was taken on leg 1 so get status from 1st leg ( leg 0 PU)
@@ -334,6 +345,7 @@ angular.module('JobDetailCtrl', [])
 					break;
 				}
 
+/*		v2.58.39 CCT test code - needs to be enabled when confirmed OK by CCT
 				// Maybe the "don't care" statuses should be configurable?
 				if(job.mobjobStatus === 'AC') {
 					found = true;			// CCT don't care about AC
@@ -344,6 +356,7 @@ angular.module('JobDetailCtrl', [])
 					found = true;			// CCT don't care about Dp
 					break;
 				}
+*/
 
 				if( typeof job.imageCount !== 'undefined') {
 
@@ -371,6 +384,14 @@ angular.module('JobDetailCtrl', [])
 				return;		// the alert is async - return here while popup does its job
 			}
 
+		}
+
+		if($scope.jseaPerJob) {
+			var job = $scope.jobs[0];
+			var hasJsea = checkJseaForJob(job);
+			if( !hasJsea) {
+				return;
+			}
 		}
 		
 
@@ -692,8 +713,8 @@ angular.module('JobDetailCtrl', [])
 		// After save go back to job list
 		window.location.href = "#/tab/jobs";
 		return;
-	 }
-	
+	}
+
 	$scope.deleteJob = function(seqid) {
 		mystr = 'deleteJob';
 		//log.debug(mystr);
@@ -986,7 +1007,7 @@ angular.module('JobDetailCtrl', [])
 
 			var retval = true;			// default behaviour
 
-			if(pdaMandatoryPhotos) {
+			if(pdaMandatoryPhotos && window.cordova) {
 				// this.$root.job contains the list of legs - 1st should match seqid
 				log.debug("checkOkForSignat:pdaMandatoryPhotos: leg 0:"+this.$root.job[0].mobjobSeq+", seqid:"+seqid);
 				if(this.$root.job[0].mobjobSeq === seqid) {
@@ -1030,6 +1051,57 @@ angular.module('JobDetailCtrl', [])
 
 					return retval;		// the alert is async - return here while popup does its job
 				}
+			}
+
+			if($scope.jseaPerJob) {
+				var job = $scope.jobs[0];
+				var hasJsea = checkJseaForJob(job);
+				if( !hasJsea) {
+					retval = false;
+				}
+			}
+
+			return retval;
+		};
+
+		function checkJseaForJob(job) {
+			var oldStatus = job.mobjobStatus;
+			var key;
+			var statusString;
+			var retval = false;
+
+			// If per job jseas make sure we have PICKUP/DELIVER jseas as appropriate
+			if(oldStatus == 'PU' || oldStatus == 'Ad') {
+				if(oldStatus == 'PU')
+					statusString = 'PICKUP';
+				else
+					statusString = 'DELIVER';
+
+				key = job.mobjobNumber + '-' + statusString;
+				var lstr = localStorage.getItem(key);
+				log.info('jseaPerJob: key:' + key + ', val:' +lstr);
+
+				if( lstr && lstr === 'Y')
+					retval = true;
+				else
+					retval = false;
+			}
+			else
+				retval = true;			// jseas not required at other statuses
+				
+			if( !retval) {
+				jseaService.setJobJseaDetails( job.mobjobNumber, job.mobjobBookingDay,'N',statusString,'JSEA',1);
+				// no jsea found - don't allow operator to continue
+				var alertPopup = $ionicPopup.alert({
+					title: 'No JSEA for '+statusString,
+					template: "Please enter JSEA before updating the job status"
+				});
+				alertPopup.then(function(res) {
+					window.location.href = "#/tab/jseas";
+					return retval;			// where will this return to?
+				});
+
+				return retval;		// the alert is async - return here while popup does its job
 			}
 
 			return retval;
