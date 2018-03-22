@@ -122,3 +122,8 @@
 .requiredInput {
 	border:1px solid #dddddd !important; background-color:#fceeee ; padding: 0 5px 0 5px !important;
 }
+
+.jsea-checkbox {
+	padding:2px;
+}
+
