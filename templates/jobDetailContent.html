@@ -186,7 +186,7 @@
 		</div>
 
         <!--   Navigation -->
-        <div ng-if="(reqsNavigation && property.property == 'mobjobNumber')" class="input-label" style="width:100%;"
+        <div ng-if="(property.property == 'mobjobNumber')" class="input-label" style="width:100%;"
                     >
             <button class="button button-positive floatLeft" ng-click="handleNavigation((property.legid % 100))" ng-disabled="syncInProgress"
                 ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
