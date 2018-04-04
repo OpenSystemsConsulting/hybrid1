@@ -48,7 +48,7 @@ angular.module('JobDetailCtrl', [])
 	 */
 	$scope.fullStatuses = (pdaParams.pda_full_statuses || (siteConfig.getSiteConfigValue('PDA_FULL_STATUSES') == 'Y'));
 
-	$scope.jseaPerJob = false;		// CCT TODO (jseaService.getJseaConfig() == 'PJB_CHECK' );
+	$scope.jseaPerJob = (jseaService.getJseaConfig() == 'PJB_CHECK' );			// CCT
 
 	$scope.reqsNavigation = navigationService.reqNavigation;
 
@@ -386,6 +386,7 @@ angular.module('JobDetailCtrl', [])
 
 		}
 
+/*
 		if($scope.jseaPerJob) {
 			var job = $scope.jobs[0];
 			var hasJsea = checkJseaForJob(job);
@@ -393,7 +394,7 @@ angular.module('JobDetailCtrl', [])
 				return;
 			}
 		}
-		
+*/
 
 		for( var iac = 0; iac < legCount; iac++)  
 		{
@@ -1053,6 +1054,7 @@ angular.module('JobDetailCtrl', [])
 				}
 			}
 
+/*
 			if($scope.jseaPerJob) {
 				var job = $scope.jobs[0];
 				var hasJsea = checkJseaForJob(job);
@@ -1060,6 +1062,7 @@ angular.module('JobDetailCtrl', [])
 					retval = false;
 				}
 			}
+*/
 
 			return retval;
 		};
