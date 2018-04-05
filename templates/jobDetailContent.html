@@ -186,14 +186,22 @@
 		</div>
 
         <!--   Navigation -->
-        <div ng-if="(property.property == 'mobjobNumber')" class="input-label" style="width:100%;"
-                    >
+        <div ng-if="(property.property == 'mobjobNumber')" class="input-label" style="width:100%;" >
             <button class="button button-positive floatLeft" ng-click="handleNavigation((property.legid % 100))" ng-disabled="syncInProgress"
                 ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
             >
                 NAV
             </button>
         </div>
+
+		<!-- debug mode set - test button -->
+		<div ng-if="(property.property == 'mobjobNumber') && pdaParams.debugMode && pdaMandatoryNotes" class="input-label" style="width:100%;">
+			<button class="button button-balanced floatLeft" ng-click="enterMandatoryNotes(property.basejob,property.legid)" ng-disabled="syncInProgress"
+				ontouchstart="window.plugins.deviceFeedback.haptic()" ontouchend="window.plugins.deviceFeedback.acoustic()"
+			>
+				TEST
+			</button>
+		</div>
 
 		<!--   Depart Delivery -->
 <!-- not used atm
