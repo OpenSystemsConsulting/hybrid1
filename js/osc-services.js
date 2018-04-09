@@ -48,6 +48,10 @@ angular.module('osc-services', [])
 		return appConfig.version;
 	};
 
+	pda_params.getAppBuild = function() {
+		return appConfig.build;
+	};
+
 	pda_params.getDriverId = function() {
 		
 		localdriver = getParams();
@@ -168,6 +172,8 @@ angular.module('osc-services', [])
 	pda_params.imageUpload = true;
 
 	pda_params.syncDL = false;						// sync DL jobs as well
+
+	pda_params.showLoading = false;
 
 	return pda_params;
 }])
@@ -698,7 +704,7 @@ angular.module('osc-services', [])
 
 	return messageService;
 })
-.factory('jseaService', function(LocalJseaDriverAnswers, pdaParams, Logger, $rootScope, siteConfig, deleteJseaChangeData ){
+.factory('jseaService', function(LocalJseaDriverAnswers, pdaParams, Logger, $rootScope, siteConfig, deleteJseaChangeData, loadingService ){
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'jseaService'};
 	var log = Logger.getInstance(logParams);
@@ -887,14 +893,20 @@ angular.module('osc-services', [])
 				queryDate.setDate(queryDate.getDate() - daysback);
 
 				log.info("deleteOldData: daysback:" + daysback + ", queryDate:" + queryDate);
+				loadingService.show({template: 'Deleting old jseas'});
 
 				if( daysback > 1) {
 					var delfilter = { "where": {"jdaJobBday": {"lt":queryDate} } };
 					log.info("deleteOldData: delfilter:"+JSON.stringify(delfilter));
 
-					LocalJseaDriverAnswers.find(delfilter, function (err, answers) {
+/*-------------------------------------------------------
+					LocalJseaDriverAnswers.find(delfilter)
+					.then (function (answers) {
 						var len = answers.length;
 						log.info("deleteOldData: deleting:"+len+" answers");
+
+						if(len > 0)
+							loadingService.show({template: 'Deleting ' + len + ' old jseas'});
 
 						for( var i = 0; i < len; i++) {
 							var answer = answers[i];
@@ -903,7 +915,34 @@ angular.module('osc-services', [])
 						}
 
 						// clear jsea change data if we've deleted any old answers
-						if( len > 1) {
+						if( len > 0) {
+							deleteJseaChangeData( function( err, changeData) {
+								if(err)
+									log.error(err);
+								if(changeData)
+									log.debug(changeData);
+							});
+						}
+					})
+					.catch (function (err) {
+						log.err("deleteOldData: err:"+err);
+					})
+-------------------------------------------------------*/
+					LocalJseaDriverAnswers.find(delfilter, function (err, answers) {
+						var len = answers.length;
+						log.info("deleteOldData: deleting:"+len+" answers");
+
+						if(len > 0)
+							loadingService.show({template: 'Deleting ' + len + ' old jseas'});
+
+						for( var i = 0; i < len; i++) {
+							var answer = answers[i];
+							log.info("deleteOldData: delete answer:"+i+" job:" + answer.jdaJobNum + " date:" + answer.jdaJobBday + " order:" + answer.jdaOrder);
+							answer.delete();
+						}
+
+						// clear jsea change data if we've deleted any old answers
+						if( len > 0) {
 							deleteJseaChangeData( function( err, changeData) {
 								if(err)
 									log.error(err);
@@ -1242,7 +1281,7 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 
 	return backgroundGeoService;
 }])
-.factory('sodService', function($rootScope,pdaParams,Logger,eventService,messageService,siteConfig,jobService,jseaService){
+.factory('sodService', function($rootScope,pdaParams,Logger,eventService,messageService,siteConfig,jobService,jseaService,loadingService,$q){
 
 	//Start of Day Service
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'sodService'};
@@ -1262,6 +1301,7 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 
 	mycurday = today.getDate();
 
+	log.info('sodService:, version:'+pdaParams.getAppVersion()+', build:'+pdaParams.getAppBuild()+', site:'+pdaParams.getSiteId()+', driver:'+pdaParams.getDriverId());
 	log.debug('Instantiating mycurday = :' + mycurday); 
 
 	var sodService = {
@@ -1288,6 +1328,8 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 					if( prevResumeDay != mycurday )
 					{
 						//Do some shit and store
+						loadingService.show({ template: 'Start of day process' });
+
 						now = new Date();
 						localStorage.setItem('FIRST_RESUME_DATE',now );
 						pdaParams.logoffDriver();
@@ -1295,6 +1337,22 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 						log.debug(" prevResumeDay != mycurday mycurday = " + mycurday);
 
 						$rootScope.$broadcast('SODSERVICE_IS_NEW_DAY');
+
+/*--------------------------------
+// maybe should be e.g. to show message and wait for all to complete
+// means each of the functions need to return a promise
+loadingService.show({ template: 'Start of day process' });
+$q.all([
+	siteConfig.getAllConfigsFromServer(),
+	jobService.deleteOldJobs(),
+	jseaService.deleteOldData(),
+	messageService.clearChangeData()
+]).then(function(responses){
+	// handling responses here
+
+	loadingService.hide();
+});
+--------------------------------*/
 						// Get site config parameters from server
 						siteConfig.getAllConfigsFromServer();
 
@@ -1393,7 +1451,8 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				'PDA_SENDER_ID',
 				'PDA_REQ_NAVIGATION',
 				'PDA_SHOW_CLIENT_NAME',
-				'PDA_JSEA_BOTH_YN'
+				'PDA_JSEA_BOTH_YN',
+				'PDA_MANDATORY_NOTES'
 			];
 
 	var g_siteconfigs = null;
@@ -2118,7 +2177,7 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 	addMessage: addMessage
   }
 })
-.factory('jobService', function(Job, pdaParams, Logger, siteConfig){
+.factory('jobService', function(Job, pdaParams, Logger, siteConfig, loadingService){
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'jobService'};
 	var log = Logger.getInstance(logParams);
@@ -2138,9 +2197,37 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 				var delfilter = { "where": {"mobjobBookingDay": {"lt":queryDate} } };
 				log.info("deleteOldJobs: delfilter:"+JSON.stringify(delfilter));
 
+				loadingService.show({template: 'Deleting old jobs'});
+
+/*--------------------------------------
+				Job.find(delfilter)
+					.then( function (jobs) {
+						var len = jobs.length;
+						log.info("deleteOldJobs: deleting:"+len+" job legs");
+
+						if(len > 0)
+							loadingService.show({template: 'Deleting ' + len + ' old jobs'});
+
+						for( var leg = 0; leg < len; leg++) {
+							var job = jobs[leg];
+							log.info("deleteOldJobs: delete leg:"+leg+" job:" + job.mobjobSeq);
+							job.delete();
+
+							// Any additional tidy up after a job delete
+							deleteJseaStatuses(job.mobjobNumber);
+						}
+					})
+					.catch( function (err) {
+						log.err("deleteOldJobs: err:"+ err);
+					});
+--------------------------------------*/
+
 				Job.find(delfilter, function (err, jobs) {
 					var len = jobs.length;
 					log.info("deleteOldJobs: deleting:"+len+" job legs");
+
+					if(len > 0)
+						loadingService.show({template: 'Deleting ' + len + ' old jobs'});
 
 					for( var leg = 0; leg < len; leg++) {
 						var job = jobs[leg];
@@ -2196,4 +2283,36 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 		showModal: showModal
 	}
 })
+.factory('loadingService', function( $ionicLoading, pdaParams, Logger){
+
+	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'errorModalService'};
+	var log = Logger.getInstance(logParams);
+
+	// TODO - maybe have a spinner? (ion-spinner is not in this early version of ionic)
+	// (e.g. template: '<p>'+text+'</p><ion-spinner icon="android"></ion-spinner>')
+
+	// Uses $ionicLoading - see https://ionicframework.com/docs/v1/api/service/$ionicLoading/
+	// so use same options object - just pass it thru if provided
+	function show(options) {
+		if(!pdaParams.showLoading)
+			return;
+
+		// if no options provided set up default text
+		options = options || { template: 'Loading...'};
+		$ionicLoading.show(options);
+	};
+
+	function hide() {
+		if(!pdaParams.showLoading)
+			return;
+		$ionicLoading.hide();
+	};
+
+	return {
+		show: show,
+		hide: hide
+	};
+
+})
+
 ;

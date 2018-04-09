@@ -42,8 +42,8 @@ angular.module('JobsIndexCtrl', [])
 })
 
 // A simple controller that fetches a list of data from a service
-.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteJobChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig', 'jseaService','gpsAudit','conflicts',
-	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteJobChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig, jseaService, gpsAudit, conflicts) { 
+.controller('JobsIndexCtrl', ['$rootScope', '$scope', '$window', '$state', 'Job', 'RemoteJob', 'util', 'sync', 'network', 'pdaParams','appService','pushService', '$ionicPopup','Logger','syncService','messageService','Idle','deleteJobChangeData', '$cordovaMedia','jobChangedService','eventService','BackgroundGeolocationService','cordovaReady','sodService','siteConfig', 'jseaService','gpsAudit','conflicts','loadingService',
+	function($rootScope, $scope, $window , $state, Job, RemoteJob, util, sync, network, pdaParams,appService,pushService, $ionicPopup, Logger, syncService, messageService,Idle,deleteJobChangeData, $cordovaMedia,jobChangedService,eventService,BackgroundGeolocationService, cordovaReady, sodService, siteConfig, jseaService, gpsAudit, conflicts, loadingService) { 
 	$scope.jobs = [];
 	$scope.jobStatuses = {};
 
@@ -79,6 +79,8 @@ angular.module('JobsIndexCtrl', [])
 	$scope.showDetail = function(mobjobSeq) {
 		$state.go('tab.job-detail', {jobId: mobjobSeq});
 	}
+
+	loadingService.show( { template: 'Loading job data...', delay: 500 });
 
 	// pickup all button 
 	$scope.pda_pickup_all = (siteConfig.getSiteConfigValue('PDA_PICKUP_ALL') == 'Y');
@@ -319,6 +321,8 @@ angular.module('JobsIndexCtrl', [])
 		log.debug("SYNC: FINISH");
 
 		$scope.jobStatuses = {};
+
+		loadingService.hide();
 
 		// We were getting the following error.  Where does the order come from?  reset filter here for now
 		// Error: The order {"key":"mobjobSeq","reverse":1} is not valid

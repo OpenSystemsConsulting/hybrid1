@@ -10,7 +10,7 @@ angular.module('JseaCtrl', [])
 	var pda_jsea_on = siteConfig.getSiteConfigValue('PDA_JSEA_ON');
 	var lpda_jsea_on = pdaParams.pda_jsea_on ? 'Y' : 'N';
 
-	var pda_jsea_both_yn = false; //siteConfig.getSiteConfigValue('PDA_JSEA_BOTH_YN') === 'Y';
+	var pda_jsea_both_yn = siteConfig.getSiteConfigValue('PDA_JSEA_BOTH_YN') === 'Y';			// CCT
 	$scope.pda_jsea_both_yn = pda_jsea_both_yn;
 
 	if(pda_jsea_on != 'Y' && lpda_jsea_on != 'Y') {
@@ -118,6 +118,7 @@ angular.module('JseaCtrl', [])
 			var ljobdate = jseaObj.jobBookingDay = jseaService.getServiceJobDate();
 			var jobStatusType = jseaObj.jobStatusType = jseaService.getServiceStatusType();
 			var formLeg = jseaObj.formLeg = jseaService.getServiceFormLeg();
+			var submitTime = Date.now();
 
 			llen = $scope.jseaQuestions.length;
 
@@ -157,7 +158,9 @@ angular.module('JseaCtrl', [])
 
 				AnswerSession.jdaJobStatusType = jobStatusType;
 
-				// TODO - store a timestamp of when answer saved
+				// store a timestamp of when answer saved
+				AnswerSession.jdaSubmitTime = submitTime;
+
 				AnswerSession.save();
 			}
 
@@ -263,7 +266,7 @@ angular.module('JseaCtrl', [])
 				// 'N" has been checked on a question that does not allow it - alert
 				var confirmPopup = $ionicPopup.confirm({
 					title: 'Have you filled in a full paper JSEA?',
-					template: 'You must fill in a full paper JSEA if you have answered NO to any questions\nPlease click OK to confirm that you have done this'
+					template: 'You have answered no to 1 or more questions that are not allowed to be no.  By clicking OK you are confirming that you have filled out a full PAPER JSEA'
 				});
 				confirmPopup.then(function(res) {
 					if(res) {

@@ -55,6 +55,9 @@ angular.module('JobDetailCtrl', [])
 	// Mandatory photos
 	$scope.pdaMandatoryPhotos = pdaMandatoryPhotos = (pdaParams.pda_mandatory_photos || (siteConfig.getSiteConfigValue('PDA_MANDATORY_PHOTOS') == 'Y'));
 
+	// Mandatory notes
+	$scope.pdaMandatoryNotes = pdaMandatoryNotes = (pdaParams.pda_mandatory_notes || (siteConfig.getSiteConfigValue('PDA_MANDATORY_NOTES') == 'Y'));
+
 	function getJob() {
 			mystr = 'getJob';
 
@@ -345,7 +348,7 @@ angular.module('JobDetailCtrl', [])
 					break;
 				}
 
-/*		v2.58.39 CCT test code - needs to be enabled when confirmed OK by CCT
+				// [ v2.58.39 CCT test code - needs to be enabled when confirmed OK by CCT
 				// Maybe the "don't care" statuses should be configurable?
 				if(job.mobjobStatus === 'AC') {
 					found = true;			// CCT don't care about AC
@@ -356,7 +359,7 @@ angular.module('JobDetailCtrl', [])
 					found = true;			// CCT don't care about Dp
 					break;
 				}
-*/
+				// ] v2.58.39 CCT test code end
 
 				if( typeof job.imageCount !== 'undefined') {
 
@@ -670,6 +673,11 @@ angular.module('JobDetailCtrl', [])
 		// if all PODs now captured update job to DL (all delivery legs have status PC so now job fully completed)
 		if( podCount >= (legCount-1))
 		{
+			// check for mandatory notes here before marking job DL
+			if(pdaMandatoryNotes) {
+				$scope.enterMandatoryNotes($scope.jobs[0].mobjobNumber, $scope.jobs[0].mobjobSeq);
+			}
+
 			for( var iac = 0; iac < legCount; iac++)
 			{
 				var job = $scope.jobs[iac];
@@ -924,6 +932,57 @@ angular.module('JobDetailCtrl', [])
 			$scope.modal.hide();
 		};
 		// ---------- text box for job notes -----------------
+
+		// [ ---------- mandatory notes via popup --------------
+		$scope.enterMandatoryNotes = function(jobNum, seqid) {
+			// Had to create new scope to pass in to get this to work consistently
+			var scope = $rootScope.$new(); scope.data = {};
+
+			//return $ionicPopup.show({
+			var myPopup = $ionicPopup.show({
+				//template: '<textarea rows="4" cols="50" expanding-textarea ng-model="data.text" autofocus ></textarea>',
+				templateUrl: 'templates/mandatory_notes.html',
+				title: 'Enter job notes',
+				subTitle: 'Job #'+jobNum,
+				scope: scope,
+				buttons: [
+					{
+						text: '<b>Save</b>',
+						type: 'button-positive',
+						onTap: function(e) {
+							if (!scope.data.text) {
+								//don't allow the user to close unless they enter something
+								e.preventDefault();
+							} else {
+								return scope.data.text;
+							}
+						}
+					}
+				]
+			});
+
+			myPopup.then(function(res) {
+				// this is where the notes come through when popup is closed
+				// popup can only be closed if something has been entered
+				//console.log('Tapped!', res);
+				if(res) {
+					var ln = new LocalNote();
+
+					ln.jnJobNum = $scope.job[0].mobjobNumber;
+					ln.jnJobBday = $scope.job[0].mobjobBookingDay;
+					ln.jnText = res;
+					ln.jnDriver = pdaParams.getDriverId();
+					ln.jnCreateTime = Date.now();
+
+					ln.save();
+					
+					job_note_sync(jnSyncCallback);
+
+					$scope.note.text = "";
+				}
+			});
+		}
+		// ] ---------- mandatory notes via popup --------------
 
 		// If we receive a cancel event for this job then inform operator
 		// Already have event handler - see above (CANCEL)
