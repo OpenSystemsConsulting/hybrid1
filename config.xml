@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="au.com.opensyscon.tplusmobile" ios-CFBundleVersion="1.0.0" version="2.58.42" versionCode="2584206" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="au.com.opensyscon.tplusmobile" ios-CFBundleVersion="1.0.0" version="2.58.43" versionCode="2584301" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
 	<!-- ios-CFBundleVersion is used as the build number for iOS apps - if there are any errors uploading to iTunes you may need to increment this -->
     <name>Tplus Mobile</name>
     <description>
