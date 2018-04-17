@@ -280,6 +280,7 @@ angular.module('JobsIndexCtrl', [])
 				var job = $scope.jobs[i];
 				job.displayDate = job[displayDate];
 				job.displayFrom = job[displayFrom];
+				job.displayTo = job[displayTo];
 
 				if( job.mobjobStatus == 'UJ') {
 					job.mobjobStatus = 'NJ';
@@ -350,6 +351,7 @@ angular.module('JobsIndexCtrl', [])
 
 				job.displayDate = job[displayDate];
 				job.displayFrom = job[displayFrom];
+				job.displayTo = job[displayTo];
 
 				// ACK the job - notifies despatch job received by pda
 				if( job.mobjobStatus == 'UJ') {
