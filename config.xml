@@ -8,7 +8,7 @@
     <author email="steven.green@opensyscon.com.au" href="http://www.oscsoftware.com.au">
         OSC Developer Team
     </author>
-    <preference name="phonegap-version" value="cli-6.3.1" />
+    <preference name="phonegap-version" value="cli-7.1.0" />
     <content src="index.html" />
     <access origin="*" />
     <preference name="android-minSdkVersion" value="16" />
