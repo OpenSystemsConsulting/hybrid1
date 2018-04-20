@@ -12,7 +12,7 @@ angular.module('config', [])
 // appConfig object contains app specific data which will NOT normally change between clients
 // e.g. the log server will normally come to OSC so we can monitor for errors etc.
 .constant('appConfig', {
-	'version':			'2.58.43',
+	'version':			'2.58.44',
 	'build':			1,
 	'logServerIP':		'opensyscon.com.au',
 	'logServerPort':	5678
