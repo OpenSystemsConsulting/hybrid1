@@ -70,6 +70,7 @@ angular.module('JobsIndexCtrl', [])
 	var jsea_retval = jseaService.getJseaConfig();
 	log.info('jsea_retval = ' + jsea_retval);
 
+	// If SOD_NO we havn't captured a JSEA for this DAY
 	if( jsea_retval == 'SOD_NO')
 	{
 		$state.go('tab.jseas');
