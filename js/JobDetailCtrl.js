@@ -118,7 +118,7 @@ angular.module('JobDetailCtrl', [])
 			*/
 			if(pdaParams.jobDetailOneDayOnly) {
 				// convoluted (maybe) way to get job date with no hh/mm/ss into date object
-				var jobDate = Math.trunc($state.params.jobId / 100000000);		// e.g. 20160502
+				var jobDate = Math.floor($state.params.jobId / 100000000);		// e.g. 20160502
 				var year = Math.round(jobDate/10000);
 				var mon = Math.round((jobDate % 10000) / 100);
 				var day = Math.round((jobDate % 100));
