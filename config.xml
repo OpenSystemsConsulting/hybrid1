@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="au.com.opensyscon.tplusmobile" ios-CFBundleVersion="2.0.0" version="2.58.44" versionCode="2584401" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="au.com.opensyscon.tplusmobile" ios-CFBundleVersion="2.0.0" version="2.58.44" versionCode="2584402" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
 	<!-- ios-CFBundleVersion is used as the build number for iOS apps - if there are any errors uploading to iTunes you may need to increment this -->
     <name>Tplus Mobile</name>
     <description>
@@ -43,6 +43,9 @@
         </config-file>
         <config-file parent="NSPhotoLibraryUsageDescription" platform="ios" target="*-Info.plist">
             <string>The app would like to access the photo library when you attach images to content.</string>
+        </config-file>
+        <config-file parent="NSPhotoLibraryAddUsageDescription" platform="ios" target="*-Info.plist">
+            <string>The photos are uploaded to your office along with the job details.  We will not share the photos with other users or partners.</string>
         </config-file>
 		<config-file parent="NSLocationWhenInUseUsageDescription" platform="ios" target="*-Info.plist">
 			<string>We may use GPS to determine your current location in order to update the despatch system at your office. We will not share your current location with other users or partners.</string>
