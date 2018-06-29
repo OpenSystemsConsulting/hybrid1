@@ -35,6 +35,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 	push_service.registered = false;
 	
 	var notificationSnd;
+	var inotificationSnd;
 	var lastSoundTime = Math.round(new Date().getTime()/1000);		// init when service instantiates
 	var newSoundTime;
 
@@ -215,7 +216,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 								// create a popup modal and keep making a sound until acknowledged
 								// Note we will already have made the sound once at this point
 								if( pda_notify_repeat && pda_notify_interval && payload.type != 'commandToPDA') {
-									var inotificationSnd = $cordovaMedia.newMedia(sound);
+									inotificationSnd = $cordovaMedia.newMedia(sound);
 									var notify;
 									var count = pda_notify_repeat;
 									var interval = 1000 * pda_notify_interval;
