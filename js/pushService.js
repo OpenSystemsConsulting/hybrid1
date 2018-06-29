@@ -227,6 +227,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 										}, function(err) {
 											log.error(platform+':$cordovaPushV5:notificationReceived:play error:['+sound+']['+JSON.stringify(err)+']');
 											inotificationSnd.release();
+											$interval.cancel(notify);
 										});
 									}, interval, count);
 
@@ -236,7 +237,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 									});
 									alertPopup.then(function(res) {
 										inotificationSnd.release();
-										$interval.cancel(notify);	// 
+										$interval.cancel(notify);
 									});
 								}
 							}
