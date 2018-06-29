@@ -236,7 +236,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 										template: payload.type == 'NEWJOB' || payload.type == 'CANCEL' ? payload.type : payload.message
 									});
 									alertPopup.then(function(res) {
-										if( typeof inotificationSnd !== 'undefined')
+										if( typeof inotificationSnd !== 'undefined' && typeof inotificationSnd.media !== 'undefined')
 											inotificationSnd.release();
 										$interval.cancel(notify);
 									});
