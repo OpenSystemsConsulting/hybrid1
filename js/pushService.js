@@ -255,6 +255,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 								if( typeof notificationSnd !== 'undefined' && typeof notificationSnd.media !== 'undefined')
 									notificationSnd.release();
 								$interval.cancel(notify);
+							},function(err) {
+								log.error(platform+':$cordovaPushV5:notificationReceived: nag popup error:' + JSON.stringify(err));
 							});
 						}
 					}
