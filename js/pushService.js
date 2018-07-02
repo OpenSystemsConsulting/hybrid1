@@ -36,6 +36,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 	
 	var notificationSnd;
 	var inotificationSnd;
+	var nagPopup;
+	var nagInterval;
 	var lastSoundTime = Math.round(new Date().getTime()/1000);		// init when service instantiates
 	var newSoundTime;
 
@@ -231,30 +233,38 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 							// create a popup modal and keep making a sound until acknowledged
 							// Note we will already have made the sound once at this point
 							//inotificationSnd = $cordovaMedia.newMedia(sound);
-							var notify;
 							var count = pda_notify_repeat;
 							var interval = 1000 * pda_notify_interval;
 
 							log.debug(platform+':$cordovaPushV5:notificationReceived: nag '+ pda_notify_repeat +' times ' + pda_notify_interval + ' seconds apart');
-							notify = $interval(function playSound() {
-								notificationSnd.seekTo(0);		// back to start
+
+							// clear any current interval service and start again
+							$interval.cancel(nagInterval);
+
+							nagInterval = $interval(function playSound() {
+								notificationSnd.seekTo(0);		// back to start of media file
 								notificationSnd.play().then(function() {
 									//inotificationSnd.release();		// don't release until count is complete
 								}, function(err) {
 									log.error(platform+':$cordovaPushV5:notificationReceived:play error:['+sound+']['+JSON.stringify(err)+']');
 									notificationSnd.release();
-									$interval.cancel(notify);
+									$interval.cancel(nagInterval);
 								});
 							}, interval, count);
 
-							var alertPopup = $ionicPopup.alert({
+							if(typeof nagPopup !== 'undefined') {
+								// we've already got a popup so close it and show the new one
+								// to ensure we have the last message available to the driver
+								nagPopup.close();
+							} 
+							nagPopup = $ionicPopup.alert({
 								title: 'New notification',
 								template: payload.type == 'NEWJOB' || payload.type == 'CANCEL' ? payload.type : payload.message
 							});
-							alertPopup.then(function(res) {
+							nagPopup.then(function(res) {
 								if( typeof notificationSnd !== 'undefined' && typeof notificationSnd.media !== 'undefined')
 									notificationSnd.release();
-								$interval.cancel(notify);
+								$interval.cancel(nagInterval);
 							},function(err) {
 								log.error(platform+':$cordovaPushV5:notificationReceived: nag popup error:' + JSON.stringify(err));
 							});
