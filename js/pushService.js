@@ -158,6 +158,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 				*/
 
+				var nag = false;			// are we going to keep nagging until ok'd?
+
 				// If there is a payload type we use that as the broadcast event with the supplied payload
 				var payload = notification.additionalData.payload || {};
 				if( payload.type ) {
@@ -194,7 +196,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 						if( sound != "") {
 
-							// Had issues when processing lots of notifications with soumds in quick succession
+							// Had issues when processing lots of notifications with sounds in quick succession
 							// So only do this if no sound received within last 10 seconds
 							newSoundTime = Math.round(new Date().getTime()/1000);
 
@@ -204,45 +206,55 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 								notificationSnd = $cordovaMedia.newMedia(sound);
 								// Maybe turn up the volume?	(0.0 - 1.0)
 								//notificationSnd.setVolume(1.0);
+								if( pda_notify_repeat && pda_notify_interval && payload.type != 'commandToPDA') {
+									nag = true;
+								}
 
 								notificationSnd.play().then(function() {
-									notificationSnd.release();
+									if(nag === true) {
+										alert_and_nag();
+									}
+									else {
+										notificationSnd.release();
+									}
 								}, function(err) {
 									log.error(platform+':$cordovaPushV5:notificationReceived:play error:['+sound+']['+JSON.stringify(err)+']');
 									notificationSnd.release();
 								});
  
-								// If appropriate site configs set, set up nagging notifications
-								// create a popup modal and keep making a sound until acknowledged
-								// Note we will already have made the sound once at this point
-								if( pda_notify_repeat && pda_notify_interval && payload.type != 'commandToPDA') {
-									inotificationSnd = $cordovaMedia.newMedia(sound);
-									var notify;
-									var count = pda_notify_repeat;
-									var interval = 1000 * pda_notify_interval;
-
-									log.debug(platform+':$cordovaPushV5:notificationReceived: nag '+ pda_notify_repeat +' times ' + pda_notify_interval + ' seconds apart');
-									notify = $interval(function playSound() {
-										inotificationSnd.play().then(function() {
-											//inotificationSnd.release();		// don't release until count is complete
-										}, function(err) {
-											log.error(platform+':$cordovaPushV5:notificationReceived:play error:['+sound+']['+JSON.stringify(err)+']');
-											inotificationSnd.release();
-											$interval.cancel(notify);
-										});
-									}, interval, count);
-
-									var alertPopup = $ionicPopup.alert({
-										title: 'New notification',
-										template: payload.type == 'NEWJOB' || payload.type == 'CANCEL' ? payload.type : payload.message
-									});
-									alertPopup.then(function(res) {
-										if( typeof inotificationSnd !== 'undefined' && typeof inotificationSnd.media !== 'undefined')
-											inotificationSnd.release();
-										$interval.cancel(notify);
-									});
-								}
 							}
+						}
+
+						function alert_and_nag() {
+							// use global notificationSnd object
+							// If appropriate site configs set, set up nagging notifications
+							// create a popup modal and keep making a sound until acknowledged
+							// Note we will already have made the sound once at this point
+							//inotificationSnd = $cordovaMedia.newMedia(sound);
+							var notify;
+							var count = pda_notify_repeat;
+							var interval = 1000 * pda_notify_interval;
+
+							log.debug(platform+':$cordovaPushV5:notificationReceived: nag '+ pda_notify_repeat +' times ' + pda_notify_interval + ' seconds apart');
+							notify = $interval(function playSound() {
+								notificationSnd.play().then(function() {
+									//inotificationSnd.release();		// don't release until count is complete
+								}, function(err) {
+									log.error(platform+':$cordovaPushV5:notificationReceived:play error:['+sound+']['+JSON.stringify(err)+']');
+									notificationSnd.release();
+									$interval.cancel(notify);
+								});
+							}, interval, count);
+
+							var alertPopup = $ionicPopup.alert({
+								title: 'New notification',
+								template: payload.type == 'NEWJOB' || payload.type == 'CANCEL' ? payload.type : payload.message
+							});
+							alertPopup.then(function(res) {
+								if( typeof notificationSnd !== 'undefined' && typeof notificationSnd.media !== 'undefined')
+									notificationSnd.release();
+								$interval.cancel(notify);
+							});
 						}
 					}
 
