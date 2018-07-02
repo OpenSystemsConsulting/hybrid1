@@ -38,6 +38,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 	var inotificationSnd;
 	var nagPopup;
 	var nagInterval;
+	var already_nagging = false;
 	var lastSoundTime = Math.round(new Date().getTime()/1000);		// init when service instantiates
 	var newSoundTime;
 
@@ -238,10 +239,13 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 							log.debug(platform+':$cordovaPushV5:notificationReceived: nag '+ pda_notify_repeat +' times ' + pda_notify_interval + ' seconds apart');
 
-							// clear any current interval service and start again
-							$interval.cancel(nagInterval);
+							if(already_nagging) {
+								// clear any current interval service and start again
+								$interval.cancel(nagInterval);
+							}
 
 							nagInterval = $interval(function playSound() {
+								already_nagging = true;
 								notificationSnd.seekTo(0);		// back to start of media file
 								notificationSnd.play().then(function() {
 									//inotificationSnd.release();		// don't release until count is complete
@@ -252,11 +256,13 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 								});
 							}, interval, count);
 
+/*
 							if(typeof nagPopup !== 'undefined') {
 								// we've already got a popup so close it and show the new one
 								// to ensure we have the last message available to the driver
 								nagPopup.close();
 							} 
+*/
 							nagPopup = $ionicPopup.alert({
 								title: 'New notification',
 								template: payload.type == 'NEWJOB' || payload.type == 'CANCEL' ? payload.type : payload.message
