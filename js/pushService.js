@@ -239,10 +239,8 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 							log.debug(platform+':$cordovaPushV5:notificationReceived: nag '+ pda_notify_repeat +' times ' + pda_notify_interval + ' seconds apart');
 
-							if(already_nagging) {
 								// clear any current interval service and start again
 								$interval.cancel(nagInterval);
-							}
 
 							nagInterval = $interval(function playSound() {
 								already_nagging = true;
@@ -254,7 +252,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 									notificationSnd.release();
 									$interval.cancel(nagInterval);
 								});
-							}, interval, count);
+							}, interval, count, false);
 
 /*
 							if(typeof nagPopup !== 'undefined') {
@@ -271,6 +269,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 								if( typeof notificationSnd !== 'undefined' && typeof notificationSnd.media !== 'undefined')
 									notificationSnd.release();
 								$interval.cancel(nagInterval);
+								already_nagging = false;
 							},function(err) {
 								log.error(platform+':$cordovaPushV5:notificationReceived: nag popup error:' + JSON.stringify(err));
 							});
