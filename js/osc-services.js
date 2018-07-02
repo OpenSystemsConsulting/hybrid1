@@ -1854,19 +1854,18 @@ $q.all([
 		};
 
 	var takePhoto = function(photoId) {
-		console.log(new Date().toISOString()+': imageService.takePhoto: starts');		//DEBUG
+		log.debug('takePhoto: start for:'+photoId);
 
 			// See: https://devdactic.com/complete-image-guide-ionic/
 			// and use promises? : https://docs.angularjs.org/api/ng/service/$q
 			var deferred = $q.defer();
-		//return $q(function(resolve, reject) {
 			var options = {
 					quality: pdaParams.imageQuality || 50,
 					destinationType: Camera.DestinationType.FILE_URI,
 					sourceType: Camera.PictureSourceType.CAMERA,
 					encodingType: Camera.EncodingType.JPEG,
 					cameraDirection: 1,
-					saveToPhotoAlbum: true
+					saveToPhotoAlbum: false
 			};
 
 			$cordovaCamera.getPicture(options).then(function(imageURI) {
@@ -1877,19 +1876,16 @@ $q.all([
 
 				//storeImageURI(photoId, imageURI);			// image successfully captured by device so store it
 
-				console.log(new Date().toISOString()+': imageService.takePhoto: resolved');		//DEBUG
+				log.debug('takePhoto: getPicture resolved with:'+imageURI);
 				deferred.resolve(imageURI);
 			}, function (err) {
-				//alert(err);
-				console.log(new Date().toISOString()+': imageService.takePhoto: rejected');		//DEBUG
+				log.error('takePhoto: getPicture failed with:'+JSON.stringify(err));
 				deferred.reject(err);
 			});
 
 			//$cordovaCamera.cleanup() 			// TODO - required for iOS - see docs for details.
 
 			return deferred.promise;
-		//});
-		console.log(new Date().toISOString()+': imageService.takePhoto: ends');		//DEBUG
 	};
 
 	function dirname(path) {
@@ -1898,7 +1894,7 @@ $q.all([
 
 	var storeImageURI = function(photoId, imageURI, metadata) {
 
-		console.log(new Date().toISOString()+': camera.storeImageURI: starts');		//DEBUG
+		log.info('storeImageURI: starts: photoId:'+photoId+', imageURI:'+imageURI+',metadata:'+metadata);
 		var deferred = $q.defer();
 
 		//Grab the file name of the photo in the temporary directory
