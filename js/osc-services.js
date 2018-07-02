@@ -1859,12 +1859,15 @@ $q.all([
 			// See: https://devdactic.com/complete-image-guide-ionic/
 			// and use promises? : https://docs.angularjs.org/api/ng/service/$q
 			var deferred = $q.defer();
+
+			// https://github.com/apache/cordova-plugin-camera#CameraOptions-quirks
+			// details various quirks - some may be important e.g. cameraDirection, destinationType
 			var options = {
 					quality: pdaParams.imageQuality || 50,
 					destinationType: Camera.DestinationType.FILE_URI,
 					sourceType: Camera.PictureSourceType.CAMERA,
 					encodingType: Camera.EncodingType.JPEG,
-					cameraDirection: 1,
+					cameraDirection: 0,					// 0 = back, 1 = front **NOTE** ignored by Android
 					saveToPhotoAlbum: false
 			};
 
