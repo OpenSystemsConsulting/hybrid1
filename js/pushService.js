@@ -237,6 +237,7 @@ function ( $rootScope, $ionicPlatform, $cordovaPush, $http , pdaParams, cordovaR
 
 							log.debug(platform+':$cordovaPushV5:notificationReceived: nag '+ pda_notify_repeat +' times ' + pda_notify_interval + ' seconds apart');
 							notify = $interval(function playSound() {
+								notificationSnd.seekTo(0);		// back to start
 								notificationSnd.play().then(function() {
 									//inotificationSnd.release();		// don't release until count is complete
 								}, function(err) {
