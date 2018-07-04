@@ -1,3 +1,4 @@
+// originally from https://github.com/sonicd300/TNF-IonicUtils
 angular.module('tnf.IonicUtils', ['ionic'])
   .directive('tnfSignaturePad', function ($ionicModal) {
 	var canvas = null,
