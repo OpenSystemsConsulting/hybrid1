@@ -1897,7 +1897,7 @@ $q.all([
 
 	var storeImageURI = function(photoId, imageURI, metadata) {
 
-		log.info('storeImageURI: starts: photoId:'+photoId+', imageURI:'+imageURI+',metadata:'+metadata);
+		log.info('storeImageURI: starts: photoId:'+photoId+', imageURI:'+imageURI+',metadata:'+JSON.stringify(metadata));
 		var deferred = $q.defer();
 
 		//Grab the file name of the photo in the temporary directory
