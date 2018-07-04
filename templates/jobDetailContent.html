@@ -277,6 +277,17 @@
 
 	</div>
 
-	<a href="http://103.25.182.105/docs/test.pdf">Test pdf link</a>
+	<ion-item>
+		<a href="http://103.25.182.105/docs/test.pdf">Test pdf - std url no cordova</a>
+	</ion-item>
+	<ion-item>
+		<a href="#" onclick="cordova.InAppBrowser.open('http://103.25.182.105/docs/test.pdf', '_self'); return false">Test pdf - _self </a>
+	</ion-item>
+	<ion-item>
+		<a href="#" onclick="cordova.InAppBrowser.open('http://103.25.182.105/docs/test.pdf', '_blank'); return false">Test pdf - _blank </a>
+	</ion-item>
+	<ion-item>
+		<a href="#" onclick="cordova.InAppBrowser.open('http://103.25.182.105/docs/test.pdf', '_system'); return false">Test pdf - _system </a>
+	</ion-item>
 
   </ion-content>
