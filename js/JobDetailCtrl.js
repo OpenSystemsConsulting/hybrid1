@@ -8,8 +8,8 @@ angular.module('JobDetailCtrl', [])
 })
 
 // For the View which is Displaying and Editing a Job or for the Creation of a new Job...
-.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','$ionicModal','LocalNote','job_note_sync','gpsAudit','$ionicPopup','imageService','imageFileService','navigationService',
-	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService, $ionicModal,LocalNote,job_note_sync, gpsAudit, $ionicPopup, imageService, imageFileService,navigationService) {
+.controller('JobDetailCtrl', ['$rootScope', '$scope', '$state', 'Job', 'util', 'pdaParams','Logger','jobChangedService','$ionicPopup','siteConfig','jseaService','$ionicModal','LocalNote','job_note_sync','gpsAudit','$ionicPopup','imageService','imageFileService','navigationService','attachService','siteService',
+	function($rootScope, $scope, $state, Job, util,pdaParams,Logger,jobChangedService,$ionicPopup,siteConfig,jseaService, $ionicModal,LocalNote,job_note_sync, gpsAudit, $ionicPopup, imageService, imageFileService,navigationService, attachService,siteService) {
 
 	var logParams = { site: pdaParams.getSiteId(), driver: pdaParams.getDriverId(), fn: 'JobDetailCtrl'};
 	var log = Logger.getInstance(logParams);
@@ -32,6 +32,9 @@ angular.module('JobDetailCtrl', [])
 	if($scope.pdaSignatOnDepPU && $scope.pdaSignatOnPU) {
 		$scope.pdaSignatOnPU = false;
 	}
+
+	$scope.pdaAttachedDocs = (pdaParams.pda_attached_docs || (siteConfig.getSiteConfigValue('PDA_ATTACHED_DOCS') == 'Y'));
+	$scope.serverIP = siteService.getServerIP();
 
 	// separate delivery signature and delivery event
 	$scope.pdaDiscreteDelSignat = (pdaParams.pda_discrete_del_signat || (siteConfig.getSiteConfigValue('PDA_DISCRETE_DEL_SIGNAT') == 'Y'));
@@ -209,6 +212,16 @@ angular.module('JobDetailCtrl', [])
           	$rootScope.tabHeader = $scope.generateJobHeader($scope.job);
           		// Generate a meaningful Header Title...
 
+			// attachments
+			if( $scope.pdaAttachedDocs) {
+				attachService.getAttachments(results[0])
+					.success(function(data) {
+					$scope.attachments = data["filelist"];			// array of filenames
+				})
+				.error(function(err) {
+					log.error('getAttachments: failed:'+JSON.stringify(err));
+				});
+			}
         });
 	  }
 
