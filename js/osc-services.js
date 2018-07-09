@@ -2314,4 +2314,33 @@ $q.all([
 
 })
 
+.factory('attachService', function( $http, siteService, pdaParams, Logger){
+
+	var service = {
+		data: [],
+		getAttachments: getAttachments
+	};
+	return service;
+
+	function getAttachments(job) {
+		// Query server to get list of attachments for this job - return as a promise
+		// Initial implementation of API takes job date and no. and is not concerned with legs
+
+		var client = job.mobjobClientCode;
+		var jobnum = job.mobjobNumber;			// TODO - should this be basejob?
+		var jobdate = Math.floor(job.mobjobSeq / 100000000);		// e.g. 20160502
+
+		var serverIP = siteService.getServerIP();
+		var serverPort = siteService.getServerPort();
+
+		return $http.get('http://'+ serverIP + '/other-cgi/listfiles.pl?output_type=JSON&client='+client+'&job_number='+jobnum+'&job_date='+jobdate)
+			.success(function(data) {
+				service.data = data;
+			})
+			.error(function (http, status, fnc, httpObj ) {
+				console.log('get failed:'+status);			// TODO - return error (object?)
+			});
+	}
+
+})
 ;
