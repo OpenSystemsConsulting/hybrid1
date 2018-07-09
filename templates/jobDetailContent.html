@@ -277,17 +277,27 @@
 
 	</div>
 
+	<div class="item item-divider" ng-show="pdaParams.pda_attached_docs">
+		File attachments
+	</div>
+	<ion-item ng-repeat="filename in attachments track by $index" ng-show="pdaParams.pda_attached_docs" class="item">
+		<a ng-href="http://{{serverIP}}/docs/{{jobs[0].mobjobClientCode}}/{{filename}}">{{filename}}</a>
+	</ion-item>
+
+
+<section id="debug" ng-if="pdaParams.debugMode">
 	<ion-item>
-		<a href="http://103.25.182.105/docs/test.pdf">Test pdf - std url no cordova</a>
+		<a href="http://{{serverIP}}/docs/test.pdf">Test pdf - std url no cordova</a>
 	</ion-item>
 	<ion-item>
-		<a href="#" onclick="cordova.InAppBrowser.open('http://103.25.182.105/docs/test.pdf', '_self'); return false">Test pdf - _self </a>
+		<a href="#" onclick="cordova.InAppBrowser.open('http://{{serverIP}}/docs/test.pdf', '_self'); return false">Test pdf - _self </a>
 	</ion-item>
 	<ion-item>
-		<a href="#" onclick="cordova.InAppBrowser.open('http://103.25.182.105/docs/test.pdf', '_blank'); return false">Test pdf - _blank </a>
+		<a href="#" onclick="cordova.InAppBrowser.open('http://{{serverIP}}/docs/test.pdf', '_blank'); return false">Test pdf - _blank </a>
 	</ion-item>
 	<ion-item>
-		<a href="#" onclick="cordova.InAppBrowser.open('http://103.25.182.105/docs/test.pdf', '_system'); return false">Test pdf - _system </a>
+		<a href="#" onclick="cordova.InAppBrowser.open('http://{{serverIP}}/docs/test.pdf', '_system'); return false">Test pdf - _system </a>
 	</ion-item>
+</section>
 
   </ion-content>
