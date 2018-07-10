@@ -277,27 +277,14 @@
 
 	</div>
 
-	<div class="item item-divider" ng-show="pdaParams.pda_attached_docs">
+	<div class="item item-divider" ng-show="{{pdaAttachedDocs}}">
 		File attachments
 	</div>
-	<ion-item ng-repeat="filename in attachments track by $index" ng-show="pdaParams.pda_attached_docs" class="item">
+	<ion-item ng-repeat="filename in attachments track by $index" ng-show="{{pdaAttachedDocs}}" class="item">
 		<a ng-href="http://{{serverIP}}/docs/{{jobs[0].mobjobClientCode}}/{{filename}}">{{filename}}</a>
 	</ion-item>
-
-
-<section id="debug" ng-if="pdaParams.debugMode">
-	<ion-item>
-		<a href="http://{{serverIP}}/docs/test.pdf">Test pdf - std url no cordova</a>
+	<ion-item ng-show="attachments.length == 0" class="item">
+		None available
 	</ion-item>
-	<ion-item>
-		<a href="#" onclick="cordova.InAppBrowser.open('http://{{serverIP}}/docs/test.pdf', '_self'); return false">Test pdf - _self </a>
-	</ion-item>
-	<ion-item>
-		<a href="#" onclick="cordova.InAppBrowser.open('http://{{serverIP}}/docs/test.pdf', '_blank'); return false">Test pdf - _blank </a>
-	</ion-item>
-	<ion-item>
-		<a href="#" onclick="cordova.InAppBrowser.open('http://{{serverIP}}/docs/test.pdf', '_system'); return false">Test pdf - _system </a>
-	</ion-item>
-</section>
 
   </ion-content>
