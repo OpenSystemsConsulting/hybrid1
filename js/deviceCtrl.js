@@ -2,8 +2,8 @@ angular.module('deviceCtrl', [])
 
 
 .controller('deviceCtrl', [
-'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', 'deviceService', 'network','fullreplication', '$cordovaNetwork',"appConfig",'siteService','$ionicPopup','siteConfig','messageService','jobService','sodService','jseaService','navigationService',
-function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, deviceService, network, fullreplication, $cordovaNetwork, appConfig, siteService, $ionicPopup,siteConfig,messageService, jobService, sodService, jseaService, navigationService) {
+'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', 'deviceService', 'network','fullreplication', '$cordovaNetwork',"appConfig",'siteService','$ionicPopup','siteConfig','messageService','jobService','sodService','jseaService','navigationService','BackgroundGeolocationService',
+function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, deviceService, network, fullreplication, $cordovaNetwork, appConfig, siteService, $ionicPopup,siteConfig,messageService, jobService, sodService, jseaService, navigationService, BackgroundGeolocationService) {
 
 	// TODO - maybe have array of key/value pairs - then can simply iterate with ng-repeat on template
 	var devicectrl = { };
@@ -183,6 +183,23 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 	$scope.setSODDate = function() {
 		sodService.setSODDate();
 		$scope.localStorageList = localStorageUsage();
+	}
+
+	// background GPS
+	$scope.showAppSettings = function() {
+		BackgroundGeolocationService.showAppSettings();
+	}
+
+	$scope.showLocationSettings = function() {
+		BackgroundGeolocationService.showLocationSettings();
+	}
+
+	$scope.bgGPSstarted = BackgroundGeolocationService.getStarted();
+	$scope.toggleBackgroundGPS = function(value) {
+		if(value)
+			BackgroundGeolocationService.start();
+		else
+			BackgroundGeolocationService.stop();
 	}
 
 }]);
