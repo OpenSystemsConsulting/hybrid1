@@ -175,6 +175,19 @@ angular.module('osc-services', [])
 
 	pda_params.showLoading = false;
 
+	// defaults for background gps
+	pda_params.gps_desiredAccuracy = 10;
+	pda_params.gps_stationaryRadius = 20;
+	pda_params.gps_distanceFilter = 30;
+	pda_params.gps_locationTimeout = 60;
+	pda_params.gps_activityType = 'AutomotiveNavigation';
+	pda_params.gps_stopOnTerminate = true;
+
+	pda_params.gps_debug = false;
+	pda_params.setGpsDebug = function(value) {
+		pda_params.gps_debug = value || false;
+	}
+
 	return pda_params;
 }])
 
@@ -1143,6 +1156,7 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 	var thisGPSsecs = 0;		// this timestamp in seconds
 	var diffGPSsecs = 0;
 	var threshold = 1;			// diff between gps must be greater than this to save
+	var started = false;
 	
 	var saveGpsToDb = function(drvid,location) {
 
@@ -1237,6 +1251,12 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 
 		//log.debug('BGGS callbackFn: calling saveGpsToDb:' + location.latitude + ',' + location.longitude);
 		saveGpsToDb(pdaParams.getDriverId(),location);
+
+		/*
+			IMPORTANT:  You must execute the finish method here to inform the native plugin that you're finished,
+			and the background-task may be completed.  You must do this regardless if your HTTP request is successful or not.
+			IF YOU DON'T, ios will CRASH YOUR APP for spending too much time in the background.
+		*/
 		backgroundGeoLocation.finish();
 	};
 
@@ -1255,19 +1275,20 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 
 		var platform = $cordovaDevice.getPlatform();
 		var bgOptions = {
-			desiredAccuracy: 10,
-			stationaryRadius: 20,
-			distanceFilter: 30,
-			locationTimeout: 60,			// Android - The minimum time interval between location updates in seconds
-			activityType: 'AutomotiveNavigation',			// iOS hint
-			debug: false,					// <-- enable this hear sounds for background-geolocation life-cycle
-			stopOnTerminate: true			// <-- enable this to clear background location settings when the app terminates
+			desiredAccuracy:	pdaParams.gps_desiredAccuracy || 10,
+			stationaryRadius:	pdaParams.gps_stationaryRadius || 20,
+			distanceFilter:		pdaParams.gps_distanceFilter || 30,
+			locationTimeout:	pdaParams.gps_locationTimeout || 60,			// Android - The minimum time interval between location updates in seconds
+			activityType:		pdaParams.gps_activityType || 'AutomotiveNavigation',			// iOS hint
+			stopOnTerminate:	pdaParams.gps_stopOnTerminate || true,			// <-- enable this to clear background location settings when the app terminates
+			debug:				pdaParams.gps_debug || false					// <-- enable this hear sounds for background-geolocation life-cycle
 		};
 
 
 		log.debug('BGGS START: configure with:'+JSON.stringify(bgOptions)); 
 		backgroundGeoLocation.configure(callbackFn, failureFn, bgOptions);
 		backgroundGeoLocation.start();
+		started = true;
 	}
 
 	/*=====================================================*/
@@ -1277,6 +1298,19 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 	backgroundGeoService.stop = function () {
 		log.debug('BGGS STOP Method called:'); 
 		backgroundGeoLocation.stop();
+		started = false;
+	}
+
+	backgroundGeoService.showAppSettings = function() {
+		backgroundGeoLocation.showAppSettings();
+	}
+
+	backgroundGeoService.showLocationSettings = function() {
+		backgroundGeoLocation.showLocationSettings();
+	}
+
+	backgroundGeoService.getStarted = function() {
+		return started;
 	}
 
 	return backgroundGeoService;
