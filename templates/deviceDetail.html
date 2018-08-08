@@ -36,20 +36,8 @@
 		</span>
 	</ion-item>
 
-	<ion-checkbox class="item-checkbox-right" ng-checked="{{devicectrl.isGpsWorking}}" ng-disabled="true">
-		GPS Active
-	</ion-checkbox>
-
 	<ion-checkbox class="item-checkbox-right" ng-checked="{{devicectrl.isDeviceReady}}" ng-disabled="true">
 		Device Ready
-	</ion-checkbox>
-
-	<ion-checkbox class="item-checkbox-right" ng-model="devicectrl.showGpsAlerts" ng-change="updateShowGpsAlerts(devicectrl.showGpsAlerts)">
-		Show GPS Alerts
-	</ion-checkbox>
-
-	<ion-checkbox class="item-checkbox-right" ng-model="devicectrl.sendGps" ng-change="updateSendGps(devicectrl.sendGps)">
-		GPS To Server
 	</ion-checkbox>
 
 	<ion-checkbox class="item-checkbox-right" ng-checked="{{devicectrl.registeredForPush}}" ng-disabled="true">
@@ -91,10 +79,6 @@
 
 	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.multiSelect" >
 		Multi job select
-	</ion-checkbox>
-
-	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.alwaysGetGPS" >
-		Always attempt foreground GPS even if logged off
 	</ion-checkbox>
 
 	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.jobDetailOneDayOnly" >
@@ -290,6 +274,50 @@
 		</span>
 	</ion-item>
 -->
+
+	<div class="item item-divider">
+		GPS properties
+	</div>
+	<ion-checkbox class="item-checkbox-right" ng-checked="{{devicectrl.isGpsWorking}}" ng-disabled="true">
+		GPS Active
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-model="devicectrl.showGpsAlerts" ng-change="updateShowGpsAlerts(devicectrl.showGpsAlerts)">
+		Show GPS Alerts
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-model="devicectrl.sendGps" ng-change="updateSendGps(devicectrl.sendGps)">
+		GPS To Server
+	</ion-checkbox>
+
+	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.alwaysGetGPS" >
+		Always attempt foreground GPS even if logged off
+	</ion-checkbox>
+
+	<!-- background GPS section -->
+	<div class="item item-divider">
+		Background GPS
+	</div>
+	<ion-item class="item item-button-right" >
+		Show App Settings
+		<button class="button button-positive" ng-click="showAppSettings()">
+			App Settings
+		</button>
+	</ion-item>
+	<ion-item class="item item-button-right" >
+		Show Location Settings
+		<button class="button button-positive" ng-click="showLocationSettings()">
+			Loc Settings
+		</button>
+	</ion-item>
+	<ion-checkbox class="item-checkbox-right" ng-model="bgGPSstarted" ng-model-options="{ getterSetter: true }" ng-change="toggleBackgroundGPS(bgGPSstarted)">
+		Start/Stop background GPS
+	</ion-checkbox>
+	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.gps_debug" ng-change="pdaParams.setGpsDebug(pdaParams.gps_debug)">
+		GPS Debug (sounds)
+	</ion-checkbox>
+	<!-- end section -->
+
 
 	<div class="item item-divider">
 		Device properties
