@@ -330,8 +330,26 @@
 	</ion-item>
 
 	<ion-item class="item">
+		Stationary Radius in metres: {{pdaParams.gps_stationaryRadius}}
+		<div class="floatRight">
+			<button class="button icon ion-minus-circled red" ng-click="subRadius()">
+			<button class="button icon ion-plus-circled green" ng-click="addRadius()">
+		</div>
+	</ion-item>
+
+	<ion-item class="item">
 		Min horiz distance in metres: {{pdaParams.gps_distanceFilter}}
 		<input class="floatRight" type="range" name="radius" ng-model="pdaParams.gps_distanceFilter" min="0" max="1000">
+	</ion-item>
+
+	<ion-item class="item">
+		Min update interval (secs) (Android): {{pdaParams.gps_interval/1000}}
+		<div class="floatRight">
+			<button class="button button-positive" ng-click="zeroInterval()"> Zero </button>
+			<button class="button icon ion-minus-circled red" ng-click="subInterval()">
+			<button class="button icon ion-plus-circled green" ng-click="addInterval()">
+			<button class="button button-positive" ng-click="defaultInterval()"> Default </button>
+		</div>
 	</ion-item>
 
 	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.gps_debug" ng-change="pdaParams.setGpsDebug(pdaParams.gps_debug)">
@@ -339,7 +357,7 @@
 	</ion-checkbox>
 
 	<ion-item class="item item-select">
-		Activity type (iOS) (current {{pdaParams.gps_activityType}})
+		iOS
 		<select name="activity" ng-model="pdaParams.gps_activityType">
 			<option>AutomotiveNavigation</option>
 			<option>OtherNavigation</option>
