@@ -313,9 +313,41 @@
 	<ion-checkbox class="item-checkbox-right" ng-model="bgGPSstarted" ng-model-options="{ getterSetter: true }" ng-change="toggleBackgroundGPS(bgGPSstarted)">
 		Start/Stop background GPS
 	</ion-checkbox>
+
+	<ion-item class="item item-select">
+		Accuracy (current {{pdaParams.gps_desiredAccuracy}})
+		<select name="accuracy" ng-model="pdaParams.gps_desiredAccuracy">
+			<option>0</option>
+			<option>10</option>
+			<option>100</option>
+			<option>1000</option>
+		</select>
+	</ion-item>
+
+	<ion-item class="item">
+		Stationary Radius in metres: {{pdaParams.gps_stationaryRadius}}
+		<input class="floatRight" type="range" name="radius" ng-model="pdaParams.gps_stationaryRadius" min="0" max="1000">
+	</ion-item>
+
+	<ion-item class="item">
+		Min horiz distance in metres: {{pdaParams.gps_distanceFilter}}
+		<input class="floatRight" type="range" name="radius" ng-model="pdaParams.gps_distanceFilter" min="0" max="1000">
+	</ion-item>
+
 	<ion-checkbox class="item-checkbox-right" ng-model="pdaParams.gps_debug" ng-change="pdaParams.setGpsDebug(pdaParams.gps_debug)">
 		GPS Debug (sounds)
 	</ion-checkbox>
+
+	<ion-item class="item item-select">
+		Activity type (iOS) (current {{pdaParams.gps_activityType}})
+		<select name="activity" ng-model="pdaParams.gps_activityType">
+			<option>AutomotiveNavigation</option>
+			<option>OtherNavigation</option>
+			<option>Fitness</option>
+			<option>Other</option>
+		</select>
+	</ion-item>
+
 	<!-- end section -->
 
 
