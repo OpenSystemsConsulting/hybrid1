@@ -13,7 +13,7 @@ angular.module('config', [])
 // e.g. the log server will normally come to OSC so we can monitor for errors etc.
 .constant('appConfig', {
 	'version':			'9.58.46',
-	'build':			3,
+	'build':			4,
 	'logServerIP':		'opensyscon.com.au',
 	'logServerPort':	5678
 })
