@@ -343,6 +343,14 @@
 	</ion-item>
 
 	<ion-item class="item">
+		Min horiz distance in metres: {{pdaParams.gps_distanceFilter}}
+		<div class="floatRight">
+			<button class="button icon ion-minus-circled red" ng-click="subDistance()">
+			<button class="button icon ion-plus-circled green" ng-click="addDistance()">
+		</div>
+	</ion-item>
+
+	<ion-item class="item">
 		Min update interval (secs) (Android): {{pdaParams.gps_interval/1000}}
 		<div class="floatRight">
 			<button class="button button-positive" ng-click="zeroInterval()"> Zero </button>

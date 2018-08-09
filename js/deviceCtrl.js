@@ -212,6 +212,16 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 			pdaParams.gps_stationaryRadius++;
 	}
 
+	$scope.subDistance = function() {
+		if(pdaParams.gps_distanceFilter > 0)
+			pdaParams.gps_distanceFilter--;
+	}
+
+	$scope.addDistance = function() {
+		if(pdaParams.gps_distanceFilter < 1000)
+			pdaParams.gps_distanceFilter++;
+	}
+
 	$scope.subInterval = function() {
 		if(pdaParams.gps_interval > 1000)
 			pdaParams.gps_interval-=1000;
