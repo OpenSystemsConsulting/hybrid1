@@ -202,4 +202,32 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 			BackgroundGeolocationService.stop();
 	}
 
+	$scope.subRadius = function() {
+		if(pdaParams.gps_stationaryRadius > 0)
+			pdaParams.gps_stationaryRadius--;
+	}
+
+	$scope.addRadius = function() {
+		if(pdaParams.gps_stationaryRadius < 1000)
+			pdaParams.gps_stationaryRadius++;
+	}
+
+	$scope.subInterval = function() {
+		if(pdaParams.gps_interval > 1000)
+			pdaParams.gps_interval-=1000;
+	}
+
+	$scope.addInterval = function() {
+		if(pdaParams.gps_interval < 300000)
+			pdaParams.gps_interval+=1000;
+	}
+
+	$scope.zeroInterval = function() {
+		pdaParams.gps_interval=1000;		// can't be zero - 1 sec is min (so 1000ms)
+	}
+
+	$scope.defaultInterval = function() {
+		pdaParams.gps_interval=60000;		// default hardcoded in a couple of places - be careful
+	}
+
 }]);
