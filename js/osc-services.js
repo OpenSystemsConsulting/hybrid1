@@ -179,7 +179,8 @@ angular.module('osc-services', [])
 	pda_params.gps_desiredAccuracy = 10;
 	pda_params.gps_stationaryRadius = 20;
 	pda_params.gps_distanceFilter = 30;
-	pda_params.gps_locationTimeout = 60;
+	pda_params.gps_locationTimeout = 60;		// removed in v2 of plugin
+	pda_params.gps_interval = 60000;			// use this in milliseconds instead
 	pda_params.gps_activityType = 'AutomotiveNavigation';
 	pda_params.gps_stopOnTerminate = true;
 
@@ -1257,7 +1258,7 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 			and the background-task may be completed.  You must do this regardless if your HTTP request is successful or not.
 			IF YOU DON'T, ios will CRASH YOUR APP for spending too much time in the background.
 		*/
-		backgroundGeoLocation.finish();
+		backgroundGeolocation.finish();
 	};
 
 	var failureFn = function(error) {
@@ -1273,12 +1274,13 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 	//Enable background geolocation
 	backgroundGeoService.start = function () {
 
+			//locationTimeout:	pdaParams.gps_locationTimeout || 60,			// Android - The minimum time interval between location updates in seconds
 		var platform = $cordovaDevice.getPlatform();
 		var bgOptions = {
 			desiredAccuracy:	pdaParams.gps_desiredAccuracy || 10,
 			stationaryRadius:	pdaParams.gps_stationaryRadius || 20,
 			distanceFilter:		pdaParams.gps_distanceFilter || 30,
-			locationTimeout:	pdaParams.gps_locationTimeout || 60,			// Android - The minimum time interval between location updates in seconds
+			interval:			pdaParams.gps_interval || 60000,			// Android - The minimum time interval between location updates in milliseconds
 			activityType:		pdaParams.gps_activityType || 'AutomotiveNavigation',			// iOS hint
 			stopOnTerminate:	pdaParams.gps_stopOnTerminate || true,			// <-- enable this to clear background location settings when the app terminates
 			debug:				pdaParams.gps_debug || false					// <-- enable this hear sounds for background-geolocation life-cycle
@@ -1286,8 +1288,8 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 
 
 		log.debug('BGGS START: configure with:'+JSON.stringify(bgOptions)); 
-		backgroundGeoLocation.configure(callbackFn, failureFn, bgOptions);
-		backgroundGeoLocation.start();
+		backgroundGeolocation.configure(callbackFn, failureFn, bgOptions);
+		backgroundGeolocation.start();
 		started = true;
 	}
 
@@ -1297,16 +1299,16 @@ function (Logger,pdaParams,gpsHistory,$cordovaDevice,gpsAudit) {
 
 	backgroundGeoService.stop = function () {
 		log.debug('BGGS STOP Method called:'); 
-		backgroundGeoLocation.stop();
+		backgroundGeolocation.stop();
 		started = false;
 	}
 
 	backgroundGeoService.showAppSettings = function() {
-		backgroundGeoLocation.showAppSettings();
+		backgroundGeolocation.showAppSettings();
 	}
 
 	backgroundGeoService.showLocationSettings = function() {
-		backgroundGeoLocation.showLocationSettings();
+		backgroundGeolocation.showLocationSettings();
 	}
 
 	backgroundGeoService.getStarted = function() {
