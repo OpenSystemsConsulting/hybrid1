@@ -278,7 +278,7 @@
 	<div class="item item-divider">
 		GPS properties
 	</div>
-	<ion-checkbox class="item-checkbox-right" ng-checked="{{devicectrl.isGpsWorking}}" ng-disabled="true">
+	<ion-checkbox class="item-checkbox-right" ng-model="devicectrl.isGpsWorking" ng-model-options="{ getterSetter: true }" ng-change="update_isGpsWorking(devicectrl.isGpsWorking)">
 		GPS Active
 	</ion-checkbox>
 

@@ -240,4 +240,9 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 		pdaParams.gps_interval=60000;		// default hardcoded in a couple of places - be careful
 	}
 
+	$scope.update_isGpsWorking = function(torf) {
+		gpsService.setGpsIsWorking(torf);
+	}
+
+
 }]);
