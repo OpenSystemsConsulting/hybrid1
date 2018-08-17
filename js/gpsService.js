@@ -7,7 +7,7 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope,gpsAudit) {
 	var log = Logger.getInstance(logParams);
 
 	// TODO - set high accuracy with a toggle parameter
-	// TODO - set maximumAge to 0?  Apparently Samsing Galaxy phone have issues caching the gps location
+	// TODO - set maximumAge to 0?	Apparently Samsing Galaxy phone have issues caching the gps location
 	// (see http://stackoverflow.com/questions/16262878/phonegap-geolocation-code-3-timeout-expired-keeps-popping-up-on-some-android)
 	// Apparently a reboot can fix Android gps timeouts
 
@@ -18,7 +18,7 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope,gpsAudit) {
   //var posOptions = {timeout: 1000, frequency : 1000, enableHighAccuracy: true };
 	var posOptions = {timeout: 10000, enableHighAccuracy: false};
 
-	var gpsIsWorking = false;
+	var gpsIsWorking = true;			// assume everything OK to start with
 	var numsaves = 0;
 	var lastsecs = 0;
 
@@ -48,6 +48,13 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope,gpsAudit) {
 
 	function getPos()
 	{
+		if(!gpsIsWorking) {
+			// NOTE - if this is the case we won't set it back to true becuase we don't attempt to save
+			// Use device tab to reset gpsIsWorking
+			log.error("getPos: gpsIsWorking:"+gpsIsWorking);
+			return;
+		}
+
 		if (log.context.driver == 0) {
 			log.context.driver = pdaParams.getDriverId();
 		}
@@ -81,12 +88,21 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope,gpsAudit) {
 			gpsIsWorking = true;
 
 		}, function(err) {
+			// error
 			if ( showGpsAlerts ) 
 			{
-				  alert('GPsService Error code: '    + err.code    + '\n' + 'message: ' + err.message + '\n');
+				  alert('GPsService Error code: '	 + err.code    + '\n' + 'message: ' + err.message + '\n');
 			}
 			
-		  // error
+			// for newer android permissions we will get this if location services disallowed for the app
+			// getCurrentPosition failed, err:{"code":1,"message":"Illegal Access"}
+			/*
+			 * NOTE that this can cause a problem where the user has selected "Deny" and also "Never ask again"
+			 * When checking allowed permissions android will emit a pause event followed by a resume event
+			 * When never ask again is selected this happens very quickly which means the app spends most
+			 * of its time processing those events
+			 * Which in turn triggered a getPos call which triggered the error again after pause/resume events
+			 */
 			gpsIsWorking = false;
 			log.error("getCurrentPosition failed, err:"+JSON.stringify(err));
 		});
@@ -105,9 +121,6 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope,gpsAudit) {
 		var oset = ldate.getTimezoneOffset();
 									
 		lgps.gps_timestamp += (oset * -1)  * 60  * 1000;
-
-
-		//parseFloat("123.456").toFixed(2);
 
 		lgps.gps_latitude = position.coords.latitude.toFixed(6);
 		lgps.gps_longitude = position.coords.longitude.toFixed(6);
@@ -130,30 +143,13 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope,gpsAudit) {
 			lgps.$create(lgps, function success( obj) {
 				if( obj) {
 					log.debug("lgps.$create success: obj:"+JSON.stringify(obj));
-					//console.log(obj);
 				}
 			}, function error(err) {
 				if( err) {
 					log.error("lgps.$create failed: err:"+JSON.stringify(err));
-					//console.log(err);
 				}
 			});
 		}
-	}
-
-	function onSuccess(position) {
-		gpsIsWorking = true;
-	}
-	function onError(error) {
-		if ( showGpsAlerts ) 
-		{
-    		alert('GPSservice OnOFFPos  Error code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
-		}
-		gpsIsWorking = false;
-	}
-	function getOneoFFPos()
-	{
-		$cordovaGeolocation.getCurrentPosition(posOptionsOneOff);
 	}
 
 	//Every 60 Seconds
@@ -161,19 +157,20 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope,gpsAudit) {
 
 	gpsService.getGpsIsWorking = function getGpsIsWorking()
 	{
-		//getOneoFFPos();
 		return gpsIsWorking;
+	}
+	gpsService.setGpsIsWorking = function(torf) 
+	{
+		gpsIsWorking = torf;
 	}
 
 	gpsService.getShowGpsAlerts = function getShowGpsAlerts()
 	{
-		//getOneoFFPos();
 		return showGpsAlerts;
 	}
 
 	gpsService.getSendGps = function getSendGps()
 	{
-		//getOneoFFPos();
 		return sendGps;
 	}
 
