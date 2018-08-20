@@ -49,9 +49,9 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope,gpsAudit) {
 	function getPos()
 	{
 		if(!gpsIsWorking) {
-			// NOTE - if this is the case we won't set it back to true becuase we don't attempt to save
+			// NOTE - if this is the case we won't set it back to true because we don't attempt to save
 			// Use device tab to reset gpsIsWorking
-			log.error("getPos: gpsIsWorking:"+gpsIsWorking);
+			log.error("getPos: gpsIsWorking:"+gpsIsWorking+", check app location settings");
 			return;
 		}
 
