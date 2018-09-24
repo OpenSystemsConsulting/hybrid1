@@ -2,8 +2,8 @@ angular.module('deviceCtrl', [])
 
 
 .controller('deviceCtrl', [
-'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', 'deviceService', 'network','fullreplication', '$cordovaNetwork',"appConfig",'siteService','$ionicPopup','siteConfig','messageService','jobService','sodService','jseaService','navigationService','BackgroundGeolocationService',
-function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, deviceService, network, fullreplication, $cordovaNetwork, appConfig, siteService, $ionicPopup,siteConfig,messageService, jobService, sodService, jseaService, navigationService, BackgroundGeolocationService) {
+'$rootScope', '$scope', '$state', 'TpmPdaController' , 'util', 'pdaParams', 'gpsService', 'cordovaReady','appService','pushService', 'deviceService', 'network','fullreplication', '$cordovaNetwork',"appConfig",'siteService','$ionicPopup','siteConfig','messageService','jobService','sodService','jseaService','navigationService','BackgroundGeolocationService','$cordovaInsomnia',
+function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsService , cordovaReady ,appService , pushService, deviceService, network, fullreplication, $cordovaNetwork, appConfig, siteService, $ionicPopup,siteConfig,messageService, jobService, sodService, jseaService, navigationService, BackgroundGeolocationService,$cordovaInsomnia) {
 
 	// TODO - maybe have array of key/value pairs - then can simply iterate with ng-repeat on template
 	var devicectrl = { };
@@ -244,5 +244,11 @@ function( $rootScope, $scope, $state, TpmPdaController, util, pdaParams, gpsServ
 		gpsService.setGpsIsWorking(torf);
 	}
 
+	$scope.keepAwake = function() {
+		$cordovaInsomnia.keepAwake();
+	}
+	$scope.allowSleepAgain = function() {
+		$cordovaInsomnia.allowSleepAgain();
+	}
 
 }]);
