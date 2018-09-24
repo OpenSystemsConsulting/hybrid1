@@ -103,8 +103,15 @@ function (gpsHistory,$cordovaGeolocation,pdaParams,Logger,$rootScope,gpsAudit) {
 			 * of its time processing those events
 			 * Which in turn triggered a getPos call which triggered the error again after pause/resume events
 			 */
-			gpsIsWorking = false;
-			log.error("getCurrentPosition failed, err:"+JSON.stringify(err));
+			// Update - only set gpsIsWorking false on the specific "Illegal Access" error
+			if( err.code === 1 && err.message === "Illegal Access")
+				gpsIsWorking = false;
+
+			// Apparently it's not possible to stringify an error object so dump code and message separately
+			// See https://stackoverflow.com/questions/18391212/is-it-not-possible-to-stringify-an-error-using-json-stringify
+			//log.error("getCurrentPosition failed, err:"+JSON.stringify(err));
+			//log.error("getCurrentPosition failed, err:"+err);
+			log.error("getCurrentPosition failed, err code:"+err.code+", message:"+err.message);
 		});
 	}
 	
