@@ -13,6 +13,8 @@ angular.module('JseaCtrl', [])
 	var pda_jsea_both_yn = siteConfig.getSiteConfigValue('PDA_JSEA_BOTH_YN') === 'Y';			// CCT
 	$scope.pda_jsea_both_yn = pda_jsea_both_yn;
 
+	var pda_jsea_no_no = siteConfig.getSiteConfigValue('PDA_JSEA_NO_NO') === 'Y';			// No 'no' answers allowed
+
 	if(pda_jsea_on != 'Y' && lpda_jsea_on != 'Y') {
 		var alertPopup = $ionicPopup.alert({
 			title: 'Module not installed',
@@ -239,50 +241,73 @@ angular.module('JseaCtrl', [])
 		var llen = $scope.jseaQuestions.length;
 
 		var checked;
-		if( !pda_jsea_both_yn)			// not checking both Y/N - old single radio button
-			return true;
 
-		// jdqCbox is a boolean and comes in by default as either true or more normally false
-		// The form will set the value to either 'Y' or 'N' once a radio button has been checked
-		for(var li = 0; li < llen; li++) {
-			checked = $scope.jseaQuestions[li].jdqCbox;
+		if(pda_jsea_both_yn)			// check both Y/N all answered
+		{
+			// jdqCbox is a boolean and comes in by default as either true or more normally false
+			// The form will set the value to either 'Y' or 'N' once a radio button has been checked
+			for(var li = 0; li < llen; li++) {
+				checked = $scope.jseaQuestions[li].jdqCbox;
 
-			if(checked !== 'N' && checked !== 'Y') {
-				// nothing explicitly checked so alert that all questions must be answered
-				var alertPopup = $ionicPopup.alert({
-					title: 'You must answer all questions',
-					template: $scope.jseaQuestions[li].jdqQuestionText
-				});
-				alertPopup.then(function(res) {
+				if(checked !== 'N' && checked !== 'Y') {
+					// nothing explicitly checked so alert that all questions must be answered
+					var alertPopup = $ionicPopup.alert({
+						title: 'You must answer all questions',
+						template: $scope.jseaQuestions[li].jdqQuestionText
+					});
+					alertPopup.then(function(res) {
+						return false;
+					});
 					return false;
-				});
-				return false;
+				}
+			}
+
+			for(var li = 0; li < llen; li++) {
+				var checked = $scope.jseaQuestions[li].jdqCbox;
+				if(checked === 'N' && ! $scope.jseaQuestions[li].jdqAllowNo) {
+					// 'N" has been checked on a question that does not allow it - alert
+					var confirmPopup = $ionicPopup.confirm({
+						title: 'Have you filled in a full paper JSEA?',
+						template: 'You have answered no to 1 or more questions that are not allowed to be no.  By clicking OK you are confirming that you have filled out a full PAPER JSEA'
+					});
+					confirmPopup.then(function(res) {
+						if(res) {
+							log.info('User has been warned and confirmed OK to submit');
+							jseaService.setJseaIsCaptured("Y");
+							//Handle Answers
+							doSubmitWork();
+							window.location.href = "#/tab/jobs";
+							return true;
+						} else {
+							log.debug('User has CANCELLED out of a Jsea session warning doing nothing');
+							return false;
+						}
+					});
+
+					return false;
+				}
 			}
 		}
+		else
+		if(pda_jsea_no_no)			// No 'no' answers allowed
+		{
+			// NOTE - very similar code to that in the 1st if above
+			// jdqCbox is a boolean and comes in by default as either true or more normally false
+			for(var li = 0; li < llen; li++) {
+				checked = $scope.jseaQuestions[li].jdqCbox;
 
-		for(var li = 0; li < llen; li++) {
-			var checked = $scope.jseaQuestions[li].jdqCbox;
-			if(checked === 'N' && ! $scope.jseaQuestions[li].jdqAllowNo) {
-				// 'N" has been checked on a question that does not allow it - alert
-				var confirmPopup = $ionicPopup.confirm({
-					title: 'Have you filled in a full paper JSEA?',
-					template: 'You have answered no to 1 or more questions that are not allowed to be no.  By clicking OK you are confirming that you have filled out a full PAPER JSEA'
-				});
-				confirmPopup.then(function(res) {
-					if(res) {
-						log.info('User has been warned and confirmed OK to submit');
-						jseaService.setJseaIsCaptured("Y");
-						//Handle Answers
-						doSubmitWork();
-						window.location.href = "#/tab/jobs";
-						return true;
-					} else {
-						log.debug('User has CANCELLED out of a Jsea session warning doing nothing');
+				if(checked !== true) {
+					// nothing explicitly checked so alert that all questions must be answered
+					var alertPopup = $ionicPopup.alert({
+						title: 'You must answer all questions',
+						subTitle: 'Please tick the following question',
+						template: $scope.jseaQuestions[li].jdqQuestionText
+					});
+					alertPopup.then(function(res) {
 						return false;
-					}
-				});
-
-				return false;
+					});
+					return false;
+				}
 			}
 		}
 

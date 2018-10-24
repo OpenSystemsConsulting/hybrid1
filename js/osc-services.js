@@ -1489,7 +1489,8 @@ $q.all([
 				'PDA_SHOW_CLIENT_NAME',
 				'PDA_JSEA_BOTH_YN',
 				'PDA_MANDATORY_NOTES',
-				'PDA_ATTACHED_DOCS'
+				'PDA_ATTACHED_DOCS',
+				'PDA_JSEA_NO_NO'
 			];
 
 	var g_siteconfigs = null;
