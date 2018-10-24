@@ -24497,6 +24497,14 @@ module.exports={
       "serverIP": "universal.opensyscon.com.au",
       "serverPort": 3062,
       "url": "http://universal.opensyscon.com.au:3062/api"
+    },
+    "rawroad": {
+      "connector": "remote",
+      "debug": "true",
+      "clientId": "RAWROAD",
+      "serverIP": "rawroad.opensyscon.com.au",
+      "serverPort": 3082,
+      "url": "http://rawroad.opensyscon.com.au:3082/api"
     }
   },
   "models": [

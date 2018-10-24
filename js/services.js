@@ -56,6 +56,8 @@ angular.module('services', [])
 				deferred.resolve(name);
 			} else if (name == 'univ' && pw == 'univ') {			// Universal
 				deferred.resolve(name);
+			} else if (name == 'rawroad' && pw == 'rawroad') {		// Raw Road
+				deferred.resolve(name);
 			// ----------------------------------------------------
 			} else {
 				deferred.reject('Wrong credentials.');
