@@ -12288,6 +12288,8 @@ var MyApp = /** @class */ (function () {
                 _this.messageService.startWatching();
                 //Start monitoring the device diagnostics
                 _this.deviceDiagnosticService.startWatching();
+                //hide splashscreen
+                _this.splashScreen.hide();
             });
             //8. If driverid > 0, redirect to jobs page
             if (_this.pdaParams.getDriverId() > 0) {
@@ -12308,6 +12310,7 @@ var MyApp = /** @class */ (function () {
             localStorage.clear();
             //Set the firstime login variable
             localStorage.setItem('firstlogin', 'true');
+            this.splashScreen.hide();
             //Direct him to the login page..
             this.rootPage = "LoginPage";
             return;
