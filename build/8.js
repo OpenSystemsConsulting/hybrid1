@@ -52,6 +52,7 @@ var LoginPageModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_login_service_login_service__ = __webpack_require__(467);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_splash_screen__ = __webpack_require__(206);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -66,6 +67,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /**
  * Generated class for the LoginPage page.
  *
@@ -73,11 +75,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * on Ionic pages and navigation.
  */
 var LoginPage = /** @class */ (function () {
-    function LoginPage(loginService, alertCtrl, sharedService) {
+    function LoginPage(loginService, alertCtrl, sharedService, splashScreen) {
         //console.log("LoginPage loading...");
         this.loginService = loginService;
         this.alertCtrl = alertCtrl;
         this.sharedService = sharedService;
+        this.splashScreen = splashScreen;
         this.ngUnsubscribe = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__["Subject"]();
         this.registerCredentials = { username: '', password: '' };
         this.allowed = false;
@@ -114,6 +117,7 @@ var LoginPage = /** @class */ (function () {
                 //Set the clientid         
                 localStorage.setItem('userId', _this.registerCredentials.username);
                 //Redirect to the root app component.
+                _this.splashScreen.show();
                 document.location.href = 'index.html';
             }
             else {
@@ -140,7 +144,7 @@ var LoginPage = /** @class */ (function () {
             selector: 'page-login',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/login/login.html"*/'<!--\n\n  Generated template for the LoginPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n  <ion-navbar color="primary">\n\n    <ion-title>LOGIN</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<!--https://devdactic.com/login-ionic-2/ -->\n\n\n\n<ion-content padding text-wrap>\n\n \n\n    <ion-row style="text-align: center">\n\n      <ion-col>\n\n        <img src="assets/OSC_300_150.jpg" />\n\n      </ion-col>\n\n    </ion-row>\n\n\n\n    <form (ngSubmit)="login()" #registerForm="ngForm">\n\n      <ion-row>\n\n        <ion-col>\n\n          <ion-list-header class="login-header" color="primary">Welcome to the TPLUS Mobile Application.\n\n          </ion-list-header>\n\n          <ion-list inset no-lines>\n\n            <ion-item>\n\n              <ion-input type="text" placeholder="Username" name="username" [(ngModel)]="registerCredentials.username"\n\n                required></ion-input>\n\n            </ion-item>\n\n            <ion-item>\n\n              <ion-input type="password" placeholder="Password" name="password"\n\n                [(ngModel)]="registerCredentials.password" required></ion-input>\n\n            </ion-item>\n\n            <p>Note: Usernames and passwords are case-sensitive.</p>\n\n          </ion-list>\n\n        </ion-col>\n\n      </ion-row>\n\n\n\n      <ion-row>\n\n        <ion-col>\n\n          <button ion-button color="secondary" full round full type="submit" [disabled]="!registerForm.form.valid">\n\n            <ion-icon name="log-in" style="font-size:20px;color:white;text-shadow:2px 2px 4px #000000;"> L/ON</ion-icon>\n\n          </button>\n\n          <br>\n\n          <ion-list-header class="login-header" color="primary">Open Systems Consulting © 2019\n\n          </ion-list-header>\n\n        </ion-col>\n\n      </ion-row>\n\n    </form>\n\n  \n\n\n\n</ion-content>'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/login/login.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__providers_login_service_login_service__["a" /* LoginServiceProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */],
-            __WEBPACK_IMPORTED_MODULE_4__providers_shared_service_shared_service__["a" /* SharedServiceProvider */]])
+            __WEBPACK_IMPORTED_MODULE_4__providers_shared_service_shared_service__["a" /* SharedServiceProvider */], __WEBPACK_IMPORTED_MODULE_5__ionic_native_splash_screen__["a" /* SplashScreen */]])
     ], LoginPage);
     return LoginPage;
 }());
