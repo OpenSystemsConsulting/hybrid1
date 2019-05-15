@@ -116,8 +116,8 @@ var LoginPage = /** @class */ (function () {
                 }
                 //Set the clientid         
                 localStorage.setItem('userId', _this.registerCredentials.username);
+                //this.splashScreen.show();
                 //Redirect to the root app component.
-                _this.splashScreen.show();
                 document.location.href = 'index.html';
             }
             else {
