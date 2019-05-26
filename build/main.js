@@ -158,11 +158,11 @@ var GpsHistoryApi = /** @class */ (function (_super) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MessageServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_sdk_services__ = __webpack_require__(84);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__fixed_queue_service_fixed_queue_service__ = __webpack_require__(174);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__device_service_device_service__ = __webpack_require__(204);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__fixed_queue_service_fixed_queue_service__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__device_service_device_service__ = __webpack_require__(205);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__log_service_log_service__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__job_service_job_service__ = __webpack_require__(119);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__job_service_job_service__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__util_service_util_service__ = __webpack_require__(55);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -226,7 +226,7 @@ var MessageServiceProvider = /** @class */ (function () {
         return true;
     };
     MessageServiceProvider.prototype.dumpLocalStorage = function () {
-        this.log.info("======================DUMPING LOCAL STORAGE --STARTS =========================");
+        this.log.info("DUMPING LOCAL STORAGE --STARTS");
         var logmsg = {};
         var dblist = ['osc-local-db', 'osc-driver-info', 'osc-push-credentials'];
         var len = dblist.length;
@@ -236,14 +236,16 @@ var MessageServiceProvider = /** @class */ (function () {
         for (var i = 0; i < len; i++) {
             var key = localStorage.key(i);
             var value = localStorage[key];
-            logmsg.type = 'dumpLocalStorage:' + key;
-            if (this.isJson(value))
-                logmsg.data = JSON.parse(value);
-            else
-                logmsg.data = value;
-            this.log.info(logmsg);
+            if (key != 'jobMetadata') {
+                logmsg.type = 'dumpLocalStorage:' + key;
+                if (this.isJson(value))
+                    logmsg.data = JSON.parse(value);
+                else
+                    logmsg.data = value;
+                this.log.info(logmsg);
+            }
         }
-        this.log.info("======================DUMPING LOCAL STORAGE --ENDS =========================");
+        this.log.info("DUMPING LOCAL STORAGE --ENDS");
     };
     MessageServiceProvider.prototype.clearLocalStorage = function () {
         var logmsg = {};
@@ -670,7 +672,7 @@ var JseaServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__fixed_queue_service_fixed_queue_service__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__fixed_queue_service_fixed_queue_service__ = __webpack_require__(176);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -743,7 +745,7 @@ var GpsAuditServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_service_util_service__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -833,7 +835,7 @@ var ConnectivityMonitorProvider = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_4__util_service_util_service__["a" /* UtilServiceProvider */], __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__["a" /* LogServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_network__["a" /* Network */], __WEBPACK_IMPORTED_MODULE_7__providers_shared_service_shared_service__["a" /* SharedServiceProvider */]])
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_network__["a" /* Network */], __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__["a" /* SharedServiceProvider */]])
     ], ConnectivityMonitorProvider);
     return ConnectivityMonitorProvider;
 }());
@@ -846,11 +848,15 @@ var ConnectivityMonitorProvider = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobServiceProvider; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BackgroundGeolocationServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_sdk_models_GpsHistory__ = __webpack_require__(97);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk_services_custom_GpsHistory__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gps_audit_service_gps_audit_service__ = __webpack_require__(116);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_device__ = __webpack_require__(54);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -861,77 +867,242 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+//import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation';
+
+
+
+
 
 
 
 /*
-  Generated class for the JobServiceProvider provider.
-
+  Generated class for the BackgroundGeolocationServiceProvider provider.
   See https://angular.io/docs/ts/latest/guide/dependency-injection.html
   for more info on providers and Angular DI.
 */
-var JobServiceProvider = /** @class */ (function () {
-    function JobServiceProvider(logger, pdaParams, siteConfig) {
-        this.logger = logger;
-        this.pdaParams = pdaParams;
-        this.siteConfig = siteConfig;
-        this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'JobServiceProvider' };
-        this.log = this.logger.getInstance(this.logParams);
-        this.jobs = [];
-        this.Job = lbclient.models.LocalJob;
-        //console.log('Hello JobServiceProvider Provider');
-    }
-    JobServiceProvider.prototype.deleteOldJobs = function (daysback) {
+var BackgroundGeolocationServiceProvider = /** @class */ (function () {
+    function BackgroundGeolocationServiceProvider(pdaParams, logger, gpsAudit, gpsHistApi, platform, device) {
         var _this = this;
-        // delete old jobs
-        // if daysback parameter provided use it otherwise use site config value
-        var val = this.siteConfig.getSiteConfigInt('PDA_DEL_DAYSBACK'); //then(function (val) {
-        daysback = daysback || val;
-        var queryDate = new Date();
-        queryDate.setDate(queryDate.getDate() - daysback);
-        this.log.info("deleteOldJobs: daysback:" + daysback + ", queryDate:" + queryDate);
-        //console.log("deleteOldJobs: daysback:" + daysback + ", queryDate:" + queryDate);
-        if (daysback > 1) {
-            var delfilter = { "where": { "mobjobBookingDay": { "lt": queryDate } } };
-            this.log.info("deleteOldJobs: delfilter:" + JSON.stringify(delfilter));
-            this.Job.find(delfilter, function (err, jobs) {
-                _this.jobs = jobs;
-                var len = _this.jobs.length;
-                _this.log.info("deleteOldJobs: deleting:" + len + " job legs");
-                //console.log("deleteOldJobs: deleting:" + len + " job legs");
-                for (var leg = 0; leg < len; leg++) {
-                    _this.job = _this.jobs[leg];
-                    _this.log.info("deleteOldJobs: delete leg:" + leg + " job:" + _this.job.mobjobSeq + " with job number:" + _this.job.mobjobNumber);
-                    //Riyaz: Deletes jobs from the local storage. 
-                    _this.job.delete();
-                    _this.deleteJseaStatuses(_this.job.mobjobNumber);
+        this.pdaParams = pdaParams;
+        this.logger = logger;
+        this.gpsAudit = gpsAudit;
+        this.gpsHistApi = gpsHistApi;
+        this.platform = platform;
+        this.device = device;
+        // GPS timestamps are in milliseconds since epoch - iOS also has a fractional part
+        // e.g. iOS:		1463707063130.011
+        // e.g. Android:	1463707069003
+        // Site for millisecond calcs and conversions: http://currentmillis.com/
+        this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'BackgroundGeolocationServiceProvider' };
+        this.log = this.logger.getInstance(this.logParams);
+        this.lastGPSsecs = 0; // last timestamp in seconds
+        this.thisGPSsecs = 0; // this timestamp in seconds
+        this.diffGPSsecs = 0;
+        this.threshold = 1; // diff between gps must be greater than this to save
+        this.setEvents = function () {
+            _this.configureBggs();
+            _this.plt.ready().then(function (readySource) {
+                _this.osplatform = _this.device.platform;
+                if (_this.osplatform != null) {
+                    _this.osplatform = _this.osplatform.toLowerCase();
+                    window.BackgroundGeolocation.on('location', function (location) {
+                        // handle your locations here 
+                        // to perform long running operation on iOS
+                        // you need to create background task
+                        if (_this.osplatform.localeCompare('ios') == 0) {
+                            window.BackgroundGeolocation.startTask(function (taskKey) {
+                                // execute long running task
+                                //this.log.info('Calling saveGpsToDb: location:' + JSON.stringify(location));
+                                _this.saveGpsToDb(_this.pdaParams.getDriverId(), location);
+                                // eg. ajax post location
+                                // IMPORTANT: task has to be ended by endTask
+                                window.BackgroundGeolocation.endTask(taskKey);
+                            });
+                        }
+                        else {
+                            //this.log.info('Calling saveGpsToDb: location:' + JSON.stringify(location));
+                            _this.log.info("BGGS: Calling saveGpsToDb.");
+                            _this.saveGpsToDb(_this.pdaParams.getDriverId(), location);
+                        }
+                    });
+                    window.BackgroundGeolocation.on('stationary', function (stationaryLocation) {
+                        // handle stationary locations here
+                        _this.log.info('  BackgroundGeolocation location is stationary.');
+                    });
+                    window.BackgroundGeolocation.on('error', function (error) {
+                        _this.log.debug('  BackgroundGeolocation error:' + error.code + " ,error message:" + error.message);
+                    });
+                    window.BackgroundGeolocation.on('start', function () {
+                        _this.log.info('  BackgroundGeolocation service has been started');
+                    });
+                    window.BackgroundGeolocation.on('stop', function () {
+                        _this.log.info('  BackgroundGeolocation service has been stopped');
+                    });
+                    window.BackgroundGeolocation.on('background', function () {
+                        _this.log.info('  App is in background');
+                        // you can also reconfigure service (changes will be applied immediately)
+                        //  (<any>window).BackgroundGeolocation.configure({ debug: true });
+                    });
+                    window.BackgroundGeolocation.on('foreground', function () {
+                        _this.log.info('  App is in foreground');
+                        // (<any>window).BackgroundGeolocation.configure({ debug: false });
+                    });
+                }
+            }); //End of platformReady fn  
+        }; //setEvents() ends
+        this.configureBggs = function () {
+            // defaults for background gps   
+            _this.pdaParams.gps_stopOnTerminate = true;
+            _this.pdaParams.gps_debug = false;
+            _this.pdaParams.gps_desiredAccuracy = 10;
+            _this.pdaParams.gps_stationaryRadius = 20;
+            _this.pdaParams.gps_activityType = 'AutomotiveNavigation';
+            _this.pdaParams.gps_distanceFilter = 30;
+            _this.pdaParams.gps_interval = 60000; // use this in milliseconds instead   
+            _this.pdaParams.gps_fastestInterval = 30000;
+            _this.pdaParams.gps_activitiesInterval = 60000;
+            _this.pdaParams.gps_stopOnStillActivity = false;
+            _this.plt.ready().then(function (readySource) {
+                _this.osplatform = _this.device.platform;
+                if (_this.osplatform != null) {
+                    _this.osplatform = _this.osplatform.toLowerCase();
+                    if (_this.osplatform.localeCompare('ios') == 0) {
+                        window.BackgroundGeolocation.configure({
+                            locationProvider: window.BackgroundGeolocation.DISTANCE_FILTER_PROVIDER,
+                            desiredAccuracy: _this.pdaParams.gps_desiredAccuracy,
+                            distanceFilter: _this.pdaParams.gps_distanceFilter,
+                            stationaryRadius: _this.pdaParams.gps_stationaryRadius,
+                            activityType: _this.pdaParams.gps_activityType,
+                            debug: _this.pdaParams.gps_debug,
+                            stopOnTerminate: _this.pdaParams.gps_stopOnTerminate // <-- enable this to clear background location settings when the app terminates
+                        });
+                    }
+                    else {
+                        window.BackgroundGeolocation.configure({
+                            locationProvider: window.BackgroundGeolocation.ACTIVITY_PROVIDER,
+                            desiredAccuracy: _this.pdaParams.gps_desiredAccuracy,
+                            stationaryRadius: _this.pdaParams.gps_stationaryRadius,
+                            distanceFilter: _this.pdaParams.gps_distanceFilter,
+                            interval: _this.pdaParams.gps_interval,
+                            debug: _this.pdaParams.gps_debug,
+                            stopOnTerminate: _this.pdaParams.gps_stopOnTerminate,
+                            fastestInterval: _this.pdaParams.gps_fastestInterval,
+                            activitiesInterval: _this.pdaParams.gps_activitiesInterval,
+                            stopOnStillActivity: _this.pdaParams.gps_stopOnStillActivity //ANDROID ONLY--stop() is forced, when the STILL activity is detected (default is true)
+                        });
+                    }
                 }
             });
-        }
-    };
-    JobServiceProvider.prototype.deleteJseaStatuses = function (jobNumber) {
-        // check local storage for PICKUP and DELIVER statuses for this job and delete if found
-        var key;
-        var statuses = ['PICKUP', 'DELIVER'];
-        var len = statuses.length;
-        for (var i = 0; i < len; i++) {
-            key = jobNumber + '-' + statuses[i];
-            var lstr = localStorage.getItem(key);
-            if (lstr) {
-                localStorage.removeItem(key);
+        };
+        this.saveGpsToDb = function (drvid, location) {
+            //GpsHistory() is a call to the GpsHistory model
+            var lgps = new __WEBPACK_IMPORTED_MODULE_2__shared_sdk_models_GpsHistory__["a" /* GpsHistory */]();
+            lgps.gps_driver_id = drvid;
+            //var platform = $cordovaDevice.getPlatform();
+            //this.log.info("BGGS platform:" + this.device_platform + ", location:" + JSON.stringify(location));
+            // LT - 06/07/2016 - with 2.52 release iOS devices do not appear to have a location.timestamp property
+            // but do have the location.time property - check for both
+            if (_this.osplatform.localeCompare('ios') == 0) {
+                if (location.timestamp) {
+                    lgps.gps_timestamp = location.timestamp;
+                }
+                else if (location.time) {
+                    lgps.gps_timestamp = location.time;
+                }
+                else {
+                    // lgps.gps_timestamp = Date.now();
+                    lgps.gps_timestamp = new Date();
+                    _this.log.error("BGGS: no time provided so use now:" + lgps.gps_timestamp);
+                }
+                lgps.gps_heading = 0; // IOS Has a heading if u want to use it later
             }
-        }
-    };
-    JobServiceProvider = __decorate([
+            else {
+                lgps.gps_timestamp = location.time;
+                lgps.gps_heading = 0; // Android has a bearing if u want to use it later
+            }
+            //this.log.info("lgps.gps_timestamp:: " + lgps.gps_timestamp);
+            _this.ltimestamp = new Date(lgps.gps_timestamp);
+            //this.log.info("this.ltimestamp:: " + this.ltimestamp);
+            // check last GPS and only update if diff is greater than x seconds
+            _this.thisGPSsecs = _this.ltimestamp.getTime() / 1000; // current GPS time in seconds
+            _this.diffGPSsecs = _this.thisGPSsecs - _this.lastGPSsecs;
+            _this.lastGPSsecs = _this.ltimestamp.getTime() / 1000;
+            // lgps.gps_timestamp is UTC at this point
+            //var ldate = new Date(lgps.gps_timestamp);
+            //var oset = ldate.getTimezoneOffset();
+            // lgps.gps_timestamp converted to local time - no timezone now
+            //var temp: any = this.ltimestamp.getTime() + (oset * -1) * 60 * 1000;
+            //this.log.info("temp:::" + temp);
+            //this.log.info("temp with offset::" + this.ltimestamp.getTime() + (oset * -1) * 60 * 1000);
+            if (location.speed !== null && location.speed !== undefined)
+                lgps.gps_speed = location.speed;
+            else
+                lgps.gps_speed = 0;
+            lgps.gps_timestamp = _this.ltimestamp;
+            lgps.gps_latitude = location.latitude;
+            lgps.gps_longitude = location.longitude;
+            lgps.gps_quality = location.accuracy;
+            lgps.gps_time = 0; //location.time;
+            // TODO - need to NOT rely on log - need our own access to this function
+            var loggedOn = _this.log.pdaParams.isDrvLoggedOn();
+            //this.log.info("BGGS driver:" + lgps.gps_driver_id + ", loggedOn:" + loggedOn + ", lgps:" + JSON.stringify(lgps));
+            _this.gpsAudit.saveGps(lgps);
+            //Riyaz:Now change the lgps.timestamp to oracle date, before saving it to the oracle DB.
+            //lgps.gps_timestamp = new Date(lgps.gps_timestamp.valueOf());
+            // TODO - do we need any more criteria to create history record?  if connected?
+            if (lgps.gps_driver_id > 0 && _this.diffGPSsecs > _this.threshold && loggedOn) {
+                // this.log.info("About to save BGGS GPS for driver:" + lgps.gps_driver_id + ", lgps:" + JSON.stringify(lgps));
+                _this.gpsHistApi.create(lgps).subscribe(function (obj) {
+                    _this.log.info("gpsHistApi.create success for BGGS: obj:" + JSON.stringify(obj));
+                }, function (err) {
+                    _this.log.error("gpsHistApi.create failed for BGGS: err:" + JSON.stringify(err));
+                });
+            }
+        }; //saveGpsToDb() ends here
+        /*=====================================================*/
+        /*             START METHOD                            */
+        /*=====================================================*/
+        this.start = function () {
+            _this.configureBggs();
+            // start recording location
+            _this.log.info("BGGS about to start...");
+            window.BackgroundGeolocation.start();
+        };
+        /*=====================================================*/
+        /*             STOP METHOD                            */
+        /*=====================================================*/
+        this.stop = function () {
+            // If we wish to turn OFF background-tracking, we can call the #stop method.
+            _this.log.info('BGGS STOP Method called:');
+            window.BackgroundGeolocation.stop();
+        };
+        this.bggs_print_configuration = function () {
+            _this.log.info("=====================================================================");
+            _this.log.info("this.pdaParams.gps_locationProvider::" + _this.pdaParams.gps_locationProvider);
+            _this.log.info("this.pdaParams.gps_activityType::" + _this.pdaParams.gps_activityType);
+            _this.log.info("this.pdaParams.gps_debug::" + _this.pdaParams.gps_debug);
+            //this.log.info("this.pdaParams.gps_desiredAccuracy::" + this.pdaParams.gps_desiredAccuracy);
+            _this.log.info("this.pdaParams.gps_distanceFilter::" + _this.pdaParams.gps_distanceFilter);
+            _this.log.info("this.pdaParams.gps_interval::" + _this.pdaParams.gps_interval);
+            _this.log.info("this.pdaParams.gps_stationaryRadius::" + _this.pdaParams.gps_stationaryRadius);
+            _this.log.info("this.pdaParams.gps_stopOnTerminate::" + _this.pdaParams.gps_stopOnTerminate);
+            _this.log.info("=====================================================================");
+        };
+        this.plt = platform;
+        //console.log('Hello BackgroundGeolocationServiceProvider Provider');
+        //Configure BackgroundGeolocation and set events
+        this.setEvents();
+    } //End of constructor
+    BackgroundGeolocationServiceProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__log_service_log_service__["a" /* LogServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_3__siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */]])
-    ], JobServiceProvider);
-    return JobServiceProvider;
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__["a" /* LogServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_4__gps_audit_service_gps_audit_service__["a" /* GpsAuditServiceProvider */], __WEBPACK_IMPORTED_MODULE_3__shared_sdk_services_custom_GpsHistory__["a" /* GpsHistoryApi */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */], __WEBPACK_IMPORTED_MODULE_7__ionic_native_device__["a" /* Device */]])
+    ], BackgroundGeolocationServiceProvider);
+    return BackgroundGeolocationServiceProvider;
 }());
 
-//# sourceMappingURL=job-service.js.map
+//# sourceMappingURL=background-geolocation-service.js.map
 
 /***/ }),
 
@@ -1044,6 +1215,99 @@ var LoopBackConfig = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobServiceProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+/*
+  Generated class for the JobServiceProvider provider.
+
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular DI.
+*/
+var JobServiceProvider = /** @class */ (function () {
+    function JobServiceProvider(logger, pdaParams, siteConfig) {
+        this.logger = logger;
+        this.pdaParams = pdaParams;
+        this.siteConfig = siteConfig;
+        this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'JobServiceProvider' };
+        this.log = this.logger.getInstance(this.logParams);
+        this.jobs = [];
+        this.Job = lbclient.models.LocalJob;
+        //console.log('Hello JobServiceProvider Provider');
+    }
+    JobServiceProvider.prototype.deleteOldJobs = function (daysback) {
+        var _this = this;
+        // delete old jobs
+        // if daysback parameter provided use it otherwise use site config value
+        var val = this.siteConfig.getSiteConfigInt('PDA_DEL_DAYSBACK'); //then(function (val) {
+        daysback = daysback || val;
+        var queryDate = new Date();
+        queryDate.setDate(queryDate.getDate() - daysback);
+        this.log.info("deleteOldJobs: daysback:" + daysback + ", queryDate:" + queryDate);
+        //console.log("deleteOldJobs: daysback:" + daysback + ", queryDate:" + queryDate);
+        if (daysback > 1) {
+            var delfilter = { "where": { "mobjobBookingDay": { "lt": queryDate } } };
+            this.log.info("deleteOldJobs: delfilter:" + JSON.stringify(delfilter));
+            this.Job.find(delfilter, function (err, jobs) {
+                _this.jobs = jobs;
+                var len = _this.jobs.length;
+                _this.log.info("deleteOldJobs: deleting:" + len + " job legs");
+                //console.log("deleteOldJobs: deleting:" + len + " job legs");
+                for (var leg = 0; leg < len; leg++) {
+                    _this.job = _this.jobs[leg];
+                    _this.log.info("deleteOldJobs: delete leg:" + leg + " job:" + _this.job.mobjobSeq + " with job number:" + _this.job.mobjobNumber);
+                    //Riyaz: Deletes jobs from the local storage. 
+                    _this.job.delete();
+                    _this.deleteJseaStatuses(_this.job.mobjobNumber);
+                }
+            });
+        }
+    };
+    JobServiceProvider.prototype.deleteJseaStatuses = function (jobNumber) {
+        // check local storage for PICKUP and DELIVER statuses for this job and delete if found
+        var key;
+        var statuses = ['PICKUP', 'DELIVER'];
+        var len = statuses.length;
+        for (var i = 0; i < len; i++) {
+            key = jobNumber + '-' + statuses[i];
+            var lstr = localStorage.getItem(key);
+            if (lstr) {
+                localStorage.removeItem(key);
+            }
+        }
+    };
+    JobServiceProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__log_service_log_service__["a" /* LogServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_3__siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */]])
+    ], JobServiceProvider);
+    return JobServiceProvider;
+}());
+
+//# sourceMappingURL=job-service.js.map
+
+/***/ }),
+
+/***/ 121:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
@@ -1124,6 +1388,187 @@ var EventServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
+/***/ 122:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DeviceDiagnosticServiceProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_diagnostic__ = __webpack_require__(414);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_DeviceDiagnostics__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk_services_custom_DeviceDiagnostics__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_device__ = __webpack_require__(54);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+
+/*
+  Generated class for the DeviceDiagnosticServiceProvider provider.
+
+  See https://angular.io/guide/dependency-injection for more info on providers
+  and Angular DI.
+*/
+var DeviceDiagnosticServiceProvider = /** @class */ (function () {
+    function DeviceDiagnosticServiceProvider(pdaParams, logger, diagnostic, siteConfig, deviceDiagnosticsApi, platform, device, sharedService) {
+        var _this = this;
+        this.pdaParams = pdaParams;
+        this.logger = logger;
+        this.diagnostic = diagnostic;
+        this.siteConfig = siteConfig;
+        this.deviceDiagnosticsApi = deviceDiagnosticsApi;
+        this.platform = platform;
+        this.device = device;
+        this.sharedService = sharedService;
+        this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'DeviceDiagnosticServiceProvider' };
+        this.log = this.logger.getInstance(this.logParams);
+        this.driverId = 0;
+        this.lastPingTimestamp = new Date();
+        this.isLocationAvailable = false;
+        this.isLocationEnabled = false;
+        this.isGpsLocationAvailable = false;
+        this.isGpsLocationEnabled = false;
+        this.isNetworkLocationAvailable = false;
+        this.isNetworkLocationEnabled = false;
+        this.getLocationMode = "Location off";
+        this.isLocationAuthorized = false;
+        this.isWifiAvailable = false;
+        this.isWifiEnabled = false;
+        this.runDiagnostics = function () {
+            _this.platform.ready().then(function (readySource) {
+                if (_this.platform.is('cordova')) {
+                    var errorCallback = function (diagFn) { return _this.log.error(diagFn + " : failed to diagnose from the device."); };
+                    _this.diagnostic.isLocationAvailable().then(function (val) { _this.isLocationAvailable = val; }, function () { });
+                    _this.diagnostic.isLocationEnabled().then(function (val) { _this.isLocationEnabled = val; }, function () { });
+                    _this.diagnostic.isGpsLocationAvailable().then(function (val) { _this.isGpsLocationAvailable = val; }, function () { });
+                    _this.diagnostic.isGpsLocationEnabled().then(function (val) { _this.isGpsLocationEnabled = val; }, function () { });
+                    _this.diagnostic.isNetworkLocationAvailable().then(function (val) { _this.isNetworkLocationAvailable = val; }, function () { });
+                    _this.diagnostic.isNetworkLocationEnabled().then(function (val) { _this.isNetworkLocationEnabled = val; }, function () { });
+                    _this.diagnostic.isLocationAuthorized().then(function (val) { _this.isLocationAuthorized = val; }, function () { });
+                    _this.diagnostic.isWifiAvailable().then(function (val) { _this.isWifiAvailable = val; }, function () { });
+                    _this.diagnostic.isWifiEnabled().then(function (val) { _this.isWifiEnabled = val; }, function () { });
+                    if (!_this.platform.is('ios')) {
+                        _this.diagnostic.getLocationMode()
+                            .then(function (locationMode) {
+                            switch (locationMode) {
+                                case _this.diagnostic.locationMode.HIGH_ACCURACY:
+                                    _this.getLocationMode = "High accuracy";
+                                    // console.log("High accuracy");
+                                    break;
+                                case _this.diagnostic.locationMode.BATTERY_SAVING:
+                                    _this.getLocationMode = "Battery saving";
+                                    //console.log("Battery saving");
+                                    break;
+                                case _this.diagnostic.locationMode.DEVICE_ONLY:
+                                    _this.getLocationMode = "Device only";
+                                    //console.log("Device only");
+                                    break;
+                                case _this.diagnostic.locationMode.LOCATION_OFF:
+                                    _this.getLocationMode = "Location off";
+                                    //console.log("Location off");
+                                    break;
+                            }
+                        }).catch(function (e) { return console.error(e); });
+                    }
+                    else
+                        _this.getLocationMode = "Not Available";
+                }
+            });
+        };
+        this.diagnosticPoller = function () {
+            _this.runDiagnostics();
+            var dd = new __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_DeviceDiagnostics__["a" /* DeviceDiagnostics */]();
+            dd.driverId = _this.pdaParams.getDriverId();
+            var lastPingDate = new Date();
+            _this.lastPingTimestamp = new Date(lastPingDate.getTime());
+            dd.lastPingTimestamp = _this.lastPingTimestamp;
+            dd.getLocationMode = _this.getLocationMode;
+            dd.isGpsLocationAvailable = _this.isGpsLocationAvailable;
+            dd.isGpsLocationEnabled = _this.isGpsLocationEnabled;
+            dd.isLocationAuthorized = _this.isLocationAuthorized;
+            dd.isLocationAvailable = _this.isLocationAvailable;
+            dd.isLocationEnabled = _this.isLocationEnabled;
+            dd.isNetworkLocationAvailable = _this.isNetworkLocationAvailable;
+            dd.isNetworkLocationEnabled = _this.isNetworkLocationEnabled;
+            dd.isWifiAvailable = _this.isWifiAvailable;
+            dd.isWifiEnabled = _this.isWifiEnabled;
+            _this.localStorageUsage();
+            _this.deviceDiagnosticsApi.upsert(dd).subscribe(function (obj) {
+                _this.log.info("deviceDiagnosticsApi.create success : " + JSON.stringify(obj));
+            }, function (err) {
+                _this.log.error("deviceDiagnosticsApi.create failed : " + JSON.stringify(err));
+            });
+        };
+        console.log('Hello DeviceDiagnosticServiceProvider Provider');
+        this.pda_disable_device_diagnostics = (this.pdaParams.pda_disable_device_diagnostics || (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DEVICE_DIAGNOSTICS') == 'Y'));
+        if (!this.pda_disable_device_diagnostics)
+            this.runDiagnostics();
+    }
+    DeviceDiagnosticServiceProvider.prototype.localStorageUsage = function () {
+        var x, xLen, usage = 0;
+        for (x in localStorage) {
+            if (!localStorage.hasOwnProperty(x)) {
+                continue;
+            }
+            xLen = ((localStorage[x].length * 2 + x.length * 2) / 1024);
+            usage += xLen;
+        }
+        ;
+        if (usage > 1024) {
+            this.log.info("LocalStorage used by the app is ::" + (usage / 1024).toFixed(2) + " MB");
+        }
+        else {
+            this.log.info("LocalStorage used by the app is ::" + usage.toFixed(2) + " KB");
+        }
+        ;
+    };
+    DeviceDiagnosticServiceProvider.prototype.stopDiagnostics = function () {
+        this.log.info("Stopping device diagnostics...");
+        //if (!this.pda_disable_device_diagnostics) {
+        this.sharedService.isDiagnosticsRunning = false;
+        clearInterval(this.intrval);
+        //}
+    };
+    DeviceDiagnosticServiceProvider.prototype.startWatching = function () {
+        //Call the Poller every minute
+        this.pda_disable_device_diagnostics = (this.pdaParams.pda_disable_device_diagnostics || (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DEVICE_DIAGNOSTICS') == 'Y'));
+        if (!this.pda_disable_device_diagnostics) {
+            this.sharedService.isDiagnosticsRunning = true;
+            this.intrval = setInterval(this.diagnosticPoller, 60000);
+        }
+    };
+    DeviceDiagnosticServiceProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__["a" /* LogServiceProvider */], __WEBPACK_IMPORTED_MODULE_1__ionic_native_diagnostic__["a" /* Diagnostic */],
+            __WEBPACK_IMPORTED_MODULE_7__siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_4__shared_sdk_services_custom_DeviceDiagnostics__["a" /* DeviceDiagnosticsApi */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["l" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_9__ionic_native_device__["a" /* Device */], __WEBPACK_IMPORTED_MODULE_8__shared_service_shared_service__["a" /* SharedServiceProvider */]])
+    ], DeviceDiagnosticServiceProvider);
+    return DeviceDiagnosticServiceProvider;
+}());
+
+//# sourceMappingURL=device-diagnostic-service.js.map
+
+/***/ }),
+
 /***/ 13:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1188,6 +1633,7 @@ var PdaparamsServiceProvider = /** @class */ (function () {
             this.jobDetailOneDayOnly = false;
         else
             this.jobDetailOneDayOnly = true;
+        //this.pda_disable_diagnostics_bgps_on_logoff = (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DIAGNOSTICS_BGPS_ON_LOGOFF') == 'Y');
     } //Constructor ends
     PdaparamsServiceProvider.prototype.getParams = function () {
         this.localdriver = JSON.parse(localStorage.getItem('osc-driver-info')) || this.localdriver;
@@ -1298,7 +1744,7 @@ var PdaparamsServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoopBackAuth; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__storage_storage_swaps__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__storage_storage_swaps__ = __webpack_require__(151);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_BaseModels__ = __webpack_require__(268);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1483,7 +1929,102 @@ var LoopBackAuth = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 149:
+/***/ 15:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SDKModels; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_Job__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_JobChange__ = __webpack_require__(269);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_TpmPdaController__ = __webpack_require__(270);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_GpsHistory__ = __webpack_require__(97);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_Application__ = __webpack_require__(271);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_Installation__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__models_Notification__ = __webpack_require__(272);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_Push__ = __webpack_require__(273);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__models_Mobile_event__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__models_SiteConfig__ = __webpack_require__(275);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__models_DespatchToDriverMessages__ = __webpack_require__(276);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__models_JseaDriverQuestions__ = __webpack_require__(277);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__models_JseaDriverAnswers__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__models_JseaDriverAnswersChange__ = __webpack_require__(278);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__models_Photocontainer__ = __webpack_require__(279);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__models_Image__ = __webpack_require__(280);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__models_BarcodeHist__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__models_BarcodeHistChange__ = __webpack_require__(281);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__models_DeviceDiagnostics__ = __webpack_require__(156);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+/* tslint:disable */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var SDKModels = /** @class */ (function () {
+    function SDKModels() {
+        this.models = {
+            Job: __WEBPACK_IMPORTED_MODULE_1__models_Job__["a" /* Job */],
+            JobChange: __WEBPACK_IMPORTED_MODULE_2__models_JobChange__["a" /* JobChange */],
+            TpmPdaController: __WEBPACK_IMPORTED_MODULE_3__models_TpmPdaController__["a" /* TpmPdaController */],
+            GpsHistory: __WEBPACK_IMPORTED_MODULE_4__models_GpsHistory__["a" /* GpsHistory */],
+            Application: __WEBPACK_IMPORTED_MODULE_5__models_Application__["a" /* Application */],
+            Installation: __WEBPACK_IMPORTED_MODULE_6__models_Installation__["a" /* Installation */],
+            Notification: __WEBPACK_IMPORTED_MODULE_7__models_Notification__["a" /* Notification */],
+            Push: __WEBPACK_IMPORTED_MODULE_8__models_Push__["a" /* Push */],
+            Mobile_event: __WEBPACK_IMPORTED_MODULE_9__models_Mobile_event__["a" /* Mobile_event */],
+            SiteConfig: __WEBPACK_IMPORTED_MODULE_10__models_SiteConfig__["a" /* SiteConfig */],
+            DespatchToDriverMessages: __WEBPACK_IMPORTED_MODULE_11__models_DespatchToDriverMessages__["a" /* DespatchToDriverMessages */],
+            JseaDriverQuestions: __WEBPACK_IMPORTED_MODULE_12__models_JseaDriverQuestions__["a" /* JseaDriverQuestions */],
+            JseaDriverAnswers: __WEBPACK_IMPORTED_MODULE_13__models_JseaDriverAnswers__["a" /* JseaDriverAnswers */],
+            JseaDriverAnswersChange: __WEBPACK_IMPORTED_MODULE_14__models_JseaDriverAnswersChange__["a" /* JseaDriverAnswersChange */],
+            Photocontainer: __WEBPACK_IMPORTED_MODULE_15__models_Photocontainer__["a" /* Photocontainer */],
+            Image: __WEBPACK_IMPORTED_MODULE_16__models_Image__["a" /* Image */],
+            BarcodeHist: __WEBPACK_IMPORTED_MODULE_17__models_BarcodeHist__["a" /* BarcodeHist */],
+            BarcodeHistChange: __WEBPACK_IMPORTED_MODULE_18__models_BarcodeHistChange__["a" /* BarcodeHistChange */],
+            DeviceDiagnostics: __WEBPACK_IMPORTED_MODULE_19__models_DeviceDiagnostics__["a" /* DeviceDiagnostics */],
+        };
+    }
+    SDKModels.prototype.get = function (modelName) {
+        return this.models[modelName];
+    };
+    SDKModels.prototype.getAll = function () {
+        return this.models;
+    };
+    SDKModels.prototype.getModelNames = function () {
+        return Object.keys(this.models);
+    };
+    SDKModels = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+    ], SDKModels);
+    return SDKModels;
+}());
+
+//# sourceMappingURL=SDKModels.js.map
+
+/***/ }),
+
+/***/ 151:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1580,102 +2121,7 @@ var SDKStorage = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 15:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SDKModels; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_Job__ = __webpack_require__(150);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_JobChange__ = __webpack_require__(269);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_TpmPdaController__ = __webpack_require__(270);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_GpsHistory__ = __webpack_require__(97);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_Application__ = __webpack_require__(271);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_Installation__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__models_Notification__ = __webpack_require__(272);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_Push__ = __webpack_require__(273);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__models_Mobile_event__ = __webpack_require__(274);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__models_SiteConfig__ = __webpack_require__(275);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__models_DespatchToDriverMessages__ = __webpack_require__(276);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__models_JseaDriverQuestions__ = __webpack_require__(277);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__models_JseaDriverAnswers__ = __webpack_require__(152);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__models_JseaDriverAnswersChange__ = __webpack_require__(278);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__models_Photocontainer__ = __webpack_require__(279);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__models_Image__ = __webpack_require__(280);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__models_BarcodeHist__ = __webpack_require__(153);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__models_BarcodeHistChange__ = __webpack_require__(281);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__models_DeviceDiagnostics__ = __webpack_require__(154);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-/* tslint:disable */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var SDKModels = /** @class */ (function () {
-    function SDKModels() {
-        this.models = {
-            Job: __WEBPACK_IMPORTED_MODULE_1__models_Job__["a" /* Job */],
-            JobChange: __WEBPACK_IMPORTED_MODULE_2__models_JobChange__["a" /* JobChange */],
-            TpmPdaController: __WEBPACK_IMPORTED_MODULE_3__models_TpmPdaController__["a" /* TpmPdaController */],
-            GpsHistory: __WEBPACK_IMPORTED_MODULE_4__models_GpsHistory__["a" /* GpsHistory */],
-            Application: __WEBPACK_IMPORTED_MODULE_5__models_Application__["a" /* Application */],
-            Installation: __WEBPACK_IMPORTED_MODULE_6__models_Installation__["a" /* Installation */],
-            Notification: __WEBPACK_IMPORTED_MODULE_7__models_Notification__["a" /* Notification */],
-            Push: __WEBPACK_IMPORTED_MODULE_8__models_Push__["a" /* Push */],
-            Mobile_event: __WEBPACK_IMPORTED_MODULE_9__models_Mobile_event__["a" /* Mobile_event */],
-            SiteConfig: __WEBPACK_IMPORTED_MODULE_10__models_SiteConfig__["a" /* SiteConfig */],
-            DespatchToDriverMessages: __WEBPACK_IMPORTED_MODULE_11__models_DespatchToDriverMessages__["a" /* DespatchToDriverMessages */],
-            JseaDriverQuestions: __WEBPACK_IMPORTED_MODULE_12__models_JseaDriverQuestions__["a" /* JseaDriverQuestions */],
-            JseaDriverAnswers: __WEBPACK_IMPORTED_MODULE_13__models_JseaDriverAnswers__["a" /* JseaDriverAnswers */],
-            JseaDriverAnswersChange: __WEBPACK_IMPORTED_MODULE_14__models_JseaDriverAnswersChange__["a" /* JseaDriverAnswersChange */],
-            Photocontainer: __WEBPACK_IMPORTED_MODULE_15__models_Photocontainer__["a" /* Photocontainer */],
-            Image: __WEBPACK_IMPORTED_MODULE_16__models_Image__["a" /* Image */],
-            BarcodeHist: __WEBPACK_IMPORTED_MODULE_17__models_BarcodeHist__["a" /* BarcodeHist */],
-            BarcodeHistChange: __WEBPACK_IMPORTED_MODULE_18__models_BarcodeHistChange__["a" /* BarcodeHistChange */],
-            DeviceDiagnostics: __WEBPACK_IMPORTED_MODULE_19__models_DeviceDiagnostics__["a" /* DeviceDiagnostics */],
-        };
-    }
-    SDKModels.prototype.get = function (modelName) {
-        return this.models[modelName];
-    };
-    SDKModels.prototype.getAll = function () {
-        return this.models;
-    };
-    SDKModels.prototype.getModelNames = function () {
-        return Object.keys(this.models);
-    };
-    SDKModels = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
-    ], SDKModels);
-    return SDKModels;
-}());
-
-//# sourceMappingURL=SDKModels.js.map
-
-/***/ }),
-
-/***/ 150:
+/***/ 152:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1942,7 +2388,7 @@ var Job = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 151:
+/***/ 153:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2041,7 +2487,7 @@ var Installation = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 152:
+/***/ 154:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2132,7 +2578,7 @@ var JseaDriverAnswers = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 153:
+/***/ 155:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2219,7 +2665,7 @@ var BarcodeHist = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 154:
+/***/ 156:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2361,7 +2807,7 @@ var ErrorHandler = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 172:
+/***/ 174:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2508,7 +2954,7 @@ var DeviceDiagnosticsApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 173:
+/***/ 175:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2777,7 +3223,7 @@ var CustomerconnServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 174:
+/***/ 176:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3212,7 +3658,7 @@ var LogServiceProvider = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 196:
+/***/ 198:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3615,23 +4061,23 @@ var BaseServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 197:
+/***/ 199:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ImageServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_file__ = __webpack_require__(417);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_transfer__ = __webpack_require__(418);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_file__ = __webpack_require__(418);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_transfer__ = __webpack_require__(419);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_camera__ = __webpack_require__(419);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_camera__ = __webpack_require__(420);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__image_file_service_image_file_service__ = __webpack_require__(198);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__image_file_service_image_file_service__ = __webpack_require__(200);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__platform_ready_service_platform_ready_service__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__platform_ready_service_platform_ready_service__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__shared_service_shared_service__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4023,7 +4469,7 @@ var ImageServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 198:
+/***/ 200:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4136,13 +4582,13 @@ var ImageFileServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 199:
+/***/ 201:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GpsServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_geolocation__ = __webpack_require__(205);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_geolocation__ = __webpack_require__(206);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_GpsHistory__ = __webpack_require__(97);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk_services_custom_GpsHistory__ = __webpack_require__(109);
@@ -4362,7 +4808,7 @@ var GpsServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 200:
+/***/ 202:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4375,8 +4821,11 @@ var GpsServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__jsea_service_jsea_service__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__message_service_message_service__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__event_service_event_service__ = __webpack_require__(120);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__job_service_job_service__ = __webpack_require__(119);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__event_service_event_service__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__job_service_job_service__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__background_geolocation_service_background_geolocation_service__ = __webpack_require__(119);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__platform_ready_service_platform_ready_service__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(122);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4396,6 +4845,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
+
 /*
   Generated class for the SodServiceProvider provider.
 
@@ -4405,7 +4857,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
   for more info on providers and Angular DI.
 */
 var SodServiceProvider = /** @class */ (function () {
-    function SodServiceProvider(jobService, pdaParams, siteConfig, logger, sharedService, jseaService, messageService, alertCtrl, eventService) {
+    function SodServiceProvider(jobService, pdaParams, siteConfig, logger, sharedService, jseaService, messageService, alertCtrl, eventService, platformReady, backgroundGeolocationService, deviceDiagnosticServiceProvider) {
         var _this = this;
         this.jobService = jobService;
         this.pdaParams = pdaParams;
@@ -4416,6 +4868,9 @@ var SodServiceProvider = /** @class */ (function () {
         this.messageService = messageService;
         this.alertCtrl = alertCtrl;
         this.eventService = eventService;
+        this.platformReady = platformReady;
+        this.backgroundGeolocationService = backgroundGeolocationService;
+        this.deviceDiagnosticServiceProvider = deviceDiagnosticServiceProvider;
         this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'SodServiceProvider' };
         this.log = this.logger.getInstance(this.logParams);
         //When App starts Get from localstorage
@@ -4433,6 +4888,7 @@ var SodServiceProvider = /** @class */ (function () {
     //this.log.debug('Instantiating mycurday = :' + mycurday);
     SodServiceProvider.prototype.checkDoSodAction = function (type) {
         var _this = this;
+        this.pda_disable_diagnostics_bgps_on_logoff = (this.pdaParams.pda_disable_diagnostics_bgps_on_logoff || (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DIAGNOSTICS_BGPS_ON_LOGOFF') == 'Y'));
         //Get What is stored from last initial resum on a day in past
         var prevResumeDateStr = localStorage.getItem('FIRST_RESUME_DATE');
         if (type == 'FIRST_RESUME') {
@@ -4449,6 +4905,10 @@ var SodServiceProvider = /** @class */ (function () {
                     this.now = new Date();
                     localStorage.setItem('FIRST_RESUME_DATE', this.now);
                     this.pdaParams.logoffDriver();
+                    if (this.platformReady.isPlatformReady() && this.pda_disable_diagnostics_bgps_on_logoff) {
+                        this.backgroundGeolocationService.stop();
+                        this.deviceDiagnosticServiceProvider.stopDiagnostics();
+                    }
                     this.eventService.sendMsg('LOGOFF', '');
                     this.log.debug(" prevResumeDay != mycurday mycurday = " + this.mycurday);
                     //Set the routed & map jobs to null
@@ -4479,7 +4939,7 @@ var SodServiceProvider = /** @class */ (function () {
                 }
                 else {
                     this.log.debug('Not new date');
-                    this.messageService.dumpLocalStorage();
+                    // this.messageService.dumpLocalStorage();
                     //Dump Device Info
                     this.messageService.dumpDeviceInfo();
                 }
@@ -4539,7 +4999,9 @@ var SodServiceProvider = /** @class */ (function () {
             __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_4__siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__["a" /* LogServiceProvider */], __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__["a" /* SharedServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_6__jsea_service_jsea_service__["a" /* JseaServiceProvider */], __WEBPACK_IMPORTED_MODULE_7__message_service_message_service__["a" /* MessageServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_8__event_service_event_service__["a" /* EventServiceProvider */]])
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_8__event_service_event_service__["a" /* EventServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_11__platform_ready_service_platform_ready_service__["a" /* PlatformReadyServiceProvider */], __WEBPACK_IMPORTED_MODULE_10__background_geolocation_service_background_geolocation_service__["a" /* BackgroundGeolocationServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_12__device_diagnostic_service_device_diagnostic_service__["a" /* DeviceDiagnosticServiceProvider */]])
     ], SodServiceProvider);
     return SodServiceProvider;
 }());
@@ -4548,7 +5010,7 @@ var SodServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 201:
+/***/ 203:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4695,275 +5157,13 @@ var JseaDriverQuestionsApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 203:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BackgroundGeolocationServiceProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_sdk_models_GpsHistory__ = __webpack_require__(97);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk_services_custom_GpsHistory__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gps_audit_service_gps_audit_service__ = __webpack_require__(116);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_device__ = __webpack_require__(54);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-//import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation';
-
-
-
-
-
-
-
-/*
-  Generated class for the BackgroundGeolocationServiceProvider provider.
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
-var BackgroundGeolocationServiceProvider = /** @class */ (function () {
-    function BackgroundGeolocationServiceProvider(pdaParams, logger, gpsAudit, gpsHistApi, platform, device) {
-        var _this = this;
-        this.pdaParams = pdaParams;
-        this.logger = logger;
-        this.gpsAudit = gpsAudit;
-        this.gpsHistApi = gpsHistApi;
-        this.platform = platform;
-        this.device = device;
-        // GPS timestamps are in milliseconds since epoch - iOS also has a fractional part
-        // e.g. iOS:		1463707063130.011
-        // e.g. Android:	1463707069003
-        // Site for millisecond calcs and conversions: http://currentmillis.com/
-        this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'BackgroundGeolocationServiceProvider' };
-        this.log = this.logger.getInstance(this.logParams);
-        this.lastGPSsecs = 0; // last timestamp in seconds
-        this.thisGPSsecs = 0; // this timestamp in seconds
-        this.diffGPSsecs = 0;
-        this.threshold = 1; // diff between gps must be greater than this to save
-        this.setEvents = function () {
-            _this.configureBggs();
-            _this.plt.ready().then(function (readySource) {
-                _this.osplatform = _this.device.platform;
-                if (_this.osplatform != null) {
-                    _this.osplatform = _this.osplatform.toLowerCase();
-                    window.BackgroundGeolocation.on('location', function (location) {
-                        // handle your locations here 
-                        // to perform long running operation on iOS
-                        // you need to create background task
-                        if (_this.osplatform.localeCompare('ios') == 0) {
-                            window.BackgroundGeolocation.startTask(function (taskKey) {
-                                // execute long running task
-                                //this.log.info('Calling saveGpsToDb: location:' + JSON.stringify(location));
-                                _this.saveGpsToDb(_this.pdaParams.getDriverId(), location);
-                                // eg. ajax post location
-                                // IMPORTANT: task has to be ended by endTask
-                                window.BackgroundGeolocation.endTask(taskKey);
-                            });
-                        }
-                        else {
-                            //this.log.info('Calling saveGpsToDb: location:' + JSON.stringify(location));
-                            _this.log.info("BGGS: Calling saveGpsToDb.");
-                            _this.saveGpsToDb(_this.pdaParams.getDriverId(), location);
-                        }
-                    });
-                    window.BackgroundGeolocation.on('stationary', function (stationaryLocation) {
-                        // handle stationary locations here
-                        _this.log.info('  BackgroundGeolocation location is stationary.');
-                    });
-                    window.BackgroundGeolocation.on('error', function (error) {
-                        _this.log.debug('  BackgroundGeolocation error:' + error.code + " ,error message:" + error.message);
-                    });
-                    window.BackgroundGeolocation.on('start', function () {
-                        _this.log.info('  BackgroundGeolocation service has been started');
-                    });
-                    window.BackgroundGeolocation.on('stop', function () {
-                        _this.log.info('  BackgroundGeolocation service has been stopped');
-                    });
-                    window.BackgroundGeolocation.on('background', function () {
-                        _this.log.info('  App is in background');
-                        // you can also reconfigure service (changes will be applied immediately)
-                        //  (<any>window).BackgroundGeolocation.configure({ debug: true });
-                    });
-                    window.BackgroundGeolocation.on('foreground', function () {
-                        _this.log.info('  App is in foreground');
-                        // (<any>window).BackgroundGeolocation.configure({ debug: false });
-                    });
-                }
-            }); //End of platformReady fn  
-        }; //setEvents() ends
-        this.configureBggs = function () {
-            // defaults for background gps   
-            _this.pdaParams.gps_stopOnTerminate = true;
-            _this.pdaParams.gps_debug = false;
-            _this.pdaParams.gps_desiredAccuracy = 10;
-            _this.pdaParams.gps_stationaryRadius = 20;
-            _this.pdaParams.gps_activityType = 'AutomotiveNavigation';
-            _this.pdaParams.gps_distanceFilter = 30;
-            _this.pdaParams.gps_interval = 60000; // use this in milliseconds instead   
-            _this.pdaParams.gps_fastestInterval = 30000;
-            _this.pdaParams.gps_activitiesInterval = 60000;
-            _this.pdaParams.gps_stopOnStillActivity = false;
-            _this.plt.ready().then(function (readySource) {
-                _this.osplatform = _this.device.platform;
-                if (_this.osplatform != null) {
-                    _this.osplatform = _this.osplatform.toLowerCase();
-                    if (_this.osplatform.localeCompare('ios') == 0) {
-                        window.BackgroundGeolocation.configure({
-                            locationProvider: window.BackgroundGeolocation.DISTANCE_FILTER_PROVIDER,
-                            desiredAccuracy: _this.pdaParams.gps_desiredAccuracy,
-                            distanceFilter: _this.pdaParams.gps_distanceFilter,
-                            stationaryRadius: _this.pdaParams.gps_stationaryRadius,
-                            activityType: _this.pdaParams.gps_activityType,
-                            debug: _this.pdaParams.gps_debug,
-                            stopOnTerminate: _this.pdaParams.gps_stopOnTerminate // <-- enable this to clear background location settings when the app terminates
-                        });
-                    }
-                    else {
-                        window.BackgroundGeolocation.configure({
-                            locationProvider: window.BackgroundGeolocation.ACTIVITY_PROVIDER,
-                            desiredAccuracy: _this.pdaParams.gps_desiredAccuracy,
-                            stationaryRadius: _this.pdaParams.gps_stationaryRadius,
-                            distanceFilter: _this.pdaParams.gps_distanceFilter,
-                            interval: _this.pdaParams.gps_interval,
-                            debug: _this.pdaParams.gps_debug,
-                            stopOnTerminate: _this.pdaParams.gps_stopOnTerminate,
-                            fastestInterval: _this.pdaParams.gps_fastestInterval,
-                            activitiesInterval: _this.pdaParams.gps_activitiesInterval,
-                            stopOnStillActivity: _this.pdaParams.gps_stopOnStillActivity //ANDROID ONLY--stop() is forced, when the STILL activity is detected (default is true)
-                        });
-                    }
-                }
-            });
-        };
-        this.saveGpsToDb = function (drvid, location) {
-            //GpsHistory() is a call to the GpsHistory model
-            var lgps = new __WEBPACK_IMPORTED_MODULE_2__shared_sdk_models_GpsHistory__["a" /* GpsHistory */]();
-            lgps.gps_driver_id = drvid;
-            //var platform = $cordovaDevice.getPlatform();
-            //this.log.info("BGGS platform:" + this.device_platform + ", location:" + JSON.stringify(location));
-            // LT - 06/07/2016 - with 2.52 release iOS devices do not appear to have a location.timestamp property
-            // but do have the location.time property - check for both
-            if (_this.osplatform.localeCompare('ios') == 0) {
-                if (location.timestamp) {
-                    lgps.gps_timestamp = location.timestamp;
-                }
-                else if (location.time) {
-                    lgps.gps_timestamp = location.time;
-                }
-                else {
-                    // lgps.gps_timestamp = Date.now();
-                    lgps.gps_timestamp = new Date();
-                    _this.log.error("BGGS: no time provided so use now:" + lgps.gps_timestamp);
-                }
-                lgps.gps_heading = 0; // IOS Has a heading if u want to use it later
-            }
-            else {
-                lgps.gps_timestamp = location.time;
-                lgps.gps_heading = 0; // Android has a bearing if u want to use it later
-            }
-            //this.log.info("lgps.gps_timestamp:: " + lgps.gps_timestamp);
-            _this.ltimestamp = new Date(lgps.gps_timestamp);
-            //this.log.info("this.ltimestamp:: " + this.ltimestamp);
-            // check last GPS and only update if diff is greater than x seconds
-            _this.thisGPSsecs = _this.ltimestamp.getTime() / 1000; // current GPS time in seconds
-            _this.diffGPSsecs = _this.thisGPSsecs - _this.lastGPSsecs;
-            _this.lastGPSsecs = _this.ltimestamp.getTime() / 1000;
-            // lgps.gps_timestamp is UTC at this point
-            //var ldate = new Date(lgps.gps_timestamp);
-            //var oset = ldate.getTimezoneOffset();
-            // lgps.gps_timestamp converted to local time - no timezone now
-            //var temp: any = this.ltimestamp.getTime() + (oset * -1) * 60 * 1000;
-            //this.log.info("temp:::" + temp);
-            //this.log.info("temp with offset::" + this.ltimestamp.getTime() + (oset * -1) * 60 * 1000);
-            if (location.speed !== null && location.speed !== undefined)
-                lgps.gps_speed = location.speed;
-            else
-                lgps.gps_speed = 0;
-            lgps.gps_timestamp = _this.ltimestamp;
-            lgps.gps_latitude = location.latitude;
-            lgps.gps_longitude = location.longitude;
-            lgps.gps_quality = location.accuracy;
-            lgps.gps_time = 0; //location.time;
-            // TODO - need to NOT rely on log - need our own access to this function
-            var loggedOn = _this.log.pdaParams.isDrvLoggedOn();
-            //this.log.info("BGGS driver:" + lgps.gps_driver_id + ", loggedOn:" + loggedOn + ", lgps:" + JSON.stringify(lgps));
-            _this.gpsAudit.saveGps(lgps);
-            //Riyaz:Now change the lgps.timestamp to oracle date, before saving it to the oracle DB.
-            //lgps.gps_timestamp = new Date(lgps.gps_timestamp.valueOf());
-            // TODO - do we need any more criteria to create history record?  if connected?
-            if (lgps.gps_driver_id > 0 && _this.diffGPSsecs > _this.threshold && loggedOn) {
-                // this.log.info("About to save BGGS GPS for driver:" + lgps.gps_driver_id + ", lgps:" + JSON.stringify(lgps));
-                _this.gpsHistApi.create(lgps).subscribe(function (obj) {
-                    _this.log.info("gpsHistApi.create success for BGGS: obj:" + JSON.stringify(obj));
-                }, function (err) {
-                    _this.log.error("gpsHistApi.create failed for BGGS: err:" + JSON.stringify(err));
-                });
-            }
-        }; //saveGpsToDb() ends here
-        /*=====================================================*/
-        /*             START METHOD                            */
-        /*=====================================================*/
-        this.start = function () {
-            _this.configureBggs();
-            // start recording location
-            _this.log.info("BGGS about to start...");
-            window.BackgroundGeolocation.start();
-        };
-        /*=====================================================*/
-        /*             STOP METHOD                            */
-        /*=====================================================*/
-        this.stop = function () {
-            // If we wish to turn OFF background-tracking, we can call the #stop method.
-            _this.log.info('BGGS STOP Method called:');
-            window.BackgroundGeolocation.stop();
-        };
-        this.bggs_print_configuration = function () {
-            _this.log.info("=====================================================================");
-            _this.log.info("this.pdaParams.gps_locationProvider::" + _this.pdaParams.gps_locationProvider);
-            _this.log.info("this.pdaParams.gps_activityType::" + _this.pdaParams.gps_activityType);
-            _this.log.info("this.pdaParams.gps_debug::" + _this.pdaParams.gps_debug);
-            //this.log.info("this.pdaParams.gps_desiredAccuracy::" + this.pdaParams.gps_desiredAccuracy);
-            _this.log.info("this.pdaParams.gps_distanceFilter::" + _this.pdaParams.gps_distanceFilter);
-            _this.log.info("this.pdaParams.gps_interval::" + _this.pdaParams.gps_interval);
-            _this.log.info("this.pdaParams.gps_stationaryRadius::" + _this.pdaParams.gps_stationaryRadius);
-            _this.log.info("this.pdaParams.gps_stopOnTerminate::" + _this.pdaParams.gps_stopOnTerminate);
-            _this.log.info("=====================================================================");
-        };
-        this.plt = platform;
-        //console.log('Hello BackgroundGeolocationServiceProvider Provider');
-        //Configure BackgroundGeolocation and set events
-        this.setEvents();
-    } //End of constructor
-    BackgroundGeolocationServiceProvider = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__["a" /* LogServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_4__gps_audit_service_gps_audit_service__["a" /* GpsAuditServiceProvider */], __WEBPACK_IMPORTED_MODULE_3__shared_sdk_services_custom_GpsHistory__["a" /* GpsHistoryApi */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */], __WEBPACK_IMPORTED_MODULE_7__ionic_native_device__["a" /* Device */]])
-    ], BackgroundGeolocationServiceProvider);
-    return BackgroundGeolocationServiceProvider;
-}());
-
-//# sourceMappingURL=background-geolocation-service.js.map
-
-/***/ }),
-
-/***/ 204:
+/***/ 205:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DeviceServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__platform_ready_service_platform_ready_service__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__platform_ready_service_platform_ready_service__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__ = __webpack_require__(54);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5015,187 +5215,6 @@ var DeviceServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 207:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DeviceDiagnosticServiceProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_diagnostic__ = __webpack_require__(420);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_DeviceDiagnostics__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk_services_custom_DeviceDiagnostics__ = __webpack_require__(172);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_service_shared_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_device__ = __webpack_require__(54);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-
-
-
-
-/*
-  Generated class for the DeviceDiagnosticServiceProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
-var DeviceDiagnosticServiceProvider = /** @class */ (function () {
-    function DeviceDiagnosticServiceProvider(pdaParams, logger, diagnostic, siteConfig, deviceDiagnosticsApi, platform, device, sharedService) {
-        var _this = this;
-        this.pdaParams = pdaParams;
-        this.logger = logger;
-        this.diagnostic = diagnostic;
-        this.siteConfig = siteConfig;
-        this.deviceDiagnosticsApi = deviceDiagnosticsApi;
-        this.platform = platform;
-        this.device = device;
-        this.sharedService = sharedService;
-        this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'DeviceDiagnosticServiceProvider' };
-        this.log = this.logger.getInstance(this.logParams);
-        this.driverId = 0;
-        this.lastPingTimestamp = new Date();
-        this.isLocationAvailable = false;
-        this.isLocationEnabled = false;
-        this.isGpsLocationAvailable = false;
-        this.isGpsLocationEnabled = false;
-        this.isNetworkLocationAvailable = false;
-        this.isNetworkLocationEnabled = false;
-        this.getLocationMode = "Location off";
-        this.isLocationAuthorized = false;
-        this.isWifiAvailable = false;
-        this.isWifiEnabled = false;
-        this.runDiagnostics = function () {
-            _this.platform.ready().then(function (readySource) {
-                if (_this.platform.is('cordova')) {
-                    var errorCallback = function (diagFn) { return _this.log.error(diagFn + " : failed to diagnose from the device."); };
-                    _this.diagnostic.isLocationAvailable().then(function (val) { _this.isLocationAvailable = val; }, function () { });
-                    _this.diagnostic.isLocationEnabled().then(function (val) { _this.isLocationEnabled = val; }, function () { });
-                    _this.diagnostic.isGpsLocationAvailable().then(function (val) { _this.isGpsLocationAvailable = val; }, function () { });
-                    _this.diagnostic.isGpsLocationEnabled().then(function (val) { _this.isGpsLocationEnabled = val; }, function () { });
-                    _this.diagnostic.isNetworkLocationAvailable().then(function (val) { _this.isNetworkLocationAvailable = val; }, function () { });
-                    _this.diagnostic.isNetworkLocationEnabled().then(function (val) { _this.isNetworkLocationEnabled = val; }, function () { });
-                    _this.diagnostic.isLocationAuthorized().then(function (val) { _this.isLocationAuthorized = val; }, function () { });
-                    _this.diagnostic.isWifiAvailable().then(function (val) { _this.isWifiAvailable = val; }, function () { });
-                    _this.diagnostic.isWifiEnabled().then(function (val) { _this.isWifiEnabled = val; }, function () { });
-                    if (!_this.platform.is('ios')) {
-                        _this.diagnostic.getLocationMode()
-                            .then(function (locationMode) {
-                            switch (locationMode) {
-                                case _this.diagnostic.locationMode.HIGH_ACCURACY:
-                                    _this.getLocationMode = "High accuracy";
-                                    // console.log("High accuracy");
-                                    break;
-                                case _this.diagnostic.locationMode.BATTERY_SAVING:
-                                    _this.getLocationMode = "Battery saving";
-                                    //console.log("Battery saving");
-                                    break;
-                                case _this.diagnostic.locationMode.DEVICE_ONLY:
-                                    _this.getLocationMode = "Device only";
-                                    //console.log("Device only");
-                                    break;
-                                case _this.diagnostic.locationMode.LOCATION_OFF:
-                                    _this.getLocationMode = "Location off";
-                                    //console.log("Location off");
-                                    break;
-                            }
-                        }).catch(function (e) { return console.error(e); });
-                    }
-                    else
-                        _this.getLocationMode = "Not Available";
-                }
-            });
-        };
-        this.diagnosticPoller = function () {
-            _this.runDiagnostics();
-            var dd = new __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_DeviceDiagnostics__["a" /* DeviceDiagnostics */]();
-            dd.driverId = _this.pdaParams.getDriverId();
-            var lastPingDate = new Date();
-            _this.lastPingTimestamp = new Date(lastPingDate.getTime());
-            dd.lastPingTimestamp = _this.lastPingTimestamp;
-            dd.getLocationMode = _this.getLocationMode;
-            dd.isGpsLocationAvailable = _this.isGpsLocationAvailable;
-            dd.isGpsLocationEnabled = _this.isGpsLocationEnabled;
-            dd.isLocationAuthorized = _this.isLocationAuthorized;
-            dd.isLocationAvailable = _this.isLocationAvailable;
-            dd.isLocationEnabled = _this.isLocationEnabled;
-            dd.isNetworkLocationAvailable = _this.isNetworkLocationAvailable;
-            dd.isNetworkLocationEnabled = _this.isNetworkLocationEnabled;
-            dd.isWifiAvailable = _this.isWifiAvailable;
-            dd.isWifiEnabled = _this.isWifiEnabled;
-            _this.localStorageUsage();
-            _this.deviceDiagnosticsApi.upsert(dd).subscribe(function (obj) {
-                _this.log.info("deviceDiagnosticsApi.create success : " + JSON.stringify(obj));
-            }, function (err) {
-                _this.log.error("deviceDiagnosticsApi.create failed : " + JSON.stringify(err));
-            });
-        };
-        console.log('Hello DeviceDiagnosticServiceProvider Provider');
-        this.pda_disable_device_diagnostics = (this.pdaParams.pda_disable_device_diagnostics || (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DEVICE_DIAGNOSTICS') == 'Y'));
-        if (!this.pda_disable_device_diagnostics)
-            this.runDiagnostics();
-    }
-    DeviceDiagnosticServiceProvider.prototype.localStorageUsage = function () {
-        var x, xLen, usage = 0;
-        for (x in localStorage) {
-            if (!localStorage.hasOwnProperty(x)) {
-                continue;
-            }
-            xLen = ((localStorage[x].length * 2 + x.length * 2) / 1024);
-            usage += xLen;
-        }
-        ;
-        if (usage > 1024) {
-            this.log.info("LocalStorage used by the app is ::" + (usage / 1024).toFixed(2) + " MB");
-        }
-        else {
-            this.log.info("LocalStorage used by the app is ::" + usage.toFixed(2) + " KB");
-        }
-        ;
-    };
-    DeviceDiagnosticServiceProvider.prototype.stopDiagnostics = function () {
-        this.log.info("Stopping device diagnostics...");
-        //if (!this.pda_disable_device_diagnostics) {
-        this.sharedService.isDiagnosticsRunning = false;
-        clearInterval(this.intrval);
-        //}
-    };
-    DeviceDiagnosticServiceProvider.prototype.startWatching = function () {
-        //Call the Poller every minute
-        this.pda_disable_device_diagnostics = (this.pdaParams.pda_disable_device_diagnostics || (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DEVICE_DIAGNOSTICS') == 'Y'));
-        if (!this.pda_disable_device_diagnostics) {
-            this.sharedService.isDiagnosticsRunning = true;
-            this.intrval = setInterval(this.diagnosticPoller, 60000);
-        }
-    };
-    DeviceDiagnosticServiceProvider = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__["a" /* LogServiceProvider */], __WEBPACK_IMPORTED_MODULE_1__ionic_native_diagnostic__["a" /* Diagnostic */],
-            __WEBPACK_IMPORTED_MODULE_7__siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_4__shared_sdk_services_custom_DeviceDiagnostics__["a" /* DeviceDiagnosticsApi */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["l" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_9__ionic_native_device__["a" /* Device */], __WEBPACK_IMPORTED_MODULE_8__shared_service_shared_service__["a" /* SharedServiceProvider */]])
-    ], DeviceDiagnosticServiceProvider);
-    return DeviceDiagnosticServiceProvider;
-}());
-
-//# sourceMappingURL=device-diagnostic-service.js.map
-
-/***/ }),
-
 /***/ 208:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -5206,7 +5225,7 @@ var DeviceDiagnosticServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_service_util_service__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__log_service_log_service__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5451,7 +5470,7 @@ var JobReplicationServiceProvider = /** @class */ (function () {
     JobReplicationServiceProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__connectivity_monitor_connectivity_monitor__["a" /* ConnectivityMonitorProvider */], __WEBPACK_IMPORTED_MODULE_2__util_service_util_service__["a" /* UtilServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_3__log_service_log_service__["a" /* LogServiceProvider */], __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_5__providers_shared_service_shared_service__["a" /* SharedServiceProvider */]])
+            __WEBPACK_IMPORTED_MODULE_3__log_service_log_service__["a" /* LogServiceProvider */], __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__["a" /* SharedServiceProvider */]])
     ], JobReplicationServiceProvider);
     return JobReplicationServiceProvider;
 }());
@@ -7764,7 +7783,7 @@ var SocketDriver = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__log_service_log_service__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_sdk__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_customerconn_service_customerconn_service__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__customerconn_service_customerconn_service__ = __webpack_require__(175);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7838,7 +7857,7 @@ var SiteconfigServiceProvider = /** @class */ (function () {
         this.siteconfigs = null;
         this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'SiteconfigServiceProvider' };
         this.log = this.logger.getInstance(this.logParams);
-        //console.log('Hello SiteconfigServiceProvider Provider');
+        console.log('Hello SiteconfigServiceProvider Provider');
     }
     SiteconfigServiceProvider.prototype.loadAllConfigsFromServer = function () {
         var _this = this;
@@ -7898,8 +7917,6 @@ var SiteconfigServiceProvider = /** @class */ (function () {
         if (!retval) {
             retval = 'N';
         }
-        //return ($q.when(retval));
-        //return (retval);
         return retval;
     };
     SiteconfigServiceProvider.prototype.getSiteConfig = function (key) {
@@ -7907,8 +7924,6 @@ var SiteconfigServiceProvider = /** @class */ (function () {
         if (!retval) {
             retval = '';
         }
-        //return ($q.when(retval));
-        //return (retval);
         return __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["Observable"].of(retval);
     };
     SiteconfigServiceProvider.prototype.getSiteConfigInt = function (key) {
@@ -7916,8 +7931,6 @@ var SiteconfigServiceProvider = /** @class */ (function () {
         if (!retval) {
             retval = 0;
         }
-        //return ($q.when(retval));
-        //return (retval);
         return retval;
     };
     // no promise on this one so it can be used in inline synchronous code
@@ -7933,7 +7946,7 @@ var SiteconfigServiceProvider = /** @class */ (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_2__shared_sdk_services__["d" /* SiteConfigApi */],
             __WEBPACK_IMPORTED_MODULE_3__shared_service_shared_service__["a" /* SharedServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_5__log_service_log_service__["a" /* LogServiceProvider */], __WEBPACK_IMPORTED_MODULE_7__providers_customerconn_service_customerconn_service__["a" /* CustomerconnServiceProvider */]])
+            __WEBPACK_IMPORTED_MODULE_5__log_service_log_service__["a" /* LogServiceProvider */], __WEBPACK_IMPORTED_MODULE_7__customerconn_service_customerconn_service__["a" /* CustomerconnServiceProvider */]])
     ], SiteconfigServiceProvider);
     return SiteconfigServiceProvider;
 }());
@@ -8101,7 +8114,7 @@ var RealTime = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Job__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Job__ = __webpack_require__(152);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__JobChange__ = __webpack_require__(269);
 /* unused harmony namespace reexport */
@@ -8111,7 +8124,7 @@ var RealTime = /** @class */ (function () {
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Application__ = __webpack_require__(271);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Installation__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Installation__ = __webpack_require__(153);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Notification__ = __webpack_require__(272);
 /* unused harmony namespace reexport */
@@ -8125,7 +8138,7 @@ var RealTime = /** @class */ (function () {
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__JseaDriverQuestions__ = __webpack_require__(277);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__JseaDriverAnswers__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__JseaDriverAnswers__ = __webpack_require__(154);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__JseaDriverAnswersChange__ = __webpack_require__(278);
 /* unused harmony namespace reexport */
@@ -8133,11 +8146,11 @@ var RealTime = /** @class */ (function () {
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Image__ = __webpack_require__(280);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__BarcodeHist__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__BarcodeHist__ = __webpack_require__(155);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__BarcodeHistChange__ = __webpack_require__(281);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__DeviceDiagnostics__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__DeviceDiagnostics__ = __webpack_require__(156);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__BaseModels__ = __webpack_require__(268);
 /* unused harmony namespace reexport */
@@ -8183,7 +8196,7 @@ var RealTime = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operators__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_Job__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_Job__ = __webpack_require__(152);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(18);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -9096,7 +9109,7 @@ var ApplicationApi = /** @class */ (function (_super) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operators__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_Installation__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_Installation__ = __webpack_require__(153);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(18);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -10020,7 +10033,7 @@ var DespatchToDriverMessagesApi = /** @class */ (function (_super) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operators__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_JseaDriverAnswers__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_JseaDriverAnswers__ = __webpack_require__(154);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(18);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -11111,7 +11124,7 @@ var ImageApi = /** @class */ (function (_super) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operators__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_BarcodeHist__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_BarcodeHist__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(18);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -11682,8 +11695,8 @@ var WindowRefServiceProvider = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ExitServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gps_service_gps_service__ = __webpack_require__(199);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__event_service_event_service__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gps_service_gps_service__ = __webpack_require__(201);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__event_service_event_service__ = __webpack_require__(121);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11763,10 +11776,10 @@ var ExitServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_push__ = __webpack_require__(414);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_push__ = __webpack_require__(415);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__log_service_log_service__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__platform_ready_service_platform_ready_service__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__platform_ready_service_platform_ready_service__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__util_service_util_service__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
@@ -12014,12 +12027,12 @@ var PushServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NavigationServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_launch_navigator__ = __webpack_require__(415);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_launch_navigator__ = __webpack_require__(416);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_service_shared_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__platform_ready_service_platform_ready_service__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__platform_ready_service_platform_ready_service__ = __webpack_require__(61);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12164,21 +12177,21 @@ var NavigationServiceProvider = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(416);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(206);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(417);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(207);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_base_service_base_service__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_base_service_base_service__ = __webpack_require__(198);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_config_service_config_service__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_shared_service_shared_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_sod_service_sod_service__ = __webpack_require__(200);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_customerconn_service_customerconn_service__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_sod_service_sod_service__ = __webpack_require__(202);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_customerconn_service_customerconn_service__ = __webpack_require__(175);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(117);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_message_service_message_service__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_jsea_service_jsea_service__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_image_service_image_service__ = __webpack_require__(197);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(207);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_image_service_image_service__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(122);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12206,21 +12219,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var MyApp = /** @class */ (function () {
-    function MyApp(app, statusBar, alertCtrl, splashScreen, siteConfig, configService, base, sharedService, customerConn, sodService, pdaParams, platform, connectivityMonitor, messageService, jseaService, imageService, deviceDiagnosticService) {
+    function MyApp(app, statusBar, alertCtrl, splashScreen, pdaParams, platform, connectivityMonitor, base, sharedService, customerConn, siteConfig, configService, sodService, messageService, jseaService, imageService, deviceDiagnosticService) {
         var _this = this;
         this.app = app;
         this.statusBar = statusBar;
         this.alertCtrl = alertCtrl;
         this.splashScreen = splashScreen;
-        this.siteConfig = siteConfig;
-        this.configService = configService;
-        this.base = base;
-        this.sharedService = sharedService;
-        this.customerConn = customerConn;
-        this.sodService = sodService;
         this.pdaParams = pdaParams;
         this.platform = platform;
         this.connectivityMonitor = connectivityMonitor;
+        this.base = base;
+        this.sharedService = sharedService;
+        this.customerConn = customerConn;
+        this.siteConfig = siteConfig;
+        this.configService = configService;
+        this.sodService = sodService;
         this.messageService = messageService;
         this.jseaService = jseaService;
         this.imageService = imageService;
@@ -12370,12 +12383,11 @@ var MyApp = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
-            __WEBPACK_IMPORTED_MODULE_6__providers_siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_7__providers_config_service_config_service__["a" /* ConfigServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_5__providers_base_service_base_service__["a" /* BaseServiceProvider */], __WEBPACK_IMPORTED_MODULE_8__providers_shared_service_shared_service__["a" /* SharedServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_10__providers_customerconn_service_customerconn_service__["a" /* CustomerconnServiceProvider */], __WEBPACK_IMPORTED_MODULE_9__providers_sod_service_sod_service__["a" /* SodServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_11__providers_pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_12__providers_connectivity_monitor_connectivity_monitor__["a" /* ConnectivityMonitorProvider */],
+            __WEBPACK_IMPORTED_MODULE_5__providers_base_service_base_service__["a" /* BaseServiceProvider */], __WEBPACK_IMPORTED_MODULE_8__providers_shared_service_shared_service__["a" /* SharedServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_10__providers_customerconn_service_customerconn_service__["a" /* CustomerconnServiceProvider */], __WEBPACK_IMPORTED_MODULE_6__providers_siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_7__providers_config_service_config_service__["a" /* ConfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_9__providers_sod_service_sod_service__["a" /* SodServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_13__providers_message_service_message_service__["a" /* MessageServiceProvider */], __WEBPACK_IMPORTED_MODULE_14__providers_jsea_service_jsea_service__["a" /* JseaServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_15__providers_image_service_image_service__["a" /* ImageServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_16__providers_device_diagnostic_service_device_diagnostic_service__["a" /* DeviceDiagnosticServiceProvider */]])
@@ -12658,11 +12670,10 @@ var SyncServiceProvider = /** @class */ (function () {
                     _this.log.debug("============SYNC: STARTED============");
                     //alert("SYNC STARTED");
                     _this.jobReplicationService.sync(callback, filter);
+                    _this.log.debug("============SYNC: FINISHED============");
                     _this.sharedService.setSyncInProgress(false);
                     //var endTime: number = new Date().getTime();
-                    //alert("SYNC FINISHED");
-                    //this.log.debug("============SYNC: FINISHED AT ============:" + endTime);
-                    _this.log.debug("============SYNC: FINISHED============");
+                    //this.log.debug("============SYNC: FINISHED AT ============:" + endTime);        
                     //this.log.debug("============SYNC: TOOK ============:" + (endTime - startTime) + " ms");
                 }
             }
@@ -12782,7 +12793,7 @@ var JobnoteReplicationServiceProvider = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AttachServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_config_service_config_service__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_service_config_service__ = __webpack_require__(60);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12822,7 +12833,7 @@ var AttachServiceProvider = /** @class */ (function () {
     };
     AttachServiceProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_2__providers_config_service_config_service__["a" /* ConfigServiceProvider */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_2__config_service_config_service__["a" /* ConfigServiceProvider */]])
     ], AttachServiceProvider);
     return AttachServiceProvider;
 }());
@@ -13000,51 +13011,51 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(464);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_storage__ = __webpack_require__(828);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_status_bar__ = __webpack_require__(416);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__ = __webpack_require__(206);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_status_bar__ = __webpack_require__(417);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__ = __webpack_require__(207);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_device__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_insomnia__ = __webpack_require__(202);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_native_geolocation__ = __webpack_require__(205);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_launch_navigator__ = __webpack_require__(415);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_insomnia__ = __webpack_require__(204);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_native_geolocation__ = __webpack_require__(206);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_launch_navigator__ = __webpack_require__(416);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_device_feedback__ = __webpack_require__(469);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ionic_native_file__ = __webpack_require__(417);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ionic_native_file_transfer__ = __webpack_require__(418);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_camera__ = __webpack_require__(419);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ionic_native_file__ = __webpack_require__(418);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ionic_native_file_transfer__ = __webpack_require__(419);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_camera__ = __webpack_require__(420);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ionic_native_network__ = __webpack_require__(412);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__ionic_native_barcode_scanner__ = __webpack_require__(468);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ionic_native_in_app_browser__ = __webpack_require__(466);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ionic_native_media__ = __webpack_require__(470);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ionic_native_push__ = __webpack_require__(414);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ionic_native_push__ = __webpack_require__(415);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_native_background_mode__ = __webpack_require__(411);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ionic_native_diagnostic__ = __webpack_require__(420);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ionic_native_diagnostic__ = __webpack_require__(414);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__shared_sdk_services_custom_logger_service__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__providers_login_service_login_service__ = __webpack_require__(467);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__providers_config_service_config_service__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__providers_customerconn_service_customerconn_service__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__providers_customerconn_service_customerconn_service__ = __webpack_require__(175);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__providers_siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__providers_shared_service_shared_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__providers_base_service_base_service__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__providers_base_service_base_service__ = __webpack_require__(198);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__providers_util_service_util_service__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__providers_jsea_service_jsea_service__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__providers_message_service_message_service__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__providers_fixed_queue_service_fixed_queue_service__ = __webpack_require__(174);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__providers_device_service_device_service__ = __webpack_require__(204);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__providers_platform_ready_service_platform_ready_service__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__providers_background_geolocation_service_background_geolocation_service__ = __webpack_require__(203);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__providers_fixed_queue_service_fixed_queue_service__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__providers_device_service_device_service__ = __webpack_require__(205);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__providers_platform_ready_service_platform_ready_service__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__providers_background_geolocation_service_background_geolocation_service__ = __webpack_require__(119);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__providers_gps_audit_service_gps_audit_service__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__providers_log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__providers_job_service_job_service__ = __webpack_require__(119);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__providers_event_service_event_service__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__providers_job_service_job_service__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__providers_event_service_event_service__ = __webpack_require__(121);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__providers_window_ref_service_window_ref_service__ = __webpack_require__(413);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__providers_sod_service_sod_service__ = __webpack_require__(200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__providers_sod_service_sod_service__ = __webpack_require__(202);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__providers_push_service_push_service__ = __webpack_require__(462);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_47__providers_exit_service_exit_service__ = __webpack_require__(461);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__providers_gps_service_gps_service__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__providers_gps_service_gps_service__ = __webpack_require__(201);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_49__providers_job_changed_service_job_changed_service__ = __webpack_require__(465);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_50__providers_image_service_image_service__ = __webpack_require__(197);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_51__providers_image_file_service_image_file_service__ = __webpack_require__(198);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_50__providers_image_service_image_service__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_51__providers_image_file_service_image_file_service__ = __webpack_require__(200);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__providers_driver_message_service_driver_message_service__ = __webpack_require__(475);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_53__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(117);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_54__providers_sync_service_sync_service__ = __webpack_require__(471);
@@ -13055,7 +13066,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_59__providers_jsea_answers_replication_service_jsea_answers_replication_service__ = __webpack_require__(474);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_60__providers_navigation_service_navigation_service__ = __webpack_require__(463);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_61__providers_attach_service_attach_service__ = __webpack_require__(473);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_62__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(207);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_62__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(122);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -13744,7 +13755,7 @@ var FireLoopRef = /** @class */ (function () {
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_9__SiteConfig__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__DespatchToDriverMessages__ = __webpack_require__(394);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_10__DespatchToDriverMessages__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__JseaDriverQuestions__ = __webpack_require__(201);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__JseaDriverQuestions__ = __webpack_require__(203);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__JseaDriverAnswers__ = __webpack_require__(395);
 /* unused harmony namespace reexport */
@@ -13758,7 +13769,7 @@ var FireLoopRef = /** @class */ (function () {
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__BarcodeHistChange__ = __webpack_require__(400);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__DeviceDiagnostics__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__DeviceDiagnostics__ = __webpack_require__(174);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__SDKModels__ = __webpack_require__(15);
 /* unused harmony namespace reexport */
@@ -14082,7 +14093,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         };
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
-            'version': '3.1.3',
+            'version': '3.1.4',
             'build': 2,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
@@ -14151,7 +14162,7 @@ var ConfigServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 66:
+/***/ 61:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14159,11 +14170,11 @@ var ConfigServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_device__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_insomnia__ = __webpack_require__(202);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_insomnia__ = __webpack_require__(204);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_background_mode__ = __webpack_require__(411);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__log_service_log_service__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__background_geolocation_service_background_geolocation_service__ = __webpack_require__(203);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__background_geolocation_service_background_geolocation_service__ = __webpack_require__(119);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_service_shared_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -14265,31 +14276,20 @@ var PlatformReadyServiceProvider = /** @class */ (function () {
                 });
                 _this.platform.pause.subscribe(function () {
                     _this.pda_disable_diagnostics_bgps_on_logoff = (_this.pdaParams.pda_disable_diagnostics_bgps_on_logoff || (_this.siteConfig.getSiteConfigValue('PDA_DISABLE_DIAGNOSTICS_BGPS_ON_LOGOFF') == 'Y'));
-                    // this.log.debug("PAUSE EVENT FIRED");
                     _this.log.info("platform.pause: Inside this.platform.pause.subscribe() ");
-                    //alert("Pause fired inside Platformreadyservice provider");
                     if (!_this.sharedService.loginFlag && _this.pda_disable_diagnostics_bgps_on_logoff)
                         _this.log.info("PAUSE event fired: Background GPS will not fire because pda_disable_diagnostics_bgps_on_logoff is set to TRUE.");
                     else {
-                        //this.log.debug("platform.pause: About to call BGGS.start() ");
                         _this.log.info("PAUSE event fired: Background GPS about to START.");
                         _this.backgroundGeolocationService.start();
                     }
-                    //$rootScope.$broadcast('PAUSE');
                     _this.sharedService.isAppinBackground = true;
                     _this.sharedService.PAUSE.next(true);
                 });
                 _this.platform.resume.subscribe(function () {
-                    //this.pda_disable_diagnostics_bgps_on_logoff = (this.pdaParams.pda_disable_diagnostics_bgps_on_logoff || (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DIAGNOSTICS_BGPS_ON_LOGOFF') == 'Y'));
-                    //alert("Resume fired inside Platformreadyservice provider");
-                    //this.log.debug("RESUME EVENT FIRED");
                     _this.log.info("RESUME event fired: Background GPS about to STOP.");
-                    //this.backgroundMode.disable();
-                    //if (!this.pda_disable_diagnostics_bgps_on_logoff)
                     _this.backgroundGeolocationService.stop();
-                    //$rootScope.$broadcast('RESUME');
                     _this.sharedService.isAppinBackground = false;
-                    //this.backgroundMode.moveToForeground();		// LT - force foreground
                     _this.sharedService.RESUME.next(true);
                 });
             }
@@ -14467,9 +14467,9 @@ LogServiceInstance.prototype.context = this.context;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_custom_logger_service__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_custom_SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__storage_storage_swaps__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__storage_storage_swaps__ = __webpack_require__(151);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common__ = __webpack_require__(63);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__storage_cookie_browser__ = __webpack_require__(284);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__storage_storage_browser__ = __webpack_require__(285);
@@ -14488,14 +14488,14 @@ LogServiceInstance.prototype.context = this.context;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_custom_Mobile_event__ = __webpack_require__(392);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_custom_SiteConfig__ = __webpack_require__(393);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__services_custom_DespatchToDriverMessages__ = __webpack_require__(394);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_custom_JseaDriverQuestions__ = __webpack_require__(201);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_custom_JseaDriverQuestions__ = __webpack_require__(203);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_custom_JseaDriverAnswers__ = __webpack_require__(395);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__services_custom_JseaDriverAnswersChange__ = __webpack_require__(396);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__services_custom_Photocontainer__ = __webpack_require__(397);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__services_custom_Image__ = __webpack_require__(398);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__services_custom_BarcodeHist__ = __webpack_require__(399);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__services_custom_BarcodeHistChange__ = __webpack_require__(400);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__services_custom_DeviceDiagnostics__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__services_custom_DeviceDiagnostics__ = __webpack_require__(174);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__models_index__ = __webpack_require__(382);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__services_index__ = __webpack_require__(84);

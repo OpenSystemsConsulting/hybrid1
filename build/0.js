@@ -318,14 +318,14 @@ var KeysPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_log_service_log_service__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_siteconfig_service_siteconfig_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_base_service_base_service__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_base_service_base_service__ = __webpack_require__(198);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_shared_service_shared_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_jsea_service_jsea_service__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_message_service_message_service__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_event_service_event_service__ = __webpack_require__(120);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_sod_service_sod_service__ = __webpack_require__(200);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_background_geolocation_service_background_geolocation_service__ = __webpack_require__(203);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_platform_ready_service_platform_ready_service__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_event_service_event_service__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_sod_service_sod_service__ = __webpack_require__(202);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_background_geolocation_service_background_geolocation_service__ = __webpack_require__(119);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_platform_ready_service_platform_ready_service__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__providers_sync_service_sync_service__ = __webpack_require__(471);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_exit_service_exit_service__ = __webpack_require__(461);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_gps_audit_service_gps_audit_service__ = __webpack_require__(116);
@@ -335,7 +335,7 @@ var KeysPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__providers_job_replication_service_job_replication_service__ = __webpack_require__(208);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(117);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__providers_push_service_push_service__ = __webpack_require__(462);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(207);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(122);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27_leaflet__ = __webpack_require__(861);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27_leaflet___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_27_leaflet__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_leaflet_routing_machine__ = __webpack_require__(862);
@@ -458,23 +458,23 @@ var HomePage = /** @class */ (function () {
             return 0;
         };
         this.logonDriver = function () {
+            _this.log.info("The driver has LOGGED ON.");
             _this.pdaParams.logonDriver();
             _this.eventService.sendMsg('LOGON', '');
             _this.sodService.checkDoSodAction('FIRST_RESUME'); // check if first for the day
             // Dump local storage at logon time - debug aid
             //this.messageService.dumpLocalStorage();
-            _this.sharedService.loginFlag = _this.pdaParams.isDrvLoggedOn();
             _this.cd.detectChanges();
             if (_this.platformReady.isPlatformReady()) {
-                // this.backgroundGeolocationService.start();
+                _this.backgroundGeolocationService.start();
                 if (!_this.sharedService.isDiagnosticsRunning)
                     _this.deviceDiagnosticServiceProvider.startWatching();
             }
         };
         this.logoffDriver = function () {
+            _this.log.info("The driver has LOGGED OFF.");
             _this.pdaParams.logoffDriver();
             _this.eventService.sendMsg('LOGOFF', '');
-            _this.sharedService.loginFlag = _this.pdaParams.isDrvLoggedOn();
             _this.cd.detectChanges();
             if (_this.platformReady.isPlatformReady() && _this.pda_disable_diagnostics_bgps_on_logoff) {
                 _this.backgroundGeolocationService.stop();
@@ -761,7 +761,7 @@ var HomePage = /** @class */ (function () {
                             if (error)
                                 // this.log.error("signatureCallback: Error in saving job number: " + job.mobjobNumber + " with leg # :" + job.mobjobLegNumber + " and error:" + JSON.stringify(error));
                                 _this.log.error("signatureCallback: Error in saving job. Error::" + JSON.stringify(error));
-                            //This is async loopback layer and jobnumbers and dates will be the last one in the iteration.
+                            //This is async loopback layer and jobnumbers and dates will be set the last one in the iteration.
                             //This is not helpful and so dont print it. 
                             /*  else
                                  this.log.info("signatureCallback: Saved job number: " + job.mobjobNumber + " with leg #:" + job.mobjobLegNumber); */
@@ -1222,7 +1222,7 @@ var HomePage = /** @class */ (function () {
                 _this.cd.detectChanges();
             }
             if (err) {
-                _this.log.info("===============Error in getJobs::============" + err);
+                _this.log.info("Error in getJobs::" + err);
             }
         });
     }; //getJobs() ends here
