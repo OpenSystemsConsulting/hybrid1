@@ -6377,39 +6377,39 @@ var map = {
 		12
 	],
 	"../pages/images/images.module": [
-		838,
+		846,
 		11
 	],
 	"../pages/job-detail-notes/job-detail-notes.module": [
-		839,
+		838,
 		10
 	],
 	"../pages/job-details/job-details.module": [
-		840,
+		839,
 		4
 	],
 	"../pages/jsea/jsea.module": [
-		841,
+		840,
 		9
 	],
 	"../pages/login/login.module": [
-		842,
+		841,
 		8
 	],
 	"../pages/msgs/msgs.module": [
-		843,
+		842,
 		7
 	],
 	"../pages/pda/pda.module": [
-		844,
+		843,
 		6
 	],
 	"../pages/signature/signature.module": [
-		845,
+		844,
 		3
 	],
 	"../pages/tabs/tabs.module": [
-		846,
+		845,
 		5
 	]
 };
@@ -13282,7 +13282,6 @@ var AppModule = /** @class */ (function () {
                         { loadChildren: '../pages/gps/gps.module#GpsPageModule', name: 'GpsPage', segment: 'gps', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/image-text/image-text.module#ImageTextPageModule', name: 'ImageTextPage', segment: 'image-text', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/images/images.module#ImagesPageModule', name: 'ImagesPage', segment: 'images', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-detail-notes/job-detail-notes.module#JobDetailNotesPageModule', name: 'JobDetailNotesPage', segment: 'job-detail-notes', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-details/job-details.module#JobDetailsPageModule', name: 'JobDetailsPage', segment: 'job-details', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/jsea/jsea.module#JseaPageModule', name: 'JseaPage', segment: 'jsea', priority: 'low', defaultHistory: [] },
@@ -13290,7 +13289,8 @@ var AppModule = /** @class */ (function () {
                         { loadChildren: '../pages/msgs/msgs.module#MsgsPageModule', name: 'MsgsPage', segment: 'msgs', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/pda/pda.module#PdaPageModule', name: 'PdaPage', segment: 'pda', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/signature/signature.module#SignaturePageModule', name: 'SignaturePage', segment: 'signature', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/images/images.module#ImagesPageModule', name: 'ImagesPage', segment: 'images', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_24__shared_sdk__["c" /* SDKBrowserModule */].forRoot(),
