@@ -536,11 +536,11 @@ var SqliteServiceProvider = /** @class */ (function () {
                         resolve(true);
                     }, function (tx, error) {
                         //reject(error);
-                        resolve(false);
+                        reject(error);
                         //console.log('SELECT error: ' + error.message);
                     });
                 }, function (error) {
-                    resolve(false);
+                    reject(error);
                     //reject(false);
                     //console.log('Select transaction error: ' + error.message);
                 }, function () {
@@ -549,17 +549,22 @@ var SqliteServiceProvider = /** @class */ (function () {
             });
         };
         this.clear = function () {
-            _this.db.transaction(function (tx) {
-                var query = "DELETE FROM tplusStorage";
-                tx.executeSql(query, [], function (tx, res) {
-                    console.log("rowsAffected: " + res.rowsAffected);
-                }, function (tx, error) {
-                    console.log('DELETE error: ' + error.message);
+            return new Promise(function (resolve, reject) {
+                _this.db.transaction(function (tx) {
+                    var query = "DELETE FROM tplusStorage";
+                    tx.executeSql(query, [], function (tx, res) {
+                        console.log("rowsAffected: " + res.rowsAffected);
+                        resolve(true);
+                    }, function (tx, error) {
+                        reject(error);
+                        console.log('DELETE error: ' + error.message);
+                    });
+                }, function (error) {
+                    resolve(false);
+                    console.log('Delete transaction error: ' + error.message);
+                }, function () {
+                    console.log('Delete transaction ok');
                 });
-            }, function (error) {
-                console.log('Delete transaction error: ' + error.message);
-            }, function () {
-                console.log('Delete transaction ok');
             });
         };
         this.printAll = function () {
@@ -12598,51 +12603,24 @@ var MyApp = /** @class */ (function () {
                         _a.sent();
                         if (!this.sharedService.localStorageZapped) return [3 /*break*/, 5];
                         /*
-                        * If yes,localstorage has been zapped, retrive the login,userId,driverId,osc-push-credentials,uuid,driverHome latlng
-                        * variables from sqlite and write to localstorage
+                        * If yes,localstorage has been zapped, retrive all variables from sqlite and write to localstorage
                         * */
                         return [4 /*yield*/, localStorage.setItem('login', loginVar)];
                     case 3:
                         /*
-                        * If yes,localstorage has been zapped, retrive the login,userId,driverId,osc-push-credentials,uuid,driverHome latlng
-                        * variables from sqlite and write to localstorage
+                        * If yes,localstorage has been zapped, retrive all variables from sqlite and write to localstorage
                         * */
                         _a.sent();
                         return [4 /*yield*/, this.storage.getAndSetToLocalStorage().then(function (val) {
-                                /* await this.storage.get("userId").then((val: any) => {
-                                  localStorage.setItem('userId', val);
-                      
-                                });
-                                await this.storage.get("driverId").then((driverId: any) => {
-                                  //call this.pdaParams.setDriverInfo(this.driverId);
-                                  localStorage.setItem('driverId', driverId);
-                                  this.pdaParams.setDriverInfo(driverId);
-                                  this.pdaParams.logoffDriver();
-                                });
-                                await this.storage.get("osc-push-credentials").then((val: any) => {
-                                  localStorage.setItem('osc-push-credentials', val);
-                                });
-                                await this.storage.get("uuid").then((val: any) => {
-                                  if (val)
-                                    localStorage.setItem('uuid', val);
-                                });
-                                await this.storage.get("driverHomeLng").then((val: any) => {
-                                  if (val)
-                                    localStorage.setItem('driverHomeLng', val);
-                                });
-                                await this.storage.get("driverHomeLat").then((val: any) => {
-                                  if (val)
-                                    localStorage.setItem('driverHomeLat', val);
-                                });
-                      
-                                await this.storage.get("osc-local-db").then((val: any) => {
-                                  localStorage.setItem('osc-local-db', val);
-                                });
-                       */
-                                //Also, set firstlogin to false and 
-                                localStorage.setItem('firstlogin', 'false');
-                                document.location.href = 'index.html';
-                                return;
+                                if (val) {
+                                    //Also, set firstlogin to false and 
+                                    localStorage.setItem('firstlogin', 'false');
+                                    document.location.href = 'index.html';
+                                    return;
+                                }
+                                else {
+                                    console.log("Error in getAndSetToLocalStorage:" + val);
+                                }
                             })];
                     case 4:
                         _a.sent();
