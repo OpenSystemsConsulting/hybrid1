@@ -536,7 +536,7 @@ var SqliteServiceProvider = /** @class */ (function () {
                         resolve(true);
                     }, function (tx, error) {
                         //reject(error);
-                        reject(error);
+                        resolve(false);
                         //console.log('SELECT error: ' + error.message);
                     });
                 }, function (error) {
@@ -12612,15 +12612,10 @@ var MyApp = /** @class */ (function () {
                         * */
                         _a.sent();
                         return [4 /*yield*/, this.storage.getAndSetToLocalStorage().then(function (val) {
-                                if (val) {
-                                    //Also, set firstlogin to false and 
-                                    localStorage.setItem('firstlogin', 'false');
-                                    document.location.href = 'index.html';
-                                    return;
-                                }
-                                else {
-                                    console.log("Error in getAndSetToLocalStorage:" + val);
-                                }
+                                //Also, set firstlogin to false and 
+                                localStorage.setItem('firstlogin', 'false');
+                                document.location.href = 'index.html';
+                                return;
                             })];
                     case 4:
                         _a.sent();
