@@ -6,13 +6,13 @@ webpackJsonp([15],{
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GpsHistoryApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -160,10 +160,10 @@ var GpsHistoryApi = /** @class */ (function (_super) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_sdk_services__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__fixed_queue_service_fixed_queue_service__ = __webpack_require__(177);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__device_service_device_service__ = __webpack_require__(206);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__job_service_job_service__ = __webpack_require__(121);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__util_service_util_service__ = __webpack_require__(55);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -420,16 +420,227 @@ var MessageServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
+/***/ 115:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SqliteServiceProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_service_shared_service__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+/*
+  Generated class for the SqliteServiceProvider provider.
+
+  See https://angular.io/guide/dependency-injection for more info on providers
+  and Angular DI.
+*/
+var SqliteServiceProvider = /** @class */ (function () {
+    // (<any>window).
+    function SqliteServiceProvider(http, sharedService, pdaParams) {
+        var _this = this;
+        this.http = http;
+        this.sharedService = sharedService;
+        this.pdaParams = pdaParams;
+        this.opendbOnDeviceReady = function () {
+            //this.db = (<any>window).sqlitePlugin.openDatabase({ name: 'test.db', location: 'default' });
+            _this.db = window.sqlitePlugin.openDatabase({ name: 'test.db', location: 'default' }, function (db) {
+                // Here, you might create or open the table.
+                db.transaction(function (tx) {
+                    // ...
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS tplusStorage (item,itemvalue)', function (tx, res) {
+                        console.log("tplusStorage table created -- " + res);
+                    });
+                }, function (error) {
+                    console.log('Create transaction error: ' + error.message);
+                }, function () {
+                    console.log('Create transaction ok');
+                });
+                _this.isOpen = true;
+            }, function (error) {
+                console.log('Open database ERROR: ' + JSON.stringify(error));
+            });
+        };
+        this.set = function (item, itemvalue) {
+            //  let itemvalue = JSON.stringify(itemval);
+            _this.db.transaction(function (tx) {
+                var query = "INSERT OR REPLACE INTO tplusStorage (item,itemvalue) VALUES (?,?)";
+                tx.executeSql(query, [item, itemvalue], function (tx, res) {
+                    //console.log("Insert item is :" + item + " for itemvalue:" + itemvalue);
+                    //console.log("insertId: " + res.insertId + " -- probably 1");
+                    //console.log("rowsAffected: " + res.rowsAffected + " -- should be 1");
+                }, function (tx, error) {
+                    console.log('INSERT error: ' + error.message);
+                });
+            }, function (error) {
+                console.log('Insert transaction error: ' + error.message);
+            }, function () {
+                console.log('Insert transaction ok');
+            });
+        };
+        this.get = function (item) {
+            return new Promise(function (resolve, reject) {
+                _this.db.transaction(function (tx) {
+                    var query = "SELECT itemvalue FROM tplusStorage WHERE item = ?";
+                    tx.executeSql(query, [item], function (tx, resultSet) {
+                        /*   for(var x = 0; x < resultSet.rows.length; x++) {
+                              console.log("First name: " + resultSet.rows.item(x).firstname +
+                                  ", Acct: " + resultSet.rows.item(x).acctNo);
+                          } */
+                        console.log('Select query item is :' + item);
+                        // console.log('Select query execution result is :' + resultSet.rows.item(0).itemvalue);
+                        //console.log('Select query execution result is :' + JSON.parse(resultSet.rows.item(0)));
+                        if (resultSet.rows.item(0).itemvalue)
+                            resolve(resultSet.rows.item(0).itemvalue);
+                        else
+                            resolve(0);
+                    }, function (tx, error) {
+                        //reject(error);
+                        resolve(0);
+                        //console.log('SELECT error: ' + error.message);
+                    });
+                }, function (error) {
+                    //reject(false);
+                    //console.log('Select transaction error: ' + error.message);
+                }, function () {
+                    console.log('Select transaction ok');
+                });
+            });
+        };
+        this.getAndSetToLocalStorage = function () {
+            return new Promise(function (resolve, reject) {
+                _this.db.transaction(function (tx) {
+                    var query = "SELECT item,itemvalue FROM tplusStorage";
+                    tx.executeSql(query, [], function (tx, resultSet) {
+                        for (var x = 0; x < resultSet.rows.length; x++) {
+                            console.log("item: " + resultSet.rows.item(x).item + ", ItemValue: " + resultSet.rows.item(x).itemvalue);
+                            localStorage.setItem(resultSet.rows.item(x).item, resultSet.rows.item(x).itemvalue);
+                            if (resultSet.rows.item(x).item == 'driverId') {
+                                _this.pdaParams.setDriverInfo(resultSet.rows.item(x).itemvalue);
+                                _this.pdaParams.logoffDriver();
+                            }
+                        }
+                        resolve(true);
+                    }, function (tx, error) {
+                        //reject(error);
+                        resolve(false);
+                        //console.log('SELECT error: ' + error.message);
+                    });
+                }, function (error) {
+                    resolve(false);
+                    //reject(false);
+                    //console.log('Select transaction error: ' + error.message);
+                }, function () {
+                    console.log('getAndSetToLocalStorage transaction ok');
+                });
+            });
+        };
+        this.clear = function () {
+            _this.db.transaction(function (tx) {
+                var query = "DELETE FROM tplusStorage";
+                tx.executeSql(query, [], function (tx, res) {
+                    console.log("rowsAffected: " + res.rowsAffected);
+                }, function (tx, error) {
+                    console.log('DELETE error: ' + error.message);
+                });
+            }, function (error) {
+                console.log('Delete transaction error: ' + error.message);
+            }, function () {
+                console.log('Delete transaction ok');
+            });
+        };
+        this.printAll = function () {
+            _this.db.transaction(function (tx) {
+                var query = "SELECT item, itemvalue FROM tplusStorage";
+                tx.executeSql(query, [], function (tx, resultSet) {
+                    console.log("----------START PRINTING VALUES---------------");
+                    for (var x = 0; x < resultSet.rows.length; x++) {
+                        console.log("Item: " + resultSet.rows.item(x).item +
+                            ", Value: " + resultSet.rows.item(x).itemvalue);
+                        console.log("-------------------------");
+                    }
+                    console.log("---------END PRINTING VALUES----------------");
+                }, function (tx, error) {
+                    console.log('printAll error: ' + error.message);
+                });
+            }, function (error) {
+                //reject(false);
+                console.log('PRINTALL transaction error: ' + error.message);
+            }, function () {
+                console.log('PRINTALL transaction ok');
+            });
+        };
+        ////////////////////////////////////////////////////////////////////////
+        this.echoTest = function () {
+            document.addEventListener('deviceready', function () {
+                window.sqlitePlugin.echoTest(function () {
+                    console.log('ECHO test OK');
+                });
+            });
+        };
+        this.selfTest = function () {
+            document.addEventListener('deviceready', function () {
+                window.sqlitePlugin.selfTest(function () {
+                    console.log('SELF test OK');
+                });
+            });
+        };
+        this.sqlStringTest = function () {
+            document.addEventListener('deviceready', function () {
+                var db = window.sqlitePlugin.openDatabase({ name: 'test.db', location: 'default' });
+                db.transaction(function (tr) {
+                    tr.executeSql("SELECT upper('Test string') AS upperString", [], function (tr, rs) {
+                        console.log('Got upperString result: ' + rs.rows.item(0).upperString);
+                    });
+                });
+            });
+        }; //sqlStringTest ends
+        this.closeDB = function () {
+            _this.db.close(function () {
+                console.log("DB closed!");
+            }, function (error) {
+                console.log("Error closing DB:" + error.message);
+            });
+        };
+        console.log('Hello SqliteServiceProvider Provider');
+        if (!this.isOpen) {
+            document.addEventListener('deviceready', this.opendbOnDeviceReady, false);
+        }
+    } //constructor ends
+    SqliteServiceProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_2__shared_service_shared_service__["a" /* SharedServiceProvider */], __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */]])
+    ], SqliteServiceProvider);
+    return SqliteServiceProvider;
+}());
+
+//# sourceMappingURL=sqlite-service.js.map
+
+/***/ }),
+
 /***/ 116:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JseaServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_service_shared_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__log_service_log_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_service_shared_service__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__log_service_log_service__ = __webpack_require__(20);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -670,8 +881,8 @@ var JseaServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GpsAuditServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__fixed_queue_service_fixed_queue_service__ = __webpack_require__(177);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -743,9 +954,9 @@ var GpsAuditServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_network__ = __webpack_require__(413);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_service_util_service__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -848,104 +1059,168 @@ var ConnectivityMonitorProvider = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoopBackConfig; });
-/* tslint:disable */
-/**
-* @module LoopBackConfig
-* @description
-*
-* The LoopBackConfig module help developers to externally
-* configure the base url and api version for loopback.io
-*
-* Example
-*
-* import { LoopBackConfig } from './sdk';
-*
-* @Component() // No metadata needed for this module
-*
-* export class MyApp {
-*   constructor() {
-*     LoopBackConfig.setBaseURL('http://localhost:3000');
-*     LoopBackConfig.setApiVersion('api');
-*   }
-* }
-**/
-var LoopBackConfig = /** @class */ (function () {
-    function LoopBackConfig() {
-    }
-    LoopBackConfig.setApiVersion = function (version) {
-        if (version === void 0) { version = 'api'; }
-        LoopBackConfig.version = version;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PdaparamsServiceProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_service_config_service__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_service_shared_service__ = __webpack_require__(21);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+/*
+  Generated class for the PdaparamsServiceProvider provider.
+
+  Get driver ID from local storage
+     If no driver ID then this must be first time setup so prompt for it (IMEI as well?)
+     Can then retrieve rest of driver details from tpm_pda_controller table
+
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular DI.
+*/
+var PdaparamsServiceProvider = /** @class */ (function () {
+    function PdaparamsServiceProvider(configService, sharedService) {
+        this.configService = configService;
+        this.sharedService = sharedService;
+        this.pda_image_notes = true;
+        this.fullReplication = false;
+        // TODO - siteId needs to be in a config file somewhere
+        this.localdriver = {
+            driverId: 0,
+            accessAllowed: false,
+            loggedOn: false,
+            lastUpdate: 0,
+            debugMode: false
+        };
+        this.debugMode = this.localdriver.debugMode;
+        this.experimental = true; // enable any experimental features
+        this.multileg = true; // enable separate pods for multileg jobs
+        this.jobdisplay = false; // jobs tab does a quick display from local storage while sync takes place
+        this.multiSelect = true; // Allow multi job select for Accept; Pickup etc.
+        this.GPSInterval = 60000; // 1 minute default to grab GPS data (milliseconds)
+        this.alwaysGetGPS = false;
+        this.pda_jsea_on = false;
+        this.imagePollTime = 60000 * 5; // 5 minute default
+        this.imageUpload = true;
+        this.syncDL = false; // sync DL jobs as well
+        this.getAppBuild = function () {
+            return this.configService.appConfig.build;
+        };
+        //console.log('Hello PdaparamsServiceProvider Provider');
+        this.driverId = this.getDriverId();
+        if (this.sharedService.testing)
+            this.jobDetailOneDayOnly = false;
+        else
+            this.jobDetailOneDayOnly = true;
+        //this.pda_disable_diagnostics_bgps_on_logoff = (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DIAGNOSTICS_BGPS_ON_LOGOFF') == 'Y');
+    } //Constructor ends
+    PdaparamsServiceProvider.prototype.getParams = function () {
+        this.localdriver = JSON.parse(localStorage.getItem('osc-driver-info')) || this.localdriver;
+        return this.localdriver;
     };
-    LoopBackConfig.getApiVersion = function () {
-        return LoopBackConfig.version;
+    ;
+    PdaparamsServiceProvider.prototype.getAppVersion = function () {
+        return this.configService.appConfig.version;
     };
-    LoopBackConfig.setBaseURL = function (url) {
-        if (url === void 0) { url = '/'; }
-        LoopBackConfig.path = url;
+    ;
+    PdaparamsServiceProvider.prototype.getDriverId = function () {
+        this.localdriver = this.getParams();
+        this.driverId = this.localdriver.driverId;
+        return this.localdriver.driverId;
     };
-    LoopBackConfig.getPath = function () {
-        return LoopBackConfig.path;
+    ;
+    PdaparamsServiceProvider.prototype.getSiteId = function () {
+        // NOTE - should be in service but got circular dependancy when injecting siteService
+        var siteId = localStorage.getItem('clientId');
+        return siteId;
     };
-    LoopBackConfig.setAuthPrefix = function (authPrefix) {
-        if (authPrefix === void 0) { authPrefix = ''; }
-        LoopBackConfig.authPrefix = authPrefix;
+    ;
+    PdaparamsServiceProvider.prototype.clearDriverInfo = function () {
+        localStorage.removeItem('osc-driver-info');
     };
-    LoopBackConfig.getAuthPrefix = function () {
-        return LoopBackConfig.authPrefix;
+    ;
+    PdaparamsServiceProvider.prototype.setDriverInfo = function (driverId) {
+        this.localdriver.driverId = driverId;
+        this.driverId = driverId;
+        localStorage.setItem('osc-driver-info', JSON.stringify(this.localdriver));
     };
-    LoopBackConfig.setDebugMode = function (isEnabled) {
-        LoopBackConfig.debug = isEnabled;
+    ;
+    PdaparamsServiceProvider.prototype.setDebugMode = function (value) {
+        this.localdriver.debugMode = value || false;
+        localStorage.setItem('osc-driver-info', JSON.stringify(this.localdriver));
     };
-    LoopBackConfig.debuggable = function () {
-        return LoopBackConfig.debug;
+    ;
+    PdaparamsServiceProvider.prototype.logonDriver = function () {
+        this.localdriver = this.getParams();
+        this.localdriver.loggedOn = true;
+        this.localdriver.lastUpdate = Date.now();
+        this.sharedService.loginFlag = true;
+        localStorage.setItem('osc-driver-info', JSON.stringify(this.localdriver));
     };
-    LoopBackConfig.filterOnUrl = function () {
-        LoopBackConfig.filterOn = 'url';
+    ;
+    PdaparamsServiceProvider.prototype.logoffDriver = function () {
+        this.localdriver = this.getParams();
+        this.localdriver.loggedOn = false;
+        this.localdriver.lastUpdate = Date.now();
+        this.sharedService.loginFlag = false;
+        localStorage.setItem('osc-driver-info', JSON.stringify(this.localdriver));
     };
-    LoopBackConfig.filterOnHeaders = function () {
-        LoopBackConfig.filterOn = 'headers';
+    ;
+    PdaparamsServiceProvider.prototype.isDrvLoggedOff = function () {
+        this.localdriver = this.getParams();
+        if (this.localdriver.loggedOn) {
+            return false;
+        }
+        else {
+            return true;
+        }
     };
-    LoopBackConfig.whereOnUrl = function () {
-        LoopBackConfig.whereOn = 'url';
+    ;
+    PdaparamsServiceProvider.prototype.isDrvLoggedOn = function () {
+        this.localdriver = this.getParams();
+        if (this.localdriver.loggedOn) {
+            return true;
+        }
+        else {
+            return false;
+        }
     };
-    LoopBackConfig.whereOnHeaders = function () {
-        LoopBackConfig.whereOn = 'headers';
+    ;
+    PdaparamsServiceProvider.prototype.checkDriverStatus = function () {
+        // If device is resumed first time on a date after last login then auto logoff the driver
+        // which will ensure he has to login in again before processing any work
+        // (so in effect an auto logout overnight)
+        // TODO - need a date check etc.
+        //this.logoffDriver();
     };
-    LoopBackConfig.isHeadersFilteringSet = function () {
-        return (LoopBackConfig.filterOn === 'headers');
+    ;
+    PdaparamsServiceProvider.prototype.setParameter = function (params, cb) {
+        // params is object of (maybe array) of key/value pair(s) for us to set
+        // e.g. { "experimental":false}
+        for (var key in params) {
+            if (this.hasOwnProperty(key)) {
+                this[key] = params[key];
+            }
+        }
+        if (cb)
+            cb();
     };
-    LoopBackConfig.isHeadersWhereSet = function () {
-        return (LoopBackConfig.whereOn === 'headers');
-    };
-    LoopBackConfig.setSecureWebSockets = function () {
-        LoopBackConfig.secure = true;
-    };
-    LoopBackConfig.unsetSecureWebSockets = function () {
-        LoopBackConfig.secure = false;
-    };
-    LoopBackConfig.isSecureWebSocketsSet = function () {
-        return LoopBackConfig.secure;
-    };
-    LoopBackConfig.setRequestOptionsCredentials = function (withCredentials) {
-        if (withCredentials === void 0) { withCredentials = false; }
-        LoopBackConfig.withCredentials = withCredentials;
-    };
-    LoopBackConfig.getRequestOptionsCredentials = function () {
-        return LoopBackConfig.withCredentials;
-    };
-    LoopBackConfig.path = '//192.168.160.132:3001';
-    LoopBackConfig.version = 'api';
-    LoopBackConfig.authPrefix = '';
-    LoopBackConfig.debug = true;
-    LoopBackConfig.filterOn = 'headers';
-    LoopBackConfig.whereOn = 'headers';
-    LoopBackConfig.secure = false;
-    LoopBackConfig.withCredentials = false;
-    return LoopBackConfig;
+    ;
+    PdaparamsServiceProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__config_service_config_service__["a" /* ConfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_2__shared_service_shared_service__["a" /* SharedServiceProvider */]])
+    ], PdaparamsServiceProvider);
+    return PdaparamsServiceProvider;
 }());
 
-//# sourceMappingURL=lb.config.js.map
+//# sourceMappingURL=pdaparams-service.js.map
 
 /***/ }),
 
@@ -959,8 +1234,8 @@ var LoopBackConfig = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_sdk_models_GpsHistory__ = __webpack_require__(97);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk_services_custom_GpsHistory__ = __webpack_require__(109);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gps_audit_service_gps_audit_service__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_device__ = __webpack_require__(54);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1217,8 +1492,8 @@ var BackgroundGeolocationServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1311,10 +1586,10 @@ var JobServiceProvider = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_service_config_service__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__window_ref_service_window_ref_service__ = __webpack_require__(415);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__window_ref_service_window_ref_service__ = __webpack_require__(414);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1394,14 +1669,14 @@ var EventServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DeviceDiagnosticServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_diagnostic__ = __webpack_require__(416);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_diagnostic__ = __webpack_require__(415);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_DeviceDiagnostics__ = __webpack_require__(157);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk_services_custom_DeviceDiagnostics__ = __webpack_require__(175);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_service_shared_service__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_device__ = __webpack_require__(54);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1573,168 +1848,104 @@ var DeviceDiagnosticServiceProvider = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PdaparamsServiceProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_service_config_service__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_service_shared_service__ = __webpack_require__(23);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-/*
-  Generated class for the PdaparamsServiceProvider provider.
-
-  Get driver ID from local storage
-     If no driver ID then this must be first time setup so prompt for it (IMEI as well?)
-     Can then retrieve rest of driver details from tpm_pda_controller table
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
-var PdaparamsServiceProvider = /** @class */ (function () {
-    function PdaparamsServiceProvider(configService, sharedService) {
-        this.configService = configService;
-        this.sharedService = sharedService;
-        this.pda_image_notes = true;
-        this.fullReplication = false;
-        // TODO - siteId needs to be in a config file somewhere
-        this.localdriver = {
-            driverId: 0,
-            accessAllowed: false,
-            loggedOn: false,
-            lastUpdate: 0,
-            debugMode: false
-        };
-        this.debugMode = this.localdriver.debugMode;
-        this.experimental = true; // enable any experimental features
-        this.multileg = true; // enable separate pods for multileg jobs
-        this.jobdisplay = false; // jobs tab does a quick display from local storage while sync takes place
-        this.multiSelect = true; // Allow multi job select for Accept; Pickup etc.
-        this.GPSInterval = 60000; // 1 minute default to grab GPS data (milliseconds)
-        this.alwaysGetGPS = false;
-        this.pda_jsea_on = false;
-        this.imagePollTime = 60000 * 5; // 5 minute default
-        this.imageUpload = true;
-        this.syncDL = false; // sync DL jobs as well
-        this.getAppBuild = function () {
-            return this.configService.appConfig.build;
-        };
-        //console.log('Hello PdaparamsServiceProvider Provider');
-        this.driverId = this.getDriverId();
-        if (this.sharedService.testing)
-            this.jobDetailOneDayOnly = false;
-        else
-            this.jobDetailOneDayOnly = true;
-        //this.pda_disable_diagnostics_bgps_on_logoff = (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DIAGNOSTICS_BGPS_ON_LOGOFF') == 'Y');
-    } //Constructor ends
-    PdaparamsServiceProvider.prototype.getParams = function () {
-        this.localdriver = JSON.parse(localStorage.getItem('osc-driver-info')) || this.localdriver;
-        return this.localdriver;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoopBackConfig; });
+/* tslint:disable */
+/**
+* @module LoopBackConfig
+* @description
+*
+* The LoopBackConfig module help developers to externally
+* configure the base url and api version for loopback.io
+*
+* Example
+*
+* import { LoopBackConfig } from './sdk';
+*
+* @Component() // No metadata needed for this module
+*
+* export class MyApp {
+*   constructor() {
+*     LoopBackConfig.setBaseURL('http://localhost:3000');
+*     LoopBackConfig.setApiVersion('api');
+*   }
+* }
+**/
+var LoopBackConfig = /** @class */ (function () {
+    function LoopBackConfig() {
+    }
+    LoopBackConfig.setApiVersion = function (version) {
+        if (version === void 0) { version = 'api'; }
+        LoopBackConfig.version = version;
     };
-    ;
-    PdaparamsServiceProvider.prototype.getAppVersion = function () {
-        return this.configService.appConfig.version;
+    LoopBackConfig.getApiVersion = function () {
+        return LoopBackConfig.version;
     };
-    ;
-    PdaparamsServiceProvider.prototype.getDriverId = function () {
-        this.localdriver = this.getParams();
-        this.driverId = this.localdriver.driverId;
-        return this.localdriver.driverId;
+    LoopBackConfig.setBaseURL = function (url) {
+        if (url === void 0) { url = '/'; }
+        LoopBackConfig.path = url;
     };
-    ;
-    PdaparamsServiceProvider.prototype.getSiteId = function () {
-        // NOTE - should be in service but got circular dependancy when injecting siteService
-        var siteId = localStorage.getItem('clientId');
-        return siteId;
+    LoopBackConfig.getPath = function () {
+        return LoopBackConfig.path;
     };
-    ;
-    PdaparamsServiceProvider.prototype.clearDriverInfo = function () {
-        localStorage.removeItem('osc-driver-info');
+    LoopBackConfig.setAuthPrefix = function (authPrefix) {
+        if (authPrefix === void 0) { authPrefix = ''; }
+        LoopBackConfig.authPrefix = authPrefix;
     };
-    ;
-    PdaparamsServiceProvider.prototype.setDriverInfo = function (driverId) {
-        this.localdriver.driverId = driverId;
-        this.driverId = driverId;
-        localStorage.setItem('osc-driver-info', JSON.stringify(this.localdriver));
+    LoopBackConfig.getAuthPrefix = function () {
+        return LoopBackConfig.authPrefix;
     };
-    ;
-    PdaparamsServiceProvider.prototype.setDebugMode = function (value) {
-        this.localdriver.debugMode = value || false;
-        localStorage.setItem('osc-driver-info', JSON.stringify(this.localdriver));
+    LoopBackConfig.setDebugMode = function (isEnabled) {
+        LoopBackConfig.debug = isEnabled;
     };
-    ;
-    PdaparamsServiceProvider.prototype.logonDriver = function () {
-        this.localdriver = this.getParams();
-        this.localdriver.loggedOn = true;
-        this.localdriver.lastUpdate = Date.now();
-        this.sharedService.loginFlag = true;
-        localStorage.setItem('osc-driver-info', JSON.stringify(this.localdriver));
+    LoopBackConfig.debuggable = function () {
+        return LoopBackConfig.debug;
     };
-    ;
-    PdaparamsServiceProvider.prototype.logoffDriver = function () {
-        this.localdriver = this.getParams();
-        this.localdriver.loggedOn = false;
-        this.localdriver.lastUpdate = Date.now();
-        this.sharedService.loginFlag = false;
-        localStorage.setItem('osc-driver-info', JSON.stringify(this.localdriver));
+    LoopBackConfig.filterOnUrl = function () {
+        LoopBackConfig.filterOn = 'url';
     };
-    ;
-    PdaparamsServiceProvider.prototype.isDrvLoggedOff = function () {
-        this.localdriver = this.getParams();
-        if (this.localdriver.loggedOn) {
-            return false;
-        }
-        else {
-            return true;
-        }
+    LoopBackConfig.filterOnHeaders = function () {
+        LoopBackConfig.filterOn = 'headers';
     };
-    ;
-    PdaparamsServiceProvider.prototype.isDrvLoggedOn = function () {
-        this.localdriver = this.getParams();
-        if (this.localdriver.loggedOn) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    LoopBackConfig.whereOnUrl = function () {
+        LoopBackConfig.whereOn = 'url';
     };
-    ;
-    PdaparamsServiceProvider.prototype.checkDriverStatus = function () {
-        // If device is resumed first time on a date after last login then auto logoff the driver
-        // which will ensure he has to login in again before processing any work
-        // (so in effect an auto logout overnight)
-        // TODO - need a date check etc.
-        //this.logoffDriver();
+    LoopBackConfig.whereOnHeaders = function () {
+        LoopBackConfig.whereOn = 'headers';
     };
-    ;
-    PdaparamsServiceProvider.prototype.setParameter = function (params, cb) {
-        // params is object of (maybe array) of key/value pair(s) for us to set
-        // e.g. { "experimental":false}
-        for (var key in params) {
-            if (this.hasOwnProperty(key)) {
-                this[key] = params[key];
-            }
-        }
-        if (cb)
-            cb();
+    LoopBackConfig.isHeadersFilteringSet = function () {
+        return (LoopBackConfig.filterOn === 'headers');
     };
-    ;
-    PdaparamsServiceProvider = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__config_service_config_service__["a" /* ConfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_2__shared_service_shared_service__["a" /* SharedServiceProvider */]])
-    ], PdaparamsServiceProvider);
-    return PdaparamsServiceProvider;
+    LoopBackConfig.isHeadersWhereSet = function () {
+        return (LoopBackConfig.whereOn === 'headers');
+    };
+    LoopBackConfig.setSecureWebSockets = function () {
+        LoopBackConfig.secure = true;
+    };
+    LoopBackConfig.unsetSecureWebSockets = function () {
+        LoopBackConfig.secure = false;
+    };
+    LoopBackConfig.isSecureWebSocketsSet = function () {
+        return LoopBackConfig.secure;
+    };
+    LoopBackConfig.setRequestOptionsCredentials = function (withCredentials) {
+        if (withCredentials === void 0) { withCredentials = false; }
+        LoopBackConfig.withCredentials = withCredentials;
+    };
+    LoopBackConfig.getRequestOptionsCredentials = function () {
+        return LoopBackConfig.withCredentials;
+    };
+    LoopBackConfig.path = '//192.168.160.132:3001';
+    LoopBackConfig.version = 'api';
+    LoopBackConfig.authPrefix = '';
+    LoopBackConfig.debug = true;
+    LoopBackConfig.filterOn = 'headers';
+    LoopBackConfig.whereOn = 'headers';
+    LoopBackConfig.secure = false;
+    LoopBackConfig.withCredentials = false;
+    return LoopBackConfig;
 }());
 
-//# sourceMappingURL=pdaparams-service.js.map
+//# sourceMappingURL=lb.config.js.map
 
 /***/ }),
 
@@ -2813,13 +3024,13 @@ var ErrorHandler = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DeviceDiagnosticsApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -3313,7 +3524,7 @@ var FixedQueueServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 18:
+/***/ 19:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3324,7 +3535,7 @@ var FixedQueueServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3550,114 +3761,6 @@ var SocketConnection = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 19:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogServiceProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_service_config_service__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_service_shared_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util_service_util_service__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_sdk_services_custom_logger_service__ = __webpack_require__(96);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__log_service_instance__ = __webpack_require__(811);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-//import { Injectable, ReflectiveInjector } from '@angular/core';
-
-
-//import 'reflect-metadata';
-
-
-
-
-
-
-
-/*
-  Generated class for the LogServiceProvider provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
-var LogServiceProvider = /** @class */ (function (_super) {
-    __extends(LogServiceProvider, _super);
-    /*  private pdaParamService;
-     private configService;
-     private loggerService;
-     //public http; */
-    function LogServiceProvider(pdaParamService, configService, http, sharedService, platform, utilService) {
-        var _this = _super.call(this) || this;
-        _this.pdaParamService = pdaParamService;
-        _this.configService = configService;
-        _this.http = http;
-        _this.sharedService = sharedService;
-        _this.platform = platform;
-        _this.utilService = utilService;
-        return _this;
-    }
-    /*  enabled(_isEnabled) {
-       this.isEnabled = !!_isEnabled;
-     }; */
-    LogServiceProvider.prototype.logInstance = function (context) {
-        //console.log("=========The Driver ID in the logService.ts is ::============" + context.driver);
-        context.ver = this.configService.appConfig.version;
-        this.context = context;
-        this.pdaParams = this.pdaParamService;
-        //context, driverId, logServerIP, logServerPort
-        return new __WEBPACK_IMPORTED_MODULE_8__log_service_instance__["a" /* LogServiceInstance */](this.http, this.context, this.pdaParamService.getDriverId(), this.getlogServerIP(), this.getlogServerPort(), this.pdaParams, this.sharedService, this.platform, this.utilService);
-    };
-    ;
-    LogServiceProvider.prototype.getInstance = function (context) {
-        //return new Logger(context);
-        return this.logInstance(context);
-    };
-    ;
-    LogServiceProvider.prototype.setContext = function (context) {
-        this.context = context;
-    };
-    LogServiceProvider.prototype.getlogServerIP = function () {
-        return (this.configService.appConfig.logServerIP);
-    };
-    ;
-    LogServiceProvider.prototype.getlogServerPort = function () {
-        return (this.configService.appConfig.logServerPort);
-    };
-    ;
-    LogServiceProvider = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_2__config_service_config_service__["a" /* ConfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
-            __WEBPACK_IMPORTED_MODULE_3__shared_service_shared_service__["a" /* SharedServiceProvider */], __WEBPACK_IMPORTED_MODULE_7_ionic_angular__["l" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_5__util_service_util_service__["a" /* UtilServiceProvider */]])
-    ], LogServiceProvider);
-    return LogServiceProvider;
-}(__WEBPACK_IMPORTED_MODULE_6__shared_sdk_services_custom_logger_service__["a" /* LoggerService */]));
-
-//# sourceMappingURL=log-service.js.map
-
-/***/ }),
-
 /***/ 199:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3668,9 +3771,9 @@ var LogServiceProvider = /** @class */ (function (_super) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__(407);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_service_util_service__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(20);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4061,6 +4164,114 @@ var BaseServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
+/***/ 20:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogServiceProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_service_config_service__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_service_shared_service__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util_service_util_service__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_sdk_services_custom_logger_service__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ionic_angular__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__log_service_instance__ = __webpack_require__(811);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+//import { Injectable, ReflectiveInjector } from '@angular/core';
+
+
+//import 'reflect-metadata';
+
+
+
+
+
+
+
+/*
+  Generated class for the LogServiceProvider provider.
+
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular DI.
+*/
+var LogServiceProvider = /** @class */ (function (_super) {
+    __extends(LogServiceProvider, _super);
+    /*  private pdaParamService;
+     private configService;
+     private loggerService;
+     //public http; */
+    function LogServiceProvider(pdaParamService, configService, http, sharedService, platform, utilService) {
+        var _this = _super.call(this) || this;
+        _this.pdaParamService = pdaParamService;
+        _this.configService = configService;
+        _this.http = http;
+        _this.sharedService = sharedService;
+        _this.platform = platform;
+        _this.utilService = utilService;
+        return _this;
+    }
+    /*  enabled(_isEnabled) {
+       this.isEnabled = !!_isEnabled;
+     }; */
+    LogServiceProvider.prototype.logInstance = function (context) {
+        //console.log("=========The Driver ID in the logService.ts is ::============" + context.driver);
+        context.ver = this.configService.appConfig.version;
+        this.context = context;
+        this.pdaParams = this.pdaParamService;
+        //context, driverId, logServerIP, logServerPort
+        return new __WEBPACK_IMPORTED_MODULE_8__log_service_instance__["a" /* LogServiceInstance */](this.http, this.context, this.pdaParamService.getDriverId(), this.getlogServerIP(), this.getlogServerPort(), this.pdaParams, this.sharedService, this.platform, this.utilService);
+    };
+    ;
+    LogServiceProvider.prototype.getInstance = function (context) {
+        //return new Logger(context);
+        return this.logInstance(context);
+    };
+    ;
+    LogServiceProvider.prototype.setContext = function (context) {
+        this.context = context;
+    };
+    LogServiceProvider.prototype.getlogServerIP = function () {
+        return (this.configService.appConfig.logServerIP);
+    };
+    ;
+    LogServiceProvider.prototype.getlogServerPort = function () {
+        return (this.configService.appConfig.logServerPort);
+    };
+    ;
+    LogServiceProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_2__config_service_config_service__["a" /* ConfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */],
+            __WEBPACK_IMPORTED_MODULE_3__shared_service_shared_service__["a" /* SharedServiceProvider */], __WEBPACK_IMPORTED_MODULE_7_ionic_angular__["l" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_5__util_service_util_service__["a" /* UtilServiceProvider */]])
+    ], LogServiceProvider);
+    return LogServiceProvider;
+}(__WEBPACK_IMPORTED_MODULE_6__shared_sdk_services_custom_logger_service__["a" /* LoggerService */]));
+
+//# sourceMappingURL=log-service.js.map
+
+/***/ }),
+
 /***/ 200:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4068,17 +4279,17 @@ var BaseServiceProvider = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ImageServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_file__ = __webpack_require__(420);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_transfer__ = __webpack_require__(421);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_file__ = __webpack_require__(419);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_transfer__ = __webpack_require__(420);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_camera__ = __webpack_require__(422);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_camera__ = __webpack_require__(421);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__image_file_service_image_file_service__ = __webpack_require__(201);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__platform_ready_service_platform_ready_service__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__shared_service_shared_service__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4475,8 +4686,8 @@ var ImageServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ImageFileServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4593,9 +4804,9 @@ var ImageFileServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_GpsHistory__ = __webpack_require__(97);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk_services_custom_GpsHistory__ = __webpack_require__(109);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gps_audit_service_gps_audit_service__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__log_service_log_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__log_service_log_service__ = __webpack_require__(20);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4815,10 +5026,10 @@ var GpsServiceProvider = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SodServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__jsea_service_jsea_service__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__message_service_message_service__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__event_service_event_service__ = __webpack_require__(122);
@@ -5016,13 +5227,13 @@ var SodServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JseaDriverQuestionsApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -5223,9 +5434,9 @@ var DeviceServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__connectivity_monitor_connectivity_monitor__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_service_util_service__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5479,22 +5690,174 @@ var JobReplicationServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 22:
+/***/ 21:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SharedServiceProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(402);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var SharedServiceProvider = /** @class */ (function () {
+    function SharedServiceProvider(loadingCtrl) {
+        this.loadingCtrl = loadingCtrl;
+        //Riyaz: Events are implemented using Subjects & BehaviorSubjects
+        this.SITE_CONFIG_LOADED = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.SODSERVICE_IS_NEW_DAY = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.APP_ON_LINE = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["BehaviorSubject"](false);
+        this.APP_OFF_LINE = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["BehaviorSubject"](false);
+        this.commandToPDA = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.messageToDriver = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.pushNotificationReceived = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.jobMetaDataLoadedSubject = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.tpmPdaCtlsLoadedSubject = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.PAUSE = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.RESUME = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.DESTROY = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.NEWJOB = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.JOBUPDATE = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.CANCEL = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.imageSaved = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.imageRefresh = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
+        this.testing = false;
+        this.isOnline = false;
+        this.seqno = 0;
+        this.tab = "";
+        this.isAppinBackground = false;
+        this.isDiagnosticsRunning = false;
+        this.newMsgCount = 0;
+        this.temp = [];
+        this.multidel_phototaken = false;
+        //Riyaz: Global variables are implemented using getter & setter methods
+        //See https://ionicallyspeaking.com/2016/03/10/global-variables-in-ionic-2/
+        this.props = new Map();
+        this.setMyConfiguredForJsea(false);
+        this.tabLoading = this.loadingCtrl.create({});
+        //console.log('Hello SharedServiceProvider Provider');
+    }
+    SharedServiceProvider.prototype.setJobId = function (value) {
+        this.props.set('jobid', value);
+    };
+    SharedServiceProvider.prototype.getJobId = function () {
+        return this.props.get('jobid');
+    };
+    SharedServiceProvider.prototype.setJobMetaData = function (value) {
+        //console.log("3.5 Jobmetadata in shared-service.ts set to==" + value);
+        localStorage.setItem('jobMetadata', '');
+        localStorage.setItem('jobMetadata', JSON.stringify(value));
+        //alert("Jobmetadata set!!");
+    };
+    SharedServiceProvider.prototype.getJobMetaData = function () {
+        return JSON.parse(localStorage.getItem('jobMetadata'));
+    };
+    SharedServiceProvider.prototype.setHistoryMetaData = function (value) {
+        this.props.set('historyMetadata', value);
+    };
+    SharedServiceProvider.prototype.getHistoryMetadata = function () {
+        return this.props.get('historyMetadata');
+    };
+    SharedServiceProvider.prototype.setBNewItem = function (value) {
+        this.props.set('bNewItem', value);
+    };
+    SharedServiceProvider.prototype.getBNewItem = function () {
+        return this.props.get('bNewItem');
+    };
+    SharedServiceProvider.prototype.setDesktopBrowserScrolling = function (value) {
+        this.props.set('desktopBrowserScrolling', value);
+    };
+    SharedServiceProvider.prototype.getDesktopBrowserScrolling = function () {
+        return this.props.get('desktopBrowserScrolling');
+    };
+    SharedServiceProvider.prototype.setSyncInProgress = function (value) {
+        this.props.set('syncInProgress', value);
+    };
+    SharedServiceProvider.prototype.getSyncInProgress = function () {
+        return this.props.get('syncInProgress');
+    };
+    SharedServiceProvider.prototype.setFirstTimeLoad = function (value) {
+        this.props.set('firstTimeLoad', value);
+    };
+    SharedServiceProvider.prototype.getFirstTimeLoad = function () {
+        return this.props.get('firstTimeLoad');
+    };
+    SharedServiceProvider.prototype.setMyConfiguredForJsea = function (value) {
+        this.props.set('myConfiguredForJsea', value);
+    };
+    SharedServiceProvider.prototype.getMyConfiguredForJsea = function () {
+        return this.props.get('myConfiguredForJsea');
+    };
+    SharedServiceProvider.prototype.setCancelNotif = function (value) {
+        this.props.set('CancelNotif', value);
+    };
+    SharedServiceProvider.prototype.getCancelNotif = function () {
+        return this.props.get('CancelNotif');
+    };
+    SharedServiceProvider.prototype.showSpinner = function () {
+        var _this = this;
+        this.tabLoading = this.loadingCtrl.create({
+            cssClass: 'transparent'
+        });
+        this.tabLoading.present().then(function () {
+            _this.tabLoading.dismiss();
+        });
+    };
+    SharedServiceProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* LoadingController */]])
+    ], SharedServiceProvider);
+    return SharedServiceProvider;
+}());
+
+//# sourceMappingURL=shared-service.js.map
+
+/***/ }),
+
+/***/ 220:
+/***/ (function(module, exports) {
+
+function webpackEmptyAsyncContext(req) {
+	// Here Promise.resolve().then() is used instead of new Promise() to prevent
+	// uncatched exception popping up in devtools
+	return Promise.resolve().then(function() {
+		throw new Error("Cannot find module '" + req + "'.");
+	});
+}
+webpackEmptyAsyncContext.keys = function() { return []; };
+webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
+module.exports = webpackEmptyAsyncContext;
+webpackEmptyAsyncContext.id = 220;
+
+/***/ }),
+
+/***/ 23:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BaseLoopBackApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__error_service__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__auth_service__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__custom_SDKModels__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operators__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__sockets_socket_connections__ = __webpack_require__(19);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -6196,220 +6559,68 @@ var BaseLoopBackApi = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 220:
-/***/ (function(module, exports) {
-
-function webpackEmptyAsyncContext(req) {
-	// Here Promise.resolve().then() is used instead of new Promise() to prevent
-	// uncatched exception popping up in devtools
-	return Promise.resolve().then(function() {
-		throw new Error("Cannot find module '" + req + "'.");
-	});
-}
-webpackEmptyAsyncContext.keys = function() { return []; };
-webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
-module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 220;
-
-/***/ }),
-
-/***/ 23:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SharedServiceProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(402);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var SharedServiceProvider = /** @class */ (function () {
-    function SharedServiceProvider(loadingCtrl) {
-        this.loadingCtrl = loadingCtrl;
-        //Riyaz: Events are implemented using Subjects & BehaviorSubjects
-        this.SITE_CONFIG_LOADED = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.SODSERVICE_IS_NEW_DAY = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.APP_ON_LINE = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["BehaviorSubject"](false);
-        this.APP_OFF_LINE = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["BehaviorSubject"](false);
-        this.commandToPDA = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.messageToDriver = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.pushNotificationReceived = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.jobMetaDataLoadedSubject = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.tpmPdaCtlsLoadedSubject = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.PAUSE = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.RESUME = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.DESTROY = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.NEWJOB = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.JOBUPDATE = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.CANCEL = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.imageSaved = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.imageRefresh = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["Subject"]();
-        this.testing = false;
-        this.isOnline = false;
-        this.seqno = 0;
-        this.tab = "";
-        this.isAppinBackground = false;
-        this.isDiagnosticsRunning = false;
-        this.newMsgCount = 0;
-        this.temp = [];
-        this.multidel_phototaken = false;
-        //Riyaz: Global variables are implemented using getter & setter methods
-        //See https://ionicallyspeaking.com/2016/03/10/global-variables-in-ionic-2/
-        this.props = new Map();
-        this.setMyConfiguredForJsea(false);
-        this.tabLoading = this.loadingCtrl.create({});
-        //console.log('Hello SharedServiceProvider Provider');
-    }
-    SharedServiceProvider.prototype.setJobId = function (value) {
-        this.props.set('jobid', value);
-    };
-    SharedServiceProvider.prototype.getJobId = function () {
-        return this.props.get('jobid');
-    };
-    SharedServiceProvider.prototype.setJobMetaData = function (value) {
-        //console.log("3.5 Jobmetadata in shared-service.ts set to==" + value);
-        localStorage.setItem('jobMetadata', '');
-        localStorage.setItem('jobMetadata', JSON.stringify(value));
-        //alert("Jobmetadata set!!");
-    };
-    SharedServiceProvider.prototype.getJobMetaData = function () {
-        return JSON.parse(localStorage.getItem('jobMetadata'));
-    };
-    SharedServiceProvider.prototype.setHistoryMetaData = function (value) {
-        this.props.set('historyMetadata', value);
-    };
-    SharedServiceProvider.prototype.getHistoryMetadata = function () {
-        return this.props.get('historyMetadata');
-    };
-    SharedServiceProvider.prototype.setBNewItem = function (value) {
-        this.props.set('bNewItem', value);
-    };
-    SharedServiceProvider.prototype.getBNewItem = function () {
-        return this.props.get('bNewItem');
-    };
-    SharedServiceProvider.prototype.setDesktopBrowserScrolling = function (value) {
-        this.props.set('desktopBrowserScrolling', value);
-    };
-    SharedServiceProvider.prototype.getDesktopBrowserScrolling = function () {
-        return this.props.get('desktopBrowserScrolling');
-    };
-    SharedServiceProvider.prototype.setSyncInProgress = function (value) {
-        this.props.set('syncInProgress', value);
-    };
-    SharedServiceProvider.prototype.getSyncInProgress = function () {
-        return this.props.get('syncInProgress');
-    };
-    SharedServiceProvider.prototype.setFirstTimeLoad = function (value) {
-        this.props.set('firstTimeLoad', value);
-    };
-    SharedServiceProvider.prototype.getFirstTimeLoad = function () {
-        return this.props.get('firstTimeLoad');
-    };
-    SharedServiceProvider.prototype.setMyConfiguredForJsea = function (value) {
-        this.props.set('myConfiguredForJsea', value);
-    };
-    SharedServiceProvider.prototype.getMyConfiguredForJsea = function () {
-        return this.props.get('myConfiguredForJsea');
-    };
-    SharedServiceProvider.prototype.setCancelNotif = function (value) {
-        this.props.set('CancelNotif', value);
-    };
-    SharedServiceProvider.prototype.getCancelNotif = function () {
-        return this.props.get('CancelNotif');
-    };
-    SharedServiceProvider.prototype.showSpinner = function () {
-        var _this = this;
-        this.tabLoading = this.loadingCtrl.create({
-            cssClass: 'transparent'
-        });
-        this.tabLoading.present().then(function () {
-            _this.tabLoading.dismiss();
-        });
-    };
-    SharedServiceProvider = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* LoadingController */]])
-    ], SharedServiceProvider);
-    return SharedServiceProvider;
-}());
-
-//# sourceMappingURL=shared-service.js.map
-
-/***/ }),
-
 /***/ 264:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"../pages/barcode/barcode.module": [
-		832,
+		833,
 		14
 	],
 	"../pages/change/change.module": [
-		833,
+		834,
 		13
 	],
 	"../pages/device/device.module": [
-		834,
+		835,
 		2
 	],
 	"../pages/gps/gps.module": [
-		835,
+		836,
 		1
 	],
 	"../pages/home/home.module": [
-		836,
+		837,
 		0
 	],
 	"../pages/image-text/image-text.module": [
-		837,
+		838,
 		12
 	],
 	"../pages/images/images.module": [
-		846,
+		839,
 		11
 	],
 	"../pages/job-detail-notes/job-detail-notes.module": [
-		838,
+		840,
 		10
 	],
 	"../pages/job-details/job-details.module": [
-		839,
+		841,
 		4
 	],
 	"../pages/jsea/jsea.module": [
-		840,
+		842,
 		9
 	],
 	"../pages/login/login.module": [
-		841,
+		843,
 		8
 	],
 	"../pages/msgs/msgs.module": [
-		842,
+		844,
 		7
 	],
 	"../pages/pda/pda.module": [
-		843,
+		845,
 		6
 	],
 	"../pages/signature/signature.module": [
-		844,
+		846,
 		3
 	],
 	"../pages/tabs/tabs.module": [
-		845,
+		847,
 		5
 	]
 };
@@ -7779,9 +7990,9 @@ var SocketDriver = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_sdk_services__ = __webpack_require__(84);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_service_shared_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__log_service_log_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_service_shared_service__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__log_service_log_service__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__customerconn_service_customerconn_service__ = __webpack_require__(176);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -7964,7 +8175,7 @@ var SiteconfigServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__io_service__ = __webpack_require__(544);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_FireLoop__ = __webpack_require__(545);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sockets_socket_connections__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__custom_SDKModels__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_operators__);
@@ -8188,16 +8399,16 @@ var RealTime = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operators__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_Job__ = __webpack_require__(153);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -8593,13 +8804,13 @@ var JobApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobChangeApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -8740,13 +8951,13 @@ var JobChangeApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TpmPdaControllerApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -8954,13 +9165,13 @@ var TpmPdaControllerApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ApplicationApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9101,16 +9312,16 @@ var ApplicationApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return InstallationApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operators__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_Installation__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9354,13 +9565,13 @@ var InstallationApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NotificationApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9501,13 +9712,13 @@ var NotificationApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PushApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9620,13 +9831,13 @@ var PushApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Mobile_eventApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9731,13 +9942,13 @@ var Mobile_eventApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SiteConfigApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9878,13 +10089,13 @@ var SiteConfigApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DespatchToDriverMessagesApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -10025,16 +10236,16 @@ var DespatchToDriverMessagesApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JseaDriverAnswersApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operators__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_JseaDriverAnswers__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -10407,13 +10618,13 @@ var JseaDriverAnswersApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JseaDriverAnswersChangeApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -10554,13 +10765,13 @@ var JseaDriverAnswersChangeApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PhotocontainerApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -10969,13 +11180,13 @@ var PhotocontainerApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ImageApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -11116,16 +11327,16 @@ var ImageApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BarcodeHistApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operators__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_BarcodeHist__ = __webpack_require__(156);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -11498,13 +11709,13 @@ var BarcodeHistApi = /** @class */ (function (_super) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BarcodeHistChangeApi; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SDKModels__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_base_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lb_config__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_auth_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_error_service__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__sockets_socket_connections__ = __webpack_require__(19);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -11639,7 +11850,7 @@ var BarcodeHistChangeApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 415:
+/***/ 414:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11776,15 +11987,15 @@ var ExitServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_push__ = __webpack_require__(417);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_push__ = __webpack_require__(416);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__platform_ready_service_platform_ready_service__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__util_service_util_service__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__shared_sdk_services__ = __webpack_require__(84);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_storage__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_sqlite_service_sqlite_service__ = __webpack_require__(115);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12014,7 +12225,7 @@ var PushServiceProvider = /** @class */ (function () {
     };
     PushServiceProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_11__ionic_storage__["b" /* Storage */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_11__providers_sqlite_service_sqlite_service__["a" /* SqliteServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_4__log_service_log_service__["a" /* LogServiceProvider */], __WEBPACK_IMPORTED_MODULE_6__platform_ready_service_platform_ready_service__["a" /* PlatformReadyServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__["a" /* Device */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_push__["a" /* Push */], __WEBPACK_IMPORTED_MODULE_10__shared_sdk_services__["b" /* InstallationApi */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_7__shared_service_shared_service__["a" /* SharedServiceProvider */],
@@ -12033,10 +12244,10 @@ var PushServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NavigationServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_launch_navigator__ = __webpack_require__(418);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_launch_navigator__ = __webpack_require__(417);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_service_shared_service__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__platform_ready_service_platform_ready_service__ = __webpack_require__(61);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -12183,22 +12394,22 @@ var NavigationServiceProvider = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(419);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(418);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(208);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_base_service_base_service__ = __webpack_require__(199);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_config_service_config_service__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_shared_service_shared_service__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_sod_service_sod_service__ = __webpack_require__(203);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_customerconn_service_customerconn_service__ = __webpack_require__(176);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_message_service_message_service__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_jsea_service_jsea_service__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_image_service_image_service__ = __webpack_require__(200);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(123);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ionic_storage__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__providers_sqlite_service_sqlite_service__ = __webpack_require__(115);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12373,7 +12584,7 @@ var MyApp = /** @class */ (function () {
                         })];
                     case 1:
                         _a.sent();
-                        if (!!(localStorage.getItem('login'))) return [3 /*break*/, 12];
+                        if (!!(localStorage.getItem('login'))) return [3 /*break*/, 6];
                         //Check if it is available in the sqlite db        
                         return [4 /*yield*/, this.storage.get("login").then(function (val) {
                                 if (val)
@@ -12385,7 +12596,7 @@ var MyApp = /** @class */ (function () {
                     case 2:
                         //Check if it is available in the sqlite db        
                         _a.sent();
-                        if (!this.sharedService.localStorageZapped) return [3 /*break*/, 11];
+                        if (!this.sharedService.localStorageZapped) return [3 /*break*/, 5];
                         /*
                         * If yes,localstorage has been zapped, retrive the login,userId,driverId,osc-push-credentials,uuid,driverHome latlng
                         * variables from sqlite and write to localstorage
@@ -12397,49 +12608,46 @@ var MyApp = /** @class */ (function () {
                         * variables from sqlite and write to localstorage
                         * */
                         _a.sent();
-                        return [4 /*yield*/, this.storage.get("userId").then(function (val) {
-                                localStorage.setItem('userId', val);
+                        return [4 /*yield*/, this.storage.getAndSetToLocalStorage().then(function (val) {
+                                /* await this.storage.get("userId").then((val: any) => {
+                                  localStorage.setItem('userId', val);
+                      
+                                });
+                                await this.storage.get("driverId").then((driverId: any) => {
+                                  //call this.pdaParams.setDriverInfo(this.driverId);
+                                  localStorage.setItem('driverId', driverId);
+                                  this.pdaParams.setDriverInfo(driverId);
+                                  this.pdaParams.logoffDriver();
+                                });
+                                await this.storage.get("osc-push-credentials").then((val: any) => {
+                                  localStorage.setItem('osc-push-credentials', val);
+                                });
+                                await this.storage.get("uuid").then((val: any) => {
+                                  if (val)
+                                    localStorage.setItem('uuid', val);
+                                });
+                                await this.storage.get("driverHomeLng").then((val: any) => {
+                                  if (val)
+                                    localStorage.setItem('driverHomeLng', val);
+                                });
+                                await this.storage.get("driverHomeLat").then((val: any) => {
+                                  if (val)
+                                    localStorage.setItem('driverHomeLat', val);
+                                });
+                      
+                                await this.storage.get("osc-local-db").then((val: any) => {
+                                  localStorage.setItem('osc-local-db', val);
+                                });
+                       */
+                                //Also, set firstlogin to false and 
+                                localStorage.setItem('firstlogin', 'false');
+                                document.location.href = 'index.html';
+                                return;
                             })];
                     case 4:
                         _a.sent();
-                        return [4 /*yield*/, this.storage.get("driverId").then(function (driverId) {
-                                //call this.pdaParams.setDriverInfo(this.driverId);
-                                localStorage.setItem('driverId', driverId);
-                                _this.pdaParams.setDriverInfo(driverId);
-                                _this.pdaParams.logoffDriver();
-                            })];
+                        return [3 /*break*/, 6];
                     case 5:
-                        _a.sent();
-                        return [4 /*yield*/, this.storage.get("osc-push-credentials").then(function (val) {
-                                localStorage.setItem('osc-push-credentials', val);
-                            })];
-                    case 6:
-                        _a.sent();
-                        return [4 /*yield*/, this.storage.get("uuid").then(function (val) {
-                                localStorage.setItem('uuid', val);
-                            })];
-                    case 7:
-                        _a.sent();
-                        return [4 /*yield*/, this.storage.get("driverHomeLng").then(function (val) {
-                                localStorage.setItem('driverHomeLng', val);
-                            })];
-                    case 8:
-                        _a.sent();
-                        return [4 /*yield*/, this.storage.get("driverHomeLat").then(function (val) {
-                                localStorage.setItem('driverHomeLat', val);
-                            })];
-                    case 9:
-                        _a.sent();
-                        return [4 /*yield*/, this.storage.get("osc-local-db").then(function (val) {
-                                localStorage.setItem('osc-local-db', val);
-                            })];
-                    case 10:
-                        _a.sent();
-                        //Also, set firstlogin to false and 
-                        localStorage.setItem('firstlogin', 'false');
-                        document.location.href = 'index.html';
-                        return [2 /*return*/];
-                    case 11:
                         //clear previous data in the storage, if any.
                         localStorage.clear();
                         this.storage.clear();
@@ -12449,7 +12657,7 @@ var MyApp = /** @class */ (function () {
                         //Direct him to the login page..
                         this.rootPage = "LoginPage";
                         return [2 /*return*/];
-                    case 12:
+                    case 6:
                         //set the tab string in shared-service
                         this.sharedService.tab = "App.Component.ts";
                         //3. Is the Server API Url set?
@@ -12457,6 +12665,8 @@ var MyApp = /** @class */ (function () {
                         //Also set the server path for the loopback SDK builder in the ./shared/sdk directory.
                         if (!(localStorage.getItem('apiURL'))) {
                             this.userId = localStorage.getItem('userId');
+                            //Hack:Set userid into sqlite as its not being set from login.ts
+                            this.storage.set("userId", this.userId);
                             //console.log('userId====' + this.userId);
                             this.connDetails = this.customerConn.getConnectionDetails(this.userId.toLowerCase());
                             this.configService.setSiteDetails(this.connDetails);
@@ -12507,7 +12717,7 @@ var MyApp = /** @class */ (function () {
     MyApp = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n\n'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/app/app.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */], __WEBPACK_IMPORTED_MODULE_17__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */], __WEBPACK_IMPORTED_MODULE_17__providers_sqlite_service_sqlite_service__["a" /* SqliteServiceProvider */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
             __WEBPACK_IMPORTED_MODULE_11__providers_pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_12__providers_connectivity_monitor_connectivity_monitor__["a" /* ConnectivityMonitorProvider */],
@@ -12740,11 +12950,11 @@ var LoginServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SyncServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__job_replication_service_job_replication_service__ = __webpack_require__(209);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -13136,32 +13346,32 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(465);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_storage__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_status_bar__ = __webpack_require__(419);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_storage__ = __webpack_require__(829);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_status_bar__ = __webpack_require__(418);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__ = __webpack_require__(208);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_device__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_insomnia__ = __webpack_require__(205);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_native_geolocation__ = __webpack_require__(207);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_launch_navigator__ = __webpack_require__(418);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_launch_navigator__ = __webpack_require__(417);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_device_feedback__ = __webpack_require__(470);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ionic_native_file__ = __webpack_require__(420);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ionic_native_file_transfer__ = __webpack_require__(421);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_camera__ = __webpack_require__(422);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ionic_native_file__ = __webpack_require__(419);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ionic_native_file_transfer__ = __webpack_require__(420);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_camera__ = __webpack_require__(421);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ionic_native_network__ = __webpack_require__(413);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__ionic_native_barcode_scanner__ = __webpack_require__(469);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ionic_native_in_app_browser__ = __webpack_require__(467);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ionic_native_media__ = __webpack_require__(471);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ionic_native_push__ = __webpack_require__(417);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ionic_native_push__ = __webpack_require__(416);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_native_background_mode__ = __webpack_require__(412);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ionic_native_diagnostic__ = __webpack_require__(416);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ionic_native_diagnostic__ = __webpack_require__(415);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__shared_sdk_services_custom_logger_service__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__providers_login_service_login_service__ = __webpack_require__(468);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__providers_config_service_config_service__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__providers_customerconn_service_customerconn_service__ = __webpack_require__(176);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__providers_siteconfig_service_siteconfig_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__providers_shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__providers_shared_service_shared_service__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__providers_base_service_base_service__ = __webpack_require__(199);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__providers_util_service_util_service__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__providers_jsea_service_jsea_service__ = __webpack_require__(116);
@@ -13171,10 +13381,10 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__providers_platform_ready_service_platform_ready_service__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__providers_background_geolocation_service_background_geolocation_service__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__providers_gps_audit_service_gps_audit_service__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__providers_log_service_log_service__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__providers_log_service_log_service__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__providers_job_service_job_service__ = __webpack_require__(121);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__providers_event_service_event_service__ = __webpack_require__(122);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__providers_window_ref_service_window_ref_service__ = __webpack_require__(415);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__providers_window_ref_service_window_ref_service__ = __webpack_require__(414);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__providers_sod_service_sod_service__ = __webpack_require__(203);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__providers_push_service_push_service__ = __webpack_require__(463);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_47__providers_exit_service_exit_service__ = __webpack_require__(462);
@@ -13186,13 +13396,14 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_53__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_54__providers_sync_service_sync_service__ = __webpack_require__(472);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__providers_job_replication_service_job_replication_service__ = __webpack_require__(209);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_56__providers_barcode_service_barcode_service__ = __webpack_require__(830);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_56__providers_barcode_service_barcode_service__ = __webpack_require__(831);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__providers_jobnote_replication_service_jobnote_replication_service__ = __webpack_require__(473);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_58__providers_barcode_replication_service_barcode_replication_service__ = __webpack_require__(831);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_58__providers_barcode_replication_service_barcode_replication_service__ = __webpack_require__(832);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_59__providers_jsea_answers_replication_service_jsea_answers_replication_service__ = __webpack_require__(475);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_60__providers_navigation_service_navigation_service__ = __webpack_require__(464);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_61__providers_attach_service_attach_service__ = __webpack_require__(474);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_62__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(123);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_63__providers_sqlite_service_sqlite_service__ = __webpack_require__(115);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -13211,6 +13422,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 //import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+
 
 
 
@@ -13282,6 +13494,7 @@ var AppModule = /** @class */ (function () {
                         { loadChildren: '../pages/gps/gps.module#GpsPageModule', name: 'GpsPage', segment: 'gps', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/image-text/image-text.module#ImageTextPageModule', name: 'ImageTextPage', segment: 'image-text', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/images/images.module#ImagesPageModule', name: 'ImagesPage', segment: 'images', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-detail-notes/job-detail-notes.module#JobDetailNotesPageModule', name: 'JobDetailNotesPage', segment: 'job-detail-notes', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-details/job-details.module#JobDetailsPageModule', name: 'JobDetailsPage', segment: 'job-details', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/jsea/jsea.module#JseaPageModule', name: 'JseaPage', segment: 'jsea', priority: 'low', defaultHistory: [] },
@@ -13289,8 +13502,7 @@ var AppModule = /** @class */ (function () {
                         { loadChildren: '../pages/msgs/msgs.module#MsgsPageModule', name: 'MsgsPage', segment: 'msgs', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/pda/pda.module#PdaPageModule', name: 'PdaPage', segment: 'pda', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/signature/signature.module#SignaturePageModule', name: 'SignaturePage', segment: 'signature', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/images/images.module#ImagesPageModule', name: 'ImagesPage', segment: 'images', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_24__shared_sdk__["c" /* SDKBrowserModule */].forRoot(),
@@ -13362,7 +13574,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_60__providers_navigation_service_navigation_service__["a" /* NavigationServiceProvider */],
                 __WEBPACK_IMPORTED_MODULE_61__providers_attach_service_attach_service__["a" /* AttachServiceProvider */],
                 __WEBPACK_IMPORTED_MODULE_22__ionic_native_background_mode__["a" /* BackgroundMode */],
-                __WEBPACK_IMPORTED_MODULE_62__providers_device_diagnostic_service_device_diagnostic_service__["a" /* DeviceDiagnosticServiceProvider */]
+                __WEBPACK_IMPORTED_MODULE_62__providers_device_diagnostic_service_device_diagnostic_service__["a" /* DeviceDiagnosticServiceProvider */],
+                __WEBPACK_IMPORTED_MODULE_63__providers_sqlite_service_sqlite_service__["a" /* SqliteServiceProvider */]
             ]
         })
     ], AppModule);
@@ -13842,7 +14055,7 @@ var FireLoopRef = /** @class */ (function () {
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__error_service__ = __webpack_require__(17);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_service__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_service__ = __webpack_require__(23);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__real_time__ = __webpack_require__(382);
 /* unused harmony namespace reexport */
@@ -14298,10 +14511,10 @@ var ConfigServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_insomnia__ = __webpack_require__(205);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_background_mode__ = __webpack_require__(412);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__background_geolocation_service_background_geolocation_service__ = __webpack_require__(120);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_service_shared_service__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14444,7 +14657,7 @@ var PlatformReadyServiceProvider = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogServiceInstance; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared_sdk_lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared_sdk_lb_config__ = __webpack_require__(13);
 
 var LogServiceInstance = /** @class */ (function () {
     function LogServiceInstance(http, context, driverId, logServerIP, logServerPort, pdaParams, sharedService, platform, utilService) {
@@ -14594,14 +14807,14 @@ LogServiceInstance.prototype.context = this.context;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_custom_logger_service__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_custom_SDKModels__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__storage_storage_swaps__ = __webpack_require__(152);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common__ = __webpack_require__(63);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__storage_cookie_browser__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__storage_storage_browser__ = __webpack_require__(286);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__sockets_socket_browser__ = __webpack_require__(507);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__sockets_socket_driver__ = __webpack_require__(299);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__sockets_socket_connections__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__sockets_socket_connections__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_core_real_time__ = __webpack_require__(382);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services_custom_Job__ = __webpack_require__(386);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_custom_JobChange__ = __webpack_require__(387);
@@ -14626,7 +14839,7 @@ LogServiceInstance.prototype.context = this.context;
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__services_index__ = __webpack_require__(84);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_34__services_index__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__lb_config__ = __webpack_require__(13);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_35__lb_config__["a"]; });
 /* unused harmony namespace reexport */
 /* unused harmony reexport CookieBrowser */
@@ -14785,15 +14998,15 @@ var SDKBrowserModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 830:
+/***/ 831:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BarcodeServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pdaparams_service_pdaparams_service__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_service_shared_service__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -14866,7 +15079,7 @@ var BarcodeServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 831:
+/***/ 832:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14967,7 +15180,7 @@ var BarcodeReplicationServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoggerService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lb_config__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lb_config__ = __webpack_require__(13);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
