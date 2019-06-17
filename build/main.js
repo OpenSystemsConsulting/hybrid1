@@ -588,6 +588,30 @@ var SqliteServiceProvider = /** @class */ (function () {
                 console.log('PRINTALL transaction ok');
             });
         };
+        this.sqliteStorageList = function () {
+            return new Promise(function (resolve, reject) {
+                _this.db.transaction(function (tx) {
+                    var query = "SELECT item,itemvalue FROM tplusStorage";
+                    tx.executeSql(query, [], function (tx, resultSet) {
+                        /*   for (var x = 0; x < resultSet.rows.length; x++) {
+                            console.log("item: " + resultSet.rows.item(x).item + ", ItemValue: " + resultSet.rows.item(x).itemvalue);
+                            localStorage.setItem(resultSet.rows.item(x).item, resultSet.rows.item(x).itemvalue);
+                          } */
+                        resolve(resultSet.rows.item);
+                    }, function (tx, error) {
+                        //reject(error);
+                        resolve(false);
+                        //console.log('SELECT error: ' + error.message);
+                    });
+                }, function (error) {
+                    reject(error);
+                    //reject(false);
+                    //console.log('Select transaction error: ' + error.message);
+                }, function () {
+                    console.log('getAndSetToLocalStorage transaction ok');
+                });
+            });
+        };
         ////////////////////////////////////////////////////////////////////////
         this.echoTest = function () {
             document.addEventListener('deviceready', function () {
@@ -3421,6 +3445,14 @@ var CustomerconnServiceProvider = /** @class */ (function () {
                 "serverIP": "tplusmobile-bne.capitaltransport.com.au",
                 "serverPort": 3001,
                 "url": "http://tplusmobile-bne.capitaltransport.com.au:3001"
+            },
+            "oth": {
+                "connector": "remote",
+                "debug": "true",
+                "clientId": "OTH",
+                "serverIP": "oth.opensyscon.com.au",
+                "serverPort": 3176,
+                "url": "http://oth.opensyscon.com.au:3176"
             }
         };
         this.getConnectionDetails = function (customer) {
@@ -12883,6 +12915,9 @@ var LoginServiceProvider = /** @class */ (function () {
                 access_1 = true;
             }
             else if (credentials.username == 'capbne' && credentials.password == 'capbne') {
+                access_1 = true;
+            }
+            else if (credentials.username == 'oth' && credentials.password == 'oth') {
                 access_1 = true;
             }
             else {
