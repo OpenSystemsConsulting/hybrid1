@@ -316,7 +316,7 @@ var KeysPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_device_feedback__ = __webpack_require__(470);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_media__ = __webpack_require__(471);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_sqlite_service_sqlite_service__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_log_service_log_service__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_base_service_base_service__ = __webpack_require__(199);
@@ -1155,9 +1155,6 @@ var HomePage = /** @class */ (function () {
         this.appType = "Default";
         this.cd.detectChanges();
         this.hideMap();
-        console.log("===============================printall from home.ts STARTS=========================================");
-        this.storage.printAll();
-        console.log("===============================printall from home.ts ENDS=========================================");
     }; //End of ionViewWillEnter()
     HomePage.prototype.isDrvLoggedOff = function () {
         return !this.sharedService.loginFlag;

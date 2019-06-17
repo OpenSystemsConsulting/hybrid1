@@ -328,7 +328,7 @@ var KeysPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_push_service_push_service__ = __webpack_require__(463);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_navigation_service_navigation_service__ = __webpack_require__(464);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_log_service_log_service__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_log_service_log_service__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__app_app_component__ = __webpack_require__(465);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -448,7 +448,7 @@ var DevicePage = /** @class */ (function () {
         };
         this.reloadSiteConfig = function () {
             _this.siteConfig.deleteLocalConfigs();
-            console.log("Local Configs deleted!");
+            _this.log.info("Local Configs deleted!");
             var result$ = _this.siteConfig
                 .loadAllConfigsFromServer()
                 .subscribe(function (result) {
@@ -540,7 +540,7 @@ var DevicePage = /** @class */ (function () {
         };
         this.viewChangeData = function () {
             _this.navCtrl.push("ChangePage").catch(function (err) {
-                //console.log("Error pushing ChangePage:" + err);
+                //this.log.info("Error pushing ChangePage:" + err);
             });
         };
         this.clearChangeData = function () {
@@ -581,14 +581,15 @@ var DevicePage = /** @class */ (function () {
         this.def_gps_activitiesInterval = pdaParams.gps_activitiesInterval;
     } //Constructor ends
     DevicePage.prototype.ionViewWillEnter = function () {
-        var _this = this;
-        this.storage.sqliteStorageList().then(function (rows) {
-            _this.sqliteStorageList = rows;
-            for (var i = 0; i < _this.sqliteStorageList.length; i++) {
-                console.log("item: " + _this.sqliteStorageList(i).item + ", ItemValue: " + _this.sqliteStorageList(i).itemvalue);
-                console.log("-------======================----------");
-            }
-        });
+        /*    this.storage.sqliteStorageList().then((rows: any) => {
+             this.sqliteStorageList = rows;
+       
+             for (let i = 0; i < this.sqliteStorageList.length; i++) {
+               console.log("item: " + this.sqliteStorageList(i).item + ", ItemValue: " + this.sqliteStorageList(i).itemvalue);
+               console.log("-------======================----------");
+             }
+       
+           }); */
         //set the tab string in shared-service
         this.sharedService.tab = "Device";
         this.log.info("In the Device Tab.");
