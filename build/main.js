@@ -490,7 +490,7 @@ var SqliteServiceProvider = /** @class */ (function () {
             _this.db.transaction(function (tx) {
                 var query = "INSERT OR REPLACE INTO tplusStorage (item,itemvalue) VALUES (?,?)";
                 tx.executeSql(query, [item, itemvalue], function (tx, res) {
-                    _this.log.info("Sqlite Storage : Inserted item is :" + item + " for itemvalue:" + itemvalue);
+                    // this.log.info("Sqlite Storage : Inserted item is :" + item + " for itemvalue:" + itemvalue);
                     //this.log.info("insertId: " + res.insertId + " -- probably 1");
                     //this.log.info("rowsAffected: " + res.rowsAffected + " -- should be 1");
                 }, function (tx, error) {
@@ -796,10 +796,10 @@ var JseaServiceProvider = /** @class */ (function () {
     };
     JseaServiceProvider.prototype.setJseaType = function (larg) {
         var match = false;
-        this.log.info('Setting JseaType passed ' + larg);
+        //this.log.info('Setting JseaType passed ' + larg);
         for (var key in this.jseaServiceTypes) {
             var lvalue = this.jseaServiceTypes[key];
-            this.log.info(' lvalue : ' + lvalue);
+            //this.log.info(' lvalue : ' + lvalue);
             if (larg == lvalue) {
                 match = true;
                 this.jseaServiceType = this.jseaServiceTypes[key];
@@ -827,7 +827,7 @@ var JseaServiceProvider = /** @class */ (function () {
         return (this.jseaServiceType == this.jseaServiceTypes["SOD"]);
     };
     JseaServiceProvider.prototype.getJseaConfig = function () {
-        this.log.info('Getting JseaIsCaptured');
+        //this.log.info('Getting JseaIsCaptured');
         //If we havn't been configured then don't stop the person doing things in the app
         //if (this.myConfiguredForJsea == false) {
         if (this.sharedService.getMyConfiguredForJsea() == false) {
@@ -853,7 +853,7 @@ var JseaServiceProvider = /** @class */ (function () {
         var _this = this;
         //if (this.SODSERVICE_IS_NEW_DAY || localStorage.getItem('SODSERVICE_IS_NEW_DAY')) {
         this.sharedService.SODSERVICE_IS_NEW_DAY.subscribe(function (SODSERVICE_IS_NEW_DAY) {
-            _this.log.info('SODSERVICE_IS_NEW_DAY Event triggered');
+            //this.log.info('SODSERVICE_IS_NEW_DAY Event triggered');
             if (_this.isJseaStartOfDay()) {
                 _this.log.info('SODSERVICE_IS_NEW_DAY isJseaStartOfDay is TRUE ');
                 //Update the value to be No and then when the guy uses the ctrler this will make it Yes
@@ -866,7 +866,7 @@ var JseaServiceProvider = /** @class */ (function () {
         // if (this.SITE_CONFIG_LOADED || localStorage.getItem('SITE_CONFIG_LOADED')) {
         this.sharedService.SITE_CONFIG_LOADED.subscribe(function (SITE_CONFIG_LOADED) {
             //console.log("Hi from jsea-service.ts");
-            _this.log.info('SITE_CONFIG_LOADED Event triggered');
+            // this.log.info('SITE_CONFIG_LOADED Event triggered');
             if (_this.siteConfig.getSiteConfigValue('PDA_JSEA_ON') === 'Y' || _this.pdaParams.pda_jsea_on) {
                 //Now get the type value
                 var lvar = _this.siteConfig.getSiteConfigValue('PDA_JSEA_TYPE');
@@ -5575,7 +5575,7 @@ var JobReplicationServiceProvider = /** @class */ (function () {
             options.lastFilter = filter;
             _this.lastFilter = filter;
             var counter = 0;
-            _this.log.info("isOnline status before replication:" + _this.sharedService.isOnline);
+            //this.log.info("isOnline status before replication:" + this.sharedService.isOnline);
             /* var temp = [];
             temp.push('this.sharedService.isOnline:'+this.sharedService.isOnline); */
             if (_this.sharedService.isOnline) {
@@ -5587,13 +5587,13 @@ var JobReplicationServiceProvider = /** @class */ (function () {
                     _this.log.info('Fullreplication NOT set for the syncing process.');
                 // Remote job first
                 //temp.push('Calling: RemoteJob.replicate(), since:' + JSON.stringify(this.since));
-                _this.log.info('Calling: RemoteJob.replicate(), since:' + JSON.stringify(_this.since));
+                // this.log.info('Calling: RemoteJob.replicate(), since:' + JSON.stringify(this.since));
                 _this.RemoteJob.replicate(_this.since.pull, _this.LocalJob, options, function (err, conflicts, cps) {
                     _this.log.info("RemoteJob Replication completed.");
                     options.filter = "";
                     _this.since.pull = cps;
                     //temp.push('Calling: LocalJob.replicate(), since:' + JSON.stringify(this.since));
-                    _this.log.info('Calling: LocalJob.replicate(), since:' + JSON.stringify(_this.since));
+                    //this.log.info('Calling: LocalJob.replicate(), since:' + JSON.stringify(this.since));
                     _this.LocalJob.replicate(_this.since.push, _this.RemoteJob, options, function (err, conflicts, cps) {
                         _this.log.info("LocalJob Replication completed.");
                         //temp.push("LocalJob Replication completed.");
@@ -5607,8 +5607,8 @@ var JobReplicationServiceProvider = /** @class */ (function () {
                             //temp.push(' finished JOB replication, conflicts ARE UNDEFINED');
                         }
                         if (conflicts != undefined && conflicts.length > 0) {
-                            _this.log.info("The number of conflicts detected:" + conflicts.length);
-                            _this.log.info('sync: JOB conflicts:' + JSON.stringify(conflicts));
+                            //this.log.info("The number of conflicts detected:" + conflicts.length);
+                            // this.log.info('sync: JOB conflicts:' + JSON.stringify(conflicts));
                             conflicts.forEach(function (conflict) {
                                 conflict.type(function (err, type) {
                                     conflict.type = type;
@@ -12359,16 +12359,16 @@ var NavigationServiceProvider = /** @class */ (function () {
         this.prepNavigation = function () {
             if (localStorage.getItem('SITE_CONFIG_LOADED')) {
                 //if (localStorage.getItem('SITE_CONFIG_LOADED')) {
-                _this.log.debug('NavigationServiceProvider SITE_CONFIG_LOADED Event triggered');
+                //this.log.debug('NavigationServiceProvider SITE_CONFIG_LOADED Event triggered');
                 if (_this.siteConfig.getSiteConfigValue('PDA_REQ_NAVIGATION') == 'Y') {
                     _this.moduleInstalled = true;
                     _this.navigationServAllowed = true;
-                    _this.log.debug("navigationServAllowed is NOW TRUE");
+                    //this.log.debug("navigationServAllowed is NOW TRUE");
                     _this.isReady = true;
                     // }
                 }
                 else {
-                    _this.log.debug("navigationServAllowed:" + _this.myNotModuleInstalled);
+                    // this.log.debug("navigationServAllowed:" + this.myNotModuleInstalled);
                     //alert(this.myNotModuleInstalled);
                 }
             }
@@ -12380,7 +12380,7 @@ var NavigationServiceProvider = /** @class */ (function () {
             return this.moduleInstalled;
         };
         this.registerJobDetails = function (jobnum, jobdate, address) {
-            this.log.debug("Registering jobDetails num " + jobnum + " Date " + jobdate + ' Address = ' + address);
+            //this.log.debug("Registering jobDetails num " + jobnum + " Date " + jobdate + ' Address = ' + address);
             this.JobNumber = jobnum;
             this.JobDate = jobdate;
             this.myaddress = address;
@@ -12411,7 +12411,7 @@ var NavigationServiceProvider = /** @class */ (function () {
             this.prepNavigation();
             if (!deststr) {
                 //navigator.notification. alert("A destination must be specified");
-                alert("A destination must be specified");
+                // alert("A destination must be specified");
                 this.log.debug("A destination must be specified");
                 return;
             }
@@ -14471,7 +14471,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         };
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
-            'version': '3.1.6',
+            'version': '3.1.7',
             'build': 2,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678

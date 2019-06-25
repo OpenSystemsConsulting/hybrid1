@@ -806,7 +806,7 @@ var HomePage = /** @class */ (function () {
         if (typeof (this.sharedService.loginFlag) == 'undefined')
             this.sharedService.loginFlag = this.pdaParams.isDrvLoggedOn();
         //this.log.debug("syncInProgress:" + this.syncService.getSyncInProgress());
-        this.log.debug("Value of syncInProgress:" + this.sharedService.getSyncInProgress());
+        //this.log.debug("Value of syncInProgress:" + this.sharedService.getSyncInProgress());
         //this.syncService.setSyncInProgress(false);
         this.sharedService.setSyncInProgress(false);
         __WEBPACK_IMPORTED_MODULE_3__shared_sdk__["b" /* LoopBackConfig */].setBaseURL(this.configService.apiURL);
@@ -901,7 +901,7 @@ var HomePage = /** @class */ (function () {
             this.sharedService.NEWJOB.subscribe(function (payload) {
                 // Nothing much to do here other than make a noise and refresh the jobs list
                 _this.notificationCount++;
-                _this.log.info(payload.platform + ":" + event + ':' + JSON.stringify(payload));
+                //this.log.info(payload.platform + ":" + event + ':' + JSON.stringify(payload));
                 _this.ionViewWillEnter();
                 // NOTE - not intuitive - if app is asked to play sound it has been done by the notification service 
                 // already so DO NOT do it again here
@@ -913,7 +913,7 @@ var HomePage = /** @class */ (function () {
         this.sub5 =
             this.sharedService.CANCEL.subscribe(function (payload) {
                 _this.notificationCount++;
-                _this.log.info(payload.platform + ":" + event + ':' + JSON.stringify(payload));
+                //this.log.info(payload.platform + ":" + event + ':' + JSON.stringify(payload));
                 // Check For Cancellation and then delete job 
                 if (typeof payload.data != "undefined") {
                     // Belt and braces - we shouldn't get to the event handler if it's not a cancel
@@ -958,7 +958,7 @@ var HomePage = /** @class */ (function () {
                 _this.notificationCount++;
                 _this.log.info('notification received in pushNotificationReceived subscription::' + JSON.stringify(notification.payload));
                 var platform = notification.platform;
-                _this.log.info(platform + ":pushNotificationReceived:" + notification.event);
+                //this.log.info(platform + ":pushNotificationReceived:" + notification.event);
                 var message = notification.message;
                 switch (platform) {
                     case 'Android':
@@ -1045,7 +1045,7 @@ var HomePage = /** @class */ (function () {
             var startTime = new Date().getTime();
             //this.log.debug("===========Conflict resolution started at===============:" + startTime);
             _this.localConflicts = conflicts;
-            _this.log.debug(conflicts.length + " conflicts:" + JSON.stringify(conflicts));
+            //this.log.debug(conflicts.length + " conflicts:" + JSON.stringify(conflicts));
             // var uconflicts = this.removeDuplicates(conflicts, 'modelId');
             //this.log.debug(uconflicts.length + " uconflicts:" + JSON.stringify(uconflicts));
             // conflicts.source = conflicts.target;
@@ -1058,8 +1058,8 @@ var HomePage = /** @class */ (function () {
                         conflict.target = target;
                         conflict.manual = new conflict.SourceModel(source || target);
                         // log the conflict details
-                        _this.log.error("conflicts: source:" + JSON.stringify(conflict.source));
-                        _this.log.error("conflicts: target:" + JSON.stringify(conflict.target));
+                        //this.log.error("conflicts: source:" + JSON.stringify(conflict.source));
+                        //this.log.error("conflicts: target:" + JSON.stringify(conflict.target));
                         // Maybe simply clobber the remote end with the local data
                         // as resolveUsingSource doesn't appear to do what we want        
                         //Copy certain fields from the target to the source, to factor in an update from the (target)server side.
@@ -1091,8 +1091,8 @@ var HomePage = /** @class */ (function () {
                             _this.RemoteJob.upsert(conflict.source, function (err, model) {
                                 if (err)
                                     _this.log.error("upsert:error:" + JSON.stringify(err));
-                                if (model)
-                                    _this.log.info("upsert: model:" + JSON.stringify(model));
+                                /*  if (model)
+                                     this.log.info("upsert: model:" + JSON.stringify(model)); */
                             });
                         }
                     });
@@ -1103,8 +1103,8 @@ var HomePage = /** @class */ (function () {
                         var sourceType = conflict.sourceChange.type();
                         var targetType = conflict.targetChange.type();
                         // log the conflict details
-                        _this.log.error("conflicts: source type:" + sourceType + ", sourceChange:" + JSON.stringify(conflict.sourceChange));
-                        _this.log.error("conflicts: target type:" + targetType + ", targetChange:" + JSON.stringify(conflict.targetChange));
+                        // this.log.error("conflicts: source type:" + sourceType + ", sourceChange:" + JSON.stringify(conflict.sourceChange));
+                        // this.log.error("conflicts: target type:" + targetType + ", targetChange:" + JSON.stringify(conflict.targetChange));
                         // automatically resolve conflicts
                         // If source is update and target is delete, then a job has been completed
                         // on the server and should no longer be on the client so auto resolve this
