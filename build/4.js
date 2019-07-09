@@ -1,6 +1,6 @@
 webpackJsonp([4],{
 
-/***/ 841:
+/***/ 842:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JobDetailsPageModule", function() { return JobDetailsPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__job_details__ = __webpack_require__(869);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__job_details__ = __webpack_require__(870);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_components_module__ = __webpack_require__(854);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -202,7 +202,7 @@ var CameraButtonComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 869:
+/***/ 870:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -221,12 +221,12 @@ var CameraButtonComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_jsea_service_jsea_service__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_config_service_config_service__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_job_changed_service_job_changed_service__ = __webpack_require__(466);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_gps_audit_service_gps_audit_service__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_gps_audit_service_gps_audit_service__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_image_service_image_service__ = __webpack_require__(200);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_jobnote_replication_service_jobnote_replication_service__ = __webpack_require__(473);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_jobnote_replication_service_jobnote_replication_service__ = __webpack_require__(474);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__providers_navigation_service_navigation_service__ = __webpack_require__(464);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_message_service_message_service__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_attach_service_attach_service__ = __webpack_require__(474);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_attach_service_attach_service__ = __webpack_require__(475);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
