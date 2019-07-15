@@ -1,14 +1,14 @@
 webpackJsonp([14],{
 
-/***/ 834:
+/***/ 833:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BarcodePageModule", function() { return BarcodePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__barcode__ = __webpack_require__(858);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__barcode__ = __webpack_require__(857);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -41,13 +41,13 @@ var BarcodePageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 858:
+/***/ 857:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BarcodePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_barcode_scanner__ = __webpack_require__(469);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk__ = __webpack_require__(83);
@@ -59,6 +59,7 @@ var BarcodePageModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_platform_ready_service_platform_ready_service__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_shared_service_shared_service__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_message_service_message_service__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_barcode_replication_service_barcode_replication_service__ = __webpack_require__(470);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -81,6 +82,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /**
  * Generated class for the BarcodePage page.
  *
@@ -88,7 +90,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * on Ionic pages and navigation.
  */
 var BarcodePage = /** @class */ (function () {
-    function BarcodePage(navCtrl, navParams, configService, pdaParams, siteConfig, logger, base, alertCtrl, platformReady, device, barcodeScanner, modalController, sharedService, messageService) {
+    function BarcodePage(navCtrl, navParams, configService, pdaParams, siteConfig, logger, base, alertCtrl, platformReady, device, barcodeScanner, modalController, sharedService, messageService, barcodeReplicationService) {
         var _this = this;
         this.navCtrl = navCtrl;
         this.navParams = navParams;
@@ -104,6 +106,7 @@ var BarcodePage = /** @class */ (function () {
         this.modalController = modalController;
         this.sharedService = sharedService;
         this.messageService = messageService;
+        this.barcodeReplicationService = barcodeReplicationService;
         this.t = this.navCtrl.parent;
         this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'BarcodePage' };
         this.log = this.logger.getInstance(this.logParams);
@@ -117,6 +120,7 @@ var BarcodePage = /** @class */ (function () {
         this.RemoteBarcodeHist = lbclient.models.RemoteBarcodeHist;
         this.Job = lbclient.models.LocalJob;
         this.barcodes = [];
+        this.barcodetemp = "";
         this.strncmp = function (str1, str2, n) {
             str1 = str1.substring(0, n);
             str2 = str2.substring(0, n);
@@ -180,7 +184,8 @@ var BarcodePage = /** @class */ (function () {
             confirmPopup.present();
         }; //scanCancel() ends here
         this.openSignatureModal = function () {
-            var modal = _this.modalController.create('SignaturePage');
+            var lparams = { metadata: { barcodeSignOff: true } };
+            var modal = _this.modalController.create('SignaturePage', lparams);
             modal.onDidDismiss(function (result) {
                 if (typeof result !== 'undefined') {
                     var podname = result.podname;
@@ -383,7 +388,7 @@ var BarcodePage = /** @class */ (function () {
             }
             if (syncRequired) {
                 this.barcodeReplicationService.barcode_sync();
-                this.barcodeService.setSyncRequired(true);
+                //this.barcodeService.setSyncRequired(true);
                 this.barcodes = [];
             }
             if (this.platformReady.isPlatformReady()) {
@@ -395,6 +400,17 @@ var BarcodePage = /** @class */ (function () {
             //this.navCtrl.popToRoot();
             this.t.select(0);
         }; //finishSubmit() ends here
+        this.arrayRemove = function (value) {
+            _this.barcodes = _this.barcodes.filter(function (ele) {
+                return ele != value;
+            });
+        };
+        this.submitBarInput = function () {
+            if (_this.barcodetemp.length > 0 && _this.barcodetemp.trim() != '') {
+                _this.barcodes.push(_this.barcodetemp);
+                _this.barcodetemp = "";
+            }
+        };
         //console.log("BarcodePage loading...");
         this.username = navParams.data;
         __WEBPACK_IMPORTED_MODULE_4__shared_sdk__["b" /* LoopBackConfig */].setBaseURL(this.configService.apiURL);
@@ -521,16 +537,20 @@ var BarcodePage = /** @class */ (function () {
         this.sharedService.tab = "Scan/Barcode";
         this.log.info("In the Scan/Barcode Tab.");
     };
+    BarcodePage.prototype.customTrackBy = function (index, obj) {
+        return index;
+    };
     BarcodePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-barcode',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/barcode/barcode.html"*/'<!--\n\n  Generated template for the BarcodePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n    <ion-navbar color="primary">\n\n        <ion-buttons left>\n\n            <span [ngSwitch]="this.sharedService.loginFlag">\n\n                <ion-badge class="common-border" color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n                <ion-badge class="common-border" color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n            </span>\n\n        </ion-buttons>\n\n        <ion-title>BARCODE</ion-title>\n\n        <ion-buttons right>\n\n            <!-- <ion-badge class="common-border" color="danger" *ngIf="newMessageCount">{{newMessageCount}}</ion-badge> -->\n\n            <ion-badge class="common-border" color="danger"> Driver # {{driverId}}</ion-badge>\n\n        </ion-buttons>\n\n    </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content [ngClass]="{ \'overflow-scroll\': (desktopBrowserScrolling == true) }" padding>\n\n    <ion-list>\n\n        <span [ngSwitch]="my_is_scan_on"> Scan Session :\n\n            <ion-badge color="secondary" *ngSwitchCase="true"> On</ion-badge>\n\n            <ion-badge color="danger" *ngSwitchCase="false"> Off</ion-badge>\n\n        </span>\n\n        <span></span>\n\n        <p></p>\n\n    </ion-list>\n\n\n\n    <ion-list padding>\n\n\n\n      <!--   <ion-item class="barcode-item">\n\n            <input type="text" [(ngModel)]="barcodes[0]" />\n\n        </ion-item> -->\n\n\n\n        <ion-item class="barcode-item" [hidden]="barcodes.length !== 0">\n\n            <strong>\n\n                No barcodes\n\n            </strong>\n\n        </ion-item>\n\n        <ion-item class="barcode-item" [hidden]="barcodes.length === 0" *ngFor="let barcode of barcodes; trackBy:$index" type="item-text-wrap">\n\n            {{barcode}}\n\n        </ion-item>\n\n    </ion-list>\n\n\n\n    <ion-row>\n\n        <ion-col>\n\n            <button ion-button full round color="primary" (click)="scan()">\n\n                Camera Scan\n\n            </button>\n\n        </ion-col>\n\n    </ion-row>\n\n\n\n    <ion-row *ngIf="barcodes.length !== 0">\n\n        <ion-col col-6>\n\n            <button ion-button full round color="secondary" (click)="sharedService.showSpinner();scanSubmit()">\n\n                Submit\n\n            </button>\n\n        </ion-col>\n\n        <ion-col col-6>\n\n            <button ion-button full round color="danger" (click)="sharedService.showSpinner();scanCancel()">\n\n                Cancel\n\n            </button>\n\n        </ion-col>\n\n    </ion-row>\n\n\n\n</ion-content>'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/barcode/barcode.html"*/,
+            selector: 'page-barcode',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/barcode/barcode.html"*/'<!--\n\n  Generated template for the BarcodePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n    <ion-navbar color="primary">\n\n        <ion-buttons left>\n\n            <span [ngSwitch]="this.sharedService.loginFlag">\n\n                <ion-badge class="common-border" color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n                <ion-badge class="common-border" color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n            </span>\n\n        </ion-buttons>\n\n        <ion-title>BARCODE</ion-title>\n\n        <ion-buttons right>\n\n            <!-- <ion-badge class="common-border" color="danger" *ngIf="newMessageCount">{{newMessageCount}}</ion-badge> -->\n\n            <ion-badge class="common-border" color="danger"> Driver # {{driverId}}</ion-badge>\n\n        </ion-buttons>\n\n    </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content [ngClass]="{ \'overflow-scroll\': (desktopBrowserScrolling == true) }" padding>\n\n    <ion-list>\n\n        <span [ngSwitch]="my_is_scan_on"> Scan Session :\n\n            <ion-badge color="secondary" *ngSwitchCase="true"> On</ion-badge>\n\n            <ion-badge color="danger" *ngSwitchCase="false"> Off</ion-badge>\n\n        </span>\n\n        <span></span>\n\n        <p></p>\n\n    </ion-list>\n\n\n\n    <!--  <ion-list padding no-lines> -->\n\n\n\n    <!-- <ion-item class="barcode-item" no-lines>\n\n            <input type="text" [(ngModel)]="barcodes[0]" />\n\n        </ion-item> -->\n\n\n\n\n\n\n\n    <!--  <ion-item class="barcode-item" [hidden]="barcodes.length !== 0" no-lines>\n\n            <strong>\n\n                No barcodes\n\n            </strong>\n\n        </ion-item> -->\n\n\n\n    <!-- <ion-item [hidden]="barcodes.length === 0" *ngFor="let barcode of barcodes; trackBy:$index"\n\n            type="item-text-wrap" no-lines>\n\n            {{barcode}}\n\n        </ion-item> -->\n\n    <!--  </ion-list> -->\n\n\n\n\n\n    <ion-card round inset class="ion-card" type="item-text-wrap" tappable>\n\n        <ion-row>\n\n            <ion-col>\n\n                <!-- <input type="text" [ngModel]="barcodes[barcodes.length]" /> -->\n\n                <ion-input id="barinput" type="text" [(ngModel)]="barcodetemp" clearInput placeholder="Enter A Barcode">\n\n                </ion-input>\n\n            </ion-col>\n\n        </ion-row>\n\n        <ion-row>\n\n            <ion-col>\n\n                <button ion-button full round color="primary" type="reset" (click)="submitBarInput()">\n\n                    Enter BarCodes Manually\n\n                </button>\n\n            </ion-col>\n\n        </ion-row>\n\n    </ion-card>\n\n\n\n    <!--   <ion-row>\n\n        <ion-col>\n\n            <ion-fab middle right>\n\n                <button ion-fab mini (click)=\'barcodes[barcodes.length]=""\'>\n\n                    <ion-icon name="add"></ion-icon>\n\n                </button>\n\n            </ion-fab>\n\n        </ion-col>\n\n    </ion-row> -->\n\n\n\n    <ion-row>\n\n        <ion-col>\n\n            <button ion-button full round color="primary" (click)="scan()">\n\n                OR Scan BarCodes\n\n            </button>\n\n        </ion-col>\n\n    </ion-row>\n\n\n\n\n\n\n\n\n\n    <ion-card round inset class="ion-card" type="item-text-wrap" tappable [hidden]="barcodes.length !== 0">\n\n        <ion-row nolines>\n\n            <ion-col>\n\n                <strong>\n\n                    No barcodes Added.\n\n                </strong>\n\n            </ion-col>\n\n        </ion-row>\n\n\n\n    </ion-card>\n\n\n\n    <br>\n\n\n\n    <ion-card round inset class="ion-card" type="item-text-wrap" tappable [hidden]="barcodes.length == 0">\n\n         <ion-row *ngFor="let barcode of barcodes;let i = index;" no-padding no-margin>\n\n            <ion-col col-1 style="margin:auto;">{{ i+ 1 }}.</ion-col>\n\n            <ion-col col-9 style="margin:auto;">{{barcodes[i]}}</ion-col>\n\n            <ion-col col-2 style="margin:auto;">\n\n                <button ion-button color="danger" (click)="arrayRemove(barcodes[i])">\n\n                    <ion-icon name="remove"></ion-icon>\n\n                </button>\n\n            </ion-col>\n\n        </ion-row>\n\n\n\n    </ion-card>\n\n\n\n\n\n\n\n\n\n    <ion-row *ngIf="barcodes.length !== 0">\n\n        <ion-col col-6>\n\n            <button ion-button full round color="secondary" (click)="sharedService.showSpinner();scanSubmit()">\n\n                Submit\n\n            </button>\n\n        </ion-col>\n\n        <ion-col col-6>\n\n            <button ion-button full round color="danger" (click)="sharedService.showSpinner();scanCancel()">\n\n                Cancel\n\n            </button>\n\n        </ion-col>\n\n    </ion-row>\n\n\n\n</ion-content>'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/barcode/barcode.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */], __WEBPACK_IMPORTED_MODULE_5__providers_config_service_config_service__["a" /* ConfigServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_7__providers_pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_8__providers_siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_6__providers_log_service_log_service__["a" /* LogServiceProvider */], __WEBPACK_IMPORTED_MODULE_9__providers_base_service_base_service__["a" /* BaseServiceProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */],
             __WEBPACK_IMPORTED_MODULE_10__providers_platform_ready_service_platform_ready_service__["a" /* PlatformReadyServiceProvider */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__["a" /* Device */],
             __WEBPACK_IMPORTED_MODULE_3__ionic_native_barcode_scanner__["a" /* BarcodeScanner */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* ModalController */],
-            __WEBPACK_IMPORTED_MODULE_11__providers_shared_service_shared_service__["a" /* SharedServiceProvider */], __WEBPACK_IMPORTED_MODULE_12__providers_message_service_message_service__["a" /* MessageServiceProvider */]])
+            __WEBPACK_IMPORTED_MODULE_11__providers_shared_service_shared_service__["a" /* SharedServiceProvider */], __WEBPACK_IMPORTED_MODULE_12__providers_message_service_message_service__["a" /* MessageServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_13__providers_barcode_replication_service_barcode_replication_service__["a" /* BarcodeReplicationServiceProvider */]])
     ], BarcodePage);
     return BarcodePage;
 }());

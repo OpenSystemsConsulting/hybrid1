@@ -1,14 +1,14 @@
 webpackJsonp([0],{
 
-/***/ 838:
+/***/ 837:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HomePageModule", function() { return HomePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home__ = __webpack_require__(862);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home__ = __webpack_require__(861);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pipes_pipes_module__ = __webpack_require__(848);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -304,17 +304,17 @@ var KeysPipe = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 862:
+/***/ 861:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_device_feedback__ = __webpack_require__(470);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_media__ = __webpack_require__(471);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_device_feedback__ = __webpack_require__(471);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_media__ = __webpack_require__(472);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_sqlite_service_sqlite_service__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_log_service_log_service__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(12);
@@ -327,23 +327,23 @@ var KeysPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_sod_service_sod_service__ = __webpack_require__(203);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_background_geolocation_service_background_geolocation_service__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__providers_platform_ready_service_platform_ready_service__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_sync_service_sync_service__ = __webpack_require__(472);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_sync_service_sync_service__ = __webpack_require__(473);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_exit_service_exit_service__ = __webpack_require__(462);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_gps_audit_service_gps_audit_service__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_gps_audit_service_gps_audit_service__ = __webpack_require__(117);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__providers_config_service_config_service__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__providers_util_service_util_service__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__providers_job_changed_service_job_changed_service__ = __webpack_require__(466);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__providers_job_replication_service_job_replication_service__ = __webpack_require__(209);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__providers_push_service_push_service__ = __webpack_require__(463);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(123);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_leaflet__ = __webpack_require__(863);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_leaflet__ = __webpack_require__(862);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28_leaflet___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_28_leaflet__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29_leaflet_routing_machine__ = __webpack_require__(864);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29_leaflet_routing_machine__ = __webpack_require__(863);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29_leaflet_routing_machine___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_29_leaflet_routing_machine__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30_leaflet_icon_glyph__ = __webpack_require__(865);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30_leaflet_icon_glyph__ = __webpack_require__(864);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_30_leaflet_icon_glyph___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_30_leaflet_icon_glyph__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31_overlapping_marker_spiderfier_leaflet__ = __webpack_require__(866);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31_overlapping_marker_spiderfier_leaflet__ = __webpack_require__(865);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_31_overlapping_marker_spiderfier_leaflet___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_31_overlapping_marker_spiderfier_leaflet__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -423,6 +423,7 @@ var HomePage = /** @class */ (function () {
         this.t = this.navCtrl.parent;
         this.jobs = [];
         this.tjobs = [];
+        this.njobs = [];
         this.mystr = '';
         this.notificationCount = 0;
         this.updateStatus = false;
@@ -595,14 +596,19 @@ var HomePage = /** @class */ (function () {
             // this.cd.detectChanges();
             // this.RemoteJob.find(all_legs_filter, (err, jobs) => {
             _this.Job.find(all_legs_filter, function (err, jobs) {
-                var len = jobs.length;
+                _this.tjobs = [];
+                _this.njobs = [];
                 var logstr = '';
-                _this.tjobs = jobs;
+                //this.tjobs = jobs;
+                _this.njobs = jobs;
                 // update many jobs at once from e.g. NJ -> AC, or AC -> PU
                 // TODO - will need to only update selected jobs rather than all at a particular status
                 // TODO - cater for multi leg jobs when selecting by click rather than all
+                _this.log.debug("jobs.length before calling cleanUpIncompleteLegs()::" + _this.njobs.length);
+                _this.cleanUpIncompleteLegs();
+                _this.log.debug("jobs.length after cleanUpIncompleteLegs()::" + _this.tjobs.length);
                 var flag = 0;
-                ;
+                var len = _this.tjobs.length;
                 for (var i = 0; i < len; i++) {
                     // TODO - check if specific job is selected via checkbox on screen
                     var job = _this.tjobs[i];
@@ -640,6 +646,37 @@ var HomePage = /** @class */ (function () {
                 }
             }); //subscribe ends here
         }; //updateSelectedJobs ends here
+        this.cleanUpIncompleteLegs = function () {
+            //Child leg processing
+            var len = _this.njobs.length;
+            for (var i = 0; i < len; i++) {
+                //testing
+                /* if (this.njobs[i].mobjobNumber == 10287 && this.njobs[i].mobjobLegNumber == 0)
+                      this.njobs[i].mobjobStatus = 'UJ'; */
+                //Get the non-base leg
+                if (_this.njobs[i].mobjobLegNumber > 0) {
+                    var job = _this.njobs[i];
+                    for (var j = 0; j < len; j++) {
+                        //1.Check if the leg also has a base leg
+                        //2.Check if base leg is not UJ
+                        if (_this.njobs[j].mobjobLegNumber == 0) {
+                            //continue with the processing
+                            if (job.mobjobBasejobNum == _this.njobs[j].mobjobBasejobNum && _this.njobs[j].mobjobStatus != 'UJ') {
+                                _this.tjobs.push(job);
+                                _this.log.debug("Job sequence added during cleanUpIncompleteLegs()::" + job.mobjobSeq);
+                            }
+                            else {
+                                _this.log.debug("Job sequence removed during cleanUpIncompleteLegs()::" + job.mobjobSeq);
+                            }
+                        }
+                    }
+                }
+                else {
+                    _this.tjobs.push(_this.njobs[i]);
+                    //this.log.debug("Job sequence added during cleanUpIncompleteLegs()::" + job.mobjobSeq);
+                }
+            }
+        };
         /*
         * Multiple deliveries with one signature
         */
@@ -672,7 +709,7 @@ var HomePage = /** @class */ (function () {
                 // at least one job selected 
                 //Setting the Leg Status to DL here as we are only doing this at Delivery which will happen
                 // as soon as the signature is accepted.
-                var lparams = { metadata: { basejob: _this.checkedJobs[0].mobjobBasejobNum, legid: _this.checkedJobs[0].mobjobSeq, legStatus: 'DL' } };
+                var lparams = { metadata: { basejob: _this.checkedJobs[0].mobjobBasejobNum, legid: _this.checkedJobs[0].mobjobSeq, legStatus: 'DL', barcodeSignOff: false } };
                 _this.openSignatureModal(lparams);
             }
             else {
@@ -1749,7 +1786,7 @@ var HomePage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 863:
+/***/ 862:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* @preserve
@@ -15686,7 +15723,7 @@ window.L = exports;
 
 /***/ }),
 
-/***/ 864:
+/***/ 863:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var require;var require;(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return require(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(_dereq_,module,exports){
@@ -34336,7 +34373,7 @@ module.exports = L.Routing = {
 
 /***/ }),
 
-/***/ 865:
+/***/ 864:
 /***/ (function(module, exports) {
 
 
@@ -34459,7 +34496,7 @@ L.Icon.Glyph.prototype.options.iconUrl = 'data:image/png;base64,iVBORw0KGgoAAAAN
 
 /***/ }),
 
-/***/ 866:
+/***/ 865:
 /***/ (function(module, exports) {
 
 !function(){"use strict";var t={}.hasOwnProperty,e=[].slice;(function(){if(null!=this.L)return this.OverlappingMarkerSpiderfier=function(){var r,i;function n(e,r){var i,n,s,a,h,l;for(s in this.map=e,null==r&&(r={}),r)t.call(r,s)&&(l=r[s],this[s]=l);for(this.initMarkerArrays(),this.listeners={},n=0,a=(h=["click","zoomend"]).length;n<a;n++)i=h[n],this.map.addEventListener(i,function(t){return function(){return t.unspiderfy()}}(this))}return(r=n.prototype).VERSION="0.2.6",i=2*Math.PI,r.keepSpiderfied=!1,r.nearbyDistance=20,r.circleSpiralSwitchover=9,r.circleFootSeparation=25,r.circleStartAngle=i/12,r.spiralFootSeparation=28,r.spiralLengthStart=11,r.spiralLengthFactor=5,r.legWeight=1.5,r.legColors={usual:"#222",highlighted:"#f00"},r.initMarkerArrays=function(){return this.markers=[],this.markerListeners=[]},r.addMarker=function(t){var e,r;return null!=t._oms?this:(t._oms=!0,r=this,e=function(){return r.spiderListener(t)},t.addEventListener("click",e),this.markerListeners.push(e),this.markers.push(t),this)},r.getMarkers=function(){return this.markers.slice(0)},r.removeMarker=function(t){var e,r;return null!=t._omsData&&this.unspiderfy(),(e=this.arrIndexOf(this.markers,t))<0?this:(r=this.markerListeners.splice(e,1)[0],t.removeEventListener("click",r),delete t._oms,this.markers.splice(e,1),this)},r.clearMarkers=function(){var t,e,r,i,n,s;for(this.unspiderfy(),t=e=0,r=(s=this.markers).length;e<r;t=++e)i=s[t],n=this.markerListeners[t],i.removeEventListener("click",n),delete i._oms;return this.initMarkerArrays(),this},r.addListener=function(t,e){var r;return(null!=(r=this.listeners)[t]?r[t]:r[t]=[]).push(e),this},r.removeListener=function(t,e){var r;return(r=this.arrIndexOf(this.listeners[t],e))<0||this.listeners[t].splice(r,1),this},r.clearListeners=function(t){return this.listeners[t]=[],this},r.trigger=function(){var t,r,i,n,s,a,h,l;for(r=arguments[0],t=2<=arguments.length?e.call(arguments,1):[],l=[],n=0,s=(h=null!=(a=this.listeners[r])?a:[]).length;n<s;n++)i=h[n],l.push(i.apply(null,t));return l},r.generatePtsCircle=function(t,e){var r,n,s,a,h,l,o;for(h=this.circleFootSeparation*(2+t)/i,n=i/t,o=[],s=a=0,l=t;0<=l?a<l:a>l;s=0<=l?++a:--a)r=this.circleStartAngle+s*n,o.push(new L.Point(e.x+h*Math.cos(r),e.y+h*Math.sin(r)));return o},r.generatePtsSpiral=function(t,e){var r,n,s,a,h,l,o;for(a=this.spiralLengthStart,r=0,o=[],n=s=0,l=t;0<=l?s<l:s>l;n=0<=l?++s:--s)r+=this.spiralFootSeparation/a+5e-4*n,h=new L.Point(e.x+a*Math.cos(r),e.y+a*Math.sin(r)),a+=i*this.spiralLengthFactor/r,o.push(h);return o},r.spiderListener=function(t){var e,r,i,n,s,a,h,l,o,u;if((a=null!=t._omsData)&&this.keepSpiderfied||this.unspiderfy(),a)return this.trigger("click",t);for(h=[],l=[],o=this.nearbyDistance*this.nearbyDistance,s=this.map.latLngToLayerPoint(t.getLatLng()),e=0,r=(u=this.markers).length;e<r;e++)i=u[e],this.map.hasLayer(i)&&(n=this.map.latLngToLayerPoint(i.getLatLng()),this.ptDistanceSq(n,s)<o?h.push({marker:i,markerPt:n}):l.push(i));return 1===h.length?this.trigger("click",t):this.spiderfy(h,l)},r.makeHighlightListeners=function(t){return{highlight:(e=this,function(){return t._omsData.leg.setStyle({color:e.legColors.highlighted})}),unhighlight:function(e){return function(){return t._omsData.leg.setStyle({color:e.legColors.usual})}}(this)};var e},r.spiderfy=function(t,e){var r,i,n,s,a,h,l,o,u,g,c;return this.spiderfying=!0,g=t.length,r=this.ptAverage(function(){var e,r,i;for(i=[],e=0,r=t.length;e<r;e++)l=t[e],i.push(l.markerPt);return i}()),s=g>=this.circleSpiralSwitchover?this.generatePtsSpiral(g,r).reverse():this.generatePtsCircle(g,r),c=function(){var e,r,l;for(l=[],e=0,r=s.length;e<r;e++)n=s[e],i=this.map.layerPointToLatLng(n),u=this.minExtract(t,function(t){return function(e){return t.ptDistanceSq(e.markerPt,n)}}(this)),h=u.marker,a=new L.Polyline([h.getLatLng(),i],{color:this.legColors.usual,weight:this.legWeight,clickable:!1}),this.map.addLayer(a),h._omsData={usualPosition:h.getLatLng(),leg:a},this.legColors.highlighted!==this.legColors.usual&&(o=this.makeHighlightListeners(h),h._omsData.highlightListeners=o,h.addEventListener("mouseover",o.highlight),h.addEventListener("mouseout",o.unhighlight)),h.setLatLng(i),h.setZIndexOffset(1e6),l.push(h);return l}.call(this),delete this.spiderfying,this.spiderfied=!0,this.trigger("spiderfy",c,e)},r.unspiderfy=function(t){var e,r,i,n,s,a,h;if(null==t&&(t=null),null==this.spiderfied)return this;for(this.unspiderfying=!0,h=[],s=[],e=0,r=(a=this.markers).length;e<r;e++)null!=(i=a[e])._omsData?(this.map.removeLayer(i._omsData.leg),i!==t&&i.setLatLng(i._omsData.usualPosition),i.setZIndexOffset(0),null!=(n=i._omsData.highlightListeners)&&(i.removeEventListener("mouseover",n.highlight),i.removeEventListener("mouseout",n.unhighlight)),delete i._omsData,h.push(i)):s.push(i);return delete this.unspiderfying,delete this.spiderfied,this.trigger("unspiderfy",h,s),this},r.ptDistanceSq=function(t,e){var r,i;return(r=t.x-e.x)*r+(i=t.y-e.y)*i},r.ptAverage=function(t){var e,r,i,n,s,a;for(s=a=0,e=0,r=t.length;e<r;e++)s+=(n=t[e]).x,a+=n.y;return i=t.length,new L.Point(s/i,a/i)},r.minExtract=function(t,e){var r,i,n,s,a,h;for(n=s=0,a=t.length;s<a;n=++s)h=e(t[n]),(void 0===r||null===r||h<i)&&(i=h,r=n);return t.splice(r,1)[0]},r.arrIndexOf=function(t,e){var r,i,n;if(null!=t.indexOf)return t.indexOf(e);for(r=i=0,n=t.length;i<n;r=++i)if(t[r]===e)return r;return-1},n}()}).call(window)}();
