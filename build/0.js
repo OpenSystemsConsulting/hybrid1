@@ -7,7 +7,7 @@ webpackJsonp([0],{
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HomePageModule", function() { return HomePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home__ = __webpack_require__(861);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pipes_pipes_module__ = __webpack_require__(848);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -310,7 +310,7 @@ var KeysPipe = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_device_feedback__ = __webpack_require__(471);
@@ -650,9 +650,6 @@ var HomePage = /** @class */ (function () {
             //Child leg processing
             var len = _this.njobs.length;
             for (var i = 0; i < len; i++) {
-                //testing
-                /* if (this.njobs[i].mobjobNumber == 10287 && this.njobs[i].mobjobLegNumber == 0)
-                      this.njobs[i].mobjobStatus = 'UJ'; */
                 //Get the non-base leg
                 if (_this.njobs[i].mobjobLegNumber > 0) {
                     var job = _this.njobs[i];
@@ -663,10 +660,10 @@ var HomePage = /** @class */ (function () {
                             //continue with the processing
                             if (job.mobjobBasejobNum == _this.njobs[j].mobjobBasejobNum && _this.njobs[j].mobjobStatus != 'UJ') {
                                 _this.tjobs.push(job);
-                                _this.log.debug("Job sequence added during cleanUpIncompleteLegs()::" + job.mobjobSeq);
+                                _this.log.debug("Job sequence with legnum > 0, added during cleanUpIncompleteLegs()::" + job.mobjobSeq);
                             }
                             else {
-                                _this.log.debug("Job sequence removed during cleanUpIncompleteLegs()::" + job.mobjobSeq);
+                                _this.log.debug("Job sequence with legnum > 0, removed during cleanUpIncompleteLegs()::" + job.mobjobSeq);
                             }
                         }
                     }

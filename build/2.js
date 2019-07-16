@@ -1,14 +1,14 @@
 webpackJsonp([2],{
 
-/***/ 836:
+/***/ 835:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DevicePageModule", function() { return DevicePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__device__ = __webpack_require__(860);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__device__ = __webpack_require__(859);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pipes_pipes_module__ = __webpack_require__(848);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -304,13 +304,13 @@ var KeysPipe = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 860:
+/***/ 859:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DevicePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_sqlite_service_sqlite_service__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_config_service_config_service__ = __webpack_require__(60);
@@ -361,7 +361,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var DevicePage = /** @class */ (function () {
-    function DevicePage(navCtrl, navParams, platformReady, configService, logger, pdaParams, gpsService, exitService, deviceService, sharedService, storage, alertCtrl, siteConfig, messageService, jobService, jseaService, sodService, conMonService, pushService, navigatorService, app) {
+    function DevicePage(navCtrl, navParams, platformReady, configService, logger, pdaParams, gpsService, exitService, deviceService, sharedService, storage, alertCtrl, siteConfig, messageService, jobService, jseaService, sodService, conMonService, pushService, navigatorService, app, platform) {
         var _this = this;
         this.navCtrl = navCtrl;
         this.navParams = navParams;
@@ -384,6 +384,7 @@ var DevicePage = /** @class */ (function () {
         this.pushService = pushService;
         this.navigatorService = navigatorService;
         this.app = app;
+        this.platform = platform;
         this.loginFlag = this.pdaParams.isDrvLoggedOn();
         this.devicectrl = {
             title: '',
@@ -428,7 +429,8 @@ var DevicePage = /** @class */ (function () {
                         handler: function () {
                             localStorage.clear();
                             _this.storage.clear();
-                            _this.storage.closeDB();
+                            if (_this.platform.is('cordova') && window.sqlitePlugin)
+                                _this.storage.closeDB();
                             // TODO -  clear images if required - see /app/strongloop/loopback-clientservices-osc-images/client/js/deviceCtrl.js           
                             _this.app.getRootNav().setRoot(__WEBPACK_IMPORTED_MODULE_20__app_app_component__["a" /* MyApp */]);
                             //document.location.href = 'index.html';
@@ -636,7 +638,7 @@ var DevicePage = /** @class */ (function () {
             __WEBPACK_IMPORTED_MODULE_14__providers_jsea_service_jsea_service__["a" /* JseaServiceProvider */], __WEBPACK_IMPORTED_MODULE_15__providers_sod_service_sod_service__["a" /* SodServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_17__providers_connectivity_monitor_connectivity_monitor__["a" /* ConnectivityMonitorProvider */], __WEBPACK_IMPORTED_MODULE_16__providers_push_service_push_service__["a" /* PushServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_18__providers_navigation_service_navigation_service__["a" /* NavigationServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */]])
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */]])
     ], DevicePage);
     return DevicePage;
 }());
