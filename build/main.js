@@ -6664,31 +6664,31 @@ var map = {
 		10
 	],
 	"../pages/job-details/job-details.module": [
-		841,
+		847,
 		4
 	],
 	"../pages/jsea/jsea.module": [
-		842,
+		841,
 		9
 	],
 	"../pages/login/login.module": [
-		843,
+		842,
 		8
 	],
 	"../pages/msgs/msgs.module": [
-		844,
+		843,
 		7
 	],
 	"../pages/pda/pda.module": [
-		845,
+		844,
 		6
 	],
 	"../pages/signature/signature.module": [
-		846,
+		845,
 		3
 	],
 	"../pages/tabs/tabs.module": [
-		847,
+		846,
 		5
 	]
 };
@@ -12178,6 +12178,8 @@ var PushServiceProvider = /** @class */ (function () {
                                 _this.storage.set('osc-push-credentials', JSON.stringify(installation_object)).then(function (res) {
                                     if (res)
                                         console.log("osc-push-credentials are set");
+                                    else
+                                        console.log("osc-push-credentials is not set");
                                 });
                                 _this.log.info("Sqlite Storage : Setting osc-push-credentials : " + JSON.stringify(installation_object));
                                 var alertPopup = _this.alertCtrl.create({
@@ -12225,6 +12227,8 @@ var PushServiceProvider = /** @class */ (function () {
                         _this.storage.set('uuid', JSON.stringify(uuid)).then(function (res) {
                             if (res)
                                 console.log("uuid is set");
+                            else
+                                console.log("uuid is not set");
                         });
                         _this.log.info("Sqlite Storage : Setting UUID : " + JSON.stringify(uuid));
                         localStorage.setItem('uuid', JSON.stringify(uuid));
@@ -12245,6 +12249,8 @@ var PushServiceProvider = /** @class */ (function () {
                             _this.storage.set('uuid', JSON.stringify(uuid)).then(function (res) {
                                 if (res)
                                     console.log("uuid is set");
+                                else
+                                    console.log("uuid is not set");
                             });
                             _this.log.info("Sqlite Storage : Setting UUID : " + JSON.stringify(uuid));
                             localStorage.setItem('uuid', JSON.stringify(uuid));
@@ -12730,6 +12736,8 @@ var MyApp = /** @class */ (function () {
                             this.storage.set("userId", this.userId).then(function (res) {
                                 if (res)
                                     console.log("userid is set");
+                                else
+                                    console.log("userid is NOT set");
                             });
                             //console.log('userId====' + this.userId);
                             this.connDetails = this.customerConn.getConnectionDetails(this.userId.toLowerCase());
@@ -12845,7 +12853,7 @@ var JobChangedServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 468:
+/***/ 467:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13192,139 +13200,6 @@ var SyncServiceProvider = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobnoteReplicationServiceProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-;
-/*
-  Generated class for the JobnoteReplicationServiceProvider provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
-var JobnoteReplicationServiceProvider = /** @class */ (function () {
-    function JobnoteReplicationServiceProvider() {
-        //console.log('Hello JobnoteReplicationServiceProvider Provider');
-        var _this = this;
-        this.LocalNote = lbclient.models.LocalNote;
-        this.RemoteNote = lbclient.models.RemoteNote;
-        this.models = lbclient.models;
-        this.lastFilter = {};
-        this.d = new Date();
-        this.since = { push: -1, pull: -1 };
-        this.job_note_sync = function (callback, filter) {
-            var options = { filter: '', lastFilter: '' };
-            var cb = null;
-            cb = callback;
-            options.filter = filter;
-            options.lastFilter = filter;
-            _this.lastFilter = filter;
-            var counter = 0;
-            //console.log(new Date().toISOString() + ': starting replication');
-            // LT - 10/12/2015 - original code - does remote first
-            _this.LocalNote.replicate(_this.since.push, _this.RemoteNote, options, function (err, conflicts, cps) {
-                _this.since.push = cps;
-                _this.LocalNote.replicate(_this.since.push, _this.RemoteNote, options, function (err, conflicts, cps) {
-                    _this.since.pull = cps;
-                    //console.log(new Date().toISOString() + ': finished replication');
-                    cb && cb(err, conflicts);
-                });
-            });
-        };
-        // LT - don't work with our current loopback version - use observe ?  Maybe need filter (and callback?)
-        this.LocalNote.on('before save', function (ctx, next) {
-            next();
-        });
-        // sync local changes if connected
-        this.LocalNote.on('after save', function (ctx, next) {
-            next();
-            this.job_note_sync();
-        });
-        this.LocalNote.on('after delete', function (ctx, next) {
-            next();
-            this.job_note_sync();
-        });
-    }
-    JobnoteReplicationServiceProvider = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [])
-    ], JobnoteReplicationServiceProvider);
-    return JobnoteReplicationServiceProvider;
-}());
-
-//# sourceMappingURL=jobnote-replication-service.js.map
-
-/***/ }),
-
-/***/ 475:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AttachServiceProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_service_config_service__ = __webpack_require__(60);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-/*
-  Generated class for the AttachServiceProvider provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
-var AttachServiceProvider = /** @class */ (function () {
-    function AttachServiceProvider(http, configService) {
-        this.http = http;
-        this.configService = configService;
-        //console.log('Hello AttachServiceProvider Provider');
-    }
-    AttachServiceProvider.prototype.getAttachments = function (job) {
-        // Query server to get list of attachments for this job - return as a promise
-        // Initial implementation of API takes job date and no. and is not concerned with legs
-        var client = job.mobjobClientCode;
-        var jobnum = job.mobjobNumber; // TODO - should this be basejob?
-        var jobdate = Math.floor(job.mobjobSeq / 100000000); // e.g. 20160502
-        var serverIP = this.configService.getServerIP();
-        if (serverIP == '')
-            serverIP = JSON.parse(localStorage.getItem('clientConfig')).serverIP;
-        //var serverPort = this.configService.getServerPort();
-        var compURL = 'http://' + serverIP + '/other-cgi/listfiles.pl?output_type=JSON&client=' + client + '&job_number=' + jobnum + '&job_date=' + jobdate;
-        return this.http.get(compURL).map(function (res) { return res.json(); }).catch(function (err) { return err; });
-    };
-    AttachServiceProvider = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_2__config_service_config_service__["a" /* ConfigServiceProvider */]])
-    ], AttachServiceProvider);
-    return AttachServiceProvider;
-}());
-
-//# sourceMappingURL=attach-service.js.map
-
-/***/ }),
-
-/***/ 476:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JseaAnswersReplicationServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -13401,7 +13276,7 @@ var JseaAnswersReplicationServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 477:
+/***/ 475:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13461,6 +13336,139 @@ var DriverMessageServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
+/***/ 476:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobnoteReplicationServiceProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+;
+/*
+  Generated class for the JobnoteReplicationServiceProvider provider.
+
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular DI.
+*/
+var JobnoteReplicationServiceProvider = /** @class */ (function () {
+    function JobnoteReplicationServiceProvider() {
+        //console.log('Hello JobnoteReplicationServiceProvider Provider');
+        var _this = this;
+        this.LocalNote = lbclient.models.LocalNote;
+        this.RemoteNote = lbclient.models.RemoteNote;
+        this.models = lbclient.models;
+        this.lastFilter = {};
+        this.d = new Date();
+        this.since = { push: -1, pull: -1 };
+        this.job_note_sync = function (callback, filter) {
+            var options = { filter: '', lastFilter: '' };
+            var cb = null;
+            cb = callback;
+            options.filter = filter;
+            options.lastFilter = filter;
+            _this.lastFilter = filter;
+            var counter = 0;
+            //console.log(new Date().toISOString() + ': starting replication');
+            // LT - 10/12/2015 - original code - does remote first
+            _this.LocalNote.replicate(_this.since.push, _this.RemoteNote, options, function (err, conflicts, cps) {
+                _this.since.push = cps;
+                _this.LocalNote.replicate(_this.since.push, _this.RemoteNote, options, function (err, conflicts, cps) {
+                    _this.since.pull = cps;
+                    //console.log(new Date().toISOString() + ': finished replication');
+                    cb && cb(err, conflicts);
+                });
+            });
+        };
+        // LT - don't work with our current loopback version - use observe ?  Maybe need filter (and callback?)
+        this.LocalNote.on('before save', function (ctx, next) {
+            next();
+        });
+        // sync local changes if connected
+        this.LocalNote.on('after save', function (ctx, next) {
+            next();
+            this.job_note_sync();
+        });
+        this.LocalNote.on('after delete', function (ctx, next) {
+            next();
+            this.job_note_sync();
+        });
+    }
+    JobnoteReplicationServiceProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [])
+    ], JobnoteReplicationServiceProvider);
+    return JobnoteReplicationServiceProvider;
+}());
+
+//# sourceMappingURL=jobnote-replication-service.js.map
+
+/***/ }),
+
+/***/ 477:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AttachServiceProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__config_service_config_service__ = __webpack_require__(60);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+/*
+  Generated class for the AttachServiceProvider provider.
+
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular DI.
+*/
+var AttachServiceProvider = /** @class */ (function () {
+    function AttachServiceProvider(http, configService) {
+        this.http = http;
+        this.configService = configService;
+        //console.log('Hello AttachServiceProvider Provider');
+    }
+    AttachServiceProvider.prototype.getAttachments = function (job) {
+        // Query server to get list of attachments for this job - return as a promise
+        // Initial implementation of API takes job date and no. and is not concerned with legs
+        var client = job.mobjobClientCode;
+        var jobnum = job.mobjobNumber; // TODO - should this be basejob?
+        var jobdate = Math.floor(job.mobjobSeq / 100000000); // e.g. 20160502
+        var serverIP = this.configService.getServerIP();
+        if (serverIP == '')
+            serverIP = JSON.parse(localStorage.getItem('clientConfig')).serverIP;
+        //var serverPort = this.configService.getServerPort();
+        var compURL = 'http://' + serverIP + '/other-cgi/listfiles.pl?output_type=JSON&client=' + client + '&job_number=' + jobnum + '&job_date=' + jobdate;
+        return this.http.get(compURL).map(function (res) { return res.json(); }).catch(function (err) { return err; });
+    };
+    AttachServiceProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_2__config_service_config_service__["a" /* ConfigServiceProvider */]])
+    ], AttachServiceProvider);
+    return AttachServiceProvider;
+}());
+
+//# sourceMappingURL=attach-service.js.map
+
+/***/ }),
+
 /***/ 478:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -13502,14 +13510,14 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_camera__ = __webpack_require__(421);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ionic_native_network__ = __webpack_require__(413);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__ionic_native_barcode_scanner__ = __webpack_require__(469);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ionic_native_in_app_browser__ = __webpack_require__(467);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ionic_native_in_app_browser__ = __webpack_require__(468);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ionic_native_media__ = __webpack_require__(472);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ionic_native_push__ = __webpack_require__(416);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_native_background_mode__ = __webpack_require__(412);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ionic_native_diagnostic__ = __webpack_require__(415);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__shared_sdk_services_custom_logger_service__ = __webpack_require__(96);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__providers_login_service_login_service__ = __webpack_require__(468);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__providers_login_service_login_service__ = __webpack_require__(467);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__providers_config_service_config_service__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__providers_customerconn_service_customerconn_service__ = __webpack_require__(176);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(12);
@@ -13535,16 +13543,16 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_49__providers_job_changed_service_job_changed_service__ = __webpack_require__(466);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_50__providers_image_service_image_service__ = __webpack_require__(200);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_51__providers_image_file_service_image_file_service__ = __webpack_require__(201);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__providers_driver_message_service_driver_message_service__ = __webpack_require__(477);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__providers_driver_message_service_driver_message_service__ = __webpack_require__(475);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_53__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_54__providers_sync_service_sync_service__ = __webpack_require__(473);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__providers_job_replication_service_job_replication_service__ = __webpack_require__(209);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_56__providers_barcode_service_barcode_service__ = __webpack_require__(832);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__providers_jobnote_replication_service_jobnote_replication_service__ = __webpack_require__(474);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__providers_jobnote_replication_service_jobnote_replication_service__ = __webpack_require__(476);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_58__providers_barcode_replication_service_barcode_replication_service__ = __webpack_require__(470);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_59__providers_jsea_answers_replication_service_jsea_answers_replication_service__ = __webpack_require__(476);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_59__providers_jsea_answers_replication_service_jsea_answers_replication_service__ = __webpack_require__(474);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_60__providers_navigation_service_navigation_service__ = __webpack_require__(464);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_61__providers_attach_service_attach_service__ = __webpack_require__(475);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_61__providers_attach_service_attach_service__ = __webpack_require__(477);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_62__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_63__providers_sqlite_service_sqlite_service__ = __webpack_require__(115);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -13639,13 +13647,13 @@ var AppModule = /** @class */ (function () {
                         { loadChildren: '../pages/image-text/image-text.module#ImageTextPageModule', name: 'ImageTextPage', segment: 'image-text', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/images/images.module#ImagesPageModule', name: 'ImagesPage', segment: 'images', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-detail-notes/job-detail-notes.module#JobDetailNotesPageModule', name: 'JobDetailNotesPage', segment: 'job-detail-notes', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/job-details/job-details.module#JobDetailsPageModule', name: 'JobDetailsPage', segment: 'job-details', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/jsea/jsea.module#JseaPageModule', name: 'JseaPage', segment: 'jsea', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/msgs/msgs.module#MsgsPageModule', name: 'MsgsPage', segment: 'msgs', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/pda/pda.module#PdaPageModule', name: 'PdaPage', segment: 'pda', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/signature/signature.module#SignaturePageModule', name: 'SignaturePage', segment: 'signature', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/job-details/job-details.module#JobDetailsPageModule', name: 'JobDetailsPage', segment: 'job-details', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_24__shared_sdk__["c" /* SDKBrowserModule */].forRoot(),

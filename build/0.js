@@ -1174,6 +1174,8 @@ var HomePage = /** @class */ (function () {
             this.storage.set('osc-local-db', localStorage.getItem('osc-local-db')).then(function (res) {
                 if (res)
                     _this.log.debug("osc-local-db is set.");
+                else
+                    _this.log.debug("osc-local-db is NOT set.");
             });
         }
         // initialise the current new message count in this scope
