@@ -320,7 +320,7 @@ var KeysPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_base_service_base_service__ = __webpack_require__(199);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_shared_service_shared_service__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_shared_service_shared_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_jsea_service_jsea_service__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_message_service_message_service__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_event_service_event_service__ = __webpack_require__(122);
@@ -1158,6 +1158,7 @@ var HomePage = /** @class */ (function () {
         });
     }; //End of ionViewDidLoad()
     HomePage.prototype.ionViewWillEnter = function () {
+        var _this = this;
         this.driverId = this.pdaParams.getDriverId();
         this.sharedService.tab = "Home/Jobs";
         this.log.info("In the Home/Jobs Tab.");
@@ -1170,7 +1171,10 @@ var HomePage = /** @class */ (function () {
         }
         this.soundFlag = false;
         if (localStorage.getItem('osc-local-db')) {
-            this.storage.set('osc-local-db', localStorage.getItem('osc-local-db'));
+            this.storage.set('osc-local-db', localStorage.getItem('osc-local-db')).then(function (res) {
+                if (res)
+                    _this.log.debug("osc-local-db is set.");
+            });
         }
         // initialise the current new message count in this scope
         // this.newMessageCount = this.messageService.getNewMesssageCount(); 

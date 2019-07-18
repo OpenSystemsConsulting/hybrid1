@@ -55,7 +55,7 @@ var PdaPageModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_config_service_config_service__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_log_service_log_service__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_shared_service_shared_service__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_shared_service_shared_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_sqlite_service_sqlite_service__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__app_app_component__ = __webpack_require__(465);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -167,11 +167,17 @@ var PdaPage = /** @class */ (function () {
                         _this.TpmPdaController.upsert(TpmPdaControllerRow).subscribe();
                         _this.sharedService.tpmPdaCtlsLoadedSubject.next(true);
                     }
-                    _this.storage.set('driverHomeLat', TpmPdaControllerRow.tpmpc_driver_home_lat);
+                    _this.storage.set('driverHomeLat', TpmPdaControllerRow.tpmpc_driver_home_lat).then(function (res) {
+                        if (res)
+                            console.log("driverHomeLat is set");
+                    });
                     _this.log.info("Sqlite Storage : Setting driverHomeLat : " + TpmPdaControllerRow.tpmpc_driver_home_lat);
                     localStorage.setItem('driverHomeLat', TpmPdaControllerRow.tpmpc_driver_home_lat);
                     localStorage.setItem('driverHomeLng', TpmPdaControllerRow.tpmpc_driver_home_lng);
-                    _this.storage.set('driverHomeLng', TpmPdaControllerRow.tpmpc_driver_home_lng);
+                    _this.storage.set('driverHomeLng', TpmPdaControllerRow.tpmpc_driver_home_lng).then(function (res) {
+                        if (res)
+                            console.log("driverHomeLng is set");
+                    });
                     _this.log.info("Sqlite Storage : Setting driverHomeLng : " + TpmPdaControllerRow.tpmpc_driver_home_lng);
                 }
                 if (_this.isDriverSetup && flag) {
@@ -260,7 +266,10 @@ var PdaPage = /** @class */ (function () {
             }
             _this.driverId = driverId;
             //Save the driverid in sqllite
-            _this.storage.set("driverId", _this.driverId);
+            _this.storage.set("driverId", _this.driverId).then(function (res) {
+                if (res)
+                    console.log("driverId is set");
+            });
             _this.log.info("Sqlite Storage : Setting driverID : " + _this.driverId);
             _this.pdaParams.setDriverInfo(_this.driverId);
             //console.log("================The driver id is===================::" + this.pdaParams.getDriverId());

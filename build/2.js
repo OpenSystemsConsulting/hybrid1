@@ -319,7 +319,7 @@ var KeysPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_gps_service_gps_service__ = __webpack_require__(202);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_platform_ready_service_platform_ready_service__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_exit_service_exit_service__ = __webpack_require__(462);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_shared_service_shared_service__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_shared_service_shared_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_device_service_device_service__ = __webpack_require__(206);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_message_service_message_service__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_job_service_job_service__ = __webpack_require__(121);
@@ -513,7 +513,14 @@ var DevicePage = /** @class */ (function () {
                         handler: function () {
                             localStorage.clear();
                             // TODO -  clear images if required - see /app/strongloop/loopback-clientservices-osc-images/client/js/deviceCtrl.js           
-                            _this.app.getRootNav().setRoot(__WEBPACK_IMPORTED_MODULE_20__app_app_component__["a" /* MyApp */]);
+                            //this.app.getRootNav().setRoot(MyApp);
+                            var alert = _this.alertCtrl.create({
+                                title: 'Restart App',
+                                subTitle: 'Please restart the app.',
+                                buttons: ['OK'],
+                                enableBackdropDismiss: false
+                            });
+                            alert.present();
                             //return false;
                         }
                     },
