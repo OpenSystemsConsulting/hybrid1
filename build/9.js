@@ -1,6 +1,6 @@
 webpackJsonp([9],{
 
-/***/ 842:
+/***/ 841:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JseaPageModule", function() { return JseaPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__jsea__ = __webpack_require__(870);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__jsea__ = __webpack_require__(869);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -41,7 +41,7 @@ var JseaPageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 870:
+/***/ 869:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58,7 +58,7 @@ var JseaPageModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_shared_service_shared_service__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_jsea_service_jsea_service__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_message_service_message_service__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_jsea_answers_replication_service_jsea_answers_replication_service__ = __webpack_require__(476);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_jsea_answers_replication_service_jsea_answers_replication_service__ = __webpack_require__(474);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -267,64 +267,92 @@ var JseaPage = /** @class */ (function () {
             var retval = true;
             var llen = _this.jseaQuestions.length;
             var checked;
-            if (!_this.pda_jsea_both_yn)
-                return true;
+            //if (!this.pda_jsea_both_yn)			// not checking both Y/N - old single radio button
+            // return true;
             // jdqCbox is a boolean and comes in by default as either true or more normally false
             // The form will set the value to either 'Y' or 'N' once a radio button has been checked
-            for (var li = 0; li < llen; li++) {
-                checked = _this.jseaQuestions[li].jdqCbox;
-                if (checked !== 'N' && checked !== 'Y') {
-                    // nothing explicitly checked so alert that all questions must be answered
-                    var alertPopup = _this.alertCtrl.create({
-                        title: 'You must answer all questions',
-                        message: _this.jseaQuestions[li].jdqQuestionText,
-                        buttons: [{
-                                text: 'OK',
-                                handler: function () {
-                                    var navTransition = alertPopup.dismiss();
-                                    return false;
+            if (_this.pda_jsea_both_yn) {
+                for (var li = 0; li < llen; li++) {
+                    checked = _this.jseaQuestions[li].jdqCbox;
+                    if (checked !== 'N' && checked !== 'Y') {
+                        // nothing explicitly checked so alert that all questions must be answered
+                        var alertPopup = _this.alertCtrl.create({
+                            title: 'You must answer all questions',
+                            message: _this.jseaQuestions[li].jdqQuestionText,
+                            buttons: [{
+                                    text: 'OK',
+                                    handler: function () {
+                                        var navTransition = alertPopup.dismiss();
+                                        return false;
+                                    }
+                                }],
+                            enableBackdropDismiss: false
+                        });
+                        alertPopup.present();
+                        return false;
+                    }
+                }
+                for (var li = 0; li < llen; li++) {
+                    var checked = _this.jseaQuestions[li].jdqCbox;
+                    if (checked === 'N' && !_this.jseaQuestions[li].jdqAllowNo) {
+                        // 'N" has been checked on a question that does not allow it - alert
+                        var confirmPopup = _this.alertCtrl.create({
+                            title: 'Have you filled in a full paper JSEA?',
+                            message: 'You have answered no to 1 or more questions that are not allowed to be no.  By clicking OK you are confirming that you have filled out a full PAPER JSEA',
+                            buttons: [
+                                {
+                                    text: 'OK',
+                                    handler: function () {
+                                        var navTransition = confirmPopup.dismiss();
+                                        _this.log.info('User has been warned and confirmed OK to submit');
+                                        _this.jseaService.setJseaIsCaptured("Y");
+                                        //Handle Answers
+                                        _this.doSubmitWork();
+                                        navTransition.then(function () {
+                                            _this.t.select(0);
+                                        });
+                                        return false;
+                                    }
+                                },
+                                {
+                                    text: 'Cancel',
+                                    handler: function () {
+                                        _this.log.debug('User has CANCELLED out of a Jsea session warning doing nothing');
+                                        return true;
+                                    }
                                 }
-                            }],
-                        enableBackdropDismiss: false
-                    });
-                    alertPopup.present();
-                    return false;
+                            ],
+                            enableBackdropDismiss: false
+                        });
+                        confirmPopup.present();
+                        return false;
+                    }
                 }
             }
-            for (var li = 0; li < llen; li++) {
-                var checked = _this.jseaQuestions[li].jdqCbox;
-                if (checked === 'N' && !_this.jseaQuestions[li].jdqAllowNo) {
-                    // 'N" has been checked on a question that does not allow it - alert
-                    var confirmPopup = _this.alertCtrl.create({
-                        title: 'Have you filled in a full paper JSEA?',
-                        message: 'You have answered no to 1 or more questions that are not allowed to be no.  By clicking OK you are confirming that you have filled out a full PAPER JSEA',
-                        buttons: [
-                            {
-                                text: 'OK',
-                                handler: function () {
-                                    var navTransition = confirmPopup.dismiss();
-                                    _this.log.info('User has been warned and confirmed OK to submit');
-                                    _this.jseaService.setJseaIsCaptured("Y");
-                                    //Handle Answers
-                                    _this.doSubmitWork();
-                                    navTransition.then(function () {
-                                        _this.t.select(0);
-                                    });
-                                    return false;
+            else if (_this.pda_jsea_no_no) {
+                // NOTE - very similar code to that in the 1st if above       
+                // jdqCbox is a boolean and comes in by default as either true or more normally false
+                for (var li = 0; li < llen; li++) {
+                    checked = _this.jseaQuestions[li].jdqCbox;
+                    if (checked !== true) {
+                        // nothing explicitly checked so alert that all questions must be answered
+                        var alertPopup = _this.alertCtrl.create({
+                            title: 'You must answer all questions',
+                            subTitle: 'Please tick the following question :' + _this.jseaQuestions[li].jdqQuestionText,
+                            buttons: [
+                                {
+                                    text: 'OK',
+                                    handler: function () {
+                                        _this.log.info('User has been warned about pda_jsea_no_no');
+                                        return true;
+                                    }
                                 }
-                            },
-                            {
-                                text: 'Cancel',
-                                handler: function () {
-                                    _this.log.debug('User has CANCELLED out of a Jsea session warning doing nothing');
-                                    return true;
-                                }
-                            }
-                        ],
-                        enableBackdropDismiss: false
-                    });
-                    confirmPopup.present();
-                    return false;
+                            ],
+                            enableBackdropDismiss: false
+                        });
+                        alertPopup.present();
+                        return false;
+                    }
                 }
             }
             return retval;
@@ -353,11 +381,14 @@ var JseaPage = /** @class */ (function () {
             this.pda_jsea_on = 'Y';
             this.lpda_jsea_on = 'Y';
             this.pda_jsea_both_yn = 'Y';
+            this.pda_jsea_no_no = 'Y';
         }
         else {
             this.pda_jsea_on = this.siteConfig.getSiteConfigValue('PDA_JSEA_ON');
             this.lpda_jsea_on = this.pdaParams.pda_jsea_on ? 'Y' : 'N';
             this.pda_jsea_both_yn = this.siteConfig.getSiteConfigValue('PDA_JSEA_BOTH_YN') === 'Y';
+            // No 'no' answers allowed
+            this.pda_jsea_no_no = this.siteConfig.getSiteConfigValue('PDA_JSEA_NO_NO') === 'Y';
         }
         if (this.pda_jsea_on != 'Y' && this.lpda_jsea_on != 'Y') {
             var alert_1 = this.alertCtrl.create({
