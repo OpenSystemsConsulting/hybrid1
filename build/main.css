@@ -30827,6 +30827,11 @@ gridlabel {
   background-color: #FFCCFF !important;
 }
 
+.instructionfields {
+  background-color: #dbebf5 !important;
+  border: 1px solid #51cbee;
+}
+
 .suburbfield {
   background-color: #FFCC99 !important;
 }
