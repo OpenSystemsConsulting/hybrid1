@@ -333,7 +333,7 @@ var KeysPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__providers_config_service_config_service__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__providers_util_service_util_service__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__providers_job_changed_service_job_changed_service__ = __webpack_require__(466);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__providers_job_replication_service_job_replication_service__ = __webpack_require__(209);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__providers_job_replication_service_job_replication_service__ = __webpack_require__(210);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__providers_push_service_push_service__ = __webpack_require__(463);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(123);
@@ -1171,12 +1171,14 @@ var HomePage = /** @class */ (function () {
         }
         this.soundFlag = false;
         if (localStorage.getItem('osc-local-db')) {
-            this.storage.set('osc-local-db', localStorage.getItem('osc-local-db')).then(function (res) {
-                if (res)
-                    _this.log.debug("osc-local-db is set.");
-                else
-                    _this.log.debug("osc-local-db is NOT set.");
-            });
+            if (!this.sharedService.desktopTesting) {
+                this.storage.set('osc-local-db', localStorage.getItem('osc-local-db')).then(function (res) {
+                    if (res)
+                        _this.log.debug("osc-local-db is set.");
+                    else
+                        _this.log.debug("osc-local-db is NOT set.");
+                });
+            }
         }
         // initialise the current new message count in this scope
         // this.newMessageCount = this.messageService.getNewMesssageCount(); 

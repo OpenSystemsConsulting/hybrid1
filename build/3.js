@@ -334,6 +334,7 @@ exports.SignaturePad = SignaturePad;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_config_service_config_service__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -350,6 +351,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /**
  * Generated class for the SignaturePage page.
  *
@@ -359,12 +361,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * See: http://www.9lessons.info/2017/04/ionic-3-and-angular-4-working-with.html
  */
 var SignaturePage = /** @class */ (function () {
-    function SignaturePage(navCtrl, navParams, alertCtrl, configService, sharedService, viewCtrl, pdaParams, params) {
+    function SignaturePage(navCtrl, navParams, alertCtrl, configService, sharedService, siteConfig, viewCtrl, pdaParams, params) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.alertCtrl = alertCtrl;
         this.configService = configService;
         this.sharedService = sharedService;
+        this.siteConfig = siteConfig;
         this.viewCtrl = viewCtrl;
         this.pdaParams = pdaParams;
         this.barcodeSignOff = false;
@@ -376,6 +379,7 @@ var SignaturePage = /** @class */ (function () {
         };
         this.metadata = params.get("metadata");
         this.barcodeSignOff = this.metadata.barcodeSignOff;
+        this.pda_delivery_to_base = this.siteConfig.getSiteConfigYN('PDA_DELIVERY_TO_BASE');
         /* if (this.metadata != null) {
           this.multidel_caller = true;
           console.log("Metadata  = " + params.get("metadata"));
@@ -400,6 +404,7 @@ var SignaturePage = /** @class */ (function () {
         };
         __WEBPACK_IMPORTED_MODULE_3__shared_sdk__["b" /* LoopBackConfig */].setBaseURL(configService.apiURL);
         __WEBPACK_IMPORTED_MODULE_3__shared_sdk__["b" /* LoopBackConfig */].setApiVersion(configService.API_VERSION);
+        this.sharedService.deliverToBase = false;
     }
     SignaturePage.prototype.ionViewDidLoad = function () {
         this.signaturePadModel.podname = "";
@@ -416,6 +421,54 @@ var SignaturePage = /** @class */ (function () {
         this.signaturePad.clear();
         this.signature = null;
         this.navCtrl.pop();
+    };
+    SignaturePage.prototype.updatedeliverToBase = function () {
+        var _this = this;
+        if (this.pda_delivery_to_base != 'Y') {
+            var alert_1 = this.alertCtrl.create({
+                title: 'Not Installed',
+                subTitle: 'This facility is not installed on your site.Please call Open Systems Consulting, if you wish to discuss.',
+                buttons: [{
+                        text: 'OK',
+                        handler: function () {
+                            return;
+                        }
+                    }],
+                enableBackdropDismiss: false
+            });
+            alert_1.present();
+        }
+        else {
+            if (this.sharedService.deliverToBase) {
+                var confirmPopup = this.alertCtrl.create({
+                    title: 'Deliver to Base',
+                    message: 'Deliver to base (no name or signature is required).  Are you sure you want to do this?',
+                    buttons: [
+                        {
+                            text: 'Yes',
+                            handler: function () {
+                                _this.viewCtrl.dismiss({
+                                    podname: '',
+                                    signature: '',
+                                    mdelPhotoTaken: ''
+                                });
+                            }
+                        },
+                        {
+                            text: 'Cancel',
+                            role: 'cancel',
+                            handler: function () {
+                                //console.log('Cancel clicked');
+                                _this.sharedService.deliverToBase = false;
+                                return;
+                            }
+                        }
+                    ],
+                    enableBackdropDismiss: false
+                });
+                confirmPopup.present();
+            }
+        }
     };
     SignaturePage.prototype.save = function () {
         if (!this.signaturePadModel.signatureConfirm || this.signaturePadModel.podname == '' || this.signaturePad.isEmpty()) {
@@ -463,10 +516,10 @@ var SignaturePage = /** @class */ (function () {
     ], SignaturePage.prototype, "signaturePad", void 0);
     SignaturePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-signature',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/signature/signature.html"*/'<!--\n\n  Generated template for the SignaturePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n  <ion-navbar color="primary">\n\n    <ion-buttons left>\n\n      <span [ngSwitch]="this.sharedService.loginFlag">\n\n        <ion-badge class="common-border" color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n        <ion-badge class="common-border" color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n      </span>\n\n    </ion-buttons>\n\n    <ion-title>Add Signature</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n\n\n<ion-content scroll="false" padding>\n\n  <div class="card list">\n\n\n\n    <div class="item item-body signature-item-body">\n\n      <ion-label> Enter your POD NAME below: </ion-label>\n\n      <ion-input class="inputbg" type="text" name="podname" [(ngModel)]="signaturePadModel.podname" required>\n\n      </ion-input>\n\n    </div>\n\n\n\n    <div class="item item-body signature-item-body">\n\n      Use finger or stylus to sign below\n\n    </div>\n\n\n\n    <!--<div *ngIf="( pdaImages && property.property == \'mobjobNumber\' )"> -->\n\n    <div *ngIf=!barcodeSignOff>\n\n      <!--<camera-button [metadata]="{basejob: property.basejob, legid: property.legid, legStatus: property.legStatus}"> -->\n\n      <camera-button [metadata]="metadata">\n\n      </camera-button>\n\n    </div>\n\n\n\n    <signature-pad [options]="signaturePadOptions" id="signature-canvas" class="padding-horizontal item"\n\n      style="width: 100%;">\n\n\n\n    </signature-pad>\n\n\n\n    <!-- <div class="item item-checkbox">\n\n      <label class="checkbox">\n\n        <input type="checkbox" [(ngModel)]="signaturePadModel.signatureConfirm" />\n\n        I accept the signature above\n\n      </label>\n\n    </div> -->\n\n\n\n\n\n    <div class="item item-checkbox">\n\n      <label class="checkbox">\n\n        <input type="checkbox" [(ngModel)]="signaturePadModel.signatureConfirm" />\n\n        <b>I accept the signature above</b>\n\n        <br>\n\n      </label>\n\n    </div>\n\n\n\n\n\n    <!--  <ion-list>\n\n      <ion-item>\n\n        <ion-label> I accept the signature above</ion-label>\n\n        <ion-checkbox [(ngModel)]="signaturePadModel.signatureConfirm"  [checked]="signaturePadModel.signatureConfirm"></ion-checkbox>\n\n      </ion-item>\n\n    </ion-list> -->\n\n\n\n\n\n  </div>\n\n\n\n  <ion-grid>\n\n    <ion-row>\n\n      <ion-col col-4>\n\n        <button ion-button color="secondary" (click)="sharedService.showSpinner();save()">\n\n          Accept\n\n        </button>\n\n      </ion-col>\n\n      <ion-col col-4>\n\n        <button ion-button color="light" (click)="clear()">Clear</button>\n\n      </ion-col>\n\n      <ion-col col-4>\n\n        <button ion-button color="danger" (click)="sharedService.showSpinner();drawCancel()">Cancel</button>\n\n      </ion-col>\n\n    </ion-row>\n\n  </ion-grid>\n\n</ion-content>'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/signature/signature.html"*/,
+            selector: 'page-signature',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/signature/signature.html"*/'<!--\n\n  Generated template for the SignaturePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n  <ion-navbar color="primary">\n\n    <ion-buttons left>\n\n      <span [ngSwitch]="this.sharedService.loginFlag">\n\n        <ion-badge class="common-border" color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n        <ion-badge class="common-border" color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n      </span>\n\n    </ion-buttons>\n\n    <ion-title>Add Signature</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n\n\n\n\n<ion-content scroll="false" padding>\n\n  <div class="card list">\n\n\n\n      <ion-item class="item item-body" type="item-text-wrap" text-wrap>\n\n          <ion-label>Deliver to base (if selected,no name or signature is required)</ion-label>\n\n          <ion-toggle [(ngModel)]="sharedService.deliverToBase"\n\n            (ngModelChange)="updatedeliverToBase()"></ion-toggle>\n\n        </ion-item>\n\n\n\n    <div class="item item-body signature-item-body">\n\n      <ion-label> Enter your POD NAME below: </ion-label>\n\n      <ion-input class="inputbg" type="text" name="podname" [(ngModel)]="signaturePadModel.podname" required>\n\n      </ion-input>\n\n    </div>\n\n\n\n    <div class="item item-body signature-item-body">\n\n      Use finger or stylus to sign below\n\n    </div>\n\n\n\n    <!--<div *ngIf="( pdaImages && property.property == \'mobjobNumber\' )"> -->\n\n    <div *ngIf=!barcodeSignOff>\n\n      <!--<camera-button [metadata]="{basejob: property.basejob, legid: property.legid, legStatus: property.legStatus}"> -->\n\n      <camera-button [metadata]="metadata">\n\n      </camera-button>\n\n    </div>\n\n\n\n    <signature-pad [options]="signaturePadOptions" id="signature-canvas" class="padding-horizontal item"\n\n      style="width: 100%;">\n\n\n\n    </signature-pad>\n\n\n\n    <!-- <div class="item item-checkbox">\n\n      <label class="checkbox">\n\n        <input type="checkbox" [(ngModel)]="signaturePadModel.signatureConfirm" />\n\n        I accept the signature above\n\n      </label>\n\n    </div> -->\n\n\n\n\n\n    <div class="item item-checkbox">\n\n      <label class="checkbox">\n\n        <input type="checkbox" [(ngModel)]="signaturePadModel.signatureConfirm" />\n\n        <b>I accept the signature above</b>\n\n        <br>\n\n      </label>\n\n    </div>\n\n\n\n\n\n    <!--  <ion-list>\n\n      <ion-item>\n\n        <ion-label> I accept the signature above</ion-label>\n\n        <ion-checkbox [(ngModel)]="signaturePadModel.signatureConfirm"  [checked]="signaturePadModel.signatureConfirm"></ion-checkbox>\n\n      </ion-item>\n\n    </ion-list> -->\n\n\n\n\n\n  </div>\n\n\n\n  <ion-grid>\n\n    <ion-row>\n\n      <ion-col col-4>\n\n        <button ion-button color="secondary" (click)="sharedService.showSpinner();save()">\n\n          Accept\n\n        </button>\n\n      </ion-col>\n\n      <ion-col col-4>\n\n        <button ion-button color="light" (click)="clear()">Clear</button>\n\n      </ion-col>\n\n      <ion-col col-4>\n\n        <button ion-button color="danger" (click)="sharedService.showSpinner();drawCancel()">Cancel</button>\n\n      </ion-col>\n\n    </ion-row>\n\n  </ion-grid>\n\n</ion-content>'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/signature/signature.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */],
-            __WEBPACK_IMPORTED_MODULE_4__providers_config_service_config_service__["a" /* ConfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_6__providers_shared_service_shared_service__["a" /* SharedServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_4__providers_config_service_config_service__["a" /* ConfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_6__providers_shared_service_shared_service__["a" /* SharedServiceProvider */], __WEBPACK_IMPORTED_MODULE_7__providers_siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* ViewController */], __WEBPACK_IMPORTED_MODULE_5__providers_pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]])
     ], SignaturePage);
     return SignaturePage;

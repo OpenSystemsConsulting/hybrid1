@@ -52,7 +52,7 @@ var LoginPageModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_login_service_login_service__ = __webpack_require__(468);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_shared_service_shared_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_splash_screen__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_splash_screen__ = __webpack_require__(209);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_sqlite_service_sqlite_service__ = __webpack_require__(115);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -154,12 +154,14 @@ var LoginPage = /** @class */ (function () {
                 (function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.storage.set('login', JSON.stringify(loginDetails)).then(function (res) {
-                                    if (res)
-                                        console.log("login is set");
-                                    else
-                                        console.log("login is not set");
-                                })];
+                            case 0:
+                                if (!!this.sharedService.desktopTesting) return [3 /*break*/, 3];
+                                return [4 /*yield*/, this.storage.set('login', JSON.stringify(loginDetails)).then(function (res) {
+                                        if (res)
+                                            console.log("login is set");
+                                        else
+                                            console.log("login is not set");
+                                    })];
                             case 1:
                                 _a.sent();
                                 return [4 /*yield*/, this.storage.set('userId', uid).then(function (res) {
@@ -170,6 +172,8 @@ var LoginPage = /** @class */ (function () {
                                     })];
                             case 2:
                                 _a.sent();
+                                _a.label = 3;
+                            case 3:
                                 //this.storage.printAll();
                                 localStorage.setItem('login', JSON.stringify(loginDetails));
                                 localStorage.setItem('userId', uid);

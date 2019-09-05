@@ -167,21 +167,25 @@ var PdaPage = /** @class */ (function () {
                         _this.TpmPdaController.upsert(TpmPdaControllerRow).subscribe();
                         _this.sharedService.tpmPdaCtlsLoadedSubject.next(true);
                     }
-                    _this.storage.set('driverHomeLat', TpmPdaControllerRow.tpmpc_driver_home_lat).then(function (res) {
-                        if (res)
-                            console.log("driverHomeLat is set");
-                        else
-                            console.log("driverHomeLat is not set");
-                    });
+                    if (!_this.sharedService.desktopTesting) {
+                        _this.storage.set('driverHomeLat', TpmPdaControllerRow.tpmpc_driver_home_lat).then(function (res) {
+                            if (res)
+                                console.log("driverHomeLat is set");
+                            else
+                                console.log("driverHomeLat is not set");
+                        });
+                    }
                     _this.log.info("Sqlite Storage : Setting driverHomeLat : " + TpmPdaControllerRow.tpmpc_driver_home_lat);
                     localStorage.setItem('driverHomeLat', TpmPdaControllerRow.tpmpc_driver_home_lat);
                     localStorage.setItem('driverHomeLng', TpmPdaControllerRow.tpmpc_driver_home_lng);
-                    _this.storage.set('driverHomeLng', TpmPdaControllerRow.tpmpc_driver_home_lng).then(function (res) {
-                        if (res)
-                            console.log("driverHomeLng is set");
-                        else
-                            console.log("driverHomeLng is not set");
-                    });
+                    if (!_this.sharedService.desktopTesting) {
+                        _this.storage.set('driverHomeLng', TpmPdaControllerRow.tpmpc_driver_home_lng).then(function (res) {
+                            if (res)
+                                console.log("driverHomeLng is set");
+                            else
+                                console.log("driverHomeLng is not set");
+                        });
+                    }
                     _this.log.info("Sqlite Storage : Setting driverHomeLng : " + TpmPdaControllerRow.tpmpc_driver_home_lng);
                 }
                 if (_this.isDriverSetup && flag) {
@@ -204,9 +208,11 @@ var PdaPage = /** @class */ (function () {
                             text: 'Relogin',
                             handler: function () {
                                 localStorage.clear();
-                                _this.storage.clear();
-                                if (_this.plt.is('cordova') && window.sqlitePlugin)
-                                    _this.storage.closeDB();
+                                if (!_this.sharedService.desktopTesting) {
+                                    _this.storage.clear();
+                                    if (_this.plt.is('cordova') && window.sqlitePlugin)
+                                        _this.storage.closeDB();
+                                }
                                 _this.app.getRootNav().setRoot(__WEBPACK_IMPORTED_MODULE_11__app_app_component__["a" /* MyApp */]);
                             }
                         },
@@ -270,12 +276,14 @@ var PdaPage = /** @class */ (function () {
             }
             _this.driverId = driverId;
             //Save the driverid in sqllite
-            _this.storage.set("driverId", _this.driverId).then(function (res) {
-                if (res)
-                    console.log("driverId is set");
-                else
-                    console.log("driverId is not set");
-            });
+            if (!_this.sharedService.desktopTesting) {
+                _this.storage.set("driverId", _this.driverId).then(function (res) {
+                    if (res)
+                        console.log("driverId is set");
+                    else
+                        console.log("driverId is not set");
+                });
+            }
             _this.log.info("Sqlite Storage : Setting driverID : " + _this.driverId);
             _this.pdaParams.setDriverInfo(_this.driverId);
             //console.log("================The driver id is===================::" + this.pdaParams.getDriverId());

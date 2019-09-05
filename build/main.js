@@ -1005,9 +1005,9 @@ var GpsAuditServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConnectivityMonitorProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(402);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(403);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_network__ = __webpack_require__(413);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_network__ = __webpack_require__(414);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_service_util_service__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
@@ -1645,7 +1645,7 @@ var JobServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_service_config_service__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__window_ref_service_window_ref_service__ = __webpack_require__(414);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__window_ref_service_window_ref_service__ = __webpack_require__(415);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1725,7 +1725,7 @@ var EventServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DeviceDiagnosticServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_diagnostic__ = __webpack_require__(415);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_diagnostic__ = __webpack_require__(416);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_DeviceDiagnostics__ = __webpack_require__(157);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk_services_custom_DeviceDiagnostics__ = __webpack_require__(175);
@@ -2012,7 +2012,7 @@ var LoopBackConfig = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoopBackAuth; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__storage_storage_swaps__ = __webpack_require__(152);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_BaseModels__ = __webpack_require__(269);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_BaseModels__ = __webpack_require__(270);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2203,23 +2203,23 @@ var LoopBackAuth = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SDKModels; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_Job__ = __webpack_require__(153);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_JobChange__ = __webpack_require__(270);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_TpmPdaController__ = __webpack_require__(271);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_JobChange__ = __webpack_require__(271);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_TpmPdaController__ = __webpack_require__(272);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_GpsHistory__ = __webpack_require__(97);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_Application__ = __webpack_require__(272);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_Application__ = __webpack_require__(273);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_Installation__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__models_Notification__ = __webpack_require__(273);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_Push__ = __webpack_require__(274);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__models_Mobile_event__ = __webpack_require__(275);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__models_SiteConfig__ = __webpack_require__(276);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__models_DespatchToDriverMessages__ = __webpack_require__(277);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__models_JseaDriverQuestions__ = __webpack_require__(278);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__models_Notification__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_Push__ = __webpack_require__(275);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__models_Mobile_event__ = __webpack_require__(276);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__models_SiteConfig__ = __webpack_require__(277);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__models_DespatchToDriverMessages__ = __webpack_require__(278);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__models_JseaDriverQuestions__ = __webpack_require__(279);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__models_JseaDriverAnswers__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__models_JseaDriverAnswersChange__ = __webpack_require__(279);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__models_Photocontainer__ = __webpack_require__(280);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__models_Image__ = __webpack_require__(281);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__models_JseaDriverAnswersChange__ = __webpack_require__(280);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__models_Photocontainer__ = __webpack_require__(281);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__models_Image__ = __webpack_require__(282);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__models_BarcodeHist__ = __webpack_require__(156);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__models_BarcodeHistChange__ = __webpack_require__(282);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__models_BarcodeHistChange__ = __webpack_require__(283);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__models_DeviceDiagnostics__ = __webpack_require__(157);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2653,6 +2653,11 @@ var Job = /** @class */ (function () {
                     name: 'JobexSpecialInstructions',
                     type: 'string',
                     default: '0'
+                },
+                "deliveryToBase": {
+                    name: 'deliveryToBase',
+                    type: 'string',
+                    default: 'No'
                 }
             },
             relations: {}
@@ -3671,7 +3676,7 @@ var FixedQueueServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_throw__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3713,7 +3718,7 @@ var ErrorHandler = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BaseServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__(407);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__(408);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_service_util_service__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
@@ -4115,7 +4120,7 @@ var BaseServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SocketConnection; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__socket_driver__ = __webpack_require__(299);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__socket_driver__ = __webpack_require__(300);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators__ = __webpack_require__(46);
@@ -4873,7 +4878,7 @@ var ImageFileServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GpsServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_geolocation__ = __webpack_require__(207);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_geolocation__ = __webpack_require__(208);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_GpsHistory__ = __webpack_require__(97);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk_services_custom_GpsHistory__ = __webpack_require__(109);
@@ -5500,7 +5505,7 @@ var DeviceServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 209:
+/***/ 210:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6484,7 +6489,7 @@ var BaseLoopBackApi = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 220:
+/***/ 221:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -6497,7 +6502,7 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 220;
+webpackEmptyAsyncContext.id = 221;
 
 /***/ }),
 
@@ -6507,7 +6512,7 @@ webpackEmptyAsyncContext.id = 220;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SharedServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(402);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(403);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -6546,6 +6551,8 @@ var SharedServiceProvider = /** @class */ (function () {
         this.testing = false;
         this.isOnline = false;
         this.isDbOpen = false;
+        this.desktopTesting = false;
+        this.deliverToBase = false;
         this.seqno = 0;
         this.tab = "";
         this.isAppinBackground = false;
@@ -6637,7 +6644,7 @@ var SharedServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 264:
+/***/ 265:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -6713,12 +6720,12 @@ function webpackAsyncContext(req) {
 webpackAsyncContext.keys = function webpackAsyncContextKeys() {
 	return Object.keys(map);
 };
-webpackAsyncContext.id = 264;
+webpackAsyncContext.id = 265;
 module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ 269:
+/***/ 270:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6809,7 +6816,7 @@ var SDKToken = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 270:
+/***/ 271:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6884,7 +6891,7 @@ var JobChange = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 271:
+/***/ 272:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6971,7 +6978,7 @@ var TpmPdaController = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 272:
+/***/ 273:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7121,7 +7128,7 @@ var Application = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 273:
+/***/ 274:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7240,7 +7247,7 @@ var Notification = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 274:
+/***/ 275:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7295,7 +7302,7 @@ var Push = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 275:
+/***/ 276:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7350,7 +7357,7 @@ var Mobile_event = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 276:
+/***/ 277:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7417,7 +7424,7 @@ var SiteConfig = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 277:
+/***/ 278:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7500,7 +7507,7 @@ var DespatchToDriverMessages = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 278:
+/***/ 279:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7575,7 +7582,7 @@ var JseaDriverQuestions = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 279:
+/***/ 280:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7650,7 +7657,7 @@ var JseaDriverAnswersChange = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 280:
+/***/ 281:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7705,7 +7712,7 @@ var Photocontainer = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 281:
+/***/ 282:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7772,7 +7779,7 @@ var Image = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 282:
+/***/ 283:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7847,7 +7854,7 @@ var BarcodeHistChange = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 285:
+/***/ 286:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7946,7 +7953,7 @@ var CookieBrowser = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 286:
+/***/ 287:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8034,7 +8041,7 @@ var StorageBrowser = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 299:
+/***/ 300:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8142,7 +8149,8 @@ var SiteconfigServiceProvider = /** @class */ (function () {
             'PDA_DISABLE_BACKGROUND_SYNC',
             'PDA_DISABLE_DEVICE_DIAGNOSTICS',
             'PDA_DISABLE_DIAGNOSTICS_BGPS_ON_LOGOFF',
-            'PDA_JSEA_NO_NO'
+            'PDA_JSEA_NO_NO',
+            'PDA_DELIVERY_TO_BASE'
         ];
         this.siteconfigs = null;
         this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'SiteconfigServiceProvider' };
@@ -8245,7 +8253,7 @@ var SiteconfigServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 382:
+/***/ 383:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8400,49 +8408,49 @@ var RealTime = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 383:
+/***/ 384:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Job__ = __webpack_require__(153);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__JobChange__ = __webpack_require__(270);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__JobChange__ = __webpack_require__(271);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TpmPdaController__ = __webpack_require__(271);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TpmPdaController__ = __webpack_require__(272);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__GpsHistory__ = __webpack_require__(97);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Application__ = __webpack_require__(272);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Application__ = __webpack_require__(273);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Installation__ = __webpack_require__(154);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Notification__ = __webpack_require__(273);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Notification__ = __webpack_require__(274);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Push__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Push__ = __webpack_require__(275);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Mobile_event__ = __webpack_require__(275);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Mobile_event__ = __webpack_require__(276);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__SiteConfig__ = __webpack_require__(276);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__SiteConfig__ = __webpack_require__(277);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__DespatchToDriverMessages__ = __webpack_require__(277);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__DespatchToDriverMessages__ = __webpack_require__(278);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__JseaDriverQuestions__ = __webpack_require__(278);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__JseaDriverQuestions__ = __webpack_require__(279);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__JseaDriverAnswers__ = __webpack_require__(155);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__JseaDriverAnswersChange__ = __webpack_require__(279);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__JseaDriverAnswersChange__ = __webpack_require__(280);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__Photocontainer__ = __webpack_require__(280);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__Photocontainer__ = __webpack_require__(281);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Image__ = __webpack_require__(281);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Image__ = __webpack_require__(282);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__BarcodeHist__ = __webpack_require__(156);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__BarcodeHistChange__ = __webpack_require__(282);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__BarcodeHistChange__ = __webpack_require__(283);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__DeviceDiagnostics__ = __webpack_require__(157);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__BaseModels__ = __webpack_require__(269);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__BaseModels__ = __webpack_require__(270);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__FireLoopRef__ = __webpack_require__(547);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_20__FireLoopRef__["a"]; });
@@ -8472,7 +8480,7 @@ var RealTime = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 386:
+/***/ 387:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8877,7 +8885,7 @@ var JobApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 387:
+/***/ 388:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9024,7 +9032,7 @@ var JobChangeApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 388:
+/***/ 389:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9238,7 +9246,7 @@ var TpmPdaControllerApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 389:
+/***/ 390:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9385,7 +9393,7 @@ var ApplicationApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 390:
+/***/ 391:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9638,7 +9646,7 @@ var InstallationApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 391:
+/***/ 392:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9785,7 +9793,7 @@ var NotificationApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 392:
+/***/ 393:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9904,7 +9912,7 @@ var PushApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 393:
+/***/ 394:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10015,7 +10023,7 @@ var Mobile_eventApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 394:
+/***/ 395:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10162,7 +10170,7 @@ var SiteConfigApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 395:
+/***/ 396:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10309,7 +10317,7 @@ var DespatchToDriverMessagesApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 396:
+/***/ 397:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10691,7 +10699,7 @@ var JseaDriverAnswersApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 397:
+/***/ 398:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10838,7 +10846,7 @@ var JseaDriverAnswersChangeApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 398:
+/***/ 399:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11253,7 +11261,7 @@ var PhotocontainerApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 399:
+/***/ 400:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11400,7 +11408,7 @@ var ImageApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 400:
+/***/ 401:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11782,7 +11790,7 @@ var BarcodeHistApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 401:
+/***/ 402:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11929,7 +11937,7 @@ var BarcodeHistChangeApi = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ 414:
+/***/ 415:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12066,7 +12074,7 @@ var ExitServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_push__ = __webpack_require__(416);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_push__ = __webpack_require__(417);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__log_service_log_service__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__platform_ready_service_platform_ready_service__ = __webpack_require__(61);
@@ -12186,12 +12194,14 @@ var PushServiceProvider = /** @class */ (function () {
                             _this.installationApi.create(installation_object).subscribe(function (res) {
                                 // Save data to local storage (it also gets put into $rootScope below)
                                 localStorage.setItem('osc-push-credentials', JSON.stringify(installation_object));
-                                _this.storage.set('osc-push-credentials', JSON.stringify(installation_object)).then(function (res) {
-                                    if (res)
-                                        console.log("osc-push-credentials are set");
-                                    else
-                                        console.log("osc-push-credentials is not set");
-                                });
+                                if (!_this.sharedService.desktopTesting) {
+                                    _this.storage.set('osc-push-credentials', JSON.stringify(installation_object)).then(function (res) {
+                                        if (res)
+                                            console.log("osc-push-credentials are set");
+                                        else
+                                            console.log("osc-push-credentials is not set");
+                                    });
+                                }
                                 _this.log.info("Sqlite Storage : Setting osc-push-credentials : " + JSON.stringify(installation_object));
                                 var alertPopup = _this.alertCtrl.create({
                                     title: 'Device registered',
@@ -12235,12 +12245,14 @@ var PushServiceProvider = /** @class */ (function () {
                     //if uuid is null, store new uuid and continue
                     if (!localStorage.getItem('uuid')) {
                         uuid.push(new_uuid);
-                        _this.storage.set('uuid', JSON.stringify(uuid)).then(function (res) {
-                            if (res)
-                                console.log("uuid is set");
-                            else
-                                console.log("uuid is not set");
-                        });
+                        if (!_this.sharedService.desktopTesting) {
+                            _this.storage.set('uuid', JSON.stringify(uuid)).then(function (res) {
+                                if (res)
+                                    console.log("uuid is set");
+                                else
+                                    console.log("uuid is not set");
+                            });
+                        }
                         _this.log.info("Sqlite Storage : Setting UUID : " + JSON.stringify(uuid));
                         localStorage.setItem('uuid', JSON.stringify(uuid));
                     }
@@ -12257,12 +12269,14 @@ var PushServiceProvider = /** @class */ (function () {
                                 uuid.splice(0, 1);
                             //Push the new uuid to the circular array
                             uuid.push(new_uuid);
-                            _this.storage.set('uuid', JSON.stringify(uuid)).then(function (res) {
-                                if (res)
-                                    console.log("uuid is set");
-                                else
-                                    console.log("uuid is not set");
-                            });
+                            if (!_this.sharedService.desktopTesting) {
+                                _this.storage.set('uuid', JSON.stringify(uuid)).then(function (res) {
+                                    if (res)
+                                        console.log("uuid is set");
+                                    else
+                                        console.log("uuid is not set");
+                                });
+                            }
                             _this.log.info("Sqlite Storage : Setting UUID : " + JSON.stringify(uuid));
                             localStorage.setItem('uuid', JSON.stringify(uuid));
                         }
@@ -12341,7 +12355,7 @@ var PushServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NavigationServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_launch_navigator__ = __webpack_require__(417);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_launch_navigator__ = __webpack_require__(207);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_service_shared_service__ = __webpack_require__(23);
@@ -12432,9 +12446,10 @@ var NavigationServiceProvider = /** @class */ (function () {
                 this.log.debug(this.myNotModuleInstalled);
                 return;
             }
-            this.navigatorPlugin.appSelection.userChoice.get(function (app) {
-                this.log.debug("User preferred app currently is: " + this.navigatorPlugin.getAppDisplayName(app));
+            /* this.navigatorPlugin.appSelection.userChoice.get(function (app) {
+              this.log.debug("User preferred app currently is: " + this.navigatorPlugin.getAppDisplayName(app));
             });
+         */
             this.navigatorPlugin.appSelection.userChoice.clear(function () {
                 this.log.debug("Wants to clear app ,so now preferred app is cleared");
             });
@@ -12492,7 +12507,7 @@ var NavigationServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(418);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(209);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_base_service_base_service__ = __webpack_require__(199);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_siteconfig_service_siteconfig_service__ = __webpack_require__(35);
@@ -12677,6 +12692,7 @@ var MyApp = /** @class */ (function () {
                         })];
                     case 1:
                         _a.sent();
+                        if (!!this.sharedService.desktopTesting) return [3 /*break*/, 3];
                         if (!!this.sharedService.isDbOpen) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.storage.opendbOnDeviceReady().then(function (res) {
                                 _this.sharedService.isDbOpen = res;
@@ -12686,9 +12702,9 @@ var MyApp = /** @class */ (function () {
                         _a.sent();
                         _a.label = 3;
                     case 3:
-                        if (!!(localStorage.getItem('login'))) return [3 /*break*/, 8];
+                        if (!!(localStorage.getItem('login'))) return [3 /*break*/, 9];
                         console.log('There is no login available in local storage.');
-                        //2.1. Check if it is available in the sqlite db        
+                        if (!!this.sharedService.desktopTesting) return [3 /*break*/, 5];
                         return [4 /*yield*/, this.storage.get("login").then(function (val) {
                                 if (val) {
                                     loginVar = val;
@@ -12701,15 +12717,16 @@ var MyApp = /** @class */ (function () {
                                 _this.sharedService.localStorageZapped = loginVar;
                             })];
                     case 4:
-                        //2.1. Check if it is available in the sqlite db        
                         _a.sent();
-                        if (!this.sharedService.localStorageZapped) return [3 /*break*/, 7];
+                        _a.label = 5;
+                    case 5:
+                        if (!this.sharedService.localStorageZapped) return [3 /*break*/, 8];
                         console.log('LocalStorage has been zapped!!');
                         /*
                         * 2.3 If yes,localstorage has been zapped, retrive all variables from sqlite and write to localstorage
                         * */
                         return [4 /*yield*/, localStorage.setItem('login', loginVar)];
-                    case 5:
+                    case 6:
                         /*
                         * 2.3 If yes,localstorage has been zapped, retrive all variables from sqlite and write to localstorage
                         * */
@@ -12721,10 +12738,10 @@ var MyApp = /** @class */ (function () {
                                 document.location.href = 'index.html';
                                 return;
                             })];
-                    case 6:
-                        _a.sent();
-                        return [3 /*break*/, 8];
                     case 7:
+                        _a.sent();
+                        return [3 /*break*/, 9];
+                    case 8:
                         console.log('LocalStorage has NOT been zapped, so we are redirected to the login page.');
                         //clear previous data in the storage, if any.
                         localStorage.clear();
@@ -12735,7 +12752,14 @@ var MyApp = /** @class */ (function () {
                         //Direct him to the login page..
                         this.rootPage = "LoginPage";
                         return [2 /*return*/];
-                    case 8:
+                    case 9:
+                        /*    }
+                           else {
+                             localStorage.setItem('firstlogin', 'true');
+                             this.rootPage = "LoginPage";
+                             return;
+                           }
+                      */
                         //set the tab string in shared-service
                         this.sharedService.tab = "App.Component.ts";
                         //3. Is the Server API Url set?
@@ -12744,12 +12768,14 @@ var MyApp = /** @class */ (function () {
                         if (!(localStorage.getItem('apiURL'))) {
                             this.userId = localStorage.getItem('userId');
                             //Hack:Set userid into sqlite as its not being set from login.ts
-                            this.storage.set("userId", this.userId).then(function (res) {
-                                if (res)
-                                    console.log("userid is set");
-                                else
-                                    console.log("userid is NOT set");
-                            });
+                            if (!this.sharedService.desktopTesting) {
+                                this.storage.set("userId", this.userId).then(function (res) {
+                                    if (res)
+                                        console.log("userid is set");
+                                    else
+                                        console.log("userid is NOT set");
+                                });
+                            }
                             //console.log('userId====' + this.userId);
                             this.connDetails = this.customerConn.getConnectionDetails(this.userId.toLowerCase());
                             this.configService.setSiteDetails(this.connDetails);
@@ -13114,7 +13140,7 @@ var BarcodeReplicationServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__log_service_log_service__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__job_replication_service_job_replication_service__ = __webpack_require__(209);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__job_replication_service_job_replication_service__ = __webpack_require__(210);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__siteconfig_service_siteconfig_service__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_service_shared_service__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -13510,22 +13536,22 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(465);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_storage__ = __webpack_require__(830);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_status_bar__ = __webpack_require__(418);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__ = __webpack_require__(209);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_device__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_insomnia__ = __webpack_require__(205);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_native_geolocation__ = __webpack_require__(207);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_launch_navigator__ = __webpack_require__(417);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_native_geolocation__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_launch_navigator__ = __webpack_require__(207);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_device_feedback__ = __webpack_require__(471);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ionic_native_file__ = __webpack_require__(419);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ionic_native_file_transfer__ = __webpack_require__(420);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_camera__ = __webpack_require__(421);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ionic_native_network__ = __webpack_require__(413);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__ionic_native_network__ = __webpack_require__(414);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__ionic_native_barcode_scanner__ = __webpack_require__(469);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__ionic_native_in_app_browser__ = __webpack_require__(467);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ionic_native_media__ = __webpack_require__(472);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ionic_native_push__ = __webpack_require__(416);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_native_background_mode__ = __webpack_require__(412);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ionic_native_diagnostic__ = __webpack_require__(415);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ionic_native_push__ = __webpack_require__(417);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_native_background_mode__ = __webpack_require__(413);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ionic_native_diagnostic__ = __webpack_require__(416);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__shared_sdk_services_custom_logger_service__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__providers_login_service_login_service__ = __webpack_require__(468);
@@ -13546,7 +13572,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__providers_log_service_log_service__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__providers_job_service_job_service__ = __webpack_require__(121);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__providers_event_service_event_service__ = __webpack_require__(122);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__providers_window_ref_service_window_ref_service__ = __webpack_require__(414);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__providers_window_ref_service_window_ref_service__ = __webpack_require__(415);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__providers_sod_service_sod_service__ = __webpack_require__(203);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__providers_push_service_push_service__ = __webpack_require__(463);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_47__providers_exit_service_exit_service__ = __webpack_require__(462);
@@ -13557,7 +13583,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__providers_driver_message_service_driver_message_service__ = __webpack_require__(477);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_53__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_54__providers_sync_service_sync_service__ = __webpack_require__(473);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__providers_job_replication_service_job_replication_service__ = __webpack_require__(209);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__providers_job_replication_service_job_replication_service__ = __webpack_require__(210);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_56__providers_barcode_service_barcode_service__ = __webpack_require__(832);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__providers_jobnote_replication_service_jobnote_replication_service__ = __webpack_require__(474);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_58__providers_barcode_replication_service_barcode_replication_service__ = __webpack_require__(470);
@@ -13835,7 +13861,7 @@ var IO = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FireLoop; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index__ = __webpack_require__(383);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index__ = __webpack_require__(384);
 /* tslint:disable */
 
 var FireLoop = /** @class */ (function () {
@@ -13862,7 +13888,7 @@ var FireLoop = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FireLoopRef; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_merge__ = __webpack_require__(384);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_merge__ = __webpack_require__(385);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_merge___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_add_observable_merge__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__);
@@ -13870,7 +13896,7 @@ var FireLoop = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_merge__ = __webpack_require__(385);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_merge__ = __webpack_require__(386);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_merge___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_merge__);
 /* tslint:disable */
 
@@ -14219,7 +14245,7 @@ var FireLoopRef = /** @class */ (function () {
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_service__ = __webpack_require__(22);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__real_time__ = __webpack_require__(382);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__real_time__ = __webpack_require__(383);
 /* unused harmony namespace reexport */
 /* tslint:disable */
 
@@ -14490,41 +14516,41 @@ var UtilServiceProvider = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Job__ = __webpack_require__(386);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Job__ = __webpack_require__(387);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__Job__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__JobChange__ = __webpack_require__(387);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__JobChange__ = __webpack_require__(388);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TpmPdaController__ = __webpack_require__(388);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TpmPdaController__ = __webpack_require__(389);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_2__TpmPdaController__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__GpsHistory__ = __webpack_require__(109);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Application__ = __webpack_require__(389);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Application__ = __webpack_require__(390);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Installation__ = __webpack_require__(390);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Installation__ = __webpack_require__(391);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_5__Installation__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Notification__ = __webpack_require__(391);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Notification__ = __webpack_require__(392);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Push__ = __webpack_require__(392);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Push__ = __webpack_require__(393);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Mobile_event__ = __webpack_require__(393);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Mobile_event__ = __webpack_require__(394);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__SiteConfig__ = __webpack_require__(394);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__SiteConfig__ = __webpack_require__(395);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_9__SiteConfig__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__DespatchToDriverMessages__ = __webpack_require__(395);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__DespatchToDriverMessages__ = __webpack_require__(396);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_10__DespatchToDriverMessages__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__JseaDriverQuestions__ = __webpack_require__(204);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__JseaDriverAnswers__ = __webpack_require__(396);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__JseaDriverAnswers__ = __webpack_require__(397);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__JseaDriverAnswersChange__ = __webpack_require__(397);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__JseaDriverAnswersChange__ = __webpack_require__(398);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__Photocontainer__ = __webpack_require__(398);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__Photocontainer__ = __webpack_require__(399);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Image__ = __webpack_require__(399);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__Image__ = __webpack_require__(400);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__BarcodeHist__ = __webpack_require__(400);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__BarcodeHist__ = __webpack_require__(401);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__BarcodeHistChange__ = __webpack_require__(401);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__BarcodeHistChange__ = __webpack_require__(402);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__DeviceDiagnostics__ = __webpack_require__(175);
 /* unused harmony namespace reexport */
@@ -14672,7 +14698,7 @@ var ConfigServiceProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_device__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_insomnia__ = __webpack_require__(205);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_background_mode__ = __webpack_require__(412);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_background_mode__ = __webpack_require__(413);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__log_service_log_service__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__background_geolocation_service_background_geolocation_service__ = __webpack_require__(120);
@@ -14972,32 +14998,32 @@ LogServiceInstance.prototype.context = this.context;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common__ = __webpack_require__(63);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__storage_cookie_browser__ = __webpack_require__(285);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__storage_storage_browser__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__storage_cookie_browser__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__storage_storage_browser__ = __webpack_require__(287);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__sockets_socket_browser__ = __webpack_require__(508);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__sockets_socket_driver__ = __webpack_require__(299);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__sockets_socket_driver__ = __webpack_require__(300);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__sockets_socket_connections__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_core_real_time__ = __webpack_require__(382);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services_custom_Job__ = __webpack_require__(386);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_custom_JobChange__ = __webpack_require__(387);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_custom_TpmPdaController__ = __webpack_require__(388);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_core_real_time__ = __webpack_require__(383);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services_custom_Job__ = __webpack_require__(387);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_custom_JobChange__ = __webpack_require__(388);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_custom_TpmPdaController__ = __webpack_require__(389);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_custom_GpsHistory__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_custom_Application__ = __webpack_require__(389);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_custom_Installation__ = __webpack_require__(390);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_custom_Notification__ = __webpack_require__(391);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_custom_Push__ = __webpack_require__(392);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_custom_Mobile_event__ = __webpack_require__(393);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_custom_SiteConfig__ = __webpack_require__(394);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__services_custom_DespatchToDriverMessages__ = __webpack_require__(395);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_custom_Application__ = __webpack_require__(390);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_custom_Installation__ = __webpack_require__(391);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_custom_Notification__ = __webpack_require__(392);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_custom_Push__ = __webpack_require__(393);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_custom_Mobile_event__ = __webpack_require__(394);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_custom_SiteConfig__ = __webpack_require__(395);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__services_custom_DespatchToDriverMessages__ = __webpack_require__(396);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_custom_JseaDriverQuestions__ = __webpack_require__(204);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_custom_JseaDriverAnswers__ = __webpack_require__(396);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__services_custom_JseaDriverAnswersChange__ = __webpack_require__(397);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__services_custom_Photocontainer__ = __webpack_require__(398);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__services_custom_Image__ = __webpack_require__(399);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__services_custom_BarcodeHist__ = __webpack_require__(400);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__services_custom_BarcodeHistChange__ = __webpack_require__(401);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_custom_JseaDriverAnswers__ = __webpack_require__(397);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__services_custom_JseaDriverAnswersChange__ = __webpack_require__(398);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__services_custom_Photocontainer__ = __webpack_require__(399);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__services_custom_Image__ = __webpack_require__(400);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__services_custom_BarcodeHist__ = __webpack_require__(401);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__services_custom_BarcodeHistChange__ = __webpack_require__(402);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__services_custom_DeviceDiagnostics__ = __webpack_require__(175);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__models_index__ = __webpack_require__(383);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__models_index__ = __webpack_require__(384);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__services_index__ = __webpack_require__(84);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_34__services_index__["a"]; });

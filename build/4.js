@@ -749,7 +749,11 @@ var JobDetailsPage = /** @class */ (function () {
                 _this.mystr = 'handleJobStatusChange:' + job.mobjobSeq + ' updated from ' + oldStatus + ' -> ' + job.mobjobStatus;
                 _this.log.info(_this.mystr);
                 //console.log('this.mystr:::::' + this.mystr);     
-                job.save(); // save leg  
+                if (_this.sharedService.deliverToBase) {
+                    //Set the deliverytobase field to yes
+                    job.deliveryToBase = "Yes";
+                }
+                job.save(); // save leg  ----------------------------------------------
                 _this.jobChangedService.setlastjobedited(true);
             } //For loop for each leg ends here
             // NOTE - because we don't replicate between the very last PC and setting all to DL the last PC leg goes
@@ -773,7 +777,11 @@ var JobDetailsPage = /** @class */ (function () {
                             job.gpsLatDL = lgps.gps_latitude;
                             job.gpsLongDL = lgps.gps_longitude;
                         }
-                        job.save(); // save leg         
+                        if (_this.sharedService.deliverToBase) {
+                            //Set the deliverytobase field to yes
+                            job.deliveryToBase = "Yes";
+                        }
+                        job.save(); // save leg         -------------------------------------------------------------
                         _this.mystr = 'handleJobStatusChange:DL' + job.mobjobSeq + ' updated from ' + oldStatus + ' -> ' + job.mobjobStatus;
                         _this.log.info(_this.mystr);
                         _this.jobChangedService.setlastjobedited(true);
