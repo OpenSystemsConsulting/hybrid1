@@ -12456,7 +12456,12 @@ var NavigationServiceProvider = /** @class */ (function () {
             alert("Your navigator choice has been cleared, you will be prompted the next time you decide to navigate");
         };
         this.navigate = function (deststr) {
+            this.log.debug('Navigate: Inside navigate() with deststr:' + deststr);
             this.prepNavigation();
+            this.log.debug('Navigate: Returned from prepNavigation() with:::');
+            this.log.debug('Navigate: this.moduleInstalled::' + this.moduleInstalled);
+            this.log.debug('Navigate: this.navigationServAllowed::' + this.navigationServAllowed);
+            this.log.debug('Navigate: this.isReady::' + this.isReady);
             if (!deststr) {
                 //navigator.notification. alert("A destination must be specified");
                 // alert("A destination must be specified");
@@ -12464,6 +12469,8 @@ var NavigationServiceProvider = /** @class */ (function () {
                 return;
             }
             if (this.isReady) {
+                this.log.debug('Navigate: inside this.isReady');
+                this.log.debug('Navigate: Value of this.navigatorPlugin::' + this.navigatorPlugin);
                 this.navigatorPlugin.navigate(deststr, {
                     start: null,
                     enableDebug: true,
