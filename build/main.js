@@ -12456,39 +12456,22 @@ var NavigationServiceProvider = /** @class */ (function () {
             alert("Your navigator choice has been cleared, you will be prompted the next time you decide to navigate");
         };
         this.navigate = function (deststr) {
-            var _this = this;
-            this.log.debug('Navigate: Inside navigate() with deststr:' + deststr);
-            this.prepNavigation();
-            this.log.debug('Navigate: Returned from prepNavigation() with:::');
-            this.log.debug('Navigate: this.moduleInstalled::' + this.moduleInstalled);
-            this.log.debug('Navigate: this.navigationServAllowed::' + this.navigationServAllowed);
-            this.log.debug('Navigate: this.isReady::' + this.isReady);
+            _this.log.debug('Navigate: Inside navigate() with deststr:' + deststr);
+            _this.prepNavigation();
+            _this.log.debug('Navigate: Returned from prepNavigation() with:::');
+            _this.log.debug('Navigate: this.moduleInstalled::' + _this.moduleInstalled);
+            _this.log.debug('Navigate: this.navigationServAllowed::' + _this.navigationServAllowed);
+            _this.log.debug('Navigate: this.isReady::' + _this.isReady);
             if (!deststr) {
                 //navigator.notification. alert("A destination must be specified");
                 // alert("A destination must be specified");
-                this.log.debug("A destination must be specified");
+                _this.log.debug("A destination must be specified");
                 return;
             }
-            if (this.isReady) {
-                this.log.debug('Navigate: inside this.isReady');
-                this.log.debug('Navigate: Value of this.navigatorPlugin::' + this.navigatorPlugin);
-                /*  this.navigatorPlugin.navigate(deststr, {
-                   start: null,
-                   enableDebug: true,
-                   successCallback: this.onSuccess,
-                   errorCallback: this.onError
-                 }); */
-                var platform = this.device.platform.toLowerCase();
-                if (platform == "android") {
-                    platform = this.navigatorPlugin.PLATFORM.ANDROID;
-                }
-                else if (platform == "ios") {
-                    platform = this.navigatorPlugin.PLATFORM.IOS;
-                }
-                else if (platform.match(/win/)) {
-                    platform = this.navigatorPlugin.PLATFORM.WINDOWS;
-                }
-                this.navigatorPlugin.navigate(deststr, {
+            if (_this.isReady) {
+                _this.log.debug('Navigate: inside this.isReady');
+                _this.log.debug('Navigate: Value of this.navigatorPlugin::' + _this.navigatorPlugin);
+                _this.navigatorPlugin.navigate(deststr, {
                     start: null,
                     enableDebug: true
                 }).then(function (success) {
@@ -12499,7 +12482,7 @@ var NavigationServiceProvider = /** @class */ (function () {
             }
             else {
                 //alert("cordovaReady.isDeviceReady = false, cant use Navigator Plugin");
-                this.log.debug("cordovaReady.isDeviceReady = false, cant use Navigator Plugin");
+                _this.log.debug("cordovaReady.isDeviceReady = false, cant use Navigator Plugin");
             }
         };
         var lstr = 'Constructing NavigationServiceProvider Provider';
