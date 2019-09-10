@@ -6551,7 +6551,7 @@ var SharedServiceProvider = /** @class */ (function () {
         this.testing = false;
         this.isOnline = false;
         this.isDbOpen = false;
-        this.desktopTesting = true;
+        this.desktopTesting = false;
         this.deliverToBase = false;
         this.seqno = 0;
         this.tab = "";
@@ -6661,7 +6661,7 @@ var map = {
 		2
 	],
 	"../pages/gps/gps.module": [
-		839,
+		836,
 		1
 	],
 	"../pages/home/home.module": [
@@ -6669,11 +6669,11 @@ var map = {
 		0
 	],
 	"../pages/image-text/image-text.module": [
-		836,
+		838,
 		12
 	],
 	"../pages/images/images.module": [
-		838,
+		839,
 		11
 	],
 	"../pages/job-detail-notes/job-detail-notes.module": [
@@ -13690,10 +13690,10 @@ var AppModule = /** @class */ (function () {
                         { loadChildren: '../pages/barcode/barcode.module#BarcodePageModule', name: 'BarcodePage', segment: 'barcode', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/change/change.module#ChangePageModule', name: 'ChangePage', segment: 'change', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/device/device.module#DevicePageModule', name: 'DevicePage', segment: 'device', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/image-text/image-text.module#ImageTextPageModule', name: 'ImageTextPage', segment: 'image-text', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/images/images.module#ImagesPageModule', name: 'ImagesPage', segment: 'images', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/gps/gps.module#GpsPageModule', name: 'GpsPage', segment: 'gps', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/image-text/image-text.module#ImageTextPageModule', name: 'ImageTextPage', segment: 'image-text', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/images/images.module#ImagesPageModule', name: 'ImagesPage', segment: 'images', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-detail-notes/job-detail-notes.module#JobDetailNotesPageModule', name: 'JobDetailNotesPage', segment: 'job-detail-notes', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-details/job-details.module#JobDetailsPageModule', name: 'JobDetailsPage', segment: 'job-details', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/jsea/jsea.module#JseaPageModule', name: 'JseaPage', segment: 'jsea', priority: 'low', defaultHistory: [] },
