@@ -3553,13 +3553,13 @@ var CustomerconnServiceProvider = /** @class */ (function () {
                 "serverPort": 3001,
                 "url": "http://tplusmobile-bne.capitaltransport.com.au:3001"
             },
-            "oth": {
+            "lfr": {
                 "connector": "remote",
                 "debug": "true",
-                "clientId": "OTH",
-                "serverIP": "oth.opensyscon.com.au",
+                "clientId": "LFR",
+                "serverIP": "lf.opensyscon.com.au",
                 "serverPort": 3176,
-                "url": "http://oth.opensyscon.com.au:3176"
+                "url": "http://lf.opensyscon.com.au:3176"
             }
         };
         this.getConnectionDetails = function (customer) {
@@ -13033,6 +13033,9 @@ var LoginServiceProvider = /** @class */ (function () {
                 access_1 = true;
             }
             else if (credentials.username == 'oth' && credentials.password == 'oth') {
+                access_1 = true;
+            }
+            else if (credentials.username == 'lfr' && credentials.password == 'lfr') {
                 access_1 = true;
             }
             else {
