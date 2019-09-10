@@ -6661,7 +6661,7 @@ var map = {
 		2
 	],
 	"../pages/gps/gps.module": [
-		836,
+		839,
 		1
 	],
 	"../pages/home/home.module": [
@@ -6669,11 +6669,11 @@ var map = {
 		0
 	],
 	"../pages/image-text/image-text.module": [
-		838,
+		836,
 		12
 	],
 	"../pages/images/images.module": [
-		839,
+		838,
 		11
 	],
 	"../pages/job-detail-notes/job-detail-notes.module": [
@@ -12471,14 +12471,16 @@ var NavigationServiceProvider = /** @class */ (function () {
             if (_this.isReady) {
                 _this.log.debug('Navigate: inside this.isReady');
                 _this.log.debug('Navigate: Value of this.navigatorPlugin::' + _this.navigatorPlugin);
+                _this.log.debug('Navigate: ::this.navigatorPlugin.APP::' + _this.navigatorPlugin.APP);
                 _this.navigatorPlugin.navigate(deststr, {
-                    start: null,
+                    start: "",
                     enableDebug: true
-                }).then(function (success) {
-                    _this.log.debug('navigatorPlugin.navigate success::' + success);
-                }, function (error) {
-                    _this.log.error('navigatorPlugin.navigate error::' + error);
-                });
+                }).then(function (success) { return alert('Launched navigator'); }, function (error) { return alert('Error launching navigator: ' + error); });
+                /* .then(success =>
+                        this.log.debug('navigatorPlugin.navigate success::'),
+                        error =>
+                          this.log.error('navigatorPlugin.navigate error::' + error)
+                      ); */
             }
             else {
                 //alert("cordovaReady.isDeviceReady = false, cant use Navigator Plugin");
@@ -13688,10 +13690,10 @@ var AppModule = /** @class */ (function () {
                         { loadChildren: '../pages/barcode/barcode.module#BarcodePageModule', name: 'BarcodePage', segment: 'barcode', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/change/change.module#ChangePageModule', name: 'ChangePage', segment: 'change', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/device/device.module#DevicePageModule', name: 'DevicePage', segment: 'device', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/gps/gps.module#GpsPageModule', name: 'GpsPage', segment: 'gps', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/image-text/image-text.module#ImageTextPageModule', name: 'ImageTextPage', segment: 'image-text', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/images/images.module#ImagesPageModule', name: 'ImagesPage', segment: 'images', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/gps/gps.module#GpsPageModule', name: 'GpsPage', segment: 'gps', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-detail-notes/job-detail-notes.module#JobDetailNotesPageModule', name: 'JobDetailNotesPage', segment: 'job-detail-notes', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-details/job-details.module#JobDetailsPageModule', name: 'JobDetailsPage', segment: 'job-details', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/jsea/jsea.module#JseaPageModule', name: 'JseaPage', segment: 'jsea', priority: 'low', defaultHistory: [] },
