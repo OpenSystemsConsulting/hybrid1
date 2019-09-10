@@ -6551,7 +6551,7 @@ var SharedServiceProvider = /** @class */ (function () {
         this.testing = false;
         this.isOnline = false;
         this.isDbOpen = false;
-        this.desktopTesting = false;
+        this.desktopTesting = true;
         this.deliverToBase = false;
         this.seqno = 0;
         this.tab = "";
@@ -12456,6 +12456,7 @@ var NavigationServiceProvider = /** @class */ (function () {
             alert("Your navigator choice has been cleared, you will be prompted the next time you decide to navigate");
         };
         this.navigate = function (deststr) {
+            var _this = this;
             this.log.debug('Navigate: Inside navigate() with deststr:' + deststr);
             this.prepNavigation();
             this.log.debug('Navigate: Returned from prepNavigation() with:::');
@@ -12471,11 +12472,29 @@ var NavigationServiceProvider = /** @class */ (function () {
             if (this.isReady) {
                 this.log.debug('Navigate: inside this.isReady');
                 this.log.debug('Navigate: Value of this.navigatorPlugin::' + this.navigatorPlugin);
+                /*  this.navigatorPlugin.navigate(deststr, {
+                   start: null,
+                   enableDebug: true,
+                   successCallback: this.onSuccess,
+                   errorCallback: this.onError
+                 }); */
+                var platform = this.device.platform.toLowerCase();
+                if (platform == "android") {
+                    platform = this.navigatorPlugin.PLATFORM.ANDROID;
+                }
+                else if (platform == "ios") {
+                    platform = this.navigatorPlugin.PLATFORM.IOS;
+                }
+                else if (platform.match(/win/)) {
+                    platform = this.navigatorPlugin.PLATFORM.WINDOWS;
+                }
                 this.navigatorPlugin.navigate(deststr, {
                     start: null,
-                    enableDebug: true,
-                    successCallback: this.onSuccess,
-                    errorCallback: this.onError
+                    enableDebug: true
+                }).then(function (success) {
+                    _this.log.debug('navigatorPlugin.navigate success::' + success);
+                }, function (error) {
+                    _this.log.error('navigatorPlugin.navigate error::' + error);
                 });
             }
             else {
