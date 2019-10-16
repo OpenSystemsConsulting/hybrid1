@@ -706,12 +706,7 @@ var HomePage = /** @class */ (function () {
                 // at least one job selected 
                 //Setting the Leg Status to DL here as we are only doing this at Delivery which will happen
                 // as soon as the signature is accepted.
-                var showDeliverToBase = false;
-                if (_this.checkedJobs.length === 1)
-                    showDeliverToBase = true;
-                else
-                    showDeliverToBase = false;
-                var lparams = { metadata: { basejob: _this.checkedJobs[0].mobjobBasejobNum, legid: _this.checkedJobs[0].mobjobSeq, legStatus: 'DL', barcodeSignOff: false, showDeliverToBase: showDeliverToBase } };
+                var lparams = { metadata: { basejob: _this.checkedJobs[0].mobjobBasejobNum, legid: _this.checkedJobs[0].mobjobSeq, legStatus: 'DL', barcodeSignOff: false, showDeliverToBase: false } };
                 _this.openSignatureModal(lparams);
             }
             else {
