@@ -2657,7 +2657,7 @@ var Job = /** @class */ (function () {
                 "deliveryToBase": {
                     name: 'deliveryToBase',
                     type: 'string',
-                    default: 'No'
+                    default: '0'
                 }
             },
             relations: {}
@@ -4878,7 +4878,7 @@ var ImageFileServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GpsServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_geolocation__ = __webpack_require__(207);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_geolocation__ = __webpack_require__(208);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_GpsHistory__ = __webpack_require__(97);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk_services_custom_GpsHistory__ = __webpack_require__(109);
@@ -6657,11 +6657,11 @@ var map = {
 		13
 	],
 	"../pages/device/device.module": [
-		836,
+		835,
 		2
 	],
 	"../pages/gps/gps.module": [
-		835,
+		836,
 		1
 	],
 	"../pages/home/home.module": [
@@ -6673,11 +6673,11 @@ var map = {
 		12
 	],
 	"../pages/images/images.module": [
-		840,
+		839,
 		11
 	],
 	"../pages/job-detail-notes/job-detail-notes.module": [
-		839,
+		840,
 		10
 	],
 	"../pages/job-details/job-details.module": [
@@ -6685,11 +6685,11 @@ var map = {
 		4
 	],
 	"../pages/jsea/jsea.module": [
-		843,
+		842,
 		9
 	],
 	"../pages/login/login.module": [
-		842,
+		843,
 		8
 	],
 	"../pages/msgs/msgs.module": [
@@ -6701,11 +6701,11 @@ var map = {
 		6
 	],
 	"../pages/signature/signature.module": [
-		847,
+		846,
 		3
 	],
 	"../pages/tabs/tabs.module": [
-		846,
+		847,
 		5
 	]
 };
@@ -12194,14 +12194,14 @@ var PushServiceProvider = /** @class */ (function () {
                             _this.installationApi.create(installation_object).subscribe(function (res) {
                                 // Save data to local storage (it also gets put into $rootScope below)
                                 localStorage.setItem('osc-push-credentials', JSON.stringify(installation_object));
-                                if (!_this.sharedService.desktopTesting) {
-                                    _this.storage.set('osc-push-credentials', JSON.stringify(installation_object)).then(function (res) {
-                                        if (res)
-                                            console.log("osc-push-credentials are set");
-                                        else
-                                            console.log("osc-push-credentials is not set");
-                                    });
-                                }
+                                //if (!this.sharedService.desktopTesting) {
+                                _this.storage.set('osc-push-credentials', JSON.stringify(installation_object)).then(function (res) {
+                                    if (res)
+                                        console.log("osc-push-credentials are set");
+                                    else
+                                        console.log("osc-push-credentials is not set");
+                                });
+                                //}
                                 _this.log.info("Sqlite Storage : Setting osc-push-credentials : " + JSON.stringify(installation_object));
                                 var alertPopup = _this.alertCtrl.create({
                                     title: 'Device registered',
@@ -12245,14 +12245,14 @@ var PushServiceProvider = /** @class */ (function () {
                     //if uuid is null, store new uuid and continue
                     if (!localStorage.getItem('uuid')) {
                         uuid.push(new_uuid);
-                        if (!_this.sharedService.desktopTesting) {
-                            _this.storage.set('uuid', JSON.stringify(uuid)).then(function (res) {
-                                if (res)
-                                    console.log("uuid is set");
-                                else
-                                    console.log("uuid is not set");
-                            });
-                        }
+                        //if (!this.sharedService.desktopTesting) {
+                        _this.storage.set('uuid', JSON.stringify(uuid)).then(function (res) {
+                            if (res)
+                                console.log("uuid is set");
+                            else
+                                console.log("uuid is not set");
+                        });
+                        //}
                         _this.log.info("Sqlite Storage : Setting UUID : " + JSON.stringify(uuid));
                         localStorage.setItem('uuid', JSON.stringify(uuid));
                     }
@@ -12269,14 +12269,14 @@ var PushServiceProvider = /** @class */ (function () {
                                 uuid.splice(0, 1);
                             //Push the new uuid to the circular array
                             uuid.push(new_uuid);
-                            if (!_this.sharedService.desktopTesting) {
-                                _this.storage.set('uuid', JSON.stringify(uuid)).then(function (res) {
-                                    if (res)
-                                        console.log("uuid is set");
-                                    else
-                                        console.log("uuid is not set");
-                                });
-                            }
+                            //if (!this.sharedService.desktopTesting) {
+                            _this.storage.set('uuid', JSON.stringify(uuid)).then(function (res) {
+                                if (res)
+                                    console.log("uuid is set");
+                                else
+                                    console.log("uuid is not set");
+                            });
+                            //}
                             _this.log.info("Sqlite Storage : Setting UUID : " + JSON.stringify(uuid));
                             localStorage.setItem('uuid', JSON.stringify(uuid));
                         }
@@ -12355,7 +12355,7 @@ var PushServiceProvider = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NavigationServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_launch_navigator__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_launch_navigator__ = __webpack_require__(207);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__log_service_log_service__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pdaparams_service_pdaparams_service__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_service_shared_service__ = __webpack_require__(23);
@@ -12713,31 +12713,32 @@ var MyApp = /** @class */ (function () {
                         _a.sent();
                         _a.label = 3;
                     case 3:
-                        if (!!(localStorage.getItem('login'))) return [3 /*break*/, 9];
-                        console.log('There is no login available in local storage.');
-                        if (!!this.sharedService.desktopTesting) return [3 /*break*/, 5];
-                        return [4 /*yield*/, this.storage.get("login").then(function (val) {
-                                if (val) {
-                                    loginVar = val;
-                                    console.log('There is a login available in sqlite storage.');
-                                }
-                                else {
-                                    loginVar = null;
-                                    console.log('There is NO login available in sqlite storage.');
-                                }
-                                _this.sharedService.localStorageZapped = loginVar;
-                            })];
-                    case 4:
-                        _a.sent();
-                        _a.label = 5;
-                    case 5:
-                        if (!this.sharedService.localStorageZapped) return [3 /*break*/, 8];
+                        if (!!(localStorage.getItem('login'))) return [3 /*break*/, 7];
+                        console.log('There is no login available in local storage. SG CHANGE');
+                        //2.1. Check if it is available in the sqlite db    
+                        if (!this.sharedService.desktopTesting) {
+                            /****** SG CHANGE TO HAVE a TEST for IOS
+                            await this.storage.get("login").then((val) => {
+                              if (val) {
+                                loginVar = val;
+                                console.log('There is a login available in sqlite storage.');
+                              }
+                              else {
+                                loginVar = null;
+                                console.log('There is NO login available in sqlite storage.');
+                              }
+                  
+                              this.sharedService.localStorageZapped = loginVar;
+                            });
+                            *****/
+                        }
+                        if (!this.sharedService.localStorageZapped) return [3 /*break*/, 6];
                         console.log('LocalStorage has been zapped!!');
                         /*
                         * 2.3 If yes,localstorage has been zapped, retrive all variables from sqlite and write to localstorage
                         * */
                         return [4 /*yield*/, localStorage.setItem('login', loginVar)];
-                    case 6:
+                    case 4:
                         /*
                         * 2.3 If yes,localstorage has been zapped, retrive all variables from sqlite and write to localstorage
                         * */
@@ -12749,10 +12750,10 @@ var MyApp = /** @class */ (function () {
                                 document.location.href = 'index.html';
                                 return;
                             })];
-                    case 7:
+                    case 5:
                         _a.sent();
-                        return [3 /*break*/, 9];
-                    case 8:
+                        return [3 /*break*/, 7];
+                    case 6:
                         console.log('LocalStorage has NOT been zapped, so we are redirected to the login page.');
                         //clear previous data in the storage, if any.
                         localStorage.clear();
@@ -12763,7 +12764,7 @@ var MyApp = /** @class */ (function () {
                         //Direct him to the login page..
                         this.rootPage = "LoginPage";
                         return [2 /*return*/];
-                    case 9:
+                    case 7:
                         /*    }
                            else {
                              localStorage.setItem('firstlogin', 'true');
@@ -13553,8 +13554,8 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_splash_screen__ = __webpack_require__(209);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_device__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_insomnia__ = __webpack_require__(205);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_native_geolocation__ = __webpack_require__(207);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_launch_navigator__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_native_geolocation__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_launch_navigator__ = __webpack_require__(207);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_device_feedback__ = __webpack_require__(471);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ionic_native_file__ = __webpack_require__(419);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__ionic_native_file_transfer__ = __webpack_require__(420);
@@ -13692,19 +13693,19 @@ var AppModule = /** @class */ (function () {
                     links: [
                         { loadChildren: '../pages/barcode/barcode.module#BarcodePageModule', name: 'BarcodePage', segment: 'barcode', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/change/change.module#ChangePageModule', name: 'ChangePage', segment: 'change', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/gps/gps.module#GpsPageModule', name: 'GpsPage', segment: 'gps', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/device/device.module#DevicePageModule', name: 'DevicePage', segment: 'device', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/gps/gps.module#GpsPageModule', name: 'GpsPage', segment: 'gps', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/image-text/image-text.module#ImageTextPageModule', name: 'ImageTextPage', segment: 'image-text', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/job-detail-notes/job-detail-notes.module#JobDetailNotesPageModule', name: 'JobDetailNotesPage', segment: 'job-detail-notes', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/images/images.module#ImagesPageModule', name: 'ImagesPage', segment: 'images', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/job-detail-notes/job-detail-notes.module#JobDetailNotesPageModule', name: 'JobDetailNotesPage', segment: 'job-detail-notes', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-details/job-details.module#JobDetailsPageModule', name: 'JobDetailsPage', segment: 'job-details', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/jsea/jsea.module#JseaPageModule', name: 'JseaPage', segment: 'jsea', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/msgs/msgs.module#MsgsPageModule', name: 'MsgsPage', segment: 'msgs', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/pda/pda.module#PdaPageModule', name: 'PdaPage', segment: 'pda', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/signature/signature.module#SignaturePageModule', name: 'SignaturePage', segment: 'signature', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/signature/signature.module#SignaturePageModule', name: 'SignaturePage', segment: 'signature', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_24__shared_sdk__["c" /* SDKBrowserModule */].forRoot(),
@@ -14634,7 +14635,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         };
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
-            'version': '3.1.11',
+            'version': '3.1.12',
             'build': 2,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678

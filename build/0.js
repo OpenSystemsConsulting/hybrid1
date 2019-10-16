@@ -706,7 +706,12 @@ var HomePage = /** @class */ (function () {
                 // at least one job selected 
                 //Setting the Leg Status to DL here as we are only doing this at Delivery which will happen
                 // as soon as the signature is accepted.
-                var lparams = { metadata: { basejob: _this.checkedJobs[0].mobjobBasejobNum, legid: _this.checkedJobs[0].mobjobSeq, legStatus: 'DL', barcodeSignOff: false } };
+                var showDeliverToBase = false;
+                if (_this.checkedJobs.length === 1)
+                    showDeliverToBase = true;
+                else
+                    showDeliverToBase = false;
+                var lparams = { metadata: { basejob: _this.checkedJobs[0].mobjobBasejobNum, legid: _this.checkedJobs[0].mobjobSeq, legStatus: 'DL', barcodeSignOff: false, showDeliverToBase: showDeliverToBase } };
                 _this.openSignatureModal(lparams);
             }
             else {
@@ -1172,12 +1177,14 @@ var HomePage = /** @class */ (function () {
         this.soundFlag = false;
         if (localStorage.getItem('osc-local-db')) {
             if (!this.sharedService.desktopTesting) {
+                // /**  COMMENTED OUT SG CHANGE TO HAVE a TEST for IOS
                 this.storage.set('osc-local-db', localStorage.getItem('osc-local-db')).then(function (res) {
                     if (res)
                         _this.log.debug("osc-local-db is set.");
                     else
                         _this.log.debug("osc-local-db is NOT set.");
                 });
+                //**/
             }
         }
         // initialise the current new message count in this scope

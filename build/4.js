@@ -334,7 +334,7 @@ var JobDetailsPage = /** @class */ (function () {
             fullscreen: 'yes',
         };
         this.openSignatureModal = function (legid) {
-            var lparams = { metadata: { basejob: _this.jobs[0].mobjobBasejobNum, legid: legid, legStatus: _this.jobs[0].mobjobStatus, barcodeSignOff: false } };
+            var lparams = { metadata: { basejob: _this.jobs[0].mobjobBasejobNum, legid: legid, legStatus: _this.jobs[0].mobjobStatus, barcodeSignOff: false, showDeliverToBase: true } };
             var modal = _this.modalController.create('SignaturePage', lparams);
             modal.onDidDismiss(function (result) {
                 if (typeof result !== 'undefined') {
@@ -756,6 +756,7 @@ var JobDetailsPage = /** @class */ (function () {
                 job.save(); // save leg  ----------------------------------------------
                 _this.jobChangedService.setlastjobedited(true);
             } //For loop for each leg ends here
+            _this.sharedService.deliverToBase = false;
             // NOTE - because we don't replicate between the very last PC and setting all to DL the last PC leg goes
             // direct from PU -> DL and therefore does NOT trigger a POD_INFORMATION event on the server
             // TODO - what is best test for all PODs captured?
@@ -781,7 +782,8 @@ var JobDetailsPage = /** @class */ (function () {
                             //Set the deliverytobase field to yes
                             job.deliveryToBase = "Yes";
                         }
-                        job.save(); // save leg         -------------------------------------------------------------
+                        job.save();
+                        // save leg         -------------------------------------------------------------
                         _this.mystr = 'handleJobStatusChange:DL' + job.mobjobSeq + ' updated from ' + oldStatus + ' -> ' + job.mobjobStatus;
                         _this.log.info(_this.mystr);
                         _this.jobChangedService.setlastjobedited(true);

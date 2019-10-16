@@ -1,6 +1,6 @@
 webpackJsonp([2],{
 
-/***/ 836:
+/***/ 835:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DevicePageModule", function() { return DevicePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__device__ = __webpack_require__(860);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__device__ = __webpack_require__(859);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pipes_pipes_module__ = __webpack_require__(848);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -304,14 +304,14 @@ var KeysPipe = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 860:
+/***/ 859:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DevicePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_launch_navigator__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_launch_navigator__ = __webpack_require__(207);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_sqlite_service_sqlite_service__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_config_service_config_service__ = __webpack_require__(60);
@@ -432,11 +432,11 @@ var DevicePage = /** @class */ (function () {
                         text: 'Yes',
                         handler: function () {
                             localStorage.clear();
-                            if (!_this.sharedService.desktopTesting) {
-                                _this.storage.clear();
-                                if (_this.platform.is('cordova') && window.sqlitePlugin)
-                                    _this.storage.closeDB();
-                            }
+                            //if (!this.sharedService.desktopTesting) {
+                            _this.storage.clear();
+                            if (_this.platform.is('cordova') && window.sqlitePlugin)
+                                _this.storage.closeDB();
+                            //}
                             // TODO -  clear images if required - see /app/strongloop/loopback-clientservices-osc-images/client/js/deviceCtrl.js           
                             _this.app.getRootNav().setRoot(__WEBPACK_IMPORTED_MODULE_21__app_app_component__["a" /* MyApp */]);
                             //document.location.href = 'index.html';
