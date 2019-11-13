@@ -329,7 +329,7 @@ var KeysPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__providers_push_service_push_service__ = __webpack_require__(463);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_connectivity_monitor_connectivity_monitor__ = __webpack_require__(118);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_navigation_service_navigation_service__ = __webpack_require__(464);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_log_service_log_service__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__providers_log_service_log_service__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__app_app_component__ = __webpack_require__(465);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -633,6 +633,7 @@ var DevicePage = /** @class */ (function () {
            this.favouriteMapApp = this.navigatorPlugin.getAppDisplayName(app);
          }); */
         this.navigatorPlugin.availableApps().then(function (results) {
+            _this.availableMapApps = []; // reset otherwise the list keeps on growing
             for (var app in results) {
                 _this.availableMapApps.push(_this.navigatorPlugin.getAppDisplayName(app) + (results[app] ? " is" : " isn't") + " available");
             }
