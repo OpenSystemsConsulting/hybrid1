@@ -5209,6 +5209,7 @@ var SodServiceProvider = /** @class */ (function () {
                 var prevResumeDate = new Date(prevResumeDateStr);
                 var prevResumeDay = prevResumeDate.getDate();
                 this.log.debug('On Resume prevResumeDate from localstorage = :' + prevResumeDateStr + ' Str convertTodate = ' + prevResumeDate + ' prevResumeDay = ' + prevResumeDay + ' mycurday = ' + this.mycurday);
+                this.log.debug('pda_disable_diagnostics_bgps_on_logoff:' + this.pda_disable_diagnostics_bgps_on_logoff);
                 //Resume on different day
                 //if( prevResumeDay == mycurday )
                 if (prevResumeDay != this.mycurday) {
@@ -14672,7 +14673,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.13',
-            'build': 6,
+            'build': 7,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
