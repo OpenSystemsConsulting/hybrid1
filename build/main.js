@@ -341,7 +341,7 @@ var MessageServiceProvider = /** @class */ (function () {
     MessageServiceProvider.prototype.startWatching = function () {
         var _this = this;
         console.log("startWatching: MessageServiceProvider");
-        this.log.debug("startWatching: MessageServiceProvider");
+        this.log.debug("startWatching");
         // PDA commands 
         // From REST endpoint /TpmPdaControllers/sendCommandToPDA/{driver}
         this.sharedService.commandToPDA.subscribe(function (payload) {
@@ -857,7 +857,7 @@ var JseaServiceProvider = /** @class */ (function () {
     JseaServiceProvider.prototype.startWatching = function () {
         var _this = this;
         console.log("startWatching: JseaServiceProvider");
-        this.log.debug("startWatching: JseaServiceProvider");
+        this.log.debug("startWatching");
         //
         //if (this.SODSERVICE_IS_NEW_DAY || localStorage.getItem('SODSERVICE_IS_NEW_DAY')) {
         this.sharedService.SODSERVICE_IS_NEW_DAY.subscribe(function (SODSERVICE_IS_NEW_DAY) {
@@ -1056,7 +1056,7 @@ var ConnectivityMonitorProvider = /** @class */ (function () {
         this.networkType = new __WEBPACK_IMPORTED_MODULE_1_rxjs__["BehaviorSubject"]('');
         this.startWatching = function () {
             console.log("startWatching: ConnectivityMonitorProvider");
-            _this.log.debug("startWatching: ConnectivityMonitorProvider");
+            _this.log.debug("startWatching");
             _this.disConnectSubscribe();
             _this.connectSubscribe();
         }; //startWatching ends here
@@ -1792,7 +1792,9 @@ var DeviceDiagnosticServiceProvider = /** @class */ (function () {
         this.isWifiAvailable = false;
         this.isWifiEnabled = false;
         this.runDiagnostics = function () {
+            _this.log.debug("runDiagnostics");
             _this.platform.ready().then(function (readySource) {
+                _this.log.debug("runDiagnostics platform is ready, platforms:" + _this.platform.platforms());
                 if (_this.platform.is('cordova')) {
                     var errorCallback = function (diagFn) { return _this.log.error(diagFn + " : failed to diagnose from the device."); };
                     _this.diagnostic.isLocationAvailable().then(function (val) { _this.isLocationAvailable = val; }, function () { });
@@ -1833,6 +1835,7 @@ var DeviceDiagnosticServiceProvider = /** @class */ (function () {
             });
         };
         this.diagnosticPoller = function () {
+            _this.log.debug("diagnosticPoller");
             _this.runDiagnostics();
             var dd = new __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_DeviceDiagnostics__["a" /* DeviceDiagnostics */]();
             dd.driverId = _this.pdaParams.getDriverId();
@@ -1857,6 +1860,7 @@ var DeviceDiagnosticServiceProvider = /** @class */ (function () {
             });
         };
         console.log('Hello DeviceDiagnosticServiceProvider Provider');
+        this.log.debug("constructor");
         this.pda_disable_device_diagnostics = (this.pdaParams.pda_disable_device_diagnostics || (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DEVICE_DIAGNOSTICS') == 'Y'));
         if (!this.pda_disable_device_diagnostics)
             this.runDiagnostics();
@@ -1890,7 +1894,7 @@ var DeviceDiagnosticServiceProvider = /** @class */ (function () {
         //Call the Poller every minute
         this.pda_disable_device_diagnostics = (this.pdaParams.pda_disable_device_diagnostics || (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DEVICE_DIAGNOSTICS') == 'Y'));
         console.log("startWatching: DeviceDiagnosticServiceProvider: disable_device_diagnostics:" + this.pda_disable_device_diagnostics);
-        this.log.debug("startWatching: DeviceDiagnosticServiceProvider: disable_device_diagnostics:" + this.pda_disable_device_diagnostics);
+        this.log.debug("startWatching: disable_device_diagnostics:" + this.pda_disable_device_diagnostics);
         if (!this.pda_disable_device_diagnostics) {
             this.sharedService.isDiagnosticsRunning = true;
             this.intrval = setInterval(this.diagnosticPoller, 60000);
@@ -4682,7 +4686,7 @@ var ImageServiceProvider = /** @class */ (function () {
             var poller_started = false;
             //console.log("startWatching:SITE_CONFIG_LOADED value:" + this.SITE_CONFIG_LOADED);
             console.log("startWatching: ImageServiceProvider");
-            _this.log.debug("startWatching: ImageServiceProvider");
+            _this.log.debug("startWatching");
             if (_this.SITE_CONFIG_LOADED || localStorage.getItem('SITE_CONFIG_LOADED')) {
                 var YN = _this.siteConfig.getSiteConfigValue('PDA_IMAGES');
                 _this.log.debug('startWatching: PDA_IMAGES:' + YN + ', poll_started:' + poller_started);
@@ -14662,7 +14666,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.13',
-            'build': 3,
+            'build': 4,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
