@@ -5262,7 +5262,7 @@ var SodServiceProvider = /** @class */ (function () {
                 this.log.debug('On Resume prevResumeDate is NULL date = ' + this.now + ' Will clearChange Data');
                 //Riyaz: No need to logoff the driver, if he logs in for the first time.The config data is loaded dynamically
                 //this.pdaParams.logoffDriver();
-                //this.eventService.sendMsg('LOGOFF', '');
+                this.eventService.sendMsg('LOGOFF', '');
                 this.messageService.clearChangeData();
                 //Dump Device Info
                 this.messageService.dumpDeviceInfo();
@@ -14673,7 +14673,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.13',
-            'build': 7,
+            'build': 8,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
