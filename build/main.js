@@ -1343,9 +1343,12 @@ var BackgroundGeolocationServiceProvider = /** @class */ (function () {
         this.diffGPSsecs = 0;
         this.threshold = 1; // diff between gps must be greater than this to save
         this.setEvents = function () {
+            _this.log.debug('setEvents called');
             _this.configureBggs();
             _this.plt.ready().then(function (readySource) {
                 _this.osplatform = _this.device.platform;
+                console.log('platform ready, setting BGGS event handlers');
+                _this.log.debug('platform ready, setting BGGS event handlers');
                 if (_this.osplatform != null) {
                     _this.osplatform = _this.osplatform.toLowerCase();
                     window.BackgroundGeolocation.on('location', function (location) {
@@ -1532,7 +1535,7 @@ var BackgroundGeolocationServiceProvider = /** @class */ (function () {
             _this.log.info("=====================================================================");
         };
         this.plt = platform;
-        //console.log('Hello BackgroundGeolocationServiceProvider Provider');
+        console.log('Hello BackgroundGeolocationServiceProvider Provider');
         //Configure BackgroundGeolocation and set events
         this.setEvents();
     } //End of constructor
@@ -14669,7 +14672,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.13',
-            'build': 5,
+            'build': 6,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
