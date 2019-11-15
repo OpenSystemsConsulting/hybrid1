@@ -1835,6 +1835,7 @@ var DeviceDiagnosticServiceProvider = /** @class */ (function () {
             });
         };
         this.diagnosticPoller = function () {
+            console.log("diagnosticPoller");
             _this.log.debug("diagnosticPoller");
             _this.runDiagnostics();
             var dd = new __WEBPACK_IMPORTED_MODULE_3__shared_sdk_models_DeviceDiagnostics__["a" /* DeviceDiagnostics */]();
@@ -4961,6 +4962,8 @@ var GpsServiceProvider = /** @class */ (function () {
         };
         this.log = this.logger.getInstance(this.logParams);
         this.getPos = function () {
+            console.log('getPos: FGGPS getGps:' + _this.getGps);
+            _this.log.debug('getPos: FGGPS getGps:' + _this.getGps);
             if (_this.getGps) {
                 if (_this.log.context.driver == 0) {
                     _this.log.context.driver = _this.pdaParams.getDriverId();
@@ -14666,7 +14669,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.13',
-            'build': 4,
+            'build': 5,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
@@ -14790,10 +14793,13 @@ var PlatformReadyServiceProvider = /** @class */ (function () {
         this.log = this.logger.getInstance(this.logParams);
         this.isready = false;
         this.bgenabled = false;
-        //this.log.debug('Hello PlatformReadyServiceProvider Provider');
+        console.log('constructed');
+        this.log.debug('constructed');
         this.pda_disable_diagnostics_bgps_on_logoff = (this.pdaParams.pda_disable_diagnostics_bgps_on_logoff || (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DIAGNOSTICS_BGPS_ON_LOGOFF') == 'Y'));
         this.platform.ready().then(function (readySource) {
             var osplatform = _this.device.platform;
+            console.log('platform ready from:' + readySource + ', osplatform:' + osplatform);
+            _this.log.debug('platform ready from:' + readySource + ', osplatform:' + osplatform);
             if (osplatform != null) {
                 _this.log.debug('Platform ready from :' + readySource);
                 // Platform now ready, execute any required native code
