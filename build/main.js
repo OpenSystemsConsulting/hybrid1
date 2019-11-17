@@ -5251,6 +5251,11 @@ var SodServiceProvider = /** @class */ (function () {
                 }
                 else {
                     this.log.debug('Not new date');
+                    // LT - per SG even if not new day when starting app from scratch always log off driver
+                    // (this is to ensure driver logs on which (on iOS at least) appears to set up the
+                    // background services correctly to run when app is in background)
+                    this.pdaParams.logoffDriver();
+                    this.eventService.sendMsg('LOGOFF', ''); // do we need this as well?  or just local log off?
                     // this.messageService.dumpLocalStorage();
                     //Dump Device Info
                     this.messageService.dumpDeviceInfo();
@@ -14673,7 +14678,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.13',
-            'build': 9,
+            'build': 10,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
