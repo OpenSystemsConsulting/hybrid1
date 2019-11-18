@@ -1897,8 +1897,9 @@ var DeviceDiagnosticServiceProvider = /** @class */ (function () {
     DeviceDiagnosticServiceProvider.prototype.startWatching = function () {
         //Call the Poller every minute
         this.pda_disable_device_diagnostics = (this.pdaParams.pda_disable_device_diagnostics || (this.siteConfig.getSiteConfigValue('PDA_DISABLE_DEVICE_DIAGNOSTICS') == 'Y'));
-        console.log("startWatching: DeviceDiagnosticServiceProvider: disable_device_diagnostics:" + this.pda_disable_device_diagnostics);
-        this.log.debug("startWatching: disable_device_diagnostics:" + this.pda_disable_device_diagnostics);
+        var running = this.sharedService.isDiagnosticsRunning;
+        console.log("startWatching: DeviceDiagnosticServiceProvider: disable_device_diagnostics:" + this.pda_disable_device_diagnostics + ', running:' + running);
+        this.log.debug("startWatching: disable_device_diagnostics:" + this.pda_disable_device_diagnostics + ', running:' + running);
         if (!this.pda_disable_device_diagnostics) {
             this.sharedService.isDiagnosticsRunning = true;
             this.intrval = setInterval(this.diagnosticPoller, 60000);
@@ -5268,8 +5269,8 @@ var SodServiceProvider = /** @class */ (function () {
                 localStorage.setItem('FIRST_RESUME_DATE', this.now);
                 this.log.debug('On Resume prevResumeDate is NULL date = ' + this.now + ' Will clearChange Data');
                 //Riyaz: No need to logoff the driver, if he logs in for the first time.The config data is loaded dynamically
-                this.pdaParams.logoffDriver();
-                this.eventService.sendMsg('LOGOFF', '');
+                //this.pdaParams.logoffDriver();
+                //this.eventService.sendMsg('LOGOFF', '');
                 this.messageService.clearChangeData();
                 //Dump Device Info
                 this.messageService.dumpDeviceInfo();
@@ -14680,7 +14681,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.13',
-            'build': 11,
+            'build': 12,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
