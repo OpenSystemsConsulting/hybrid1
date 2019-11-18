@@ -1901,8 +1901,11 @@ var DeviceDiagnosticServiceProvider = /** @class */ (function () {
         console.log("startWatching: DeviceDiagnosticServiceProvider: disable_device_diagnostics:" + this.pda_disable_device_diagnostics + ', running:' + running);
         this.log.debug("startWatching: disable_device_diagnostics:" + this.pda_disable_device_diagnostics + ', running:' + running);
         if (!this.pda_disable_device_diagnostics) {
-            this.sharedService.isDiagnosticsRunning = true;
-            this.intrval = setInterval(this.diagnosticPoller, 60000);
+            // only start polling service if not already running
+            if (!running) {
+                this.sharedService.isDiagnosticsRunning = true;
+                this.intrval = setInterval(this.diagnosticPoller, 60000);
+            }
         }
     };
     DeviceDiagnosticServiceProvider = __decorate([
@@ -14681,7 +14684,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.13',
-            'build': 12,
+            'build': 13,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
