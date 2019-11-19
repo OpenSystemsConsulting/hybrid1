@@ -6730,11 +6730,11 @@ var map = {
 		7
 	],
 	"../pages/pda/pda.module": [
-		846,
+		845,
 		6
 	],
 	"../pages/signature/signature.module": [
-		845,
+		846,
 		3
 	],
 	"../pages/tabs/tabs.module": [
@@ -13751,8 +13751,8 @@ var AppModule = /** @class */ (function () {
                         { loadChildren: '../pages/jsea/jsea.module#JseaPageModule', name: 'JseaPage', segment: 'jsea', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/msgs/msgs.module#MsgsPageModule', name: 'MsgsPage', segment: 'msgs', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/signature/signature.module#SignaturePageModule', name: 'SignaturePage', segment: 'signature', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/pda/pda.module#PdaPageModule', name: 'PdaPage', segment: 'pda', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/signature/signature.module#SignaturePageModule', name: 'SignaturePage', segment: 'signature', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] }
                     ]
                 }),
