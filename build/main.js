@@ -5258,7 +5258,7 @@ var SodServiceProvider = /** @class */ (function () {
                     // LT - to ensure background mode processes run correctly after app start
                     // we need to start the services
                     if (this.platformReady.isPlatformReady()) {
-                        this.backgroundGeolocationService.start();
+                        //this.backgroundGeolocationService.start();
                         if (!this.sharedService.isDiagnosticsRunning)
                             this.deviceDiagnosticServiceProvider.startWatching();
                     }
