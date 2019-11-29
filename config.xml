@@ -138,10 +138,6 @@
     <allow-navigation href="http://192.168.160.51:8108" />
     <plugin name="cordova-sqlite-evcore-extbuild-free" spec="0.9.10" />
     <plugin name="cordova-plugin-add-swift-support" spec="^2.0.2" />
-    <plugin name="phonegap-plugin-push" spec="2.3.0">
-        <variable name="ANDROID_SUPPORT_V13_VERSION" value="27.+" />
-        <variable name="FCM_VERSION" value="17.0.+" />
-    </plugin>
     <plugin name="cordova-plugin-actionsheet" spec="2.3.3" />
     <plugin name="cordova-plugin-camera" spec="4.1.0">
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
@@ -183,4 +179,8 @@
         <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
     </plugin>
     <engine name="android" spec="8.1.0" />
+    <plugin name="phonegap-plugin-push" spec="2.2.3">
+        <variable name="ANDROID_SUPPORT_V13_VERSION" value="27.+" />
+        <variable name="FCM_VERSION" value="11.6.2" />
+    </plugin>
 </widget>
