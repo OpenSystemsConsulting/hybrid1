@@ -632,12 +632,14 @@ var DevicePage = /** @class */ (function () {
         /*  this.navigatorPlugin.appSelection.userChoice.get((app) => {
            this.favouriteMapApp = this.navigatorPlugin.getAppDisplayName(app);
          }); */
-        this.navigatorPlugin.availableApps().then(function (results) {
-            _this.availableMapApps = []; // reset otherwise the list keeps on growing
-            for (var app in results) {
-                _this.availableMapApps.push(_this.navigatorPlugin.getAppDisplayName(app) + (results[app] ? " is" : " isn't") + " available");
-            }
-        });
+        if (!this.sharedService.desktopTesting) {
+            this.navigatorPlugin.availableApps().then(function (results) {
+                _this.availableMapApps = []; // reset otherwise the list keeps on growing
+                for (var app in results) {
+                    _this.availableMapApps.push(_this.navigatorPlugin.getAppDisplayName(app) + (results[app] ? " is" : " isn't") + " available");
+                }
+            });
+        }
     }; // ionViewWillEnter() ends
     DevicePage.prototype.showError = function (text) {
         var alert = this.alertCtrl.create({
