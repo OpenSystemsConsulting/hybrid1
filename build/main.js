@@ -14684,7 +14684,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.14',
-            'build': 7,
+            'build': 8,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
@@ -14863,7 +14863,7 @@ var PlatformReadyServiceProvider = /** @class */ (function () {
                 }, function (err) {
                     _this.log.debug('BG MODE DISABLE: ERR = ' + err);
                 });
-                // LT - comment to test ios notification issues //this.backgroundMode.enable();
+                _this.backgroundMode.enable();
                 _this.backgroundMode.setDefaults({
                     hidden: true, title: 'App is running in the background', text: 'Doing Background GPS...'
                 });
