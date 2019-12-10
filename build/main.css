@@ -30659,6 +30659,14 @@ gridlabel {
   background: #00ff00;
 }
 
+.minsrow {
+  height: 70px !important;
+}
+
+.minscol {
+  height: 20px !important;
+}
+
 .jobnumberspan {
   color: blue !important;
   font-size: 15px;

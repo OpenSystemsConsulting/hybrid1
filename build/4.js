@@ -341,7 +341,9 @@ var JobDetailsPage = /** @class */ (function () {
                     _this.podname = result.podname;
                     _this.signature = result.signature;
                     _this.mdelPhotoTaken = result.mdelPhotoTaken;
-                    _this.handleJobStatusChange(legid, _this.signature, _this.podname);
+                    _this.breakmins = result.breakmins;
+                    _this.returnmins = result.returnmins;
+                    _this.handleJobStatusChange(legid, _this.signature, _this.podname, _this.breakmins, _this.returnmins);
                     //this.signatureCallback(this.signature, this.podname, this.mdelPhotoTaken);
                 }
             });
@@ -508,7 +510,7 @@ var JobDetailsPage = /** @class */ (function () {
         };
         //The func below should only be called when a button is clicked EG 
         // Accept / Pickup / Tap to Sign 
-        this.handleJobStatusChange = function (seqid, signat, podname) {
+        this.handleJobStatusChange = function (seqid, signat, podname, breakmins, returnmins) {
             // seqid id the mobjobSeq of the job that's just changed e.g. 2015123103038500
             _this.mystr = 'handleJobStatusChange:seqid:' + seqid;
             _this.log.debug(_this.mystr);
@@ -617,6 +619,12 @@ var JobDetailsPage = /** @class */ (function () {
                                 job.mobjobPodName = podname;
                                 job.mobjobPodTime = new Date().toISOString();
                             }
+                            if (breakmins !== undefined && breakmins !== '') {
+                                job.breakmins = parseInt(breakmins);
+                            }
+                            if (returnmins !== undefined && returnmins !== '') {
+                                job.returnmins = parseInt(returnmins);
+                            }
                         }
                         _this.log.info("Job status for Job leg:" + job.mobjobLegNumber + " of Job Number:" + job.mobjobNumber + " is set to " + job.mobjobStatus);
                     }
@@ -656,6 +664,12 @@ var JobDetailsPage = /** @class */ (function () {
                                 if (podname) {
                                     job.mobjobPodName = podname;
                                     job.mobjobPodTime = new Date().toISOString();
+                                }
+                                if (breakmins !== undefined && breakmins !== '') {
+                                    job.breakmins = parseInt(breakmins);
+                                }
+                                if (returnmins !== undefined && returnmins !== '') {
+                                    job.returnmins = parseInt(returnmins);
                                 }
                             }
                         }
@@ -722,6 +736,12 @@ var JobDetailsPage = /** @class */ (function () {
                                 if (podname) {
                                     job.mobjobPodName = podname;
                                     job.mobjobPodTime = new Date().toISOString();
+                                }
+                                if (breakmins !== undefined && breakmins !== '') {
+                                    job.breakmins = parseInt(breakmins);
+                                }
+                                if (returnmins !== undefined && returnmins !== '') {
+                                    job.returnmins = parseInt(returnmins);
                                 }
                             }
                         }

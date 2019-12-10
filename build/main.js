@@ -8183,7 +8183,8 @@ var SiteconfigServiceProvider = /** @class */ (function () {
             'PDA_DISABLE_DEVICE_DIAGNOSTICS',
             'PDA_DISABLE_DIAGNOSTICS_BGPS_ON_LOGOFF',
             'PDA_JSEA_NO_NO',
-            'PDA_DELIVERY_TO_BASE'
+            'PDA_DELIVERY_TO_BASE',
+            'PDA_BREAK_TIMES'
         ];
         this.siteconfigs = null;
         this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'SiteconfigServiceProvider' };
@@ -14684,7 +14685,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.14',
-            'build': 8,
+            'build': 24,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
