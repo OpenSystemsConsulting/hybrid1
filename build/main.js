@@ -8144,7 +8144,7 @@ var SiteconfigServiceProvider = /** @class */ (function () {
         this.logger = logger;
         this.customerConn = customerConn;
         this.keylist = [
-            'BARCODE_SUPP_BCODEISJOBNUM',
+            'PDA_BARCODE_IS_JOBNUM',
             'PDA_BARCODES',
             'PDA_JSEA_ON',
             'PDA_JSEA_TYPE',
@@ -14685,7 +14685,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.14',
-            'build': 26,
+            'build': 28,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };

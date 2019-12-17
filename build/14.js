@@ -332,6 +332,8 @@ var BarcodePage = /** @class */ (function () {
                                 matchedJobsPieces += job.mobjobJobPieces;
                                 this.JobsPieces = matchedJobsPieces;
                                 this.log.debug('Scan OFF recording JOb Index ' + foundIdx + 'Pieces now = ' + matchedJobsPieces);
+                                bchSession.bchJobno = foundJobNum;
+                                bchSession.bchJobdate = foundJobDate;
                                 fjobarr.push(foundIdx);
                                 break; // No need to keep looking we have found the job for this barcode   
                             }
@@ -442,12 +444,12 @@ var BarcodePage = /** @class */ (function () {
         // this.newMessageCount = this.messageService.getNewMesssageCount(); 
         var _this = this;
         if (this.sharedService.testing) {
-            this.YN = 'Y';
+            this.pda_barcode_is_jobnum = 'Y';
             this.pda_barcodes = 'Y';
         }
         else {
             this.pda_barcodes = this.siteConfig.getSiteConfigYN('PDA_BARCODES');
-            this.YN = this.siteConfig.getSiteConfigYN('BARCODE_SUPP_BCODEISJOBNUM');
+            this.pda_barcode_is_jobnum = this.siteConfig.getSiteConfigYN('PDA_BARCODE_IS_JOBNUM'); // was BARCODE_SUPP_BCODEISJOBNUM
         }
         this.driverId = this.pdaParams.getDriverId();
         if (this.pda_barcodes != 'Y') {
@@ -492,8 +494,8 @@ var BarcodePage = /** @class */ (function () {
             // e.g. cipherlab, pm80 etc. as operator can use button and scan at any time
             // from any page and the array then gets presented here
             this.barcodes = [];
-            //Check the value of 'BARCODE_SUPP_BCODEISJOBNUM'
-            if (this.YN === "Y") {
+            //Check the value of 'PDA_BARCODE_IS_JOBNUM'
+            if (this.pda_barcode_is_jobnum === "Y") {
                 this.myBcodeIsjobNum = true;
             }
             else {
