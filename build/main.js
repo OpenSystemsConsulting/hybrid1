@@ -6694,7 +6694,7 @@ var map = {
 		2
 	],
 	"../pages/gps/gps.module": [
-		847,
+		836,
 		1
 	],
 	"../pages/home/home.module": [
@@ -6702,15 +6702,15 @@ var map = {
 		0
 	],
 	"../pages/image-text/image-text.module": [
-		836,
+		838,
 		12
 	],
 	"../pages/images/images.module": [
-		838,
+		839,
 		11
 	],
 	"../pages/job-detail-notes/job-detail-notes.module": [
-		839,
+		840,
 		10
 	],
 	"../pages/job-details/job-details.module": [
@@ -6718,27 +6718,27 @@ var map = {
 		4
 	],
 	"../pages/jsea/jsea.module": [
-		840,
+		842,
 		9
 	],
 	"../pages/login/login.module": [
-		842,
+		843,
 		8
 	],
 	"../pages/msgs/msgs.module": [
-		843,
+		844,
 		7
 	],
 	"../pages/pda/pda.module": [
-		844,
+		845,
 		6
 	],
 	"../pages/signature/signature.module": [
-		845,
+		846,
 		3
 	],
 	"../pages/tabs/tabs.module": [
-		846,
+		847,
 		5
 	]
 };
@@ -13301,86 +13301,6 @@ var SyncServiceProvider = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JseaAnswersReplicationServiceProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-;
-/*
-  Generated class for the JseaAnswersReplicationServiceProvider provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
-var JseaAnswersReplicationServiceProvider = /** @class */ (function () {
-    function JseaAnswersReplicationServiceProvider() {
-        //console.log('Hello JseaAnswersReplicationServiceProvider Provider');
-        var _this = this;
-        this.LocalJseaDriverAnswers = lbclient.models.LocalJseaDriverAnswers;
-        this.RemoteJseaDriverAnswers = lbclient.models.RemoteJseaDriverAnswers;
-        this.models = lbclient.models;
-        this.lastFilter = {};
-        this.d = new Date();
-        this.since = { push: -1, pull: -1 };
-        this.jseaAnswers_sync = function (callback, filter) {
-            var options = { filter: '', lastFilter: '' };
-            var cb = null;
-            cb = callback;
-            options.filter = filter;
-            options.lastFilter = filter;
-            _this.lastFilter = filter;
-            var counter = 0;
-            //console.log(new Date().toISOString() + ': starting replication');
-            // LT - 10/12/2015 - original code - does remote first
-            _this.LocalJseaDriverAnswers.replicate(_this.since.push, _this.RemoteJseaDriverAnswers, options, function (err, conflicts, cps) {
-                _this.since.push = cps;
-                /* 	LocalJseaDriverAnswers.replicate(
-                        since.push,
-                        RemoteJseaDriverAnswers,
-                        options,
-                        function pulled(err, conflicts, cps) {
-                            since.pull = cps; */
-                //console.log(new Date().toISOString() + ': finished replication');
-                cb && cb(err, conflicts);
-                /* }); */
-            });
-        };
-        this.LocalJseaDriverAnswers.on('before save', function (ctx, next) {
-            next();
-        });
-        // sync local changes if connected
-        this.LocalJseaDriverAnswers.on('after save', function (ctx, next) {
-            next();
-            this.jseaAnswers_sync();
-        });
-        this.LocalJseaDriverAnswers.on('after delete', function (ctx, next) {
-            next();
-            this.jseaAnswers_sync();
-        });
-    }
-    JseaAnswersReplicationServiceProvider = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [])
-    ], JseaAnswersReplicationServiceProvider);
-    return JseaAnswersReplicationServiceProvider;
-}());
-
-//# sourceMappingURL=jsea-answers-replication-service.js.map
-
-/***/ }),
-
-/***/ 475:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobnoteReplicationServiceProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -13454,7 +13374,7 @@ var JobnoteReplicationServiceProvider = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 476:
+/***/ 475:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13507,6 +13427,86 @@ var AttachServiceProvider = /** @class */ (function () {
 }());
 
 //# sourceMappingURL=attach-service.js.map
+
+/***/ }),
+
+/***/ 476:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JseaAnswersReplicationServiceProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+;
+/*
+  Generated class for the JseaAnswersReplicationServiceProvider provider.
+
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular DI.
+*/
+var JseaAnswersReplicationServiceProvider = /** @class */ (function () {
+    function JseaAnswersReplicationServiceProvider() {
+        //console.log('Hello JseaAnswersReplicationServiceProvider Provider');
+        var _this = this;
+        this.LocalJseaDriverAnswers = lbclient.models.LocalJseaDriverAnswers;
+        this.RemoteJseaDriverAnswers = lbclient.models.RemoteJseaDriverAnswers;
+        this.models = lbclient.models;
+        this.lastFilter = {};
+        this.d = new Date();
+        this.since = { push: -1, pull: -1 };
+        this.jseaAnswers_sync = function (callback, filter) {
+            var options = { filter: '', lastFilter: '' };
+            var cb = null;
+            cb = callback;
+            options.filter = filter;
+            options.lastFilter = filter;
+            _this.lastFilter = filter;
+            var counter = 0;
+            //console.log(new Date().toISOString() + ': starting replication');
+            // LT - 10/12/2015 - original code - does remote first
+            _this.LocalJseaDriverAnswers.replicate(_this.since.push, _this.RemoteJseaDriverAnswers, options, function (err, conflicts, cps) {
+                _this.since.push = cps;
+                /* 	LocalJseaDriverAnswers.replicate(
+                        since.push,
+                        RemoteJseaDriverAnswers,
+                        options,
+                        function pulled(err, conflicts, cps) {
+                            since.pull = cps; */
+                //console.log(new Date().toISOString() + ': finished replication');
+                cb && cb(err, conflicts);
+                /* }); */
+            });
+        };
+        this.LocalJseaDriverAnswers.on('before save', function (ctx, next) {
+            next();
+        });
+        // sync local changes if connected
+        this.LocalJseaDriverAnswers.on('after save', function (ctx, next) {
+            next();
+            this.jseaAnswers_sync();
+        });
+        this.LocalJseaDriverAnswers.on('after delete', function (ctx, next) {
+            next();
+            this.jseaAnswers_sync();
+        });
+    }
+    JseaAnswersReplicationServiceProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [])
+    ], JseaAnswersReplicationServiceProvider);
+    return JseaAnswersReplicationServiceProvider;
+}());
+
+//# sourceMappingURL=jsea-answers-replication-service.js.map
 
 /***/ }),
 
@@ -13649,11 +13649,11 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_54__providers_sync_service_sync_service__ = __webpack_require__(473);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__providers_job_replication_service_job_replication_service__ = __webpack_require__(210);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_56__providers_barcode_service_barcode_service__ = __webpack_require__(832);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__providers_jobnote_replication_service_jobnote_replication_service__ = __webpack_require__(475);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__providers_jobnote_replication_service_jobnote_replication_service__ = __webpack_require__(474);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_58__providers_barcode_replication_service_barcode_replication_service__ = __webpack_require__(470);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_59__providers_jsea_answers_replication_service_jsea_answers_replication_service__ = __webpack_require__(474);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_59__providers_jsea_answers_replication_service_jsea_answers_replication_service__ = __webpack_require__(476);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_60__providers_navigation_service_navigation_service__ = __webpack_require__(464);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_61__providers_attach_service_attach_service__ = __webpack_require__(476);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_61__providers_attach_service_attach_service__ = __webpack_require__(475);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_62__providers_device_diagnostic_service_device_diagnostic_service__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_63__providers_sqlite_service_sqlite_service__ = __webpack_require__(115);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -13743,18 +13743,18 @@ var AppModule = /** @class */ (function () {
                         { loadChildren: '../pages/barcode/barcode.module#BarcodePageModule', name: 'BarcodePage', segment: 'barcode', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/change/change.module#ChangePageModule', name: 'ChangePage', segment: 'change', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/device/device.module#DevicePageModule', name: 'DevicePage', segment: 'device', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/image-text/image-text.module#ImageTextPageModule', name: 'ImageTextPage', segment: 'image-text', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/gps/gps.module#GpsPageModule', name: 'GpsPage', segment: 'gps', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/image-text/image-text.module#ImageTextPageModule', name: 'ImageTextPage', segment: 'image-text', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/images/images.module#ImagesPageModule', name: 'ImagesPage', segment: 'images', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-detail-notes/job-detail-notes.module#JobDetailNotesPageModule', name: 'JobDetailNotesPage', segment: 'job-detail-notes', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/jsea/jsea.module#JseaPageModule', name: 'JseaPage', segment: 'jsea', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-details/job-details.module#JobDetailsPageModule', name: 'JobDetailsPage', segment: 'job-details', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/jsea/jsea.module#JseaPageModule', name: 'JseaPage', segment: 'jsea', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/msgs/msgs.module#MsgsPageModule', name: 'MsgsPage', segment: 'msgs', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/pda/pda.module#PdaPageModule', name: 'PdaPage', segment: 'pda', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/signature/signature.module#SignaturePageModule', name: 'SignaturePage', segment: 'signature', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/gps/gps.module#GpsPageModule', name: 'GpsPage', segment: 'gps', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_24__shared_sdk__["c" /* SDKBrowserModule */].forRoot(),
@@ -14685,7 +14685,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.14',
-            'build': 29,
+            'build': 30,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };

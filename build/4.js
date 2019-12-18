@@ -223,10 +223,10 @@ var CameraButtonComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_job_changed_service_job_changed_service__ = __webpack_require__(466);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_gps_audit_service_gps_audit_service__ = __webpack_require__(117);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_image_service_image_service__ = __webpack_require__(200);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_jobnote_replication_service_jobnote_replication_service__ = __webpack_require__(475);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__providers_jobnote_replication_service_jobnote_replication_service__ = __webpack_require__(474);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__providers_navigation_service_navigation_service__ = __webpack_require__(464);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_message_service_message_service__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_attach_service_attach_service__ = __webpack_require__(476);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__providers_attach_service_attach_service__ = __webpack_require__(475);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
