@@ -124,6 +124,9 @@
                 <string>location</string>
             </array>
         </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSBluetoothAlwaysUsageDescription">
+            <string>Bluetooth is not requested by this app however is included because it is referenced by the cordova device plugin</string>
+        </edit-config>
     </platform>
     <allow-navigation href="http://192.168.160.51:8100" />
     <allow-navigation href="http://169.254.184.248:8100" />
