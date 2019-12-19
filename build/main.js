@@ -1794,6 +1794,7 @@ var DeviceDiagnosticServiceProvider = /** @class */ (function () {
         this.isLocationAuthorized = false;
         this.isWifiAvailable = false;
         this.isWifiEnabled = false;
+        this.isBluetoothAvailable = false;
         this.runDiagnostics = function () {
             _this.log.debug("runDiagnostics");
             _this.platform.ready().then(function (readySource) {
@@ -1809,6 +1810,7 @@ var DeviceDiagnosticServiceProvider = /** @class */ (function () {
                     _this.diagnostic.isLocationAuthorized().then(function (val) { _this.isLocationAuthorized = val; }, function () { });
                     _this.diagnostic.isWifiAvailable().then(function (val) { _this.isWifiAvailable = val; }, function () { });
                     _this.diagnostic.isWifiEnabled().then(function (val) { _this.isWifiEnabled = val; }, function () { });
+                    _this.diagnostic.isBluetoothAvailable().then(function (val) { _this.isBluetoothAvailable = val; }, function () { });
                     if (!_this.platform.is('ios')) {
                         _this.diagnostic.getLocationMode()
                             .then(function (locationMode) {
@@ -14685,7 +14687,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.14',
-            'build': 30,
+            'build': 31,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };

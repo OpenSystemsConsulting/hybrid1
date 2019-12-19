@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="au.com.opensyscon.newtplusmobile" ios-CFBundleVersion="3.1.14.030" version="3.1.14" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="au.com.opensyscon.newtplusmobile" ios-CFBundleVersion="3.1.14.031" version="3.1.14" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>New TPLUS Mobile</name>
     <description>Copyright Open Systems Consulting Pty Ltd 2019 (New TPLUS Mobile Application)</description>
     <author email="osc.supp@gmail.com" href="http://www.oscsoftware.com.au"> OSC Developer Team</author>
@@ -125,7 +125,7 @@
             </array>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSBluetoothAlwaysUsageDescription">
-            <string>Bluetooth is not requested by this app however is included because it is referenced by the cordova device plugin</string>
+            <string>Bluetooth requested to determine how to play job notification sounds when device is connected via bluetooth</string>
         </edit-config>
     </platform>
     <allow-navigation href="http://192.168.160.51:8100" />
