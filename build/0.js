@@ -918,7 +918,7 @@ var HomePage = /** @class */ (function () {
         this.sub1 =
             this.sharedService.messageToDriver.subscribe(function (payload) {
                 _this.getSoundForPayload(payload);
-                _this.navCtrl.push("MsgsPage");
+                //this.navCtrl.push("MsgsPage");
             });
         // Monitor the connection
         this.sub2 =
