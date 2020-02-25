@@ -1173,6 +1173,7 @@ var PdaparamsServiceProvider = /** @class */ (function () {
         this.imagePollTime = 60000 * 5; // 5 minute default
         this.imageUpload = true;
         this.syncDL = false; // sync DL jobs as well
+        this.signatureThrottle = 16;
         this.getAppBuild = function () {
             return this.configService.appConfig.build;
         };

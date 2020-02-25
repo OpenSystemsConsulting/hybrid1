@@ -918,7 +918,10 @@ var HomePage = /** @class */ (function () {
         this.sub1 =
             this.sharedService.messageToDriver.subscribe(function (payload) {
                 _this.getSoundForPayload(payload);
-                //this.navCtrl.push("MsgsPage");
+                //this.navCtrl.push("MsgsPage");    // LT - this appears to cause the sound to NOT play
+                // some async issue?  LT/SG have decided to NOT
+                // go to messages tab so as not to interfere with jobs
+                // The operator will need to go there if they wish to
             });
         // Monitor the connection
         this.sub2 =

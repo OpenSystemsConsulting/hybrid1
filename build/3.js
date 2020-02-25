@@ -402,6 +402,7 @@ var SignaturePage = /** @class */ (function () {
             'maxWidth': 1.5,
             'dotSize': 3,
             'penColor': 'rgb(66, 133, 244)',
+            'throttle': pdaParams.signatureThrottle || 16,
             'onEnd': function () {
                 //this.signature.image = this.signaturePad.toDataURL();
                 this.signature = this.signaturePad.toDataURL();
