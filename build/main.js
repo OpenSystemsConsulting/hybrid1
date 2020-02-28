@@ -14690,7 +14690,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.15',
-            'build': 4,
+            'build': 5,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
