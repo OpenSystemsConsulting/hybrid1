@@ -1173,7 +1173,8 @@ var PdaparamsServiceProvider = /** @class */ (function () {
         this.imagePollTime = 60000 * 5; // 5 minute default
         this.imageUpload = true;
         this.syncDL = false; // sync DL jobs as well
-        this.signatureThrottle = 16;
+        // signature throttle - get local device value if defined, else site config key, else hard coded
+        this.signatureThrottle = localStorage.getItem('signatureThrottle') || localStorage.getItem('PDA_SIGNATURE_THROTTLE') || 16;
         this.getAppBuild = function () {
             return this.configService.appConfig.build;
         };
@@ -8187,7 +8188,8 @@ var SiteconfigServiceProvider = /** @class */ (function () {
             'PDA_DISABLE_DIAGNOSTICS_BGPS_ON_LOGOFF',
             'PDA_JSEA_NO_NO',
             'PDA_DELIVERY_TO_BASE',
-            'PDA_BREAK_TIMES'
+            'PDA_BREAK_TIMES',
+            'PDA_SIGNATURE_THROTTLE'
         ];
         this.siteconfigs = null;
         this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'SiteconfigServiceProvider' };
@@ -14688,7 +14690,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.15',
-            'build': 1,
+            'build': 4,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
