@@ -644,7 +644,7 @@ var DevicePage = /** @class */ (function () {
                 }
             });
         }
-        this.signature_throttle = localStorage.getItem('signatureThrottle') || localStorage.getItem('PDA_SIGNATURE_THROTTLE') || 16;
+        this.signature_throttle = parseInt(localStorage.getItem('signatureThrottle')) || this.siteConfig.getSiteConfigInt('PDA_SIGNATURE_THROTTLE') || 16;
     }; // ionViewWillEnter() ends
     DevicePage.prototype.showError = function (text) {
         var alert = this.alertCtrl.create({

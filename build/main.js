@@ -1173,8 +1173,6 @@ var PdaparamsServiceProvider = /** @class */ (function () {
         this.imagePollTime = 60000 * 5; // 5 minute default
         this.imageUpload = true;
         this.syncDL = false; // sync DL jobs as well
-        // signature throttle - get local device value if defined, else site config key, else hard coded
-        this.signatureThrottle = localStorage.getItem('signatureThrottle') || localStorage.getItem('PDA_SIGNATURE_THROTTLE') || 16;
         this.getAppBuild = function () {
             return this.configService.appConfig.build;
         };
@@ -14690,7 +14688,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.15',
-            'build': 5,
+            'build': 6,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
