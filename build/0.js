@@ -706,7 +706,7 @@ var HomePage = /** @class */ (function () {
                 // at least one job selected 
                 //Setting the Leg Status to DL here as we are only doing this at Delivery which will happen
                 // as soon as the signature is accepted.
-                var lparams = { metadata: { basejob: _this.checkedJobs[0].mobjobBasejobNum, legid: _this.checkedJobs[0].mobjobSeq, legStatus: 'DL', barcodeSignOff: false, showDeliverToBase: false } };
+                var lparams = { metadata: { basejob: _this.checkedJobs[0].mobjobBasejobNum, legid: _this.checkedJobs[0].mobjobSeq, legStatus: 'DL', barcodeSignOff: false, showDeliverToBase: false, numJobs: _this.checkedJobs.length } };
                 _this.openSignatureModal(lparams);
             }
             else {
