@@ -3583,6 +3583,14 @@ var CustomerconnServiceProvider = /** @class */ (function () {
                 "serverIP": "lf.opensyscon.com.au",
                 "serverPort": 3176,
                 "url": "http://lf.opensyscon.com.au:3176"
+            },
+            "ceg": {
+                "connector": "remote",
+                "debug": "true",
+                "clientId": "CEG",
+                "serverIP": "opensyscon.com.au/cesgrp",
+                "serverPort": 3178,
+                "url": "http://opensyscon.com.au/cesgrp:3178"
             }
         };
         this.getConnectionDetails = function (customer) {
@@ -13091,6 +13099,9 @@ var LoginServiceProvider = /** @class */ (function () {
             else if (credentials.username == 'lfr' && credentials.password == 'lfr') {
                 access_1 = true;
             }
+            else if (credentials.username == 'ceg' && credentials.password == 'ceg') {
+                access_1 = true;
+            }
             else {
                 return __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["Observable"].throw("Wrong credentials!");
             }
@@ -14688,7 +14699,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.15',
-            'build': 7,
+            'build': 8,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
