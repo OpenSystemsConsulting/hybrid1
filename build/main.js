@@ -3588,9 +3588,9 @@ var CustomerconnServiceProvider = /** @class */ (function () {
                 "connector": "remote",
                 "debug": "true",
                 "clientId": "CEG",
-                "serverIP": "opensyscon.com.au/cesgrp",
-                "serverPort": 3178,
-                "url": "http://opensyscon.com.au/cesgrp:3178"
+                "serverIP": "bookings.rowvillecouriers.com.au",
+                "serverPort": 3001,
+                "url": "http://bookings.rowvillecouriers.com.au:3001"
             }
         };
         this.getConnectionDetails = function (customer) {
@@ -5703,7 +5703,7 @@ var JobReplicationServiceProvider = /** @class */ (function () {
                 });
                 //Set the full replication to false
                 _this.pdaParams.fullReplication = false;
-                _this.sharedService.setSyncInProgress(false);
+                _this.sharedService.setSyncInProgress(false); // TODO - don't set to false until replication finished?
             }
             else {
                 // not connected to network
@@ -14698,8 +14698,8 @@ var ConfigServiceProvider = /** @class */ (function () {
         };
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
-            'version': '3.1.15',
-            'build': 8,
+            'version': '3.1.16',
+            'build': 3,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
