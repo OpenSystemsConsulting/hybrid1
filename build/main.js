@@ -3591,6 +3591,14 @@ var CustomerconnServiceProvider = /** @class */ (function () {
                 "serverIP": "bookings.rowvillecouriers.com.au",
                 "serverPort": 3001,
                 "url": "http://bookings.rowvillecouriers.com.au:3001"
+            },
+            "swift22": {
+                "connector": "remote",
+                "debug": "true",
+                "clientId": "SWIFT2",
+                "serverIP": "27.32.225.179",
+                "serverPort": 3001,
+                "url": "http://27.32.225.179:3001/api"
             }
         };
         this.getConnectionDetails = function (customer) {
@@ -13102,6 +13110,9 @@ var LoginServiceProvider = /** @class */ (function () {
             else if (credentials.username == 'ceg' && credentials.password == 'ceg') {
                 access_1 = true;
             }
+            else if (credentials.username == 'swift22' && credentials.password == 'swift22') {
+                access_1 = true;
+            }
             else {
                 return __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["Observable"].throw("Wrong credentials!");
             }
@@ -14699,7 +14710,7 @@ var ConfigServiceProvider = /** @class */ (function () {
         //IMPORTANT Note: if appConfig.version < 2.35, then push notifications won't work properly.
         this.appConfig = {
             'version': '3.1.16',
-            'build': 3,
+            'build': 4,
             'logServerIP': 'opensyscon.com.au',
             'logServerPort': 5678
         };
