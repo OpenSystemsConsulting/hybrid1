@@ -1,6 +1,6 @@
 webpackJsonp([14],{
 
-/***/ 833:
+/***/ 835:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BarcodePageModule", function() { return BarcodePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__barcode__ = __webpack_require__(857);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__barcode__ = __webpack_require__(859);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -41,7 +41,7 @@ var BarcodePageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 857:
+/***/ 859:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49,17 +49,19 @@ var BarcodePageModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_barcode_scanner__ = __webpack_require__(469);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_config_service_config_service__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_log_service_log_service__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_siteconfig_service_siteconfig_service__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_base_service_base_service__ = __webpack_require__(199);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_platform_ready_service_platform_ready_service__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_shared_service_shared_service__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_message_service_message_service__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_barcode_replication_service_barcode_replication_service__ = __webpack_require__(470);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_barcode_scanner__ = __webpack_require__(470);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_keyboard__ = __webpack_require__(471);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_clipboard__ = __webpack_require__(472);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_sdk__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_config_service_config_service__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_log_service_log_service__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_siteconfig_service_siteconfig_service__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_base_service_base_service__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_platform_ready_service_platform_ready_service__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_shared_service_shared_service__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_message_service_message_service__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__providers_barcode_replication_service_barcode_replication_service__ = __webpack_require__(473);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -83,6 +85,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 /**
  * Generated class for the BarcodePage page.
  *
@@ -90,7 +94,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * on Ionic pages and navigation.
  */
 var BarcodePage = /** @class */ (function () {
-    function BarcodePage(navCtrl, navParams, configService, pdaParams, siteConfig, logger, base, alertCtrl, platformReady, device, barcodeScanner, modalController, sharedService, messageService, cd, barcodeReplicationService) {
+    function BarcodePage(navCtrl, navParams, configService, pdaParams, siteConfig, logger, base, alertCtrl, platformReady, device, barcodeScanner, modalController, sharedService, messageService, cd, barcodeReplicationService, keyboard, clipboard) {
         var _this = this;
         this.navCtrl = navCtrl;
         this.navParams = navParams;
@@ -108,6 +112,8 @@ var BarcodePage = /** @class */ (function () {
         this.messageService = messageService;
         this.cd = cd;
         this.barcodeReplicationService = barcodeReplicationService;
+        this.keyboard = keyboard;
+        this.clipboard = clipboard;
         this.t = this.navCtrl.parent;
         this.logParams = { site: this.pdaParams.getSiteId(), driver: this.pdaParams.getDriverId(), fn: 'BarcodePage' };
         this.log = this.logger.getInstance(this.logParams);
@@ -115,6 +121,7 @@ var BarcodePage = /** @class */ (function () {
         this.useCamera = true;
         this.useCipherlab = false;
         this.usePM80 = false;
+        this.usePM85 = false;
         this.myBcodeIsjobNum = false;
         this.my_is_scan_on = true;
         this.matchedJobsPieces = 0;
@@ -123,10 +130,12 @@ var BarcodePage = /** @class */ (function () {
         this.Job = lbclient.models.LocalJob;
         this.barcodes = [];
         this.barcodetemp = "";
+        this.adding = false; // adding barcode(s) - either off or on, not submitting or cancel
         this.pm80SuccessCallback = function (result, metadata) {
             // result has successful scan as text, metadata has result and barcode type
             _this.log.debug("PM80: callback scanned = [" + result + "], metadata:" + JSON.stringify(metadata));
-            _this.barcodes.push(result);
+            //this.barcodes.push(result);
+            _this.barcodes.unshift(result); // add to start of array
             _this.cd.detectChanges();
         };
         this.pm80ErrorCallback = function (error) {
@@ -147,7 +156,8 @@ var BarcodePage = /** @class */ (function () {
                 _this.barcodeScanner.scan().then(function (barcodeData) {
                     // Success! Barcode data is here
                     // Returns object e.g.: {text: "053329109558", format: "UPC_A", cancelled: false}
-                    _this.barcodes.push(barcodeData.text);
+                    //this.barcodes.push(barcodeData.text);
+                    _this.barcodes.unshift(barcodeData.text); // add to start of array
                     _this.log.debug('CAMERA scanned OK: barcodeData:' + barcodeData);
                 }, function (error) {
                     // An error occurred
@@ -171,6 +181,7 @@ var BarcodePage = /** @class */ (function () {
         /*        SCAN SESSION CANCEL   */
         /*========================================*/
         this.scanCancel = function () {
+            _this.adding = true;
             var confirmPopup = _this.alertCtrl.create({
                 title: 'CANCEL Scan Session',
                 subTitle: 'Are you sure you want to CANCEL this scan session (You will lose all data scanned)?',
@@ -204,6 +215,7 @@ var BarcodePage = /** @class */ (function () {
                     _this.confirmscanSubmit(signature, podname);
                 }
             });
+            _this.adding = false; // finished adding barcodes
             modal.present();
         };
         this.scanSubmit = function () {
@@ -211,6 +223,7 @@ var BarcodePage = /** @class */ (function () {
             if (this.barcodes.length == 0) {
                 return;
             }
+            this.adding = false;
             var subconfirmPopup = this.alertCtrl.create({
                 title: 'Scan Session Confirm',
                 message: 'Are you sure you want to submit your Scan session to the database ?',
@@ -218,6 +231,7 @@ var BarcodePage = /** @class */ (function () {
                     {
                         text: 'Submit',
                         handler: function () {
+                            _this.adding = false;
                             if (_this.my_is_scan_on == false) {
                                 _this.openSignatureModal();
                             }
@@ -230,6 +244,8 @@ var BarcodePage = /** @class */ (function () {
                         text: 'Cancel',
                         handler: function () {
                             _this.log.debug('User has CANCELLED out of a Scan session SUBMIT Doing nothing');
+                            _this.adding = true;
+                            _this.setFocus();
                             return;
                         }
                     }
@@ -412,9 +428,10 @@ var BarcodePage = /** @class */ (function () {
                     cordova.plugins.pm80scanner.cancel(); // Not sure if required 
                 }
             }
+            this.adding = true; // reset in case they want to add some more
             //this.app.getRootNav().setRoot(TabsPage);
             //this.navCtrl.popToRoot();
-            this.t.select(0);
+            this.t.select(0); // LT/SG - stay on barcode screen ? - driver has to go back to jobs screen manually
         }; //finishSubmit() ends here
         this.arrayRemove = function (value) {
             _this.barcodes = _this.barcodes.filter(function (ele) {
@@ -425,16 +442,39 @@ var BarcodePage = /** @class */ (function () {
             _this.barcodes.splice(index, 1);
             _this.cd.detectChanges();
         };
-        this.submitBarInput = function () {
+        this.submitBarInput = function (from) {
+            // from == 0, manual add button; from == 1, from blur event
             if (_this.barcodetemp.length > 0 && _this.barcodetemp.trim() != '') {
-                _this.barcodes.push(_this.barcodetemp);
+                //this.barcodes.push(this.barcodetemp);
+                _this.barcodes.unshift(_this.barcodetemp); // add to start of array
                 _this.barcodetemp = "";
             }
         };
+        this.setFocus = function () {
+            setTimeout(function () {
+                _this.focusInput.setFocus();
+                //this.keyboard.hide();
+            }, 400); //a least 150ms.
+        };
+        this.checkBlur = function () {
+            _this.submitBarInput(1);
+            if (_this.adding) {
+                _this.setFocus();
+            }
+        };
+        this.checkFocus = function () {
+            //console.log('focus');
+        };
+        this.checkChange = function () {
+            //console.log('change');
+        };
+        this.checkInput = function () {
+            //console.log('input');
+        };
         //console.log("BarcodePage loading...");
         this.username = navParams.data;
-        __WEBPACK_IMPORTED_MODULE_4__shared_sdk__["b" /* LoopBackConfig */].setBaseURL(this.configService.apiURL);
-        __WEBPACK_IMPORTED_MODULE_4__shared_sdk__["b" /* LoopBackConfig */].setApiVersion(this.configService.API_VERSION);
+        __WEBPACK_IMPORTED_MODULE_6__shared_sdk__["b" /* LoopBackConfig */].setBaseURL(this.configService.apiURL);
+        __WEBPACK_IMPORTED_MODULE_6__shared_sdk__["b" /* LoopBackConfig */].setApiVersion(this.configService.API_VERSION);
         /* this.sharedService.messageToDriver.subscribe(payload => {
           // this.newMessageCount = this.messageService.getNewMesssageCount();
         }); */
@@ -450,6 +490,7 @@ var BarcodePage = /** @class */ (function () {
         else {
             this.pda_barcodes = this.siteConfig.getSiteConfigYN('PDA_BARCODES');
             this.pda_barcode_is_jobnum = this.siteConfig.getSiteConfigYN('PDA_BARCODE_IS_JOBNUM'); // was BARCODE_SUPP_BCODEISJOBNUM
+            this.pda_disable_manual_entry = this.siteConfig.getSiteConfigYN('PDA_DISABLE_MANUAL_ENTRY');
         }
         this.driverId = this.pdaParams.getDriverId();
         if (this.pda_barcodes != 'Y') {
@@ -514,6 +555,23 @@ var BarcodePage = /** @class */ (function () {
                             _this.my_scan_session_type = 'SCAN ON SESSION';
                             _this.scan_session_id = _this.my_scan_session_type;
                             _this.my_is_scan_on = true;
+                            _this.adding = true;
+                            _this.setFocus();
+                            /*
+                                                        // Clipboard testing
+                                                        //this.clipboard.copy('Hello world');
+                            
+                                                        // the callback to the paste() method has the clipboard contents
+                                                        this.clipboard.paste().then(
+                                                             (resolve: string) => {
+                                                                    //alert(resolve);
+                                                                    this.barcodetemp = resolve;
+                                                                },
+                                                                (reject: string) => {
+                                                                    alert('Error: ' + reject);
+                                                                }
+                                                            );
+                            */
                         }
                     },
                     {
@@ -523,6 +581,8 @@ var BarcodePage = /** @class */ (function () {
                             _this.my_scan_session_type = 'SCAN OFF SESSION';
                             _this.scan_session_id = _this.my_scan_session_type;
                             _this.my_is_scan_on = false;
+                            _this.adding = true;
+                            _this.setFocus();
                         }
                     }
                 ],
@@ -543,15 +603,21 @@ var BarcodePage = /** @class */ (function () {
                     this.useCamera = false;
                     this.usePM80 = true;
                 }
+                if (model == 'PM85') {
+                    this.log.debug("Device is a PM85 " + model);
+                    this.useCamera = false;
+                    this.usePM85 = true;
+                }
                 else {
-                    this.log.debug("Device is NOT !!!! a CipherLab RS30 HEAD scanning NOT Available " + model);
+                    this.log.debug("Device HEAD scanning NOT Available " + model);
                     this.useCamera = true;
                 }
                 if (this.useCipherlab) {
                     window.plugins.CipherlabRS30CordovaPlugin.initialise(function () {
                         window.plugins.CipherlabRS30CordovaPlugin.setReceiveScanCallback(function (data) {
                             _this.log.debug("Cipherlab Callback called scanned = [" + data + "]");
-                            _this.barcodes.push(data);
+                            //this.barcodes.push(data);
+                            _this.barcodes.unshift(data); // add to start of array
                         });
                     });
                 }
@@ -577,18 +643,23 @@ var BarcodePage = /** @class */ (function () {
     BarcodePage.prototype.customTrackBy = function (index, obj) {
         return index;
     };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('focusInput'),
+        __metadata("design:type", Object)
+    ], BarcodePage.prototype, "focusInput", void 0);
     BarcodePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-barcode',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/barcode/barcode.html"*/'<!--\n\n  Generated template for the BarcodePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n    <ion-navbar color="primary">\n\n        <ion-buttons left>\n\n            <span [ngSwitch]="this.sharedService.loginFlag">\n\n                <ion-badge class="common-border" color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n                <ion-badge class="common-border" color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n            </span>\n\n        </ion-buttons>\n\n        <ion-title>BARCODE</ion-title>\n\n        <ion-buttons right>\n\n            <ion-badge class="common-border" color="danger"> Driver # {{driverId}}</ion-badge>\n\n        </ion-buttons>\n\n    </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content [ngClass]="{ \'overflow-scroll\': (desktopBrowserScrolling == true) }" padding>\n\n    <ion-list>\n\n        <span [ngSwitch]="my_is_scan_on"> Scan Session :\n\n            <ion-badge color="secondary" *ngSwitchCase="true"> On</ion-badge>\n\n            <ion-badge color="danger" *ngSwitchCase="false"> Off</ion-badge>\n\n        </span>\n\n        <span></span>\n\n        <p></p>\n\n    </ion-list>\n\n\n\n\n\n    <ion-card round inset class="ion-card" type="item-text-wrap" tappable>\n\n        <ion-row>\n\n            <ion-col>\n\n                <button ion-button full round color="primary" type="reset" (click)="submitBarInput()"\n\n                    [disabled]="!(barcodetemp.trim())">\n\n                    Enter BarCodes Manually\n\n                </button>\n\n            </ion-col>\n\n        </ion-row>\n\n\n\n        <ion-row>\n\n            <ion-col>\n\n                <ion-input type="text" [(ngModel)]="barcodetemp" clearInput placeholder="Enter A Barcode">\n\n                </ion-input>\n\n            </ion-col>\n\n        </ion-row>\n\n    </ion-card>\n\n\n\n\n\n    <br>\n\n    <ion-row>\n\n        <ion-col>\n\n            <button ion-button full round color="secondary" (click)="scan()">\n\n                OR Scan BarCodes\n\n            </button>\n\n        </ion-col>\n\n    </ion-row>\n\n\n\n    <ion-card round inset class="ion-card" type="item-text-wrap" tappable [hidden]="barcodes.length !== 0">\n\n        <ion-row nolines>\n\n            <ion-col>\n\n                <strong>\n\n                    No BarCodes Added.\n\n                </strong>\n\n            </ion-col>\n\n        </ion-row>\n\n    </ion-card>\n\n    <br>\n\n\n\n    <ion-card round inset class="ion-card" type="item-text-wrap" tappable [hidden]="barcodes.length == 0">\n\n        <ion-item-divider class="ion-list-header" color="primary">BarCode List</ion-item-divider>\n\n        <ion-row *ngFor="let barcode of barcodes;let i = index;" no-padding no-margin>\n\n            <ion-col col-2 style="margin:auto;">{{ i+ 1 }}.</ion-col>\n\n            <ion-col col-7 style="margin:auto;">{{barcodes[i]}}</ion-col>\n\n            <ion-col col-3 style="margin:auto;">\n\n                <button ion-button color="danger" (click)="indexRemove(i)">\n\n                    <ion-icon name="remove"></ion-icon>\n\n                </button>\n\n            </ion-col>\n\n        </ion-row>\n\n    </ion-card>\n\n\n\n    <ion-row *ngIf="barcodes.length !== 0">\n\n        <ion-col col-6>\n\n            <button ion-button full round color="secondary" (click)="sharedService.showSpinner();scanSubmit()">\n\n                Submit\n\n            </button>\n\n        </ion-col>\n\n\n\n        <ion-col col-6>\n\n            <button ion-button full round color="danger" (click)="sharedService.showSpinner();scanCancel()">\n\n                Cancel\n\n            </button>\n\n        </ion-col>\n\n    </ion-row>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/barcode/barcode.html"*/,
+            selector: 'page-barcode',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/pages/barcode/barcode.html"*/'<!--\n\n  Generated template for the BarcodePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n    <ion-navbar color="primary">\n\n        <ion-title>BARCODE</ion-title>\n\n        <ion-buttons left>\n\n            <span [ngSwitch]="this.sharedService.loginFlag">\n\n                <ion-badge class="common-border" color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n                <ion-badge class="common-border" color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n            </span>\n\n        </ion-buttons>\n\n        <ion-buttons right>\n\n            <ion-badge class="common-border" color="danger"> Driver # {{driverId}}</ion-badge>\n\n        </ion-buttons>\n\n    </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content [ngClass]="{ \'overflow-scroll\': (desktopBrowserScrolling == true) }" padding>\n\n    <ion-list>\n\n        <span [ngSwitch]="my_is_scan_on"> Scan Session :\n\n            <ion-badge color="secondary" *ngSwitchCase="true"> On</ion-badge>\n\n            <ion-badge color="danger" *ngSwitchCase="false"> Off</ion-badge>\n\n        </span>\n\n				<span id="barcode_count">\n\n					Barcodes: {{barcodes.length}}\n\n        </span>\n\n    </ion-list>\n\n\n\n\n\n    <ion-card round inset class="ion-card" type="item-text-wrap" tappable>\n\n        <ion-row>\n\n            <ion-col col-9>\n\n                <ion-input #focusInput type="text" [(ngModel)]="barcodetemp" placeholder="Enter A Barcode" (ionBlur)="checkBlur()" (ionChange)="checkChange()" (ionInput)="checkInput()" (ionFocus)="checkFocus()">\n\n<!--\n\n                <ion-input #focusInput type="text" [(ngModel)]="barcodetemp" placeholder="Enter A Barcode" autofocus>\n\n-->\n\n                </ion-input>\n\n            </ion-col>\n\n            <ion-col col-3>\n\n                <button ion-button full round color="primary" type="reset" (click)="submitBarInput(0)"\n\n                    [disabled]="pda_disable_manual_entry == \'Y\'">\n\n                    Add\n\n                </button>\n\n            </ion-col>\n\n        </ion-row>\n\n\n\n<!--\n\n        <ion-row>\n\n            <ion-col>\n\n                <ion-input #focusInput type="text" [(ngModel)]="barcodetemp" placeholder="Enter A Barcode" (ionBlur)="submitBarInput(1)">\n\n                </ion-input>\n\n            </ion-col>\n\n        </ion-row>\n\n-->\n\n    </ion-card>\n\n\n\n    <ion-row [hidden]="useCamera == false" >\n\n        <ion-col>\n\n            <button ion-button full round color="secondary" (click)="scan()">\n\n                Use camera to scan\n\n            </button>\n\n        </ion-col>\n\n    </ion-row>\n\n\n\n    <ion-card round inset class="ion-card" type="item-text-wrap" tappable [hidden]="barcodes.length !== 0">\n\n        <ion-row nolines>\n\n            <ion-col>\n\n                <strong>\n\n                    No BarCodes Added.\n\n                </strong>\n\n            </ion-col>\n\n        </ion-row>\n\n    </ion-card>\n\n\n\n    <ion-row *ngIf="barcodes.length !== 0">\n\n        <ion-col col-6>\n\n            <button ion-button full round color="secondary" (click)="sharedService.showSpinner();scanSubmit()">\n\n                Submit\n\n            </button>\n\n        </ion-col>\n\n\n\n        <ion-col col-6>\n\n            <button ion-button full round color="danger" (click)="sharedService.showSpinner();scanCancel()">\n\n                Cancel\n\n            </button>\n\n        </ion-col>\n\n    </ion-row>\n\n\n\n    <ion-card round inset class="ion-card" type="item-text-wrap" tappable [hidden]="barcodes.length == 0">\n\n        <!-- <ion-item-divider class="ion-list-header" color="primary">{{barcodes.length}} Barcodes</ion-item-divider> -->\n\n        <ion-row *ngFor="let barcode of barcodes;let i = index;" no-padding no-margin>\n\n            <ion-col col-2 style="margin:auto;">{{ i+ 1 }}.</ion-col>\n\n            <ion-col col-7 style="margin:auto;">{{barcodes[i]}}</ion-col>\n\n            <ion-col col-3 style="margin:auto;">\n\n                <button ion-button color="danger" (click)="indexRemove(i)">\n\n                    <ion-icon name="remove"></ion-icon>\n\n                </button>\n\n            </ion-col>\n\n        </ion-row>\n\n    </ion-card>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/pages/barcode/barcode.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */], __WEBPACK_IMPORTED_MODULE_5__providers_config_service_config_service__["a" /* ConfigServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_7__providers_pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_8__providers_siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */],
-            __WEBPACK_IMPORTED_MODULE_6__providers_log_service_log_service__["a" /* LogServiceProvider */], __WEBPACK_IMPORTED_MODULE_9__providers_base_service_base_service__["a" /* BaseServiceProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */],
-            __WEBPACK_IMPORTED_MODULE_10__providers_platform_ready_service_platform_ready_service__["a" /* PlatformReadyServiceProvider */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__["a" /* Device */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */], __WEBPACK_IMPORTED_MODULE_7__providers_config_service_config_service__["a" /* ConfigServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_9__providers_pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_10__providers_siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_8__providers_log_service_log_service__["a" /* LogServiceProvider */], __WEBPACK_IMPORTED_MODULE_11__providers_base_service_base_service__["a" /* BaseServiceProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */],
+            __WEBPACK_IMPORTED_MODULE_12__providers_platform_ready_service_platform_ready_service__["a" /* PlatformReadyServiceProvider */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_device__["a" /* Device */],
             __WEBPACK_IMPORTED_MODULE_3__ionic_native_barcode_scanner__["a" /* BarcodeScanner */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* ModalController */],
-            __WEBPACK_IMPORTED_MODULE_11__providers_shared_service_shared_service__["a" /* SharedServiceProvider */], __WEBPACK_IMPORTED_MODULE_12__providers_message_service_message_service__["a" /* MessageServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_13__providers_shared_service_shared_service__["a" /* SharedServiceProvider */], __WEBPACK_IMPORTED_MODULE_14__providers_message_service_message_service__["a" /* MessageServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"],
-            __WEBPACK_IMPORTED_MODULE_13__providers_barcode_replication_service_barcode_replication_service__["a" /* BarcodeReplicationServiceProvider */]])
+            __WEBPACK_IMPORTED_MODULE_15__providers_barcode_replication_service_barcode_replication_service__["a" /* BarcodeReplicationServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_4__ionic_native_keyboard__["a" /* Keyboard */], __WEBPACK_IMPORTED_MODULE_5__ionic_native_clipboard__["a" /* Clipboard */]])
     ], BarcodePage);
     return BarcodePage;
 }());

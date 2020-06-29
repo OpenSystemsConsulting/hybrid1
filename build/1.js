@@ -1,6 +1,6 @@
 webpackJsonp([1],{
 
-/***/ 836:
+/***/ 838:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,8 +8,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GpsPageModule", function() { return GpsPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gps__ = __webpack_require__(860);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pipes_pipes_module__ = __webpack_require__(848);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gps__ = __webpack_require__(862);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pipes_pipes_module__ = __webpack_require__(850);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -44,17 +44,17 @@ var GpsPageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 848:
+/***/ 850:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PipesModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__change_display_from_change_display_from__ = __webpack_require__(849);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__change_display_to_change_display_to__ = __webpack_require__(850);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__change_display_svc_change_display_svc__ = __webpack_require__(851);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gpsdate_gpsdate__ = __webpack_require__(852);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__keys_keys__ = __webpack_require__(853);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__change_display_from_change_display_from__ = __webpack_require__(851);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__change_display_to_change_display_to__ = __webpack_require__(852);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__change_display_svc_change_display_svc__ = __webpack_require__(853);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gpsdate_gpsdate__ = __webpack_require__(854);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__keys_keys__ = __webpack_require__(855);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -92,7 +92,7 @@ var PipesModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 849:
+/***/ 851:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -133,7 +133,7 @@ var ChangeDisplayFromPipe = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 850:
+/***/ 852:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -174,7 +174,7 @@ var ChangeDisplayToPipe = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 851:
+/***/ 853:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -216,7 +216,7 @@ var ChangeDisplaySvcPipe = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 852:
+/***/ 854:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -261,7 +261,7 @@ var GpsdatePipe = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 853:
+/***/ 855:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -304,14 +304,14 @@ var KeysPipe = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 860:
+/***/ 862:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GpsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__ = __webpack_require__(210);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_config_service_config_service__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_pdaparams_service_pdaparams_service__ = __webpack_require__(12);
@@ -419,7 +419,7 @@ var GpsPage = /** @class */ (function () {
     };
     GpsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-gps',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/gps/gps.html"*/'<!--\n\n  Generated template for the GpsPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar color="primary">\n\n    <ion-buttons left>\n\n      <span [ngSwitch]="this.sharedService.loginFlag">\n\n        <ion-badge class="common-border" color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n        <ion-badge class="common-border" color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n      </span>\n\n    </ion-buttons>\n\n    <ion-title>GPS</ion-title>\n\n    <ion-buttons right>\n\n      <!-- <ion-badge class="common-border" color="danger" *ngIf="newMessageCount">{{newMessageCount}}</ion-badge> -->\n\n      <ion-badge class="common-border" color="danger"> Driver # {{driverId}}</ion-badge>\n\n    </ion-buttons>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n\n\n<ion-content padding text-wrap>\n\n  <ion-card [hidden]="!showResult()">\n\n    <ion-list>\n\n      <ion-list-header class="ion-list-header" color="primary">\n\n        Current position\n\n      </ion-list-header>\n\n      <!-- This should return one row only in a production environment -->\n\n\n\n      <ion-item class="item">\n\n        Latitude:\n\n        <span class="item-note"> {{ position.coords.latitude }} </span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Longitude:\n\n        <span class="item-note"> {{ position.coords.longitude }}</span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Altitude:\n\n        <span class="item-note"> {{ position.coords.altitude }}</span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Accuracy:\n\n        <span class="item-note"> {{ position.coords.accuracy }}</span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Altitude Accuracy:\n\n        <span class="item-note"> {{ position.coords.altitudeAccuracy }}</span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Heading:\n\n        <span class="item-note"> {{ position.coords.heading }}</span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Speed:\n\n        <span class="item-note"> {{ position.coords.speed }} </span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Timestamp:\n\n        <span class="item-note"> {{ timestamp }} </span>\n\n      </ion-item>\n\n    </ion-list>\n\n  </ion-card>\n\n\n\n  <ion-card [hidden]="showResult()">\n\n    <ion-list>\n\n      <ion-list-header class="ion-list-header" color="primary">\n\n        Oops!! Something went wrong...\n\n      </ion-list-header>\n\n\n\n      <ion-item class="bodytext" >\n\n        <b> {{error}}</b>\n\n        <hr>\n\n\n\n        Please try the following:\n\n        <ul>\n\n          <li>Check if your mobile\'s location is turned on.</li>\n\n          <li>Check if you have given location access to the New TPLUS app.</li>\n\n          <li>Restart the app.</li>\n\n        </ul>     \n\n\n\n      </ion-item>\n\n    </ion-list>\n\n  </ion-card>\n\n\n\n\n\n  <ion-card *ngIf="gpshistory != \'\'">\n\n    <ion-list>\n\n      <ion-list-header class="ion-list-header" color="primary">\n\n        GPS History\n\n      </ion-list-header>\n\n      <!-- <ion-item class=item *ngFor="let gps of gpshistory | reverse"> -->\n\n      <ion-item class=item *ngFor="let gps of gpshistory">\n\n        <!-- {{ gps.gps_timestamp | gpsdate }}: {{ gps.gps_latitude }} , {{ gps.gps_longitude }} -->\n\n        {{ gps.gps_timestamp | gpsdate }}: {{ gps.gps_latitude }} , {{ gps.gps_longitude }}\n\n      </ion-item>\n\n    </ion-list>\n\n  </ion-card>\n\n\n\n  <ion-card id="debug" *ngIf="debug">\n\n    <ion-list>\n\n      <ion-item>\n\n        <button ion-button item-left color="secondary">BG GPS Start</button>\n\n        <button ion-button item-right color="danger">BG GPS Stop</button>\n\n      </ion-item>\n\n    </ion-list>\n\n  </ion-card>\n\n</ion-content>'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/gps/gps.html"*/,
+            selector: 'page-gps',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/pages/gps/gps.html"*/'<!--\n\n  Generated template for the GpsPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar color="primary">\n\n    <ion-buttons left>\n\n      <span [ngSwitch]="this.sharedService.loginFlag">\n\n        <ion-badge class="common-border" color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n        <ion-badge class="common-border" color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n      </span>\n\n    </ion-buttons>\n\n    <ion-title>GPS</ion-title>\n\n    <ion-buttons right>\n\n      <!-- <ion-badge class="common-border" color="danger" *ngIf="newMessageCount">{{newMessageCount}}</ion-badge> -->\n\n      <ion-badge class="common-border" color="danger"> Driver # {{driverId}}</ion-badge>\n\n    </ion-buttons>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n\n\n<ion-content padding text-wrap>\n\n  <ion-card [hidden]="!showResult()">\n\n    <ion-list>\n\n      <ion-list-header class="ion-list-header" color="primary">\n\n        Current position\n\n      </ion-list-header>\n\n      <!-- This should return one row only in a production environment -->\n\n\n\n      <ion-item class="item">\n\n        Latitude:\n\n        <span class="item-note"> {{ position.coords.latitude }} </span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Longitude:\n\n        <span class="item-note"> {{ position.coords.longitude }}</span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Altitude:\n\n        <span class="item-note"> {{ position.coords.altitude }}</span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Accuracy:\n\n        <span class="item-note"> {{ position.coords.accuracy }}</span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Altitude Accuracy:\n\n        <span class="item-note"> {{ position.coords.altitudeAccuracy }}</span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Heading:\n\n        <span class="item-note"> {{ position.coords.heading }}</span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Speed:\n\n        <span class="item-note"> {{ position.coords.speed }} </span>\n\n      </ion-item>\n\n      <ion-item class="item">\n\n        Timestamp:\n\n        <span class="item-note"> {{ timestamp }} </span>\n\n      </ion-item>\n\n    </ion-list>\n\n  </ion-card>\n\n\n\n  <ion-card [hidden]="showResult()">\n\n    <ion-list>\n\n      <ion-list-header class="ion-list-header" color="primary">\n\n        Oops!! Something went wrong...\n\n      </ion-list-header>\n\n\n\n      <ion-item class="bodytext" >\n\n        <b> {{error}}</b>\n\n        <hr>\n\n\n\n        Please try the following:\n\n        <ul>\n\n          <li>Check if your mobile\'s location is turned on.</li>\n\n          <li>Check if you have given location access to the New TPLUS app.</li>\n\n          <li>Restart the app.</li>\n\n        </ul>     \n\n\n\n      </ion-item>\n\n    </ion-list>\n\n  </ion-card>\n\n\n\n\n\n  <ion-card *ngIf="gpshistory != \'\'">\n\n    <ion-list>\n\n      <ion-list-header class="ion-list-header" color="primary">\n\n        GPS History\n\n      </ion-list-header>\n\n      <!-- <ion-item class=item *ngFor="let gps of gpshistory | reverse"> -->\n\n      <ion-item class=item *ngFor="let gps of gpshistory">\n\n        <!-- {{ gps.gps_timestamp | gpsdate }}: {{ gps.gps_latitude }} , {{ gps.gps_longitude }} -->\n\n        {{ gps.gps_timestamp | gpsdate }}: {{ gps.gps_latitude }} , {{ gps.gps_longitude }}\n\n      </ion-item>\n\n    </ion-list>\n\n  </ion-card>\n\n\n\n  <ion-card id="debug" *ngIf="debug">\n\n    <ion-list>\n\n      <ion-item>\n\n        <button ion-button item-left color="secondary">BG GPS Start</button>\n\n        <button ion-button item-right color="danger">BG GPS Stop</button>\n\n      </ion-item>\n\n    </ion-list>\n\n  </ion-card>\n\n</ion-content>'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/pages/gps/gps.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
             __WEBPACK_IMPORTED_MODULE_5__providers_pdaparams_service_pdaparams_service__["a" /* PdaparamsServiceProvider */], __WEBPACK_IMPORTED_MODULE_4__providers_config_service_config_service__["a" /* ConfigServiceProvider */],

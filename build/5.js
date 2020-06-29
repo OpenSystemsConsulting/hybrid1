@@ -1,6 +1,6 @@
 webpackJsonp([5],{
 
-/***/ 847:
+/***/ 849:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TabsPageModule", function() { return TabsPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs__ = __webpack_require__(877);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs__ = __webpack_require__(879);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -41,7 +41,7 @@ var TabsPageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 877:
+/***/ 879:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -53,7 +53,7 @@ var TabsPageModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_sdk__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_login_service_login_service__ = __webpack_require__(468);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_login_service_login_service__ = __webpack_require__(469);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_config_service_config_service__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_util_service_util_service__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_shared_service_shared_service__ = __webpack_require__(23);
@@ -164,7 +164,7 @@ var TabsPage = /** @class */ (function () {
     };
     TabsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-tabs',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/tabs/tabs.html"*/'<ion-tabs name="myTabsNav" color="primary">\n\n  <ion-tab [root]="tab1Root" [rootParams]="username" tabTitle="Jobs" tabIcon="home" >\n\n  </ion-tab>\n\n  <ion-tab [root]="tab2Root" [rootParams]="username" tabTitle="Device" tabIcon="construct" >\n\n  </ion-tab>\n\n  <ion-tab [root]="tab3Root" [rootParams]="username" tabTitle="GPS" tabIcon="pin" ></ion-tab>\n\n  <ion-tab [root]="tab4Root" [rootParams]="username" tabTitle="PDA" tabIcon="cog" ></ion-tab>\n\n  <ion-tab [root]="tab5Root" [rootParams]="username" tabTitle="JSEA" tabIcon="book" >\n\n  </ion-tab>\n\n  <ion-tab [root]="tab6Root" [rootParams]="username" tabTitle="Msgs" tabIcon="mail"\n\n    [tabBadge]="sharedService.newMsgCount>0 ? sharedService.newMsgCount : null" tabBadgeStyle="danger"\n\n    ></ion-tab>\n\n  <ion-tab [root]="tab7Root" [rootParams]="username" tabTitle="Images" tabIcon="images" >\n\n  </ion-tab>\n\n  <ion-tab [root]="tab8Root" [rootParams]="username" tabTitle="Scan" tabIcon="barcode" >\n\n  </ion-tab>\n\n  <!--  <ion-tab [root]="tab10Root" [rootParams]="username" tabTitle="Log" tabIcon="log-in"></ion-tab> -->\n\n</ion-tabs>'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/tabs/tabs.html"*/
+            selector: 'page-tabs',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/pages/tabs/tabs.html"*/'<ion-tabs name="myTabsNav" color="primary">\n\n  <ion-tab [root]="tab1Root" [rootParams]="username" tabTitle="Jobs" tabIcon="home" >\n\n  </ion-tab>\n\n  <ion-tab [root]="tab2Root" [rootParams]="username" tabTitle="Device" tabIcon="construct" >\n\n  </ion-tab>\n\n  <ion-tab [root]="tab3Root" [rootParams]="username" tabTitle="GPS" tabIcon="pin" ></ion-tab>\n\n  <ion-tab [root]="tab4Root" [rootParams]="username" tabTitle="PDA" tabIcon="cog" ></ion-tab>\n\n  <ion-tab [root]="tab5Root" [rootParams]="username" tabTitle="JSEA" tabIcon="book" >\n\n  </ion-tab>\n\n  <ion-tab [root]="tab6Root" [rootParams]="username" tabTitle="Msgs" tabIcon="mail"\n\n    [tabBadge]="sharedService.newMsgCount>0 ? sharedService.newMsgCount : null" tabBadgeStyle="danger"\n\n    ></ion-tab>\n\n  <ion-tab [root]="tab7Root" [rootParams]="username" tabTitle="Images" tabIcon="images" >\n\n  </ion-tab>\n\n  <ion-tab [root]="tab8Root" [rootParams]="username" tabTitle="Scan" tabIcon="barcode" >\n\n  </ion-tab>\n\n  <!--  <ion-tab [root]="tab10Root" [rootParams]="username" tabTitle="Log" tabIcon="log-in"></ion-tab> -->\n\n</ion-tabs>'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/pages/tabs/tabs.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_5__providers_login_service_login_service__["a" /* LoginServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_6__providers_config_service_config_service__["a" /* ConfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_7__providers_util_service_util_service__["a" /* UtilServiceProvider */],

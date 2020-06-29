@@ -1,6 +1,6 @@
 webpackJsonp([12],{
 
-/***/ 838:
+/***/ 840:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ImageTextPageModule", function() { return ImageTextPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__image_text__ = __webpack_require__(866);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__image_text__ = __webpack_require__(868);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -41,7 +41,7 @@ var ImageTextPageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 866:
+/***/ 868:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -112,7 +112,7 @@ var ImageTextPage = /** @class */ (function () {
     };
     ImageTextPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-image-text',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/image-text/image-text.html"*/'<!--\n\n  Generated template for the ImageTextPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n\n\n\n\n<ion-header>\n\n  <!--  <h1 class="title">Notes for Job</h1> -->\n\n  <ion-navbar color="primary">\n\n      <ion-buttons left>\n\n          <span [ngSwitch]="this.sharedService.loginFlag">      \n\n            <ion-badge class="common-border"  color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n            <ion-badge class="common-border"  color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n          </span>\n\n        </ion-buttons>\n\n    <ion-title>Notes for Image</ion-title>\n\n    <ion-buttons right>\n\n      <!-- <ion-badge class="common-border" color="danger" *ngIf="newMessageCount">{{newMessageCount}}</ion-badge> -->\n\n      <ion-badge class="common-border" color="danger"> Driver #  {{driverId}}</ion-badge>\n\n  </ion-buttons>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <ion-card>\n\n    <ion-list>\n\n      <ion-item>\n\n        <ion-textarea rows="6" cols="50" expanding-textarea name="imagemessage" [(ngModel)]="photoMessage" placeholder="Enter any comments for your image here."\n\n          autofocus required>\n\n        </ion-textarea>\n\n      </ion-item>\n\n      <ion-item>\n\n\n\n        <ion-row>\n\n          <ion-col col-4>\n\n            <button ion-button color="secondary" (click)="sharedService.showSpinner();save()">Save</button>\n\n          </ion-col>\n\n          <ion-col col-4>\n\n            <button ion-button color="light" (click)="clear()">Clear</button>\n\n          </ion-col>\n\n          <ion-col col-4>\n\n            <button ion-button color="danger" (click)="sharedService.showSpinner();closeModal()">Cancel</button>\n\n          </ion-col>\n\n        </ion-row>\n\n\n\n\n\n      </ion-item>\n\n    </ion-list>\n\n  </ion-card>\n\n</ion-content>'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/image-text/image-text.html"*/,
+            selector: 'page-image-text',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/pages/image-text/image-text.html"*/'<!--\n\n  Generated template for the ImageTextPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n\n\n\n\n<ion-header>\n\n  <!--  <h1 class="title">Notes for Job</h1> -->\n\n  <ion-navbar color="primary">\n\n      <ion-buttons left>\n\n          <span [ngSwitch]="this.sharedService.loginFlag">      \n\n            <ion-badge class="common-border"  color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n            <ion-badge class="common-border"  color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n          </span>\n\n        </ion-buttons>\n\n    <ion-title>Notes for Image</ion-title>\n\n    <ion-buttons right>\n\n      <!-- <ion-badge class="common-border" color="danger" *ngIf="newMessageCount">{{newMessageCount}}</ion-badge> -->\n\n      <ion-badge class="common-border" color="danger"> Driver #  {{driverId}}</ion-badge>\n\n  </ion-buttons>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <ion-card>\n\n    <ion-list>\n\n      <ion-item>\n\n        <ion-textarea rows="6" cols="50" expanding-textarea name="imagemessage" [(ngModel)]="photoMessage" placeholder="Enter any comments for your image here."\n\n          autofocus required>\n\n        </ion-textarea>\n\n      </ion-item>\n\n      <ion-item>\n\n\n\n        <ion-row>\n\n          <ion-col col-4>\n\n            <button ion-button color="secondary" (click)="sharedService.showSpinner();save()">Save</button>\n\n          </ion-col>\n\n          <ion-col col-4>\n\n            <button ion-button color="light" (click)="clear()">Clear</button>\n\n          </ion-col>\n\n          <ion-col col-4>\n\n            <button ion-button color="danger" (click)="sharedService.showSpinner();closeModal()">Cancel</button>\n\n          </ion-col>\n\n        </ion-row>\n\n\n\n\n\n      </ion-item>\n\n    </ion-list>\n\n  </ion-card>\n\n</ion-content>'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/pages/image-text/image-text.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_4__providers_image_file_service_image_file_service__["a" /* ImageFileServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* ViewController */],

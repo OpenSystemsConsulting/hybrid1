@@ -1,6 +1,6 @@
 webpackJsonp([3],{
 
-/***/ 846:
+/***/ 848:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,10 +8,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignaturePageModule", function() { return SignaturePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__signature__ = __webpack_require__(874);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_signaturepad__ = __webpack_require__(876);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__signature__ = __webpack_require__(876);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_signaturepad__ = __webpack_require__(878);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_signaturepad___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_angular2_signaturepad__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_components_module__ = __webpack_require__(854);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_components_module__ = __webpack_require__(856);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -48,13 +48,13 @@ var SignaturePageModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 854:
+/***/ 856:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ComponentsModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__camera_button_camera_button__ = __webpack_require__(855);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__camera_button_camera_button__ = __webpack_require__(857);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(33);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -82,7 +82,7 @@ var ComponentsModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 855:
+/***/ 857:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -192,7 +192,7 @@ var CameraButtonComponent = /** @class */ (function () {
     ], CameraButtonComponent.prototype, "metadata", void 0);
     CameraButtonComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'camera-button',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/components/camera-button/camera-button.html"*/'<!-- Generated template for the CameraButtonComponent component -->\n\n<button ion-button class="fontsize" name="myPicture" [(ngModel)]="myPicture" (click)="takephoto(metadata.legid)" ngDefaultControl>\n\n  <!-- <ion-icon name="camera"></ion-icon> &nbsp; --> Photo\n\n</button>\n\n'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/components/camera-button/camera-button.html"*/
+            selector: 'camera-button',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/components/camera-button/camera-button.html"*/'<!-- Generated template for the CameraButtonComponent component -->\n\n<button ion-button class="fontsize" name="myPicture" [(ngModel)]="myPicture" (click)="takephoto(metadata.legid)" ngDefaultControl>\n\n  <!-- <ion-icon name="camera"></ion-icon> &nbsp; --> Photo\n\n</button>\n\n'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/components/camera-button/camera-button.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* ModalController */], __WEBPACK_IMPORTED_MODULE_3__providers_image_file_service_image_file_service__["a" /* ImageFileServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_4__providers_image_service_image_service__["a" /* ImageServiceProvider */], __WEBPACK_IMPORTED_MODULE_5__providers_config_service_config_service__["a" /* ConfigServiceProvider */],
@@ -206,7 +206,7 @@ var CameraButtonComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 856:
+/***/ 858:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -222,7 +222,7 @@ var SignaturePad = (function () {
         this.onEndEvent = new core_1.EventEmitter();
     }
     SignaturePad.prototype.ngAfterContentInit = function () {
-        var sp = __webpack_require__(875)['default'];
+        var sp = __webpack_require__(877)['default'];
         var canvas = this.elementRef.nativeElement.querySelector('canvas');
         if (this.options['canvasHeight']) {
             canvas.height = this.options['canvasHeight'];
@@ -321,14 +321,14 @@ exports.SignaturePad = SignaturePad;
 
 /***/ }),
 
-/***/ 874:
+/***/ 876:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SignaturePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_signaturepad_signature_pad__ = __webpack_require__(856);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_signaturepad_signature_pad__ = __webpack_require__(858);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_signaturepad_signature_pad___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_angular2_signaturepad_signature_pad__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_sdk__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_config_service_config_service__ = __webpack_require__(60);
@@ -558,7 +558,7 @@ var SignaturePage = /** @class */ (function () {
     ], SignaturePage.prototype, "signaturePad", void 0);
     SignaturePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-signature',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/signature/signature.html"*/'<!--\n\n  Generated template for the SignaturePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n  <ion-navbar color="primary">\n\n    <ion-buttons left>\n\n      <span [ngSwitch]="this.sharedService.loginFlag">\n\n        <ion-badge class="common-border" color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n        <ion-badge class="common-border" color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n      </span>\n\n    </ion-buttons>\n\n    <ion-title>Add Signature</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n\n\n\n\n<ion-content scroll="false" padding-left padding-right >\n\n  <div class="card list">\n\n\n\n    <ion-item *ngIf=showDeliverToBase class="item item-body ">\n\n      <ion-label>Deliver to base</ion-label>\n\n      <ion-toggle [(ngModel)]="sharedService.deliverToBase" (ngModelChange)="updatedeliverToBase()"></ion-toggle>\n\n    </ion-item>\n\n\n\n    <div class="item item-body signature-item-body">\n\n      <ion-label> Enter your POD NAME below (jobs: {{numJobs}}): </ion-label>\n\n      <ion-input class="inputbg" type="text" name="podname" [(ngModel)]="signaturePadModel.podname" required>\n\n      </ion-input>\n\n    </div>\n\n\n\n    <!-- <div class="item item-body signature-item-body">\n\n      Use finger or stylus to sign below\n\n    </div> -->\n\n\n\n    <!--<div *ngIf="( pdaImages && property.property == \'mobjobNumber\' )"> -->\n\n  \n\n\n\n    <ion-row align-items-center *ngIf=!barcodeSignOff>\n\n      <!--<camera-button [metadata]="{basejob: property.basejob, legid: property.legid, legStatus: property.legStatus}"> -->\n\n     \n\n			<ion-col col-3>\n\n				<camera-button [metadata]="metadata"> </camera-button>\n\n			</ion-col>\n\n			<ion-col col-9>\n\n				Use finger/stylus to sign below       \n\n			</ion-col>\n\n          \n\n    </ion-row>\n\n\n\n    <signature-pad [options]="signaturePadOptions" id="signature-canvas" class="padding-horizontal item"\n\n      style="width: 100%;">\n\n\n\n    </signature-pad>\n\n\n\n    <div class="item item-checkbox">\n\n      <label class="checkbox">\n\n        <input type="checkbox" [(ngModel)]="signaturePadModel.signatureConfirm" />\n\n        <b>I accept the signature above</b>\n\n        <br>\n\n      </label>\n\n    </div>\n\n\n\n<!--\n\n    <ion-row align-items-center> \n\n      <ion-col col-6 align-self-center> \n\n						<ion-label position="right">Break time (mins)</ion-label>\n\n						<ion-input></ion-input>\n\n      </ion-col>\n\n      <ion-col col-6 align-self-center> \n\n						<ion-label position="fixed">Return time (mins)</ion-label>\n\n						<ion-input></ion-input>\n\n      </ion-col>\n\n    </ion-row>\n\n-->\n\n    <ion-row align-items-center> \n\n      <ion-col col-3 align-self-center> \n\n        <p style="margin: 2px"> \n\n          Break Time (Mins):\n\n        </p>   \n\n      </ion-col>\n\n      <ion-col col-3 align-self-center>\n\n          <!-- <ion-label fixed>BreakTime (Mins):</ion-label>-->\n\n            <ion-input  type="text" value="" name="breakmins" [(ngModel)]="signaturePadModel.breakmins"> </ion-input>\n\n      </ion-col>\n\n      <ion-col col-3 align-self-center> \n\n          <p style="margin: 2px">\n\n            Return Time (Mins):\n\n          </p>   \n\n        </ion-col>\n\n      <ion-col col-3 align-self-center>\n\n            <ion-input type="text" value="" name="returnmins" [(ngModel)]="signaturePadModel.returnmins">  </ion-input>\n\n      </ion-col>\n\n    </ion-row>\n\n\n\n\n\n    <!--  <ion-list>\n\n      <ion-item>\n\n        <ion-label> I accept the signature above</ion-label>\n\n        <ion-checkbox [(ngModel)]="signaturePadModel.signatureConfirm"  [checked]="signaturePadModel.signatureConfirm"></ion-checkbox>\n\n      </ion-item>\n\n    </ion-list> -->\n\n\n\n\n\n  </div>\n\n\n\n    <ion-row>\n\n      <ion-col col-4>\n\n        <button ion-button color="secondary" (click)="sharedService.showSpinner();save()">\n\n          Accept\n\n        </button>\n\n      </ion-col>\n\n      <ion-col col-4>\n\n        <button ion-button color="light" (click)="clear()">Clear</button>\n\n      </ion-col>\n\n      <ion-col col-4>\n\n        <button ion-button color="danger" (click)="sharedService.showSpinner();drawCancel()">Cancel</button>\n\n      </ion-col>\n\n    </ion-row>\n\n</ion-content>\n\n'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS3/client/src/pages/signature/signature.html"*/,
+            selector: 'page-signature',template:/*ion-inline-start:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/pages/signature/signature.html"*/'<!--\n\n  Generated template for the SignaturePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n  <ion-navbar color="primary">\n\n    <ion-buttons left>\n\n      <span [ngSwitch]="this.sharedService.loginFlag">\n\n        <ion-badge class="common-border" color="secondary" *ngSwitchCase="true"> Logged In</ion-badge>\n\n        <ion-badge class="common-border" color="danger" *ngSwitchCase="false"> Logged Off</ion-badge>\n\n      </span>\n\n    </ion-buttons>\n\n    <ion-title>Add Signature</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n\n\n\n\n<ion-content scroll="false" padding-left padding-right >\n\n  <div class="card list">\n\n\n\n    <ion-item *ngIf=showDeliverToBase class="item item-body ">\n\n      <ion-label>Deliver to base</ion-label>\n\n      <ion-toggle [(ngModel)]="sharedService.deliverToBase" (ngModelChange)="updatedeliverToBase()"></ion-toggle>\n\n    </ion-item>\n\n\n\n    <div class="item item-body signature-item-body">\n\n      <ion-label> Enter your POD NAME below (jobs: {{numJobs}}): </ion-label>\n\n      <ion-input class="inputbg" type="text" name="podname" [(ngModel)]="signaturePadModel.podname" required>\n\n      </ion-input>\n\n    </div>\n\n\n\n    <!-- <div class="item item-body signature-item-body">\n\n      Use finger or stylus to sign below\n\n    </div> -->\n\n\n\n    <!--<div *ngIf="( pdaImages && property.property == \'mobjobNumber\' )"> -->\n\n  \n\n\n\n    <ion-row align-items-center *ngIf=!barcodeSignOff>\n\n      <!--<camera-button [metadata]="{basejob: property.basejob, legid: property.legid, legStatus: property.legStatus}"> -->\n\n     \n\n			<ion-col col-3>\n\n				<camera-button [metadata]="metadata"> </camera-button>\n\n			</ion-col>\n\n			<ion-col col-9>\n\n				Use finger/stylus to sign below       \n\n			</ion-col>\n\n          \n\n    </ion-row>\n\n\n\n    <signature-pad [options]="signaturePadOptions" id="signature-canvas" class="padding-horizontal item"\n\n      style="width: 100%;">\n\n\n\n    </signature-pad>\n\n\n\n    <div class="item item-checkbox">\n\n      <label class="checkbox">\n\n        <input type="checkbox" [(ngModel)]="signaturePadModel.signatureConfirm" />\n\n        <b>I accept the signature above</b>\n\n        <br>\n\n      </label>\n\n    </div>\n\n\n\n<!--\n\n    <ion-row align-items-center> \n\n      <ion-col col-6 align-self-center> \n\n						<ion-label position="right">Break time (mins)</ion-label>\n\n						<ion-input></ion-input>\n\n      </ion-col>\n\n      <ion-col col-6 align-self-center> \n\n						<ion-label position="fixed">Return time (mins)</ion-label>\n\n						<ion-input></ion-input>\n\n      </ion-col>\n\n    </ion-row>\n\n-->\n\n    <ion-row align-items-center> \n\n      <ion-col col-3 align-self-center> \n\n        <p style="margin: 2px"> \n\n          Break Time (Mins):\n\n        </p>   \n\n      </ion-col>\n\n      <ion-col col-3 align-self-center>\n\n          <!-- <ion-label fixed>BreakTime (Mins):</ion-label>-->\n\n            <ion-input  type="text" value="" name="breakmins" [(ngModel)]="signaturePadModel.breakmins"> </ion-input>\n\n      </ion-col>\n\n      <ion-col col-3 align-self-center> \n\n          <p style="margin: 2px">\n\n            Return Time (Mins):\n\n          </p>   \n\n        </ion-col>\n\n      <ion-col col-3 align-self-center>\n\n            <ion-input type="text" value="" name="returnmins" [(ngModel)]="signaturePadModel.returnmins">  </ion-input>\n\n      </ion-col>\n\n    </ion-row>\n\n\n\n\n\n    <!--  <ion-list>\n\n      <ion-item>\n\n        <ion-label> I accept the signature above</ion-label>\n\n        <ion-checkbox [(ngModel)]="signaturePadModel.signatureConfirm"  [checked]="signaturePadModel.signatureConfirm"></ion-checkbox>\n\n      </ion-item>\n\n    </ion-list> -->\n\n\n\n\n\n  </div>\n\n\n\n    <ion-row>\n\n      <ion-col col-4>\n\n        <button ion-button color="secondary" (click)="sharedService.showSpinner();save()">\n\n          Accept\n\n        </button>\n\n      </ion-col>\n\n      <ion-col col-4>\n\n        <button ion-button color="light" (click)="clear()">Clear</button>\n\n      </ion-col>\n\n      <ion-col col-4>\n\n        <button ion-button color="danger" (click)="sharedService.showSpinner();drawCancel()">Cancel</button>\n\n      </ion-col>\n\n    </ion-row>\n\n</ion-content>\n\n'/*ion-inline-end:"/app/strongloop/tplus_mobile_riyaz/TPLUS_lt/client/src/pages/signature/signature.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */],
             __WEBPACK_IMPORTED_MODULE_4__providers_config_service_config_service__["a" /* ConfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_6__providers_shared_service_shared_service__["a" /* SharedServiceProvider */], __WEBPACK_IMPORTED_MODULE_7__providers_siteconfig_service_siteconfig_service__["a" /* SiteconfigServiceProvider */], __WEBPACK_IMPORTED_MODULE_8__ionic_native_device__["a" /* Device */],
@@ -571,7 +571,7 @@ var SignaturePage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 875:
+/***/ 877:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1182,13 +1182,13 @@ SignaturePad.prototype.toData = function () {
 
 /***/ }),
 
-/***/ 876:
+/***/ 878:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var core_1 = __webpack_require__(0);
-var signature_pad_1 = __webpack_require__(856);
+var signature_pad_1 = __webpack_require__(858);
 var SignaturePadModule = (function () {
     function SignaturePadModule() {
     }
